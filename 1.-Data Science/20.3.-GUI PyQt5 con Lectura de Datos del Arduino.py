@@ -203,7 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
         #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
         #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-        iconPath = "0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
+        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
         #PyQt5.QtGui.QIcon(): Constructor de la clase QIcon que hereda de la clase QtGui y perteneciente a la 
         #librería PyQt5, usado para crear un objeto que ícono que pueda ser añadido a cualquier widget como lo 
         #puede ser un botón, un texto estático, etc. El tamaño de dicha imagen será reducido automáticamente.
