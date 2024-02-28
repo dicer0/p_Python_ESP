@@ -14,14 +14,13 @@ center_y = screen_height // 2
 radius = 100
 
 # Set the speed of the circular motion (adjust as needed)
-speed = 0.01  # Adjust this value to control the speed
+speed = 0.05  # Adjust this value to control the speed
 
 # Function to calculate the next position of the mouse
 def calculate_next_position(angle):
     x = center_x + int(radius * math.cos(angle))
     y = center_y + int(radius * math.sin(angle))
     return x, y
-
 # Main loop
 angle = 0
 while not keyboard.is_pressed('s'):
