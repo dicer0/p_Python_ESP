@@ -28,8 +28,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Container for squares
         self.container_layout = QtWidgets.QHBoxLayout()
-        self.container_layout.addWidget(self.create_square("Square 1", "This is square 1", "Create 1"))
-        self.container_layout.addWidget(self.create_square("Square 2", "This is square 2", "Create 2"))
+        self.container_layout.addWidget(self.create_square("Square 1", "This is square 1", "Create 1", 1))
+        self.container_layout.addWidget(self.create_square("Square 2", "This is square 2", "Create 2", 2))
         
         # Main layout
         main_layout = QtWidgets.QVBoxLayout()
@@ -65,12 +65,12 @@ class MainWindow(QtWidgets.QMainWindow):
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
         
-    def create_square(self, name, text, button_text):
+    def create_square(self, name, text, button_text, window_number):
         square = QtWidgets.QFrame()
         square.setFrameShape(QtWidgets.QFrame.StyledPanel)
         square.setFixedSize(200, 200)
         square.setStyleSheet("background-color: darkgray;")
-        square.mousePressEvent = lambda event: self.open_window(name)
+        square.mousePressEvent = lambda event, n=name, w=window_number: self.open_window(n, w)
         
         # Add layout to square
         layout = QtWidgets.QVBoxLayout()
@@ -82,7 +82,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Button
         create_button = QtWidgets.QPushButton(button_text)
-        create_button.clicked.connect(lambda: self.open_window(f"{name} Window", name))
+        create_button.clicked.connect(lambda: self.open_window(f"{name} Window", window_number))
         layout.addWidget(create_button)
         
         return square
