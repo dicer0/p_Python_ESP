@@ -5,7 +5,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Time Zone Selector")
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 900, 500)
         self.open_windows = []  # List to hold references to opened windows
 
         self.create_widgets()
@@ -16,14 +16,17 @@ class MainWindow(QtWidgets.QMainWindow):
         iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconoBlancoDi_cer0.png"
         pixmap = QtGui.QPixmap(iconPath)
         # Resize the image
-        pixmap = pixmap.scaled(50, 50, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        pixmap = pixmap.scaled(80, 80, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         logo_label.setPixmap(pixmap)
         
         # Text in the middle
-        text_label = QtWidgets.QLabel("Select Time Zone:")
+        text_label = QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
+                                                "GUI MultiPantalla"
+                                            "</p>")
         
         # ComboBox for time zones
         self.timezones_combo = QtWidgets.QComboBox()
+        self.timezones_combo.setStyleSheet("font-size: 15px; font-family: Consolas, monospace; color: #002550; font-weight: bold; background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188))")
         self.timezones_combo.addItems(["GMT", "UTC", "CET", "PST", "EST"])
         
         # Container for squares
@@ -45,14 +48,14 @@ class MainWindow(QtWidgets.QMainWindow):
         menu_widget.setFixedHeight(100)
         
         # Apply the background color to the menu widget
-        menu_widget.setStyleSheet("background-color: blue;")
+        menu_widget.setStyleSheet("background-color: #002550;")
         
         main_layout.addWidget(menu_widget)
         main_layout.addStretch()  # Add stretch to push the next widget to the top
         
         # Create a light gray container widget
         light_gray_container = QtWidgets.QWidget()
-        light_gray_container.setStyleSheet("background-color: lightgray;")
+        light_gray_container.setStyleSheet("background-color: transparent; font-size: 20px; font-family: Consolas, monospace; color: #002550; font-weight: bold;")
         light_gray_layout = QtWidgets.QVBoxLayout(light_gray_container)
         light_gray_layout.addStretch()  # Add stretch to push content to the middle
         light_gray_layout.addLayout(self.container_layout)
@@ -69,7 +72,7 @@ class MainWindow(QtWidgets.QMainWindow):
         square = QtWidgets.QFrame()
         square.setFrameShape(QtWidgets.QFrame.StyledPanel)
         square.setFixedSize(200, 200)
-        square.setStyleSheet("background-color: darkgray;")
+        square.setStyleSheet("background-color: white;")
         square.mousePressEvent = lambda event, n=name, w=window_number: self.open_window(n, w)
         
         # Add layout to square
@@ -94,11 +97,11 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Top container with blue background color
         top_container = QtWidgets.QWidget()
-        top_container.setStyleSheet("background-color: blue;")
+        top_container.setStyleSheet("background-color: #002550;")
         
         # Below container with gray background color
         below_container = QtWidgets.QWidget()
-        below_container.setStyleSheet("background-color: lightgray;")
+        below_container.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         
         # Add text labels and buttons to the below container
         text_label1 = QtWidgets.QLabel("This is line 1.")
@@ -139,5 +142,6 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
+    window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
     window.show()
     sys.exit(app.exec_())
