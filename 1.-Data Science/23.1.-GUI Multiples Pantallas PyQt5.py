@@ -13,10 +13,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def create_widgets(self):
         # Logo
         logo_label = QtWidgets.QLabel()
-        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconoBlancoDi_cer0.png"
+        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
         pixmap = QtGui.QPixmap(iconPath)
         # Resize the image
-        pixmap = pixmap.scaled(80, 80, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         logo_label.setPixmap(pixmap)
         
         # Text in the middle
