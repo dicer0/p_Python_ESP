@@ -14,7 +14,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # Logo
         logo_label = QtWidgets.QLabel()
         iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconoBlancoDi_cer0.png"
-        logo_label.setPixmap(QtGui.QPixmap(iconPath))
+        pixmap = QtGui.QPixmap(iconPath)
+        # Resize the image
+        pixmap = pixmap.scaled(50, 50, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        logo_label.setPixmap(pixmap)
         
         # Text in the middle
         text_label = QtWidgets.QLabel("Select Time Zone:")
@@ -79,12 +82,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Button
         create_button = QtWidgets.QPushButton(button_text)
-        create_button.clicked.connect(lambda: self.open_window(f"{name} Window"))
+        create_button.clicked.connect(lambda: self.open_window(f"{name} Window", name))
         layout.addWidget(create_button)
         
         return square
     
-    def open_window(self, name):
+    def open_window(self, name, window_number):
         window = QtWidgets.QWidget()
         window.setWindowTitle(name)
         window.setGeometry(200, 200, 400, 300)
@@ -121,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         window.setLayout(window_layout)
         
-        confirm_button.clicked.connect(lambda: print("Confirm button clicked"))
+        confirm_button.clicked.connect(lambda: print(f"Confirm button clicked in Window {window_number}"))
         return_button.clicked.connect(window.close)
         
         window.show()
