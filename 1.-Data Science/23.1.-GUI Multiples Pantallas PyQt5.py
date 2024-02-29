@@ -1,6 +1,35 @@
-import sys
-from PyQt5 import QtWidgets, QtGui, QtCore
+# -*- coding: utf-8 -*-
 
+#PyQt5 - QtWidgets: La clase QtWidgets proporciona todos los elementos que conforman las interfaces gráficas 
+#(GUI) hechas con la librería PyQt5, entre dichas herramientas se incluyen: 
+# - Widgets: Elementos gráficos básicos de los que se conforma una GUI como lo son botones (QPushButton), cajas 
+#   de texto (QLineEdit), texto estático (QLabel), listas desplegables (QComboBox), barras de progreso 
+#   (QProgressBar), casillas de verificación (QCheckBox), imágenes (QLabel), etc.
+#   - Diálogos: Los diálogos son elementos gráficos que  facilitan la interacción con el usuario, incluyen 
+#     widgets como cuadros de diálogo de mensajes (QMessageBox), cuadros de diálogo para seleccionar archivos o 
+#     directorios (QFileDialog), cuadros de diálogo de entrada de texto (QInputDialog), etc.
+# - Layouts: Es un contenedor de PyQt5 que permite almacenar y organizar varios widgets, es el equivalente al 
+#   Panel de la librería PyQt5.
+#           - Widget: Es un contenedor que puede almacenar widgets directamente, proporcionando funcionalidades 
+#             para mostrar, ocultar, establecer posición, tamaño, manejar eventos, etc. de los diferentes 
+#             botones, checkboxes, áreas de texto, comboboxes, radiobuttons, listboxes, etc.
+# - Ventana: Es la ventana principal de la GUI, que a su vez contiene todos los contenedores con los widgets que 
+#   conforman la GUI, se declara a través de la clase QMainWindow de la librería pyQt5 y es el equivalente al 
+#   Frame de PyQt5.
+from PyQt5 import QtWidgets
+#PyQt5 - QtWidgets: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
+#archivos, directorios, señales, hilos, subprocesos, etc.
+from PyQt5 import QtCore
+#matplotlib - Figure: La clase Figure es la base para crear y organizar los elementos gráficos en Matplotlib, 
+#que es una librería de graficación matemática.
+#PyQt5 - QtGui: Clase que incluye clases y métodos para trabajar con gráficos, fuentes, colores, imágenes, 
+#íconos y otros elementos visuales utilizados en una interfaz gráfica (GUI) de PyQt5.
+from PyQt5 import QtGui
+import sys #sys: Librería que permite interactuar directamente con el sistema operativo y consola del ordenador.
+
+#MainWindow: La clase hereda de la clase QMainWindow, que a su vez hereda de la clase QtWidgets y ambas 
+#pertenecen a la librería PyQt5. El elemento representa la ventana del GUI y crea una instancia de la clase 
+#GraficaPyQt5 para agregar dentro de la ventana una gráfica.
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()

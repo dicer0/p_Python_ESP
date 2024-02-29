@@ -28,7 +28,7 @@
 #   conforman la GUI, se declara a través de la clase QMainWindow de la librería pyQt5 y es el equivalente al 
 #   Frame de wxPython.
 from PyQt5 import QtWidgets
-#PyQt5 - QtWidgets: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
+#PyQt5 - QtCore: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
 #archivos, directorios, señales, hilos, subprocesos, etc.
 from PyQt5 import QtCore 
 #PyQt5 - QtGui: Clase que incluye clases y métodos para trabajar con gráficos, fuentes, colores, imágenes, 
