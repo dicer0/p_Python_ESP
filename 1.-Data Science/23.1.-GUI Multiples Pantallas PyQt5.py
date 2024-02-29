@@ -31,12 +31,28 @@ import sys #sys: Librería que permite interactuar directamente con el sistema o
 #pertenecen a la librería PyQt5. El elemento representa la ventana del GUI y crea una instancia de la clase 
 #GraficaPyQt5 para agregar dentro de la ventana una gráfica.
 class MainWindow(QtWidgets.QMainWindow):
+    #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
+    #crea un objeto que instancee la clase y en él se declaran los atributos que se reutilizarán en los demás 
+    #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
+    #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
+    #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
+    #otros lenguajes de programación.
     def __init__(self):
+        #super(): Método para importar métodos específicos de una clase base (superclase) desde una subclase, 
+        #osea desde una clase que quiere heredar métodos de otra. En este caso se utiliza para importar el 
+        #constructor de la clase que estamos heredando.
         super().__init__()
+        #PyQt5.QtWidgets.QMainWindow.setWindowTitle(): Método para colocar un título al Window creado con PyQt5.
         self.setWindowTitle("Time Zone Selector")
+        #PyQt5.QtWidgets.QMainWindow.setGeometry(): Método para indicar la posición y dimensiones de una ventana,
+        #para ello el primer parámetro representa la posición de la esquina superior izquierda medida desde la 
+        #esquina superior izquierda de la pantalla (pos_x), la segunda representa la distancia de separación 
+        #vertical medida desde el mismo punto (pos_y) y las últimas dos representan el ancho y alto de la ventana 
+        #en pixeles:
+        #   - setGeometry(pos_x, pos_y, width, height).
         self.setGeometry(100, 100, 900, 500)
         self.open_windows = []  # List to hold references to opened windows
-
+        
         self.create_widgets()
         
     def create_widgets(self):
