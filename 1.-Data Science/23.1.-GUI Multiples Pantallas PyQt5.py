@@ -175,7 +175,6 @@ class MainWindow(QtWidgets.QMainWindow):
         #Aunque cabe mencionar que las características del widget se pueden específicar antes o después de 
         #introducir los elementos deseados en el contenedor.
         menu_widget = QtWidgets.QWidget()                   #Widget que contiene al Layout del menú superior.
-        #Características del contenedor del menú superior:
         menu_widget.setFixedHeight(100)                     #setFixedHeight(): Altura fija para un Widget.
         #En este caso el height de CSS lo que hace es modificar el tamaño de los widgets, no del contenedor.
         menu_widget.setStyleSheet("background-color: #002550; height: 20px;")
@@ -186,6 +185,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #secuencial dentro de un Layout, estos se ordenarán de una forma u otra dependiendo de qué tipo de Layout 
         #sea, y los widgets pueden ser botones, listas desplegables, textos, imagenes, etc. Se indica el órden en 
         #el que se colocarán los elementos dependiendo de cual fue añadido primero y cual después en el código.
+        #Además, cabe mencionar que si se quiere añadir un Layout dentro de otro, se usa el método .addLayout() 
+        #de la misma forma. 
         #AÑADIENDO WIDGETS AL CONTENEDOR DEL MENÚ SUPERIOR:
         menu_layout.addWidget(logo_label)                   #Logo del contenedor del menú superior.
         menu_layout.addWidget(text_label)                   #Texto del contenedor del menú superior.
@@ -195,23 +196,33 @@ class MainWindow(QtWidgets.QMainWindow):
         self.container_layout.addWidget(self.create_square("Square 2", "This is square 2", "Create 2", 2))
         
         #AÑADIENDO CONTENEDORES AL CONTENEDOR PRINCIPAL, QUE LOS ORDENA HORIZONTALMENTE DE ARRIBA A ABAJO: 
-        main_layout.addWidget(menu_widget)
-        main_layout.addStretch()  # Add stretch to push the next widget to the top
+        main_layout.addWidget(menu_widget)                  #Se agrega el Widget menú al contenedor principal.
+        #PyQt5.QtWidgets.QVBoxLayout.addStretch(): Este método agrega un espacio elástico al layout que se 
+        #expandirá para ocupar cualquier espacio adicional disponible dentro del contenedor.
+        main_layout.addStretch()                            #Se agrega un espaciado stretch después.
+        main_layout.addLayout(self.container_layout)        #Se agrega el Layout medio al contenedor principal.
+        main_layout.addStretch()                            #Se agrega un espaciado stretch después.
         
-        # Create a light gray container widget
-        light_gray_container = QtWidgets.QWidget()
-        light_gray_container.setStyleSheet("background-color: transparent; font-size: 20px; font-family: Consolas, monospace; color: #002550; font-weight: bold;")
-        light_gray_layout = QtWidgets.QVBoxLayout(light_gray_container)
-        light_gray_layout.addStretch()  # Add stretch to push content to the middle
-        light_gray_layout.addLayout(self.container_layout)
-        light_gray_layout.addStretch()  # Add stretch to push content to the middle
-        
-        main_layout.addWidget(light_gray_container)
-        main_layout.addStretch()  # Add stretch to push content to the middle
-        
-        central_widget = QtWidgets.QWidget()
-        central_widget.setLayout(main_layout)
-        self.setCentralWidget(central_widget)
+        #Creación de un objeto QWidget para acomodar el contenedor principal dentro del frame.
+        centralWidget = QtWidgets.QWidget()
+        #PyQt5.QtWidgets.QVBoxLayout.setLayout(): Método usado para añadir un layout (que es un contenedor más 
+        #complejo) a un widget (que es un contenedor más sencillo), esto es útil hacerlo cuando se quiere 
+        #colocar el contenedor en una cierta posición (central, arriba, abajo, a la derecha o a la izquierda) 
+        #dentro de la ventana de la GUI.
+        centralWidget.setLayout(main_layout)
+        #ALINEACIÓN DE CONTENIDO EN UN WIDGET O LAYOUT:
+        #PyQt5.QtWidgets.QMainWindow.setCentralWidget() = self.setCentralWidget(): Método aplicado al objeto de 
+        #la clase QMainWindow, del que hereda esta clase para establecer el widget central de la ventana 
+        #principal, ya que en PyQt5 las ventanas generalmente se dividen en diferentes áreas:
+        # - Una barra de menú en la parte superior, para ello se debe indicar que objeto es el menu bar.
+        #       - widget.setMenuBar(widget, QMenuBar)
+        # - Una barra de herramientas opcional en la parte superior o inferior.
+        #       - widget.setStatusBar(widget, QStatusBar)
+        # - Un área central donde se coloca el contenido principal de la ventana. 
+        #       - widget.setCentralWidget(widget)
+        #El método setCentralWidget() se utiliza para especificar qué widget se debe colocar en el área central
+        #de la ventana creada con esta clase propia.
+        self.setCentralWidget(centralWidget)            #Contenedor colocado en el área central de la GUI.
         
     def create_square(self, name, text, button_text, window_number):
         square = QtWidgets.QFrame()
@@ -284,6 +295,7 @@ class MainWindow(QtWidgets.QMainWindow):
         timezone = self.timezones_combo.currentText()
         print("Selected Time Zone:", timezone)
         
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
