@@ -62,16 +62,6 @@ class MainWindow(QtWidgets.QMainWindow):
         #  
         #   PyQt5.QtWidgets.QLabel: Es una representación de imagen que puede ser utilizada directamente en los 
         #   controles y widgets de la interfaz gráfica de PyQt5.
-        #Variable que guarda el directorio y el nombre del archivo creado, se reemplazan los guiones\ por / para 
-        #leer una imagen o cualquier otro archivo se usa la dirección relativa o absoluta de un directorio: 
-        # - Dirección relativa: Es una dirección que busca un archivo desde donde se encuentra la carpeta del 
-        #   archivo python actualmente, esta se debe colocar entre comillas simples o dobles.
-        # - Dirección absoluta: Es una dirección que coloca toda la ruta desde el disco duro C o cualquier otro 
-        #   que se esté usando hasta la ubicación del archivo, la cual se debe colocar entre comillas simples o 
-        #   dobles.
-        #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
-        #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
-        #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
         iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
         #Cargar una Imagen: Se crea una instancia de la librería PyQt5 por medio del constructor de la clase 
         #QPixmap para cargar una imagen en memoria con datos en bruto.
@@ -100,6 +90,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #           - QtCore.Qt.AspectRatioMode.KeepAspectRatioByExpanding: La imagen se redimensiona 
         #             manteniendo la proporción original y ocupando todo el tamaño especificado. Esto puede 
         #             provocar que parte de la imagen quede fuera de los límites del tamaño especificado.
+        # - SmoothTransformation: Es una constante de la clase QtCore.Qt que se utiliza para suavizar la imagen 
+        #   al realizar la transformación, es de mucha utilidad para mejorar la calidad de la imagen escalada.
         #En todos los parámetos mencionados para este método, no se indica explícitamente su nombre, solo se 
         #asigna un valor y el método identifica cuál es por su orden.
         #Todas las operaciones donde se afecta a una imagen se deben realizar a la imagen representada en 
@@ -117,38 +109,92 @@ class MainWindow(QtWidgets.QMainWindow):
         #mencionar que para el style se deben usar comillas simples ('') para que no tenga conlficto con las 
         #comillas dobles del parámetro text = "". PyQt5 acepta algunas instrucciones CSS pero no todas.
         logo_label = QtWidgets.QLabel(pixmap = scaledImage)    #Imagen redimensionada.
-        
-        # Text in the middle
+
+        #CREACIÓN DE LOS WIDGETS: Texto Estático, clase QLabel
+        #Instancia de la librería PyQt5 por medio del constructor de la clase QLabel que hereda de la clase 
+        #QtWidgets y sirve para crear un widget que muestre un texto estático o una imagen en una interfaz 
+        #gráfica, se le deben indicar los siguientes parámetros cuando se usa para crear texto estático:
+        # - parent: Especifica el widget padre del QLabel. Si se proporciona, el texto estático se colocará 
+        #   dentro del widget padre.
+        # - text: Permite especificar el texto que se mostrará en el widget. Puede ser una cadena de texto en 
+        #   formato plano o enriquecido con etiquetas HTML.
+        #Para dar estilo al QLabel cuando se utiliza para mostrar texto estático es mejor utilizar etiquetas 
+        #HTML que contengan un style que les dé estilo por medio de instrucciones CSS, además es importante 
+        #mencionar que para el style se deben usar comillas simples ('') para que no tenga conlficto con las 
+        #comillas dobles del parámetro text = "". PyQt5 acepta algunas instrucciones CSS pero no todas.
         text_label = QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
                                                 "GUI MultiPantalla"
                                             "</p>")
         
-        # ComboBox for time zones
+        #CREACIÓN DE LOS WIDGETS: Combo Box, Lista Desplegable
+        #Instancia de la librería PyQt5 por medio del constructor de la clase QComboBox que hereda de la clase 
+        #QtWidgets y sirve para crear un widget que muestre una lista desplegable de elementos seleccionables 
+        #en una ventana o layout.
         self.timezones_combo = QtWidgets.QComboBox()
+        #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
+        #widgets de una interfaz gráfica de usuario (GUI).
+        # - La siguiente línea de código es un método alternativo a usar la herramienta linear-gradient, ya que 
+        #   esta no es admitida por PyQt5:
+        #   background: qlineargradient(x1:punto_inicial, y1:punto_inicial, x2:punto_final, y2:punto_final, stop:0 rgb(R_inicial,G_inicial,B_inicial), stop:1 rgb(R_final,G_final,B_final));
         self.timezones_combo.setStyleSheet("font-size: 15px; font-family: Consolas, monospace; color: #002550; font-weight: bold; background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188))")
+        #QtWidgets.QComboBox.addItems(): Método que se utiliza para agregar una lista de elementos al combo box. 
+        #Este puede recibir como parámetro directamente una lista, tupla o diccionario que representen los 
+        #elementos que se agregarán al combo box o puede recibir una función propia que cree dicha lista, para 
+        #luego añadir dichos elementos creados por la función al QComboBox.
         self.timezones_combo.addItems(["GMT", "UTC", "CET", "PST", "EST"])
         
-        # Container for squares
-        self.container_layout = QtWidgets.QHBoxLayout()
+        
+        #CONTENEDORES DE ELEMENTOS: La biblioteca PyQt5 ofrece varios tipos de contenedores que se pueden 
+        #utilizar para organizar los widgets en una interfaz gráfica. Los más comunes son:
+        # - QVBoxLayout: Organiza los widgets en una disposición vertical, uno debajo del otro.
+        # - QHBoxLayout: Organiza los widgets en una disposición horizontal, uno al lado del otro.
+        # - QGridLayout: Organiza los widgets en una cuadrícula bidimensional de filas y columnas.
+        # - QFormLayout: Diseñado específicamente para crear formularios, donde los widgets se colocan en pares 
+        #   de etiqueta y campo de entrada.
+        # - QStackedLayout: Permite apilar varios widgets uno encima del otro y mostrar uno a la vez.
+        # - QTabWidget: Permite crear pestañas donde se pueden colocar diferentes conjuntos de widgets en cada 
+        #   pestaña.
+        # - QScrollArea: Proporciona una vista desplazable para un contenido que puede ser mayor que el área 
+        #   visible.
+        # - QGroupBox: Crea un grupo que puede contener y organizar otros widgets.
+        # - QSplitter: Permite dividir el área de visualización en secciones redimensionables que contienen 
+        #   widgets diferentes.
+        # - QWidget: Proporciona una ventana o área rectangular en la que se pueden colocar otros widgets para 
+        #   crear una interfaz gráfica, un QWidget puede contener otros widgets o contenedores dentro.
+        #Cuando se desee ordenar un contenedor de una forma específica dentro de un diseño o establecer ciertas 
+        #características como altura, ancho, etc. Es necesario crear un widget que lo contenga, para ello se le 
+        #debe pasar dicho widget como parámetro al contenedor, logrando así que el widget se convierta en el 
+        #elemento padre del layout.
+        # - parent: Si el constructor de esta clase recibe como parámetro un objeto QWidget, ese será el 
+        #   contenedor principal del objeto QVBoxLayout que organiza sus elementos verticalmente.
+        # - Si no recibe ningún parámetro, este es un contenedor vacío sin widget principal que aceptará 
+        #   varios elementos o contenedores y los irá colocando verticalmente, horizontalmente, en forma de 
+        #   matriz, o de varias otras formas, uno después del otro.
+        main_layout = QtWidgets.QVBoxLayout()               #Contenedor principal.
+        #EL MENÚ SUPERIOR DEBE TENER UNA ALTURA EN ESPECÍFICO, POR LO TANTO SE CREA UN WIDGET QUE LO CONTENGA: 
+        #Aunque cabe mencionar que las características del widget se pueden específicar antes o después de 
+        #introducir los elementos deseados en el contenedor.
+        menu_widget = QtWidgets.QWidget()                   #Widget que contiene al Layout del menú superior.
+        #Características del contenedor del menú superior:
+        menu_widget.setFixedHeight(100)                     #setFixedHeight(): Altura fija para un Widget.
+        #En este caso el height de CSS lo que hace es modificar el tamaño de los widgets, no del contenedor.
+        menu_widget.setStyleSheet("background-color: #002550; height: 20px;")
+        menu_layout = QtWidgets.QHBoxLayout(menu_widget)    #Contenedor del menú superior.
+        self.container_layout = QtWidgets.QHBoxLayout()     #Contenedor intermedio.
+        
+        #PyQt5.QtWidgets.QVBoxLayout.addWidget(): Método usado para añadir un widget (elemento) de forma 
+        #secuencial dentro de un Layout, estos se ordenarán de una forma u otra dependiendo de qué tipo de Layout 
+        #sea, y los widgets pueden ser botones, listas desplegables, textos, imagenes, etc. Se indica el órden en 
+        #el que se colocarán los elementos dependiendo de cual fue añadido primero y cual después en el código.
+        #AÑADIENDO WIDGETS AL CONTENEDOR DEL MENÚ SUPERIOR:
+        menu_layout.addWidget(logo_label)                   #Logo del contenedor del menú superior.
+        menu_layout.addWidget(text_label)                   #Texto del contenedor del menú superior.
+        menu_layout.addWidget(self.timezones_combo)         #Combo box del contenedor del menú superior.
+        #AÑADIENDO WIDGETS AL CONTENEDOR INTERMEDIO:
         self.container_layout.addWidget(self.create_square("Square 1", "This is square 1", "Create 1", 1))
         self.container_layout.addWidget(self.create_square("Square 2", "This is square 2", "Create 2", 2))
         
-        # Main layout
-        main_layout = QtWidgets.QVBoxLayout()
-        
-        # Create a widget to contain the menu items
-        menu_widget = QtWidgets.QWidget()
-        menu_layout = QtWidgets.QHBoxLayout(menu_widget)
-        menu_layout.addWidget(logo_label)
-        menu_layout.addWidget(text_label)
-        menu_layout.addWidget(self.timezones_combo)
-        
-        # Set fixed height for the menu widget
-        menu_widget.setFixedHeight(100)
-        
-        # Apply the background color to the menu widget
-        menu_widget.setStyleSheet("background-color: #002550;")
-        
+        #AÑADIENDO CONTENEDORES AL CONTENEDOR PRINCIPAL, QUE LOS ORDENA HORIZONTALMENTE DE ARRIBA A ABAJO: 
         main_layout.addWidget(menu_widget)
         main_layout.addStretch()  # Add stretch to push the next widget to the top
         

@@ -297,13 +297,15 @@ class MainWindow(QtWidgets.QMainWindow):
         #   widgets diferentes.
         # - QWidget: Proporciona una ventana o área rectangular en la que se pueden colocar otros widgets para 
         #   crear una interfaz gráfica, un QWidget puede contener otros widgets o contenedores dentro.
-        #Objeto de la clase QVBoxLayout, el cual se utiliza para organizar los widgets en una disposición 
-        #vertical, proporcionando una forma conveniente de colocar los widgets uno debajo del otro en una 
-        #ventana o en otro contenedor. 
+        #Cuando se desee ordenar un contenedor de una forma específica dentro de un diseño o establecer ciertas 
+        #características como altura, ancho, etc. Es necesario crear un widget que lo contenga, para ello se le 
+        #debe pasar dicho widget como parámetro al contenedor, logrando así que el widget se convierta en el 
+        #elemento padre del layout.
         # - parent: Si el constructor de esta clase recibe como parámetro un objeto QWidget, ese será el 
         #   contenedor principal del objeto QVBoxLayout que organiza sus elementos verticalmente.
         # - Si no recibe ningún parámetro, este es un contenedor vacío sin widget principal que aceptará 
-        #   varios elementos o contenedores y los irá colocando verticalmente uno después del otro.
+        #   varios elementos o contenedores y los irá colocando verticalmente, horizontalmente, en forma de 
+        #   matriz, o de varias otras formas, uno después del otro.
         main_layout = QtWidgets.QVBoxLayout() 
         #PyQt5.QtWidgets.QVBoxLayout.addWidget(): Método usado para añadir un widget de manera secuencial en la 
         #columna de un diseño vertical, como lo puede ser un botón, lista desplegable, texto, imagen, etc. Se 
