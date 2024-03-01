@@ -332,7 +332,7 @@ class VentanaImagen(QtWidgets.QMainWindow):
         #asigna un valor y el método identifica cuál es por su orden.
         #Todas las operaciones donde se afecta a una imagen se deben realizar a la imagen representada en 
         #datos brutos, para luego asignarse al widget de la GUI.
-        scaledImage = rawImage.scaled(widthImagen, heightImagen, QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+        scaledImage = rawImage.scaled(widthImagen, heightImagen, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         #Mostrar la imagen en un widget: Para mostrar la imagen de tipo Bitmap en un widget gráfico de se usa 
         #una instancia de la clase PyQt5.QtWidgets.QLabel, que es parte de la biblioteca PyQt5 y se utiliza para 
         #crear un widget que muestre un texto estático o una imagen en una interfaz gráfica, se le deben indicar 

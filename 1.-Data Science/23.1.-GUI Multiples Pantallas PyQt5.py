@@ -53,16 +53,70 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setGeometry(100, 100, 900, 500)
         self.open_windows = []  # List to hold references to opened windows
         
-        self.create_widgets()
-        
-    def create_widgets(self):
-        # Logo
-        logo_label = QtWidgets.QLabel()
+        #CREACIÓN DE LOS WIDGETS: Imágen, clase QLabel
+        #Las clases PyQt5.QtGui.QPixmap y PyQt5.QtWidgets.QLabel están relacionadas y se utilizan en conjunto 
+        #para trabajar con imágenes en la interfaz gráfica.
+        #   PyQt5.QtGui.QPixmap: Representa una imagen en memoria creada con datos en bruto, osea un formato 
+        #   matricial 3D conformado 3 capas o dimensiones RGB que contienen valores de 0 a 255. Esta clase 
+        #   proporciona métodos para cargar, manipular y transformar imágenes.
+        #  
+        #   PyQt5.QtWidgets.QLabel: Es una representación de imagen que puede ser utilizada directamente en los 
+        #   controles y widgets de la interfaz gráfica de PyQt5.
+        #Variable que guarda el directorio y el nombre del archivo creado, se reemplazan los guiones\ por / para 
+        #leer una imagen o cualquier otro archivo se usa la dirección relativa o absoluta de un directorio: 
+        # - Dirección relativa: Es una dirección que busca un archivo desde donde se encuentra la carpeta del 
+        #   archivo python actualmente, esta se debe colocar entre comillas simples o dobles.
+        # - Dirección absoluta: Es una dirección que coloca toda la ruta desde el disco duro C o cualquier otro 
+        #   que se esté usando hasta la ubicación del archivo, la cual se debe colocar entre comillas simples o 
+        #   dobles.
+        #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
+        #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
+        #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
         iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
+        #Cargar una Imagen: Se crea una instancia de la librería PyQt5 por medio del constructor de la clase 
+        #QPixmap para cargar una imagen en memoria con datos en bruto.
+        # - filepath: En este atributo se indica el nombre de archivo junto con la ruta completa de donde se 
+        #   encuentra la imagen que se va a cargar, la cual debe estar indicada en forma de string, con este 
+        #   atributo no se sigue la nomenclatura de poner el nombre del atributo seguido de su valor 
+        #   (filepath = valor), solamente se pone el path entre comillas.
+        # - format: El formato de imagen deseado. Puede ser una cadena como "PNG", "JPEG", "BMP", etc. Si no se 
+        #   especifica, se intentará detectar automáticamente el formato.
         pixmap = QtGui.QPixmap(iconPath)
-        # Resize the image
-        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        logo_label.setPixmap(pixmap)
+        #PyQt5.QtGui.QPixmap.scaled(): Método utilizado para redimensionar una imagen conformada por datos 
+        #brutos, representada por un objeto QPixmap, se realiza a través de la siguiente sintaxis:
+        #scaledImage = originalImage.scaled(width, height, aspectRatioMode)
+        # - originalImage: Es el objeto QPixmap original que se desea redimensionar.
+        # - width: Es el nuevo ancho de la imagen redimensionada.
+        # - height: Es la nueva altura de la imagen redimensionada.
+        # - aspectRatioMode: Es una constante de la clase QtCore.Qt.AspectRatioMode que especifica cómo se debe 
+        #   ajustar la imagen para mantener la proporción.
+        #           - QtCore.Qt.AspectRatioMode.IgnoreAspectRatio: La imagen se ajusta exactamente al tamaño 
+        #             especificado, sin mantener la proporción original. Esto puede dar lugar a una distorsión 
+        #             de la imagen.
+        #           - QtCore.Qt.AspectRatioMode.KeepAspectRatio: La imagen se redimensiona manteniendo la 
+        #             proporción original y ajustándose dentro del tamaño especificado para que quepa 
+        #             completamente sin recortarla. Esto puede generar márgenes en blanco si la relación de 
+        #             aspecto difiere del tamaño especificado.
+        #           - QtCore.Qt.AspectRatioMode.KeepAspectRatioByExpanding: La imagen se redimensiona 
+        #             manteniendo la proporción original y ocupando todo el tamaño especificado. Esto puede 
+        #             provocar que parte de la imagen quede fuera de los límites del tamaño especificado.
+        #En todos los parámetos mencionados para este método, no se indica explícitamente su nombre, solo se 
+        #asigna un valor y el método identifica cuál es por su orden.
+        #Todas las operaciones donde se afecta a una imagen se deben realizar a la imagen representada en 
+        #datos brutos, para luego asignarse al widget de la GUI.
+        scaledImage = pixmap.scaled(200, 200, QtCore.Qt.AspectRatioMode.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        #Mostrar la imagen en un widget: Para mostrar la imagen de tipo Bitmap en un widget gráfico de se usa 
+        #una instancia de la clase PyQt5.QtWidgets.QLabel, que es parte de la biblioteca PyQt5 y se utiliza para 
+        #crear un widget que muestre un texto estático o una imagen en una interfaz gráfica, se le deben indicar 
+        #los siguientes parámetros cuando se usa para crear una imagen estática:
+        # - parent: Este parámetro es opcional y especifica el widget padre del QLabel. Indica a qué widget 
+        #   pertenece el QLabel.
+        # - pixmap (QPixmap): La imagen que se mostrará en la etiqueta.
+        #Para dar estilo al QLabel cuando se utiliza para mostrar texto estático es mejor utilizar etiquetas 
+        #HTML que contengan un style que les dé estilo por medio de instrucciones CSS, además es importante 
+        #mencionar que para el style se deben usar comillas simples ('') para que no tenga conlficto con las 
+        #comillas dobles del parámetro text = "". PyQt5 acepta algunas instrucciones CSS pero no todas.
+        logo_label = QtWidgets.QLabel(pixmap = scaledImage)    #Imagen redimensionada.
         
         # Text in the middle
         text_label = QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
