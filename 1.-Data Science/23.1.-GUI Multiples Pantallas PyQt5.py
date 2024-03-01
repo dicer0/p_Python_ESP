@@ -53,6 +53,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setGeometry(100, 100, 900, 500)
         self.open_windows = []  # List to hold references to opened windows
         
+        #WIDGETS MENU:
         #CREACIÓN DE LOS WIDGETS: Imágen, clase QLabel
         #Las clases PyQt5.QtGui.QPixmap y PyQt5.QtWidgets.QLabel están relacionadas y se utilizan en conjunto 
         #para trabajar con imágenes en la interfaz gráfica.
@@ -122,7 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #HTML que contengan un style que les dé estilo por medio de instrucciones CSS, además es importante 
         #mencionar que para el style se deben usar comillas simples ('') para que no tenga conlficto con las 
         #comillas dobles del parámetro text = "". PyQt5 acepta algunas instrucciones CSS pero no todas.
-        text_label = QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
+        text_menu =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
                                                 "GUI MultiPantalla"
                                             "</p>")
         
@@ -143,7 +144,68 @@ class MainWindow(QtWidgets.QMainWindow):
         #luego añadir dichos elementos creados por la función al QComboBox.
         self.timezones_combo.addItems(["GMT", "UTC", "CET", "PST", "EST"])
         
+        #WIDGETS CONTENEDOR INTERMEDIO:
+        #QtWidgets.QLabel(): Widget que sirve para crear un texto estático o una imagen en una interfaz gráfica, 
+        #se le deben indicar los siguientes parámetros cuando se usa para crear un texto estático:
+        # - parent: Especifica el widget padre del QLabel. Si se proporciona, el texto estático se colocará 
+        #   dentro del widget padre.
+        # - text: Permite especificar el texto que se mostrará en el widget. Puede ser una cadena de texto en 
+        #   formato plano o enriquecido con etiquetas HTML. 
+        element_title =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
+                                                    "GUI MultiPantalla"
+                                                "</p>")
+        element_text =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
+                                                    "GUI MultiPantalla"
+                                                "</p>")
+        buttons_text =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
+                                                    "GUI MultiPantalla"
+                                                "</p>")
         
+        #CREACIÓN DE LOS WIDGETS: Botón
+        #Instancia de la librería PyQt5 por medio del constructor de la clase QPushButton que hereda de la clase 
+        #QtWidgets y sirve para crear un widget de tipo botón, en este se deben indicar como parámetros:
+        # - parent: Especifica el objeto padre al que se asociará el botón. Si se proporciona, el botón se 
+        #   colocará dentro del widget padre.
+        # - text: Con este parámetro se indica el texto que aparecerá sobre el botón.
+        # - icon: Establece el ícono que se mostrará junto al texto del botón, debe utilizarse un objeto QIcon 
+        #   perteneciente a la librería QtGui para que se pueda agregar un ícono.
+        # - checkable: Especifica si el botón funciona como un switch (que mantiene su estado) o como un push 
+        #   button (que no mantiene su estado a menos que se mantenga presionado).
+        #       - checkable = True:     Botón tipo switch.
+        #       - checkable = False:    Botón tipo push button.
+        # - autoDefault: Indica si el botón es el predeterminado del diálogo. Si se establece en True, el botón 
+        #   responderá automáticamente a la tecla "Enter", sino no lo hará.
+        # - flat: Con False se indica que el botón se muestre sin un marco, con True aparece el marco.
+        # - menu: Especifica el menú desplegable asociado al botón.
+        # - iconSize: Establece el tamaño del ícono del botón, para ello recibe un objeto QSize:
+        #       - QtCore.QSize(ancho, alto): Objeto que indica el tamaño del ícono.
+        #CREACIÓN DE ÍCONO PARA INCLUIR EN EL BOTÓN:
+        #Variable que guarda el directorio y el nombre del archivo creado, se reemplazan los guiones \ por / 
+        #para poder leer una imagen o cualquier otro archivo, se usa la dirección relativa o absoluta de un 
+        #directorio: 
+        # - Dirección relativa: Es una dirección que busca un archivo desde donde se encuentra la carpeta del 
+        #   archivo python actualmente, esta se debe colocar entre comillas simples o dobles.
+        # - Dirección absoluta: Es una dirección que coloca toda la ruta desde el disco duro C o cualquier otro 
+        #   que se esté usando hasta la ubicación del archivo, la cual se debe colocar entre comillas simples o 
+        #   dobles.
+        #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
+        #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
+        #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
+        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
+        #PyQt5.QtGui.QIcon(): Constructor de la clase QIcon que hereda de la clase QtGui y perteneciente a la 
+        #librería PyQt5, usado para crear un objeto que ícono que pueda ser añadido a cualquier widget como lo 
+        #puede ser un botón, un texto estático, etc. El tamaño de dicha imagen será reducido automáticamente.
+        logoButton = QtGui.QIcon(iconPath)
+        #Se declaran como self.nombreObjeto los widgets a los que se les vaya a extraer o introducir datos en el 
+        #transcurso del funcionamiento de la interfaz gráfica, en este caso se aplica al botón porque este va a 
+        #cambiar el texto que tiene escrito cuando sea presionado.
+        self.middleButton = QtWidgets.QPushButton(text = "\t\t\tCreate", icon = logoButton, iconSize = QtCore.QSize(30, 30))
+        
+        #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
+        #widgets de una interfaz gráfica de usuario (GUI).
+        self.middleButton.setStyleSheet("background: qlineargradient(x1:0, y1:1, x2:0, y2:0, stop:0 rgb(255,230,181), stop:1 rgb(150,0,0));")
+
+
         #CONTENEDORES DE ELEMENTOS: La biblioteca PyQt5 ofrece varios tipos de contenedores que se pueden 
         #utilizar para organizar los widgets en una interfaz gráfica. Los más comunes son:
         # - QVBoxLayout: Organiza los widgets en una disposición vertical, uno debajo del otro.
@@ -189,7 +251,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #de la misma forma. 
         #AÑADIENDO WIDGETS AL CONTENEDOR DEL MENÚ SUPERIOR:
         menu_layout.addWidget(logo_label)                   #Logo del contenedor del menú superior.
-        menu_layout.addWidget(text_label)                   #Texto del contenedor del menú superior.
+        menu_layout.addWidget(text_menu)                    #Texto del contenedor del menú superior.
         menu_layout.addWidget(self.timezones_combo)         #Combo box del contenedor del menú superior.
         #AÑADIENDO WIDGETS AL CONTENEDOR INTERMEDIO:
         self.container_layout.addWidget(self.create_square("Square 1", "This is square 1", "Create 1", 1))
