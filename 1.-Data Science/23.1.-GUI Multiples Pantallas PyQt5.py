@@ -255,8 +255,8 @@ class MainWindow(QtWidgets.QMainWindow):
         menu_layout = QtWidgets.QHBoxLayout(menu_widget)    #Contenedor del menú superior.
         #---------------------------------------------CONTENEDOR MENÚ--------------------------------------------
         #--------------------------------------------CONTENEDOR MEDIO--------------------------------------------
-        middle_widget1 = QtWidgets.QWidget()                   #Widget que contiene al Layout intermedio 1.
-        middle_widget2 = QtWidgets.QWidget()                   #Widget que contiene al Layout intermedio 2.
+        middle_widget1 = QtWidgets.QWidget()                #Widget que contiene al Layout intermedio 1.
+        middle_widget2 = QtWidgets.QWidget()                #Widget que contiene al Layout intermedio 2.
         #En este caso el height de CSS lo que hace es modificar el tamaño de los widgets, no del contenedor.
         middle_widget1.setStyleSheet("background-color: white; height: 100px; padding: 5px; border-radius: 25px;")
         middle_widget2.setStyleSheet("background-color: white; height: 100px; padding: 5px; border-radius: 25px;")
@@ -291,15 +291,15 @@ class MainWindow(QtWidgets.QMainWindow):
         # - En su tercer parámetro se indica la columna donde se quiere colocar el elemento, contando desde 0.
         #Fila 1 = x = 0; Columna 1 = y = 0; posicion = (Fila, Columna) 
         #CONTENEDOR INTERMEDIO 1:
-        self.individual_layout1.addWidget(element_title1, 0, 0)  #Agrega el título del layout en (0,0)
-        self.individual_layout1.addWidget(element_text1, 1, 0)   #Agrega el texto del layout en (1,0)
-        self.individual_layout1.addWidget(buttons_text1, 2, 0)   #Agrega el texto de los botones en (2,0)
+        self.individual_layout1.addWidget(element_title1, 0, 0) #Agrega el título del layout en (0,0)
+        self.individual_layout1.addWidget(element_text1, 1, 0)  #Agrega el texto del layout en (1,0)
+        self.individual_layout1.addWidget(buttons_text1, 2, 0)  #Agrega el texto de los botones en (2,0)
         self.individual_layout1.addWidget(docButton1, 2, 1)     #Agrega el botón de documentación en (2,1)
         self.individual_layout1.addWidget(createButton1, 2, 2)  #Agrega el botón de documentación en (2,1)
         #CONTENEDOR INTERMEDIO 2:
-        self.individual_layout2.addWidget(element_title2, 0, 0)  #Agrega el título del layout en (0,0)
-        self.individual_layout2.addWidget(element_text2, 1, 0)   #Agrega el texto del layout en (1,0)
-        self.individual_layout2.addWidget(buttons_text2, 2, 0)   #Agrega el texto de los botones en (2,0)
+        self.individual_layout2.addWidget(element_title2, 0, 0) #Agrega el título del layout en (0,0)
+        self.individual_layout2.addWidget(element_text2, 1, 0)  #Agrega el texto del layout en (1,0)
+        self.individual_layout2.addWidget(buttons_text2, 2, 0)  #Agrega el texto de los botones en (2,0)
         self.individual_layout2.addWidget(docButton2, 2, 1)     #Agrega el botón de documentación en (2,1)
         self.individual_layout2.addWidget(createButton2, 2, 2)  #Agrega el botón de documentación en (2,1)
         #CONTENEDOR DE LOS 2 INTERMEDIOS:
@@ -310,7 +310,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #PyQt5.QtWidgets.QVBoxLayout.addStretch(): Este método agrega un espacio elástico al layout que se 
         #expandirá para ocupar cualquier espacio adicional disponible dentro del contenedor.
         main_layout.addStretch()                            #Se agrega un espaciado stretch después.
-        main_layout.addWidget(middle_widget1)                #Se agrega el Widget medio al contenedor principal.
+        main_layout.addWidget(middle_widget1)               #Se agrega el Widget medio al contenedor principal.
         main_layout.addStretch()                            #Se agrega un espaciado stretch después.
         
         #Creación de un objeto QWidget para acomodar el contenedor principal dentro del frame.
