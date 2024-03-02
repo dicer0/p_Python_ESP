@@ -110,7 +110,6 @@ class MainWindow(QtWidgets.QMainWindow):
         #mencionar que para el style se deben usar comillas simples ('') para que no tenga conlficto con las 
         #comillas dobles del parámetro text = "". PyQt5 acepta algunas instrucciones CSS pero no todas.
         logo_label = QtWidgets.QLabel(pixmap = scaledImage)    #Imagen redimensionada.
-
         #CREACIÓN DE LOS WIDGETS: Texto Estático, clase QLabel
         #Instancia de la librería PyQt5 por medio del constructor de la clase QLabel que hereda de la clase 
         #QtWidgets y sirve para crear un widget que muestre un texto estático o una imagen en una interfaz 
@@ -126,7 +125,6 @@ class MainWindow(QtWidgets.QMainWindow):
         text_menu =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
                                                 "GUI MultiPantalla"
                                             "</p>")
-        
         #CREACIÓN DE LOS WIDGETS: Combo Box, Lista Desplegable
         #Instancia de la librería PyQt5 por medio del constructor de la clase QComboBox que hereda de la clase 
         #QtWidgets y sirve para crear un widget que muestre una lista desplegable de elementos seleccionables 
@@ -151,16 +149,21 @@ class MainWindow(QtWidgets.QMainWindow):
         #   dentro del widget padre.
         # - text: Permite especificar el texto que se mostrará en el widget. Puede ser una cadena de texto en 
         #   formato plano o enriquecido con etiquetas HTML. 
-        element_title =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
-                                                    "GUI MultiPantalla"
-                                                "</p>")
-        element_text =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
-                                                    "GUI MultiPantalla"
-                                                "</p>")
-        buttons_text =  QtWidgets.QLabel(text ="<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'>" +
-                                                    "GUI MultiPantalla"
-                                                "</p>")
-        
+        title_content =  """<p style = 'font-size: 30px; font-family: Consolas, monospace; color: black; font-weight: bold;'> 
+                                Título Layout 
+                            </p>"""
+        element_title1 =  QtWidgets.QLabel(text = title_content)
+        element_title2 =  QtWidgets.QLabel(text = title_content)
+        text_content =   """<p style = 'font-size: 20px; font-family: Consolas, monospace; color: black; font-weight: bold;'> 
+                                Texto del contenedor
+                            </p>"""
+        element_text1 =  QtWidgets.QLabel(text = text_content)
+        element_text2 =  QtWidgets.QLabel(text = text_content)
+        buttons_content =   """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
+                                Texto del botón
+                            </p>"""
+        buttons_text1 =  QtWidgets.QLabel(text = buttons_content)
+        buttons_text2 =  QtWidgets.QLabel(text = buttons_content)
         #CREACIÓN DE LOS WIDGETS: Botón
         #Instancia de la librería PyQt5 por medio del constructor de la clase QPushButton que hereda de la clase 
         #QtWidgets y sirve para crear un widget de tipo botón, en este se deben indicar como parámetros:
@@ -199,11 +202,17 @@ class MainWindow(QtWidgets.QMainWindow):
         #Se declaran como self.nombreObjeto los widgets a los que se les vaya a extraer o introducir datos en el 
         #transcurso del funcionamiento de la interfaz gráfica, en este caso se aplica al botón porque este va a 
         #cambiar el texto que tiene escrito cuando sea presionado.
-        self.middleButton = QtWidgets.QPushButton(text = "\t\t\tCreate", icon = logoButton, iconSize = QtCore.QSize(30, 30))
-        
+        docButton1 = QtWidgets.QPushButton(text = "", icon = logoButton, iconSize = QtCore.QSize(30, 30))
+        createButton1 = QtWidgets.QPushButton(text = "\t\t\tCreate")
+        docButton2 = QtWidgets.QPushButton(text = "", icon = logoButton, iconSize = QtCore.QSize(30, 30))
+        createButton2 = QtWidgets.QPushButton(text = "\t\t\tCreate")
         #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
         #widgets de una interfaz gráfica de usuario (GUI).
-        self.middleButton.setStyleSheet("background: qlineargradient(x1:0, y1:1, x2:0, y2:0, stop:0 rgb(255,230,181), stop:1 rgb(150,0,0));")
+        docButton1.setStyleSheet("background-color: red; max-width: 50px; height: 50px;")
+        createButton1.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));")
+        docButton2.setStyleSheet("background-color: red; max-width: 50px; height: 50px;")
+        createButton2.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));")
+        
 
 
         #CONTENEDORES DE ELEMENTOS: La biblioteca PyQt5 ofrece varios tipos de contenedores que se pueden 
@@ -232,16 +241,36 @@ class MainWindow(QtWidgets.QMainWindow):
         # - Si no recibe ningún parámetro, este es un contenedor vacío sin widget principal que aceptará 
         #   varios elementos o contenedores y los irá colocando verticalmente, horizontalmente, en forma de 
         #   matriz, o de varias otras formas, uno después del otro.
+        #------------------------------------------CONTENEDOR PRINCIPAL------------------------------------------
         main_layout = QtWidgets.QVBoxLayout()               #Contenedor principal.
+        #------------------------------------------CONTENEDOR PRINCIPAL------------------------------------------
         #EL MENÚ SUPERIOR DEBE TENER UNA ALTURA EN ESPECÍFICO, POR LO TANTO SE CREA UN WIDGET QUE LO CONTENGA: 
         #Aunque cabe mencionar que las características del widget se pueden específicar antes o después de 
         #introducir los elementos deseados en el contenedor.
+        #---------------------------------------------CONTENEDOR MENÚ--------------------------------------------
         menu_widget = QtWidgets.QWidget()                   #Widget que contiene al Layout del menú superior.
         menu_widget.setFixedHeight(100)                     #setFixedHeight(): Altura fija para un Widget.
         #En este caso el height de CSS lo que hace es modificar el tamaño de los widgets, no del contenedor.
         menu_widget.setStyleSheet("background-color: #002550; height: 20px;")
         menu_layout = QtWidgets.QHBoxLayout(menu_widget)    #Contenedor del menú superior.
-        self.container_layout = QtWidgets.QHBoxLayout()     #Contenedor intermedio.
+        #---------------------------------------------CONTENEDOR MENÚ--------------------------------------------
+        #--------------------------------------------CONTENEDOR MEDIO--------------------------------------------
+        middle_widget1 = QtWidgets.QWidget()                   #Widget que contiene al Layout intermedio 1.
+        middle_widget2 = QtWidgets.QWidget()                   #Widget que contiene al Layout intermedio 2.
+        #En este caso el height de CSS lo que hace es modificar el tamaño de los widgets, no del contenedor.
+        middle_widget1.setStyleSheet("background-color: white; height: 100px; padding: 5px; border-radius: 25px;")
+        middle_widget2.setStyleSheet("background-color: white; height: 100px; padding: 5px; border-radius: 25px;")
+        #Objeto de la clase QGridLayout, el cual se utiliza para organizar los widgets en una en una cuadrícula 
+        #bidimensional de filas y columnas.
+        # - parent: Si el constructor de esta clase recibe como parámetro un objeto QWidget, ese será el 
+        #   contenedor principal del objeto QGridLayout que organiza sus elementos en forma de rejilla.
+        # - Si no recibe ningún parámetro, este es un contenedor vacío sin widget principal que aceptará 
+        #   varios elementos o contenedores y los irá colocando dependiendo de las coordenadas que se les 
+        #   indique al utilizar el método .addWidget().
+        self.individual_layout1 = QtWidgets.QGridLayout(middle_widget1)    #Contenedor individual intermedio 1.
+        self.individual_layout2 = QtWidgets.QGridLayout(middle_widget2)    #Contenedor individual intermedio 1.
+        content_layout = QtWidgets.QHBoxLayout()                           #Contenedor de elementos intermedios.
+        #--------------------------------------------CONTENEDOR MEDIO--------------------------------------------
         
         #PyQt5.QtWidgets.QVBoxLayout.addWidget(): Método usado para añadir un widget (elemento) de forma 
         #secuencial dentro de un Layout, estos se ordenarán de una forma u otra dependiendo de qué tipo de Layout 
@@ -253,16 +282,35 @@ class MainWindow(QtWidgets.QMainWindow):
         menu_layout.addWidget(logo_label)                   #Logo del contenedor del menú superior.
         menu_layout.addWidget(text_menu)                    #Texto del contenedor del menú superior.
         menu_layout.addWidget(self.timezones_combo)         #Combo box del contenedor del menú superior.
-        #AÑADIENDO WIDGETS AL CONTENEDOR INTERMEDIO:
-        self.container_layout.addWidget(self.create_square("Square 1", "This is square 1", "Create 1", 1))
-        self.container_layout.addWidget(self.create_square("Square 2", "This is square 2", "Create 2", 2))
+        #AÑADIENDO WIDGETS A LOS CONTENEDORES INTERMEDIOS 1 Y 2:
+        #PyQt5.QtWidgets.QGridLayout.addWidget(): Método usado para añadir un widget en una cuadrícula 
+        #bidimensional compuesta por filas y columnas, donde la primera coordenada de filas y columnas se indica 
+        #desde el número 0:
+        # - En su primer parámetro se indica el widget que se quiera aregar.
+        # - En su segundo parámetro se indica la fila donde se quiere colocar el elemento, contando desde 0.
+        # - En su tercer parámetro se indica la columna donde se quiere colocar el elemento, contando desde 0.
+        #Fila 1 = x = 0; Columna 1 = y = 0; posicion = (Fila, Columna) 
+        #CONTENEDOR INTERMEDIO 1:
+        self.individual_layout1.addWidget(element_title1, 0, 0)  #Agrega el título del layout en (0,0)
+        self.individual_layout1.addWidget(element_text1, 1, 0)   #Agrega el texto del layout en (1,0)
+        self.individual_layout1.addWidget(buttons_text1, 2, 0)   #Agrega el texto de los botones en (2,0)
+        self.individual_layout1.addWidget(docButton1, 2, 1)     #Agrega el botón de documentación en (2,1)
+        self.individual_layout1.addWidget(createButton1, 2, 2)  #Agrega el botón de documentación en (2,1)
+        #CONTENEDOR INTERMEDIO 2:
+        self.individual_layout2.addWidget(element_title2, 0, 0)  #Agrega el título del layout en (0,0)
+        self.individual_layout2.addWidget(element_text2, 1, 0)   #Agrega el texto del layout en (1,0)
+        self.individual_layout2.addWidget(buttons_text2, 2, 0)   #Agrega el texto de los botones en (2,0)
+        self.individual_layout2.addWidget(docButton2, 2, 1)     #Agrega el botón de documentación en (2,1)
+        self.individual_layout2.addWidget(createButton2, 2, 2)  #Agrega el botón de documentación en (2,1)
+        #CONTENEDOR DE LOS 2 INTERMEDIOS:
+        
         
         #AÑADIENDO CONTENEDORES AL CONTENEDOR PRINCIPAL, QUE LOS ORDENA HORIZONTALMENTE DE ARRIBA A ABAJO: 
         main_layout.addWidget(menu_widget)                  #Se agrega el Widget menú al contenedor principal.
         #PyQt5.QtWidgets.QVBoxLayout.addStretch(): Este método agrega un espacio elástico al layout que se 
         #expandirá para ocupar cualquier espacio adicional disponible dentro del contenedor.
         main_layout.addStretch()                            #Se agrega un espaciado stretch después.
-        main_layout.addLayout(self.container_layout)        #Se agrega el Layout medio al contenedor principal.
+        main_layout.addWidget(middle_widget1)                #Se agrega el Widget medio al contenedor principal.
         main_layout.addStretch()                            #Se agrega un espaciado stretch después.
         
         #Creación de un objeto QWidget para acomodar el contenedor principal dentro del frame.
