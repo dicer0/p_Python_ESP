@@ -344,77 +344,50 @@ class MainWindow(QtWidgets.QMainWindow):
         #El método setCentralWidget() se utiliza para especificar qué widget se debe colocar en el área central
         #de la ventana creada con esta clase propia.
         self.setCentralWidget(centralWidget)            #Contenedor colocado en el área central de la GUI.
-        
-    def create_square(self, name, text, button_text, window_number):
-        square = QtWidgets.QFrame()
-        square.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        square.setFixedSize(200, 200)
-        square.setStyleSheet("background-color: white;")
-        square.mousePressEvent = lambda event, n=name, w=window_number: self.open_window(n, w)
-        
-        # Add layout to square
-        layout = QtWidgets.QVBoxLayout()
-        square.setLayout(layout)
-        
-        # Text label
-        text_label = QtWidgets.QLabel(text)
-        layout.addWidget(text_label)
-        
-        # Button
-        create_button = QtWidgets.QPushButton(button_text)
-        create_button.clicked.connect(lambda: self.open_window(f"{name} Window", window_number))
-        layout.addWidget(create_button)
-        
-        return square
     
-    def open_window(self, name, window_number):
-        window = QtWidgets.QWidget()
-        window.setWindowTitle(name)
-        window.setGeometry(200, 200, 400, 300)
+        #Instancia_Widget.evento_señal.connect(función_que_reacciona_al_evento): Este método se utiliza para 
+        #enlazar un evento a un controlador de eventos, que es una función que se ejecuta cuando ocurra el 
+        #evento, para ello se usa el nombre del widget, seguido del evento de tipo señal que detona el método, 
+        #la palabra reservdada .connect() y entre paréntesis se coloca el nombre de la función que ejecutará 
+        #alguna acción cuando ese evento ocurra. Normalmente las funciones que describen las acciones a 
+        #realizar por los widgets de la GUI se encuentran dentro de esta misma clase, pero fuera de su 
+        #constructor.
+        # - Tipos de Eventos en Python: 
+        #       - clicked: Señal emitida cuando se hace clic en un elemento, como un botón.
+        #       - doubleClicked: Señal emitida cuando se hace doble clic en un elemento.
+        #       - pressed: Señal emitida cuando se presiona un elemento, como un botón.
+        #       - released: Señal emitida cuando se suelta un elemento, como un botón.
+        #       - textChanged: Señal emitida cuando el texto de un elemento, como un campo de texto, cambia.
+        #       - currentIndexChanged: Señal emitida cuando se cambia el índice seleccionado en un elemento, 
+        #         como en un menú desplegable.
+        #       - activated: Señal emitida cuando se selecciona un elemento, como un elemento de un menú 
+        #         desplegable o una opción de una lista.
+        #       - keyPressed: Señal emitida cuando se presiona una tecla en el teclado.
+        #       - keyReleased: Señal emitida cuando se suelta una tecla en el teclado.
+        #       - mousePressEvent: Señal emitida cuando se presiona un botón del mouse.
+        #       - mouseReleaseEvent: Señal emitida cuando se suelta un botón del mouse.
+        #       - mouseMoveEvent: Señal emitida cuando se mueve el mouse.
+        #       - valueChanged: Señal emitida cuando se selecciona un nuevo elemento en un combo box (lista 
+        #         desplegable).
+        #       - timeout: Señal emitida cuando transcurre cada intervalo de tiempo especificado en un 
+        #         temporizador.
+        #Es importante mencionar que en  PyQt5, cuando se conecta una función a un evento, la función conectada 
+        #puede recibir argumentos adicionales proporcionados por la señal emitida. Estos argumentos son 
+        #transmitidos automáticamente por el sistema de señales y slots de PyQt5.
+        # - Tipos de argumentos retornados al suceder un evento: 
+        #       - *args y **kwargs: Muchas señales en PyQt5 permiten enviar argumentos adicionales a través de 
+        #          *args (tupla de argumentos posicionales) y **kwargs (diccionario de argumentos de palabras 
+        #          clave). Estos parámetros pueden variar según la señal específica y su contexto de uso.
+        #       - checked: Algunas señales, como "clicked" en un botón, pueden enviar el estado de alternancia 
+        #         del widget. Este parámetro indica si el widget está marcado y suele ser de tipo booleano.
+        #       - text: En widgets de entrada de texto, como QLineEdit o QTextEdit, las señales pueden enviar el 
+        #         texto ingresado o modificado como parámetro.
+        #       - index: En widgets que tienen índices o selecciones, como QComboBox o QListView, las señales 
+        #         pueden enviar el índice seleccionado como parámetro.
+        #       - position: En widgets que trabajan con eventos de posición, como QMouseEvent, las señales 
+        #         pueden enviar la posición del cursor o del evento como parámetro.
+        #Al presionar el botón se ejecutará el método botonPresionado, declarado dentro de la misma clase.
         
-        # Top container with blue background color
-        top_container = QtWidgets.QWidget()
-        top_container.setStyleSheet("background-color: #002550;")
-        
-        # Below container with gray background color
-        below_container = QtWidgets.QWidget()
-        below_container.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
-        
-        # Add text labels and buttons to the below container
-        text_label1 = QtWidgets.QLabel("This is line 1.")
-        text_label2 = QtWidgets.QLabel("This is line 2.")
-        
-        confirm_button = QtWidgets.QPushButton("Confirm")
-        return_button = QtWidgets.QPushButton("Return")
-        
-        button_layout = QtWidgets.QHBoxLayout()
-        button_layout.addWidget(confirm_button)
-        button_layout.addWidget(return_button)
-        
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(text_label1)
-        layout.addWidget(text_label2)
-        layout.addLayout(button_layout)
-        below_container.setLayout(layout)
-        
-        # Add top and below containers to the window
-        window_layout = QtWidgets.QVBoxLayout()
-        window_layout.addWidget(top_container)
-        window_layout.addWidget(below_container)
-        
-        window.setLayout(window_layout)
-        
-        confirm_button.clicked.connect(lambda: print(f"Confirm button clicked in Window {window_number}"))
-        return_button.clicked.connect(window.close)
-        
-        window.show()
-        
-        # Keep a reference to the opened window
-        self.open_windows.append(window)
-        
-    def timezone_changed(self, index):
-        timezone = self.timezones_combo.currentText()
-        print("Selected Time Zone:", timezone)
         
 #__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 
 #programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
