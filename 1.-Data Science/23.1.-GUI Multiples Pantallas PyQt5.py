@@ -50,7 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #vertical medida desde el mismo punto (pos_y) y las últimas dos representan el ancho y alto de la ventana 
         #en pixeles:
         #   - setGeometry(pos_x, pos_y, width, height).
-        self.setGeometry(100, 100, 900, 500)
+        self.setGeometry(100, 100, 1000, 500)
         self.open_windows = []  # List to hold references to opened windows
         
         #WIDGETS MENU:
@@ -154,7 +154,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             </p>"""
         element_title1 =  QtWidgets.QLabel(text = title_content)
         element_title2 =  QtWidgets.QLabel(text = title_content)
-        text_content =   """<p style = 'font-size: 20px; font-family: Consolas, monospace; color: black; font-weight: bold;'> 
+        text_content =   """<p style = 'font-size: 20px; font-family: Consolas, monospace; color: black;'> 
                                 Texto del contenedor
                             </p>"""
         element_text1 =  QtWidgets.QLabel(text = text_content)
@@ -203,15 +203,17 @@ class MainWindow(QtWidgets.QMainWindow):
         #transcurso del funcionamiento de la interfaz gráfica, en este caso se aplica al botón porque este va a 
         #cambiar el texto que tiene escrito cuando sea presionado.
         docButton1 = QtWidgets.QPushButton(text = "", icon = logoButton, iconSize = QtCore.QSize(30, 30))
-        createButton1 = QtWidgets.QPushButton(text = "\t\t\tCreate")
+        createButton1 = QtWidgets.QPushButton(text = "Create")
         docButton2 = QtWidgets.QPushButton(text = "", icon = logoButton, iconSize = QtCore.QSize(30, 30))
-        createButton2 = QtWidgets.QPushButton(text = "\t\t\tCreate")
+        createButton2 = QtWidgets.QPushButton(text = "Create")
         #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
         #widgets de una interfaz gráfica de usuario (GUI).
-        docButton1.setStyleSheet("background-color: red; max-width: 50px; height: 50px;")
-        createButton1.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));")
-        docButton2.setStyleSheet("background-color: red; max-width: 50px; height: 50px;")
-        createButton2.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));")
+        doctButtonStyle = "background-color: transparent; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
+        docButton1.setStyleSheet(doctButtonStyle)
+        docButton2.setStyleSheet(doctButtonStyle)
+        createButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
+        createButton1.setStyleSheet(createButtonStyle)
+        createButton2.setStyleSheet(createButtonStyle)
         
 
 
@@ -257,9 +259,12 @@ class MainWindow(QtWidgets.QMainWindow):
         #--------------------------------------------CONTENEDOR MEDIO--------------------------------------------
         middle_widget1 = QtWidgets.QWidget()                #Widget que contiene al Layout intermedio 1.
         middle_widget2 = QtWidgets.QWidget()                #Widget que contiene al Layout intermedio 2.
+        content_widget = QtWidgets.QWidget()                #Widget que contiene al Layout horizontal medio.
         #En este caso el height de CSS lo que hace es modificar el tamaño de los widgets, no del contenedor.
-        middle_widget1.setStyleSheet("background-color: white; height: 100px; padding: 5px; border-radius: 25px;")
-        middle_widget2.setStyleSheet("background-color: white; height: 100px; padding: 5px; border-radius: 25px;")
+        middleWidgetStyle = "background-color: white; height: 100px; padding: 5px; border-radius: 25px;"
+        middle_widget1.setStyleSheet(middleWidgetStyle)
+        middle_widget2.setStyleSheet(middleWidgetStyle)
+        content_widget.setStyleSheet("background-color: transparent;")
         #Objeto de la clase QGridLayout, el cual se utiliza para organizar los widgets en una en una cuadrícula 
         #bidimensional de filas y columnas.
         # - parent: Si el constructor de esta clase recibe como parámetro un objeto QWidget, ese será el 
@@ -267,9 +272,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # - Si no recibe ningún parámetro, este es un contenedor vacío sin widget principal que aceptará 
         #   varios elementos o contenedores y los irá colocando dependiendo de las coordenadas que se les 
         #   indique al utilizar el método .addWidget().
-        self.individual_layout1 = QtWidgets.QGridLayout(middle_widget1)    #Contenedor individual intermedio 1.
-        self.individual_layout2 = QtWidgets.QGridLayout(middle_widget2)    #Contenedor individual intermedio 1.
-        content_layout = QtWidgets.QHBoxLayout()                           #Contenedor de elementos intermedios.
+        self.individual_layout1 = QtWidgets.QGridLayout(middle_widget1) #Contenedor individual intermedio 1.
+        self.individual_layout2 = QtWidgets.QGridLayout(middle_widget2) #Contenedor individual intermedio 1.
+        content_layout = QtWidgets.QHBoxLayout(content_widget)          #Contenedor de elementos intermedios.
         #--------------------------------------------CONTENEDOR MEDIO--------------------------------------------
         
         #PyQt5.QtWidgets.QVBoxLayout.addWidget(): Método usado para añadir un widget (elemento) de forma 
@@ -303,14 +308,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.individual_layout2.addWidget(docButton2, 2, 1)     #Agrega el botón de documentación en (2,1)
         self.individual_layout2.addWidget(createButton2, 2, 2)  #Agrega el botón de documentación en (2,1)
         #CONTENEDOR DE LOS 2 INTERMEDIOS:
+        content_layout.addWidget(middle_widget1)                #Logo del contenedor del menú superior.
+        #PyQt5.QtWidgets.QVBoxLayout.addStretch(): Este método agrega un espacio elástico al layout que se 
+        #expandirá para ocupar cualquier espacio adicional disponible dentro del contenedor.
+        content_layout.addStretch()                             #Se agrega un espaciado stretch después.
+        content_layout.addWidget(middle_widget2)                #Logo del contenedor del menú superior.
         
-        
-        #AÑADIENDO CONTENEDORES AL CONTENEDOR PRINCIPAL, QUE LOS ORDENA HORIZONTALMENTE DE ARRIBA A ABAJO: 
+        #AÑADIENDO CONTENEDORES AL CONTENEDOR PRINCIPAL, QUE LOS ORDENA HORIZONTALMENTE DE ARRIBA A ABAJO: Es 
+        #muy importante mencionar que para que el órden de los elementos se mantenga, se debe relacionar un 
+        #widget a cada subcontenedor que se utilice en el diseño.
         main_layout.addWidget(menu_widget)                  #Se agrega el Widget menú al contenedor principal.
         #PyQt5.QtWidgets.QVBoxLayout.addStretch(): Este método agrega un espacio elástico al layout que se 
         #expandirá para ocupar cualquier espacio adicional disponible dentro del contenedor.
         main_layout.addStretch()                            #Se agrega un espaciado stretch después.
-        main_layout.addWidget(middle_widget1)               #Se agrega el Widget medio al contenedor principal.
+        main_layout.addWidget(content_widget)               #Se agrega el Widget medio al contenedor principal.
         main_layout.addStretch()                            #Se agrega un espaciado stretch después.
         
         #Creación de un objeto QWidget para acomodar el contenedor principal dentro del frame.
@@ -405,10 +416,33 @@ class MainWindow(QtWidgets.QMainWindow):
         timezone = self.timezones_combo.currentText()
         print("Selected Time Zone:", timezone)
         
-
+#__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 
+#programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
+#una buena práctica.
 if __name__ == "__main__":
+    #Instancia de la librería PyQt5 por medio del constructor de la clase QApplication, que hereda de la clase 
+    #QtWidgets para crear un objeto que funcione como la base de una GUI.
+    # - sys.argv: Se refiere a un vector llamado "argument vector" que puede ser accedido desde la librería sys, 
+    #   este incluye en su contenido el nombre del archivo que se quiere ejecutar y los argumentos necesarios 
+    #   que se le deben pasar para que efectúe su ejecución. Se le debe pasar como parámetro al constructor de 
+    #   la clase QApplication para que se pueda crear la base de la GUI.
+    #       - Por ejemplo, si se ejecutara el siguiente comando en consola:
+    #           python mi_script.py arg1 arg2 arg3
+    #         El contenido de sys.argv sería:
+    #           ['mi_script.py', 'arg1', 'arg2', 'arg3']
     app = QtWidgets.QApplication(sys.argv)
+    #Instancia de nuestra clase propia llamada MainWindow que fue creada en este mismo programa (window se 
+    #refiere a la ventana del GUI en PyQt5) e incluye una instancia de la clase GraficaPyQt5 para agregar un 
+    #widget que crea una gráfica dentro, el constructor vacío lo que hace es indicar que se cree y muestre la 
+    #ventana.
     window = MainWindow()
+    #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
+    #widgets de una interfaz gráfica de usuario (GUI).
     window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
+    #PyQt5.QtWidgets.QMainWindow.show() = window.show(): Método aplicado al objeto de la clase QMainWindow, 
+    #del que hereda esta clase propia para mostrar la ventana del GUI.
     window.show()
-    sys.exit(app.exec_())
+    #PyQt5.QtWidgets.QApplication.exec_(): Método para que se ejecute en un loop infinito el GUI, logrando así 
+    #que no se ejecute una vez y luego cierre por sí solo, sino que solo se cierre solamente al dar clic en el 
+    #tache del window.
+    app.exec_()
