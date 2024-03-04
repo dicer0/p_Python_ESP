@@ -344,6 +344,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #El método setCentralWidget() se utiliza para especificar qué widget se debe colocar en el área central
         #de la ventana creada con esta clase propia.
         self.setCentralWidget(centralWidget)            #Contenedor colocado en el área central de la GUI.
+        self.show()
     
         #Instancia_Widget.evento_señal.connect(función_que_reacciona_al_evento): Este método se utiliza para 
         #enlazar un evento a un controlador de eventos, que es una función que se ejecuta cuando ocurra el 
@@ -387,8 +388,82 @@ class MainWindow(QtWidgets.QMainWindow):
         #       - position: En widgets que trabajan con eventos de posición, como QMouseEvent, las señales 
         #         pueden enviar la posición del cursor o del evento como parámetro.
         #Al presionar el botón se ejecutará el método botonPresionado, declarado dentro de la misma clase.
+        createButton1.clicked.connect(self.open_window1)
+        createButton2.clicked.connect(self.open_window2)
+
+    #función open_window1(): Método creado dentro de la clase propia llamada MainWindow que recibe como 
+    #parámetro el evento que lo activa, para posteriormente ejecutar cierta acción.
+    #En este caso el evento es activado cuando se presiona el botón y lo que hace es abrir una nueva ventana, 
+    #que es instancia de la clase SecondaryWindow.
+    def open_window1(self):
+        secondary_window = SecondaryWindow("Ventana 1") #Creación de ventana 1.
+        secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
+        secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
+        #En el código de la ventana principal MainWindow se creó una variable de lista vacía llamada 
+        #self.open_windows, esta se utiliza cuando se quiera abrir ventanas nuevas, ya que cada vez que se hace 
+        #clic en uno de los botones, se crea una nueva instancia de SecondaryWindow, pero si esta no se mantiene 
+        #en ningún lugar, las ventanas se destruirán inmediatamente porque Python no tiene ninguna referencia a 
+        #ellas. Al crear la lista self.open_windows en la clase MainWindow, proporcionamos un lugar para 
+        #almacenar todas las instancias de la clase SecondaryWindow, asegurando que la ventana no se cierre 
+        #después de que el método haya terminado de ejecutarse.
+        self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+    def open_window2(self):
+        secondary_window = SecondaryWindow("Ventana 2") #Creación de ventana 2.
+        secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
+        secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
+        self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+
+
+#SecondaryWindow: Clase que representa las ventanas adicionales abiertas en la GUI, a través de ella se 
+#pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.
+class SecondaryWindow(QtWidgets.QMainWindow):
+    def __init__(self, title):                  #__init__(): Constructor de la clase SecondaryWindow.
+        super().__init__()                      #super(): Herencia de la clase QtWidgets.QMainWindow.
+        self.setWindowTitle(title)              #Título de la ventana, que recibe la clase como parámetro.
         
+        #WIDGETS VENTANAS ADICIONALES:
+        #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla editable 
+        #para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden contener texto, 
+        #números, imágenes u otros widgets.
+        table = QtWidgets.QTableWidget()                            #Tabla.
+        table.setRowCount(10)                                       #Número de filas de la tabla.
+        table.setColumnCount(10)                                    #Número de columnas de la tabla.
+        confirmButton = QtWidgets.QPushButton("Texto del botón")    #Botón.
+        createButtonStyle = "max-width: 250px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; border-radius: 25px; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
+        confirmButton.setStyleSheet(createButtonStyle)              #Estilo del botón.
+        text_content1 =  """<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'> 
+                                Título ventana adicional 
+                            </p>"""
+        texto_1 = QtWidgets.QLabel(text_content1)                   #Texto indicativo.
+        text_content2 =   """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
+                                Texto del botón
+                            </p>"""
+        texto_2 = QtWidgets.QLabel(text_content2)                   #Texto indicativo.
+
+        #CONTENEDORES:
+        widgetContenedor = QtWidgets.QWidget()              #Widget que contiene al Layout inferior.
+        widgetContenedor.setStyleSheet("background-color: #002550; padding: 5px;")
+        #Contenedor con organización matricial (fila, col).
+        contenedorMatricial = QtWidgets.QGridLayout(widgetContenedor)   
+        contenedorVertical = QtWidgets.QVBoxLayout()        #Contenedor con organización vertical.
+
+        #AÑADIR WIDGETS A LOS CONTENEDORES:
+        #------------------------------------------CONTENEDOR MATRICIAL------------------------------------------
+        contenedorMatricial.addWidget(texto_1, 0, 0)        #Añadir texto a la posición matricial (0,0).
+        contenedorMatricial.addWidget(texto_2, 1, 0)        #Añadir texto a la posición matricial (1,0).
+        contenedorMatricial.addWidget(confirmButton, 1, 2)  #Añadir botón a la posición matricial (1,2).
+        #------------------------------------------CONTENEDOR MATRICIAL------------------------------------------
+        #-------------------------------------------CONTENEDOR VERTICAL------------------------------------------
+        contenedorVertical.addWidget(table)                 #Añadir tabla al contenedor vertical.
+        contenedorVertical.addWidget(widgetContenedor)      #Añadir el contenedor matricial al vertical.
+        #-------------------------------------------CONTENEDOR VERTICAL------------------------------------------
         
+        #UNIR LOS CONTENEDORES EN UN SOLO WIDGET Y CENTRAR EL CONTENEDOR PRINCIPAL:
+        centralWidget = QtWidgets.QWidget()                 #Widget que incluye todos los contenedores.
+        centralWidget.setLayout(contenedorVertical)         #Layout principal metido en un widget para centrarlo.
+        self.setCentralWidget(centralWidget)                #Centralización del widget principal.
+
+
 #__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 
 #programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
 #una buena práctica.
