@@ -431,17 +431,18 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         confirmButton = QtWidgets.QPushButton("Texto del botón")    #Botón.
         createButtonStyle = "max-width: 250px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; border-radius: 25px; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
         confirmButton.setStyleSheet(createButtonStyle)              #Estilo del botón.
-        text_content1 =  """<p style = 'font-size: 30px; font-family: Consolas, monospace; color: white; font-weight: bold;'> 
+        text_content1 =  """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: white; font-weight: bold;'> 
                                 Título ventana adicional 
                             </p>"""
         texto_1 = QtWidgets.QLabel(text_content1)                   #Texto indicativo.
-        text_content2 =   """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
+        text_content2 =   """<p style = 'font-size: 20px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
                                 Texto del botón
                             </p>"""
         texto_2 = QtWidgets.QLabel(text_content2)                   #Texto indicativo.
 
         #CONTENEDORES:
         widgetContenedor = QtWidgets.QWidget()              #Widget que contiene al Layout inferior.
+        widgetContenedor.setFixedHeight(100)                #setFixedHeight(): Altura fija para un Widget.
         widgetContenedor.setStyleSheet("background-color: #002550; padding: 5px;")
         #Contenedor con organización matricial (fila, col).
         contenedorMatricial = QtWidgets.QGridLayout(widgetContenedor)   
