@@ -60,13 +60,16 @@ mssql_engine_sql_auth = create_engine('mssql+pyodbc://username:password@mydsn')
 #Se utiliza esta arquitectura de código cuando se quiera efectuar una acción donde se espera que pueda ocurrir un 
 #error durante su ejecución.
 try:
-    # Attempt to connect
+    #Attempt to connect
     connection = mssql_engine_windows.connect()
     print("Connection successful!")
-    # Close the connection
+    #Close the connection
     connection.close()
-except Exception as e:
-    print("Error:", e)
+except Exception as error:
+    print("Error:\n" + error)
+finally:
+    if('connection' in locals()):
+        connection.close()
 
 #MANDAR DATOS A LA BASE DE DATOS:
 #declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
@@ -80,19 +83,19 @@ class User(Base):
     age = Column(Integer)
     gender = Column(CHAR)
 
-# Create a session to interact with the database
+#Create a session to interact with the database
 Session = sessionmaker(bind = mysql_engine)
 session = Session()
 
-# Example: Inserting data into the database
+#Example: Inserting data into the database
 new_user = User(name = 'John', age = 30, gender = 'm')
 session.add(new_user)
 session.commit()
 
-# Example: Querying data from the database
+#Example: Querying data from the database
 users = session.query(User).all()
 for user in users:
     print(user.name, user.age)
 
-# Close the session when done
+#Close the session when done
 session.close()
