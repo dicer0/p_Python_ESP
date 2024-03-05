@@ -50,7 +50,7 @@ from sqlalchemy.orm import sessionmaker
 #1.- MySQL: create_engine('mysql+pymysql://username:password@hostname:port/database_name')
 #instalation: pip install mysqlclient & pip install pymysql
 try:
-    mysql_engine = create_engine('mysql+pymysql://root:password@localhost:3306/1_platziblog_db')
+    mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     connection1 = mysql_engine.connect()
     print("1.- MySQL Connection successful!!!\n")
     connection1.close()
@@ -101,32 +101,3 @@ try:
     connection6.close()
 except Exception as error:
     print("6.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Server authentication:\n" + str(error) + "\n")
-
-#MANDAR DATOS A LA BASE DE DATOS:
-#declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
-Base = declarative_base()
-#Las clases que vayan a mandar datos a la DB deben heredar de la variable que haya usado el método 
-#declarative_base().
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-    gender = Column(CHAR)
-
-#Create a session to interact with the database
-Session = sessionmaker(bind = mysql_engine)
-session = Session()
-
-#Example: Inserting data into the database
-new_user = User(name = 'John', age = 30, gender = 'm')
-session.add(new_user)
-session.commit()
-
-#Example: Querying data from the database
-users = session.query(User).all()
-for user in users:
-    print(user.name, user.age)
-
-#Close the session when done
-session.close()
