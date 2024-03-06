@@ -48,7 +48,8 @@ from sqlalchemy.orm import sessionmaker
 #Se utiliza esta arquitectura de código cuando se quiera efectuar una acción donde se espera que pueda ocurrir un 
 #error durante su ejecución.
 #1.- MySQL: create_engine('mysql+pymysql://username:password@hostname:port/database_name')
-#instalation: pip install mysqlclient & pip install pymysql
+#instalation: pip install mysqlclient
+#instalation: pip install pymysql
 try:
     mysql_engine = create_engine('mysql+pymysql://root:password@localhost:3306/1_platziblog_db')
     connection1 = mysql_engine.connect()
