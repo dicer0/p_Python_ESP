@@ -57,7 +57,7 @@ try:
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
 #2.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
-#instalation: pip install psycopg2
+#instalation: pip install psycopg2 
 try:
     postgresql_engine = create_engine('postgresql://username:password@hostname:port/database_name')
     connection2 = postgresql_engine.connect()
