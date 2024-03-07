@@ -84,10 +84,21 @@ try:
     connection4.close()
 except Exception as error:
     print("4.- Ups an Error ocurred while Opening the SQLite DataBase with an Absolute Path:\n" + str(error) + "\n")
-#5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://ServerName/DatabaseName?trusted_connection=yes')
+#5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://@mydsn')
 #instalation: pip install pyodbc
+#Este tipo de conexión es más compleja que las demás, ya que se debe ejecutar un paso intermedio donde se crea un 
+#acceso llamado ODBC (Open DataBase Connectivity), que es una  API estándar de la industria diseñada para permitir 
+#que las distintas aplicaciones (código backend Python, Node.js, Java, etc.) puedan acceder a diferentes tipos de 
+#bases de datos y/o sistemas de gestión de bases de datos (DBMS) independientemente del sistema operativo o lenguaje 
+#de programación que utilicen, proporcionando así una capa intermedia entre ellas.
+#Para crear el ODBC se deben seguir los siguientes pasos:
+#Panel de Control -> Sistema y Seguridad -> Herramientas Administrativas -> OBDC Data Sources 64 Bit -> Agregar -> SQL
+#Server -> Finalizar -> Nombre: Nombre del OBDC -> Servidor: Servidor al que nos queremos conectar -> Siguiente -> 
+#Autentificacion de Windows -> Siguiente -> Establecer la siguiente base de datos como predeterminada: Base de datos a 
+#la que nos queremos conectar -> Siguiente -> Finalizar -> Probar Origen de Datos -> Aceptar -> Aceptar.
+#Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión. 
 try:
-    mssql_engine_windows = create_engine('mssql+pyodbc://ServerName/DatabaseName?trusted_connection=yes')
+    mssql_engine_windows = create_engine('mssql+pyodbc://@mydsn')
     connection5 = mssql_engine_windows.connect()
     print("5.- Microsoft SQL Server Connection successful with Windows authentication!!!\n")
     connection5.close()
@@ -95,6 +106,15 @@ except Exception as error:
     print("5.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
 #6.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
 #instalation: pip install pyodbc
+#Este tipo de conexión es la misma a la descrita en el número 5, con la única diferencia que se incluye el nombre de 
+#usuario y contraseña para la conexión en vez del puro ODBC, para ello se siguen los siguientes pasos:
+#Panel de Control -> Sistema y Seguridad -> Herramientas Administrativas -> OBDC Data Sources 64 Bit -> Agregar -> SQL
+#Server -> Finalizar -> Nombre: Nombre del OBDC -> Servidor: Servidor al que nos queremos conectar -> Siguiente -> 
+#SQL Server Authentication -> Login: Nombre de usuario de la DB -> Password: Contraseña de la DB -> Siguiente -> 
+#Establecer la siguiente base de datos como predeterminada: Base de datos a la que nos queremos conectar -> Siguiente -> 
+#Finalizar -> Probar Origen de Datos -> Aceptar -> Aceptar.
+#Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión y de igual 
+#manera se podrán añadir el nombre de usuario y contraseña de forma opcional.
 try:
     mssql_engine_sql_auth = create_engine('mssql+pyodbc://username:password@mydsn')
     connection6 = mssql_engine_sql_auth.connect()
