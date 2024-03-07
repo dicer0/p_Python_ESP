@@ -84,10 +84,10 @@ try:
     connection4.close()
 except Exception as error:
     print("4.- Ups an Error ocurred while Opening the SQLite DataBase with an Absolute Path:\n" + str(error) + "\n")
-#5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://@mydsn')
+#5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://ServerName/DatabaseName?trusted_connection=yes')
 #instalation: pip install pyodbc
 try:
-    mssql_engine_windows = create_engine('mssql+pyodbc://@mydsn')
+    mssql_engine_windows = create_engine('mssql+pyodbc://ServerName/DatabaseName?trusted_connection=yes')
     connection5 = mssql_engine_windows.connect()
     print("5.- Microsoft SQL Server Connection successful with Windows authentication!!!\n")
     connection5.close()
