@@ -23,6 +23,9 @@
 
 #SQLAlchemy - create_engine: El método create_engine sirve para configurar la conexión a la base de datos.
 from sqlalchemy import create_engine
+#SQLAlchemy - text: El método text se utiliza para crear un objeto de expresión textual que recibe como parámetro 
+#el código de una consulta SQL en forma de String.
+from sqlalchemy import text
 #SQLAlchemy - Column: La clase Column de la biblioteca SQLAlchemy se utiliza para definir las columnas 
 #(atributos) en las tablas (entidades) de la base de datos utilizando el mapeo de objeto-relacional (ORM).
 from sqlalchemy import Column
@@ -51,9 +54,37 @@ from sqlalchemy.orm import sessionmaker
 #instalation: pip install mysqlclient
 #instalation: pip install pymysql
 try:
-    mysql_engine = create_engine('mysql+pymysql://root:password@localhost:3306/1_platziblog_db')
+    mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
+    #create_engine().connect(): El método .connect() sirve para establecer la conexión con la base de datos.
     connection1 = mysql_engine.connect()
     print("1.- MySQL Connection successful!!!\n")
+
+    #OBTENCIÓN DE DATOS DE LA BASE DE DATOS: Ya que estemos seguros que la conexión a la base de datos se ha 
+    #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, 
+    #esto se realiza a través de la variable que haya utilizado el método .connect(), el método .execute() y 
+    #.text().  
+    SQL_Query_string =  """SELECT    *
+                        FROM      usuarios AS u
+                        LEFT JOIN  posts as p ON u.id = p.usuarios_id
+                        WHERE     p.usuarios_id IS NULL;"""
+    SQL_TextObject = text(SQL_Query_string)
+    #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a través 
+    #de un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL.
+    resultado = connection1.execute(SQL_TextObject)
+    informacionDB = []
+    #Iterar sobre los resultados
+    for row in resultado:
+        informacionDB.append(row)
+    print(informacionDB, "\n")
+
+    #CERRAR LA CONEXIÓN:
+    #.create_engine().connect().execute().close(): El cerrar la conexión con la consulta hecha con el método 
+    #.execute() asegura que se liberen los recursos asociados con ese objeto una vez que se haya terminado la 
+    #consulta. Aunque no es estrictamente necesario hacer esto, es una buena práctica para limpiar y liberar 
+    #cualquier recurso adicional que pueda estar asociado con él.
+    resultado.close()
+    #create_engine().close(): El método .close() sirve para cerrar una conexión previamente establecida con el 
+    #método .connect().
     connection1.close()
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
@@ -122,6 +153,7 @@ try:
     connection6.close()
 except Exception as error:
     print("6.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Server authentication:\n" + str(error) + "\n")
+
 
 #MANDAR DATOS A LA BASE DE DATOS:
 #declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
