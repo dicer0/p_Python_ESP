@@ -4,14 +4,18 @@ from sqlalchemy import create_engine, text
 import pandas
 
 compareDicc = [{
-    "tituloStatic": "Titulo 1",     #Datos que así se pasan al diccionario final.
-    "datoStatic": "Dato 1",         
-    "estatusStatic": "activo"       #Datos de filtrado.
+    "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
+    "datoStatic": "Dato grupo 1",         
+    "estatusFilter": "activo",              #Datos de filtrado.
+    "userIdFilter": 1,
+    "categoryIdFilter": 2
 },
 {
-    "tituloStatic": "Titulo 2",     #Datos que así se pasan al diccionario final.
-    "datoStatic": "Dato 2",         
-    "estatusStatic": "activo"       #Datos de filtrado.
+    "tituloStatic": "Grupo de Datos 2",     #Datos que así se pasan al diccionario final.
+    "datoStatic": "Dato grupo 2",         
+    "estatusFilter": "inactivo",            #Datos de filtrado.
+    "userIdFilter": 2,
+    "categoryIdFilter": 3
 }]
 
 finalDicc = []
@@ -25,9 +29,7 @@ try:
                 ORDER BY  titulo DESC;"""
     resultado = connection1.execute(text(query))
     print("Oliwis", type(resultado))
-    # Convertir los resultados a un DataFrame de Pandas
     dataFramePandas = pandas.DataFrame(data = resultado, columns = resultado.keys())
-    # Mostrar el DataFrame como tabla
     print(dataFramePandas)
 
     resultado.close()
