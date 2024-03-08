@@ -40,6 +40,8 @@ from sqlalchemy.orm import declarative_base
 #crear sesiones para poder realizar operaciones del CRUD (Create-Read-Update-Delete) como agregar, modificar o 
 #eliminar filas (registros) en las tablas (entidades) de la base de datos.
 from sqlalchemy.orm import sessionmaker
+#pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
+import pandas
 
 #CONFIGURAR LA CONEXIÓN A DISTINTOS TIPOS DE BASES DE DATOS: Para ello de igual manera se debe realizar la
 #instalación de diferentes librerías.
@@ -53,6 +55,7 @@ from sqlalchemy.orm import sessionmaker
 #1.- MySQL: create_engine('mysql+pymysql://username:password@hostname:port/database_name')
 #instalation: pip install mysqlclient
 #instalation: pip install pymysql
+informacionDB = []  #Array que almacenará lo que trae el ORM de la base de datos.
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     #create_engine().connect(): El método .connect() sirve para establecer la conexión con la base de datos.
@@ -63,26 +66,38 @@ try:
     #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, 
     #esto se realiza a través de la variable que haya utilizado el método .connect(), el método .execute() y 
     #.text().  
-    SQL_Query_string =  """SELECT    *
-                        FROM      usuarios AS u
-                        LEFT JOIN  posts as p ON u.id = p.usuarios_id
-                        WHERE     p.usuarios_id IS NULL;"""
+    SQL_Query_string =  """SELECT 	  * 
+                            FROM 	    posts
+                            ORDER BY  titulo DESC;"""
     SQL_TextObject = text(SQL_Query_string)
     #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a través 
-    #de un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL.
-    resultado = connection1.execute(SQL_TextObject)
-    informacionDB = []
-    #Iterar sobre los resultados
-    for row in resultado:
-        informacionDB.append(row)
-    print(informacionDB, "\n")
+    #de un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL
+    #y lo que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
+    resultProxy = connection1.execute(SQL_TextObject)
+    print("Tipo de Dato ResultProxy: ", type(resultProxy))
+    #pandas.DataFrame: La clase DataFrame representa una estructura de datos matricial en forma de tablas que 
+    #pueden contener datos de diferentes tipos y se pueden manipular de manera eficiente para realizar diversas 
+    #operaciones de análisis de datos, para crear un objeto su constructor recibe los siguientes parámetros:
+    # - data: Este es el parámetro principal que especifica los datos que se utilizarán para crear el DataFrame.
+    #   Puede ser un diccionario, una lista de listas, un numpyArray, otra estructura de datos de Pandas (como 
+    #   otro DataFrame o una Serie), etc.
+    # - index (opcional): Este parámetro especifica las etiquetas de índice para las filas del DataFrame. 
+    #   Puede ser una lista, una matriz, una Serie, etc. Si no se especifica, se utilizarán índices enteros.
+    # - columns (opcional): Este parámetro opcional especifica los nombres de las columnas del DataFrame. Si no 
+    #   se especifica, se utilizarán nombres de columnas predeterminados (0, 1, 2, ...).
+    #       - .keys(): Como los objetos ResultProxy se manejan como diccionarios, se puede obtener el nombre de 
+    #         sus etiquetas (keys) para de esa manera asignar los nombres de las columnas de un DataFrame, pero 
+    #         si se quisiera obtener sus valores, no existe un método .values(), se debe acceder de otra forma. 
+    # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
+    dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
+    print(dataFramePandas, "\n")
 
     #CERRAR LA CONEXIÓN:
     #.create_engine().connect().execute().close(): El cerrar la conexión con la consulta hecha con el método 
     #.execute() asegura que se liberen los recursos asociados con ese objeto una vez que se haya terminado la 
     #consulta. Aunque no es estrictamente necesario hacer esto, es una buena práctica para limpiar y liberar 
     #cualquier recurso adicional que pueda estar asociado con él.
-    resultado.close()
+    resultProxy.close()
     #create_engine().close(): El método .close() sirve para cerrar una conexión previamente establecida con el 
     #método .connect().
     connection1.close()

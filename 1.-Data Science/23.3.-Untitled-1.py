@@ -1,32 +1,32 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import create_engine, text
-from sqlalchemy import Column
-from sqlalchemy import Integer, String, CHAR
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
+import pandas
 
+compareDicc = [{
+    "tituloStatic": "Titulo 1",     #Datos que así se pasan al diccionario final.
+    "estatusStatic": "activo"       #Datos de filtrado.
+},
+{
+    "tituloStatic": "Titulo 2",     #Datos que así se pasan al diccionario final.
+    "estatusStatic": "activo"       #Datos de filtrado.
+}]
+finalDicc = []
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     connection1 = mysql_engine.connect()
     print("1.- MySQL Connection successful!!!\n")
 
-    #Ejecutar una consulta SQL utilizando el método execute de la conexión
-    query =  """SELECT    *
-                FROM      usuarios AS u
-                LEFT JOIN  posts as p ON u.id = p.usuarios_id
-                WHERE     p.usuarios_id IS NULL;"""
-    resultado = connection1.execute(text(query))  #Using connection1 instead of mysql_engine
+    query =  """SELECT 	  *
+                FROM 	    posts
+                ORDER BY  titulo DESC;"""
+    resultado = connection1.execute(text(query))
+    print("Oliwis", type(resultado))
+    # Convertir los resultados a un DataFrame de Pandas
+    dataFramePandas = pandas.DataFrame(data = resultado, columns = resultado.keys())
+    # Mostrar el DataFrame como tabla
+    print(dataFramePandas)
 
-    infoDB = []
-
-    #Iterar sobre los resultados
-    for row in resultado:
-        infoDB.append(row)
-
-    print(infoDB)
-
-    #Cerrar la conexión
     resultado.close()
     connection1.close()
 except Exception as error:
