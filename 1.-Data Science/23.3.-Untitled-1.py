@@ -5,12 +5,15 @@ import pandas
 
 compareDicc = [{
     "tituloStatic": "Titulo 1",     #Datos que así se pasan al diccionario final.
+    "datoStatic": "Dato 1",         
     "estatusStatic": "activo"       #Datos de filtrado.
 },
 {
     "tituloStatic": "Titulo 2",     #Datos que así se pasan al diccionario final.
+    "datoStatic": "Dato 2",         
     "estatusStatic": "activo"       #Datos de filtrado.
 }]
+
 finalDicc = []
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
