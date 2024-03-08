@@ -55,7 +55,21 @@ import pandas
 #1.- MySQL: create_engine('mysql+pymysql://username:password@hostname:port/database_name')
 #instalation: pip install mysqlclient
 #instalation: pip install pymysql
-informacionDB = []  #Array que almacenará lo que trae el ORM de la base de datos.
+finalData = []  #Array que almacenará lo que trae el ORM de la base de datos.
+compareDicc = [{
+    "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
+    "datoStatic": "Dato grupo 1",         
+    "estatusFilter": "activo",              #Datos de filtrado.
+    "userIdFilter": 1,
+    "categoryIdFilter": 2
+},
+{
+    "tituloStatic": "Grupo de Datos 2",     #Datos que así se pasan al diccionario final.
+    "datoStatic": "Dato grupo 2",         
+    "estatusFilter": "inactivo",            #Datos de filtrado.
+    "userIdFilter": 2,
+    "categoryIdFilter": 3
+}]
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     #create_engine().connect(): El método .connect() sirve para establecer la conexión con la base de datos.
@@ -91,6 +105,25 @@ try:
     # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
     dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
     print(dataFramePandas, "\n")
+
+    #CREAR UN NUEVO ARRAY A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
+    for filter_item in compareDicc:
+        filtered_rows = []
+        for index, row in dataFramePandas.iterrows():
+            if (row['estatus'] == filter_item['estatusFilter'] and
+                row['usuarios_id'] == filter_item['userIdFilter'] and
+                row['categorias_id'] == filter_item['categoryIdFilter']):
+                filtered_rows.append(row)
+
+        for row in filtered_rows:
+            finalData.append({
+                "tituloStatic": filter_item["tituloStatic"],
+                "datoStatic": filter_item["datoStatic"],
+                "titulo": row["titulo"],
+                "fecha_publicacion": row["fecha_publicacion"]
+            })
+    finalDataFrame = pandas.DataFrame(finalData)
+    print(finalDataFrame, "\n")
 
     #CERRAR LA CONEXIÓN:
     #.create_engine().connect().execute().close(): El cerrar la conexión con la consulta hecha con el método 

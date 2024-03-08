@@ -18,20 +18,39 @@ compareDicc = [{
     "categoryIdFilter": 3
 }]
 
-finalDicc = []
+finalData = []
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     connection1 = mysql_engine.connect()
     print("1.- MySQL Connection successful!!!\n")
 
-    query =  """SELECT 	  *
-                FROM 	    posts
-                ORDER BY  titulo DESC;"""
-    resultado = connection1.execute(text(query))
-    dataFramePandas = pandas.DataFrame(data = resultado, columns = resultado.keys())
-    print(dataFramePandas)
+    SQL_Query_string =  """SELECT 	  * 
+                            FROM 	    posts
+                            ORDER BY  titulo DESC;"""
+    SQL_TextObject = text(SQL_Query_string)
+    resultProxy = connection1.execute(SQL_TextObject)
+    dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
+    print(dataFramePandas, "\n")
 
-    resultado.close()
+    for filter_item in compareDicc:
+        filtered_rows = []
+        for index, row in dataFramePandas.iterrows():
+            if (row['estatus'] == filter_item['estatusFilter'] and
+                row['usuarios_id'] == filter_item['userIdFilter'] and
+                row['categorias_id'] == filter_item['categoryIdFilter']):
+                filtered_rows.append(row)
+
+        for row in filtered_rows:
+            finalData.append({
+                "tituloStatic": filter_item["tituloStatic"],
+                "datoStatic": filter_item["datoStatic"],
+                "titulo": row["titulo"],
+                "fecha_publicacion": row["fecha_publicacion"]
+            })
+
+    resultProxy.close()
     connection1.close()
+    finalDataFrame = pandas.DataFrame(finalData)
+    print(finalDataFrame, "\n")
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
