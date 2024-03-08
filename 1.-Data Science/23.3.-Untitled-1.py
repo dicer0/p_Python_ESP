@@ -28,7 +28,6 @@ try:
                 FROM 	    posts
                 ORDER BY  titulo DESC;"""
     resultado = connection1.execute(text(query))
-    print("Oliwis", type(resultado))
     dataFramePandas = pandas.DataFrame(data = resultado, columns = resultado.keys())
     print(dataFramePandas)
 
