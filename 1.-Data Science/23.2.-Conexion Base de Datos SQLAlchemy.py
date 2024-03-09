@@ -141,8 +141,8 @@ try:
             #             )
             standardContent = """Phasellus laoreet eros nec vestibulum varius. Nunc id efficitur lacus, non imperdiet quam. Aliquam porta, tellus at porta semper, felis velit congue mauris, eu pharetra felis sem vitae tortor. Curabitur bibendum vehicula dolor, nec accumsan tortor ultrices ac. Vivamus nec tristique orci. Nullam fringilla eros magna, vitae imperdiet nisl mattis et. Ut quis malesuada felis. Proin at dictum eros, eget sodales libero. Sed egestas tristique nisi et tempor. Ut cursus sapien eu pellentesque posuere. Etiam eleifend varius cursus.\n\nNullam viverra quam porta orci efficitur imperdiet. Quisque magna erat, dignissim nec velit sit amet, hendrerit mollis mauris. Mauris sapien magna, consectetur et vulputate a, iaculis eget nisi. Nunc est diam, aliquam quis turpis ac, porta mattis neque. Quisque consequat dolor sit amet velit commodo sagittis. Donec commodo pulvinar odio, ut gravida velit pellentesque vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nMorbi vulputate ante quis elit pretium, ut blandit felis aliquet. Aenean a massa a leo tristique malesuada. Curabitur posuere, elit sed consectetur blandit, massa mauris tristique ante, in faucibus elit justo quis nisi. Ut viverra est et arcu egestas fringilla. Mauris condimentum, lorem id viverra placerat, libero lacus ultricies est, id volutpat metus sapien non justo. Nulla facilisis, sapien ut vehicula tristique, mauris lectus porta massa, sit amet malesuada dolor justo id lectus. Suspendisse sit amet tempor ligula. Nam sit amet nisl non magna lacinia finibus eget nec augue. Aliquam ornare cursus dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nDonec ornare sem eget massa pharetra rhoncus. Donec tempor sapien at posuere porttitor. Morbi sodales efficitur felis eu scelerisque. Quisque ultrices nunc ut dignissim vehicula. Donec id imperdiet orci, sed porttitor turpis. Etiam volutpat elit sed justo lobortis, tincidunt imperdiet velit pretium. Ut convallis elit sapien, ac egestas ipsum finibus a. Morbi sed odio et dui tincidunt rhoncus tempor id turpis.\n\nProin fringilla consequat imperdiet. Ut accumsan velit ac augue sollicitudin porta. Phasellus finibus porttitor felis, a feugiat purus tempus vel. Etiam vitae vehicula ex. Praesent ut tellus tellus. Fusce felis nunc, congue ac leo in, elementum vulputate nisi. Duis diam nulla, consequat ac mauris quis, viverra gravida urna."""
             #En este caso la condición evalúa si en la columna contenido de la base de datos filtrada contiene 
-            #específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y si es así, coloca 
-            #un valor que se llama "standard", sino coloca "not conventional".
+            #específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y si es así, coloca un 
+            #valor que se llama "standard", sino coloca "not conventional".
             contentStatus = "standard" if (standardContent in filtered_dataBase["contenido"]) else "not conventional"
             #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de diccionarios y la 
             #variable filtered_dataBase representa cada fila de la base de datos filtrada.
@@ -153,8 +153,8 @@ try:
                 "titulo": filtered_dataBase["titulo"],
                 "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
             })
-    #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
-    #columnas en su constructor. 
+    #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las columnas 
+    #en su constructor. 
     finalDataFrame = pandas.DataFrame(data = finalData)
     print(finalDataFrame, "\n")
 
@@ -201,13 +201,14 @@ except Exception as error:
 #Este tipo de conexión es más compleja que las demás, ya que se debe ejecutar un paso intermedio donde se crea un 
 #acceso llamado ODBC (Open DataBase Connectivity), que es una  API estándar de la industria diseñada para permitir 
 #que las distintas aplicaciones (código backend Python, Node.js, Java, etc.) puedan acceder a diferentes tipos de 
-#bases de datos y/o sistemas de gestión de bases de datos (DBMS) independientemente del sistema operativo o lenguaje 
-#de programación que utilicen, proporcionando así una capa intermedia entre ellas.
+#bases de datos y/o sistemas de gestión de bases de datos (DBMS) independientemente del sistema operativo o 
+#lenguaje de programación que utilicen, proporcionando así una capa intermedia entre ellas.
 #Para crear el ODBC se deben seguir los siguientes pasos:
-#Panel de Control -> Sistema y Seguridad -> Herramientas Administrativas -> OBDC Data Sources 64 Bit -> Agregar -> SQL
-#Server -> Finalizar -> Nombre: Nombre del OBDC -> Servidor: Servidor al que nos queremos conectar -> Siguiente -> 
-#Autentificacion de Windows -> Siguiente -> Establecer la siguiente base de datos como predeterminada: Base de datos a 
-#la que nos queremos conectar -> Siguiente -> Finalizar -> Probar Origen de Datos -> Aceptar -> Aceptar.
+#Panel de Control -> Sistema y Seguridad -> Herramientas Administrativas -> OBDC Data Sources 64 Bit -> Agregar -> 
+#SQL Server -> Finalizar -> Nombre: Nombre del OBDC -> Servidor: Servidor al que nos queremos conectar -> 
+#Siguiente -> Autentificacion de Windows -> Siguiente -> Establecer la siguiente base de datos como predeterminada: 
+#Base de datos a la que nos queremos conectar -> Siguiente -> Finalizar -> Probar Origen de Datos -> Aceptar -> 
+#Aceptar.
 #Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión. 
 try:
     mssql_engine_windows = create_engine('mssql+pyodbc://@mydsn')
@@ -218,15 +219,15 @@ except Exception as error:
     print("5.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
 #6.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
 #instalation: pip install pyodbc
-#Este tipo de conexión es la misma a la descrita en el número 5, con la única diferencia que se incluye el nombre de 
-#usuario y contraseña para la conexión en vez del puro ODBC, para ello se siguen los siguientes pasos:
-#Panel de Control -> Sistema y Seguridad -> Herramientas Administrativas -> OBDC Data Sources 64 Bit -> Agregar -> SQL
-#Server -> Finalizar -> Nombre: Nombre del OBDC -> Servidor: Servidor al que nos queremos conectar -> Siguiente -> 
-#SQL Server Authentication -> Login: Nombre de usuario de la DB -> Password: Contraseña de la DB -> Siguiente -> 
-#Establecer la siguiente base de datos como predeterminada: Base de datos a la que nos queremos conectar -> Siguiente -> 
-#Finalizar -> Probar Origen de Datos -> Aceptar -> Aceptar.
-#Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión y de igual 
-#manera se podrán añadir el nombre de usuario y contraseña de forma opcional.
+#Este tipo de conexión es la misma a la descrita en el número 5, con la única diferencia que se incluye el nombre 
+#de usuario y contraseña para la conexión en vez del puro ODBC, para ello se siguen los siguientes pasos:
+#Panel de Control -> Sistema y Seguridad -> Herramientas Administrativas -> OBDC Data Sources 64 Bit -> Agregar -> 
+#SQL Server -> Finalizar -> Nombre: Nombre del OBDC -> Servidor: Servidor al que nos queremos conectar -> 
+#Siguiente -> SQL Server Authentication -> Login: Nombre de usuario de la DB -> Password: Contraseña de la DB -> 
+#Siguiente -> Establecer la siguiente base de datos como predeterminada: Base de datos a la que nos queremos 
+#conectar -> Siguiente -> Finalizar -> Probar Origen de Datos -> Aceptar -> Aceptar.
+#Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión y de 
+#igual manera se podrán añadir el nombre de usuario y contraseña de forma opcional.
 try:
     mssql_engine_sql_auth = create_engine('mssql+pyodbc://username:password@mydsn')
     connection6 = mssql_engine_sql_auth.connect()
