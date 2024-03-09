@@ -65,17 +65,17 @@ try:
             item = QTableWidgetItem(str(finalDataFrame.iloc[i, j]))
             if i == 0:
                 item.setBackground(QColor('blue'))
-            if j == 0 and i != 0:
+            elif j == 0 and i != 0:
                 item.setBackground(QColor('green'))
-            if j == 1 and i != 0:  # Solo la segunda columna, excluyendo la primera fila
+            elif j == 1 and i != 0:  # Solo la segunda columna, excluyendo la primera fila
                 item.setBackground(QColor('gray'))
-            if i == 0 and j == 1:
+            elif i == 0 and j == 1:
                 item.setBackground(QColor('blue'))  # Para la esquina superior derecha
-            if i == 0 and j != 0:
+            elif i == 0 and j != 0:
                 item.setBackground(QColor('blue'))  # Para la primera fila
-            if i != 0 and j == 0:
+            elif i != 0 and j == 0:
                 item.setBackground(QColor('green'))  # Para la primera columna
-            if i != 0 and j != 0:
+            else:
                 item.setBackground(QColor('yellow'))
             tableWidget.setItem(i, j, item)
 
