@@ -107,7 +107,7 @@ try:
     # Convertir las fechas al formato adecuado antes de escribirlas en el archivo de Excel y aplicar color amarillo
     date_format = workbook.add_format({'num_format': 'yyyy-mm-dd', 'bg_color': 'yellow'})
     for i in range(finalDataFrame.shape[0]):
-        worksheet.write(i + 1, finalDataFrame.columns.get_loc('fecha_publicacion'), finalDataFrame.iloc[i]['fecha_publicacion'], date_format)
+        worksheet.write(i + 1, finalDataFrame.columns.get_loc('fecha_publicacion'), pd.to_datetime(finalDataFrame.iloc[i]['fecha_publicacion']).date(), date_format)
 
     # Ajustar ancho de las columnas para que se vean correctamente
     for idx, col in enumerate(finalDataFrame):
