@@ -106,23 +106,37 @@ try:
     dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
     print(dataFramePandas, "\n")
 
-    #CREAR UN NUEVO ARRAY A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
-    for filter_item in compareDicc:
-        filtered_rows = []
-        for index, row in dataFramePandas.iterrows():
-            if (row['estatus'] == filter_item['estatusFilter'] and
-                row['usuarios_id'] == filter_item['userIdFilter'] and
-                row['categorias_id'] == filter_item['categoryIdFilter']):
+    #CREAR UN NUEVO ARRAY QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
+    #bucle for each: Es un bucle que recorre la lista de diccionarios compareDicc, por lo que la variable 
+    #filter_item lleva contenidos todos los diccionarios en cada iteración, uno por uno.
+    for indDicc in compareDicc:
+        filtered_rows = []  #Lista vacía para almacenar los elementos extraídos de la base de datos.
+        #pandas.DataFrame().iterrows(): El método iterrows() se debe aplicar a algun objeto de la clase 
+        #DataFrame y siempre se encontrar como parámetro de un bucle for ya que este recorre todos los datos 
+        #de su DataFrame, devolviendo una tupla que indica el índice de cada fila y su contenido.  
+        for (index, row) in (dataFramePandas.iterrows()):
+            #En este punto con el contenido de las filas del DataFrame y la variable que recorre la lista de 
+            #diccionarios es donde se pueden realizar las comparaciones para filtrar los datos.
+            if (row['estatus'] == indDicc['estatusFilter'] and
+                row['usuarios_id'] == indDicc['userIdFilter'] and
+                row['categorias_id'] == indDicc['categoryIdFilter']):
+                #Los datos que cumplan las condiciones, se agregan a la lista vacía filtered_rows.
                 filtered_rows.append(row)
 
-        for row in filtered_rows:
+        #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones del 
+        #filtro, se añaden y organizan los datos del DataFrame final que queremos obtener.
+        for filtered_dataBase in filtered_rows:
+            #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de diccionarios 
+            #y la variable filtered_dataBase representa cada fila de la base de datos filtrada.
             finalData.append({
-                "tituloStatic": filter_item["tituloStatic"],
-                "datoStatic": filter_item["datoStatic"],
-                "titulo": row["titulo"],
-                "fecha_publicacion": row["fecha_publicacion"]
+                "tituloStatic": indDicc["tituloStatic"],
+                "datoStatic": indDicc["datoStatic"],
+                "titulo": filtered_dataBase["titulo"],
+                "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
             })
-    finalDataFrame = pandas.DataFrame(finalData)
+    #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
+    #columnas en su constructor. 
+    finalDataFrame = pandas.DataFrame(data = finalData)
     print(finalDataFrame, "\n")
 
     #CERRAR LA CONEXIÓN:
