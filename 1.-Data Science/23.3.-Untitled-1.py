@@ -41,43 +41,73 @@ try:
                 filtered_rows.append(row)
 
         for filtered_dataBase in filtered_rows:
+            standardContent = """Phasellus laoreet eros nec vestibulum varius. Nunc id efficitur lacus, non imperdiet quam. Aliquam porta, tellus at porta semper, felis velit congue mauris, eu pharetra felis sem vitae tortor. Curabitur bibendum vehicula dolor, nec accumsan tortor ultrices ac. Vivamus nec tristique orci. Nullam fringilla eros magna, vitae imperdiet nisl mattis et. Ut quis malesuada felis. Proin at dictum eros, eget sodales libero. Sed egestas tristique nisi et tempor. Ut cursus sapien eu pellentesque posuere. Etiam eleifend varius cursus.\n\nNullam viverra quam porta orci efficitur imperdiet. Quisque magna erat, dignissim nec velit sit amet, hendrerit mollis mauris. Mauris sapien magna, consectetur et vulputate a, iaculis eget nisi. Nunc est diam, aliquam quis turpis ac, porta mattis neque. Quisque consequat dolor sit amet velit commodo sagittis. Donec commodo pulvinar odio, ut gravida velit pellentesque vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nMorbi vulputate ante quis elit pretium, ut blandit felis aliquet. Aenean a massa a leo tristique malesuada. Curabitur posuere, elit sed consectetur blandit, massa mauris tristique ante, in faucibus elit justo quis nisi. Ut viverra est et arcu egestas fringilla. Mauris condimentum, lorem id viverra placerat, libero lacus ultricies est, id volutpat metus sapien non justo. Nulla facilisis, sapien ut vehicula tristique, mauris lectus porta massa, sit amet malesuada dolor justo id lectus. Suspendisse sit amet tempor ligula. Nam sit amet nisl non magna lacinia finibus eget nec augue. Aliquam ornare cursus dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nDonec ornare sem eget massa pharetra rhoncus. Donec tempor sapien at posuere porttitor. Morbi sodales efficitur felis eu scelerisque. Quisque ultrices nunc ut dignissim vehicula. Donec id imperdiet orci, sed porttitor turpis. Etiam volutpat elit sed justo lobortis, tincidunt imperdiet velit pretium. Ut convallis elit sapien, ac egestas ipsum finibus a. Morbi sed odio et dui tincidunt rhoncus tempor id turpis.\n\nProin fringilla consequat imperdiet. Ut accumsan velit ac augue sollicitudin porta. Phasellus finibus porttitor felis, a feugiat purus tempus vel. Etiam vitae vehicula ex. Praesent ut tellus tellus. Fusce felis nunc, congue ac leo in, elementum vulputate nisi. Duis diam nulla, consequat ac mauris quis, viverra gravida urna."""
+            contentStatus = "standard" if (standardContent in filtered_dataBase["contenido"]) else "not conventional"
             finalData.append({
                 "tituloStatic": indDicc["tituloStatic"],
+                "contentStatus": contentStatus,
                 "datoStatic": indDicc["datoStatic"],
                 "titulo": filtered_dataBase["titulo"],
                 "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
             })
     finalDataFrame = pd.DataFrame(data=finalData)
     print(finalDataFrame, "\n")
-    finalDataFrame.to_excel('resultado.xlsx', index=False)
 
     app = QApplication(sys.argv)
     window = QMainWindow()
     tableWidget = QTableWidget()
-    tableWidget.setRowCount(finalDataFrame.shape[0])
+    tableWidget.setRowCount(finalDataFrame.shape[0] + 1)  # +1 para incluir la fila de nombres de columna
     tableWidget.setColumnCount(finalDataFrame.shape[1])
+
+    # Mostrar nombres de columnas del DataFrame en la primera fila de la tabla y pintarla de azul
+    for j in range(finalDataFrame.shape[1]):
+        item = QTableWidgetItem(finalDataFrame.columns[j])
+        item.setBackground(QColor('blue'))
+        tableWidget.setItem(0, j, item)
 
     for i in range(finalDataFrame.shape[0]):
         for j in range(finalDataFrame.shape[1]):
             item = QTableWidgetItem(str(finalDataFrame.iloc[i, j]))
-            if i == 0:
-                item.setBackground(QColor('blue'))
-            elif j == 0 and i != 0:
+            if j == 0:
                 item.setBackground(QColor('green'))
-            elif j == 1 and i != 0:
+            elif j == 1:
                 item.setBackground(QColor('gray'))
-            elif i == 0 and j == 1:
-                item.setBackground(QColor('blue'))
-            elif i == 0 and j != 0:
-                item.setBackground(QColor('blue'))
-            elif i != 0 and j == 0:
-                item.setBackground(QColor('green'))
             else:
                 item.setBackground(QColor('yellow'))
-            tableWidget.setItem(i, j, item)
+            tableWidget.setItem(i + 1, j, item)  # +1 para evitar la superposición con la fila de nombres de columna
 
     window.setCentralWidget(tableWidget)
-    window.show()
+    window.showMaximized()
+
+    # Exportar DataFrame a Excel con el mismo formato que la GUI
+    excel_writer = pd.ExcelWriter('resultado.xlsx', engine='xlsxwriter')
+    finalDataFrame.to_excel(excel_writer, index=False, sheet_name='Sheet1', startrow=1)
+
+    workbook = excel_writer.book
+    worksheet = excel_writer.sheets['Sheet1']
+
+    # Escribir nombres de columnas en el archivo de Excel y aplicar formato a la fila de nombres de columna
+    for j, col in enumerate(finalDataFrame.columns):
+        worksheet.write(0, j, col, workbook.add_format({'bg_color': 'blue', 'bold': True}))
+
+    # Aplicar formato de colores a todas las celdas en Excel
+    for i in range(finalDataFrame.shape[0]):
+        for j in range(finalDataFrame.shape[1]):
+            cell_format = workbook.add_format()
+            if j == 0:
+                cell_format.set_bg_color('green')
+            elif j == 1:
+                cell_format.set_bg_color('gray')
+            else:
+                cell_format.set_bg_color('yellow')
+            worksheet.write(i + 1, j, finalDataFrame.iloc[i, j], cell_format)  # +1 para evitar la superposición con la fila de nombres de columna
+
+    # Ajustar ancho de las columnas para que se vean correctamente
+    for idx, col in enumerate(finalDataFrame):
+        max_len = max(finalDataFrame[col].astype(str).map(len).max(), len(str(col))) + 1
+        worksheet.set_column(idx, idx, max_len)
+
+    excel_writer.save()
     sys.exit(app.exec_())
 
 except Exception as error:
