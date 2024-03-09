@@ -1,56 +1,94 @@
-# -*- coding: utf-8 -*-
-
 from sqlalchemy import create_engine, text
-import pandas
+import pandas as pd
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
+from PyQt5.QtGui import QColor
 
+finalData = []
 compareDicc = [{
-    "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
-    "datoStatic": "Dato grupo 1",         
-    "estatusFilter": "activo",              #Datos de filtrado.
+    "tituloStatic": "Grupo de Datos 1",
+    "datoStatic": "Dato grupo 1",
+    "estatusFilter": "activo",
     "userIdFilter": 1,
     "categoryIdFilter": 2
 },
 {
-    "tituloStatic": "Grupo de Datos 2",     #Datos que así se pasan al diccionario final.
-    "datoStatic": "Dato grupo 2",         
-    "estatusFilter": "inactivo",            #Datos de filtrado.
+    "tituloStatic": "Grupo de Datos 2",
+    "datoStatic": "Dato grupo 2",
+    "estatusFilter": "inactivo",
     "userIdFilter": 2,
     "categoryIdFilter": 3
 }]
 
-finalData = []
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     connection1 = mysql_engine.connect()
     print("1.- MySQL Connection successful!!!\n")
 
-    SQL_Query_string =  """SELECT 	  * 
-                            FROM 	    posts
-                            ORDER BY  titulo DESC;"""
+    SQL_Query_string = """SELECT * FROM posts ORDER BY titulo DESC;"""
     SQL_TextObject = text(SQL_Query_string)
     resultProxy = connection1.execute(SQL_TextObject)
-    dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
+    print("Tipo de Dato ResultProxy: ", type(resultProxy))
+    dataFramePandas = pd.DataFrame(data=resultProxy, columns=resultProxy.keys())
     print(dataFramePandas, "\n")
 
-    for filter_item in compareDicc:
+    for indDicc in compareDicc:
         filtered_rows = []
-        for index, row in dataFramePandas.iterrows():
-            if (row['estatus'] == filter_item['estatusFilter'] and
-                row['usuarios_id'] == filter_item['userIdFilter'] and
-                row['categorias_id'] == filter_item['categoryIdFilter']):
+        for (index, row) in dataFramePandas.iterrows():
+            if (row['estatus'] == indDicc['estatusFilter'] and
+                    row['usuarios_id'] == indDicc['userIdFilter'] and
+                    row['categorias_id'] == indDicc['categoryIdFilter']):
                 filtered_rows.append(row)
 
-        for row in filtered_rows:
+        for filtered_dataBase in filtered_rows:
             finalData.append({
-                "tituloStatic": filter_item["tituloStatic"],
-                "datoStatic": filter_item["datoStatic"],
-                "titulo": row["titulo"],
-                "fecha_publicacion": row["fecha_publicacion"]
+                "tituloStatic": indDicc["tituloStatic"],
+                "datoStatic": indDicc["datoStatic"],
+                "titulo": filtered_dataBase["titulo"],
+                "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
             })
+    finalDataFrame = pd.DataFrame(data=finalData)
 
-    resultProxy.close()
-    connection1.close()
-    finalDataFrame = pandas.DataFrame(finalData)
-    print(finalDataFrame, "\n")
+    # Guardar en un archivo Excel
+    finalDataFrame.to_excel('resultado.xlsx', index=False)
+
+    # Mostrar en un QTableWidget
+    app = QApplication(sys.argv)
+    window = QMainWindow()
+    tableWidget = QTableWidget()
+    tableWidget.setRowCount(finalDataFrame.shape[0])
+    tableWidget.setColumnCount(finalDataFrame.shape[1])
+
+    # Establecer colores para las filas y columnas
+    for i in range(finalDataFrame.shape[0]):
+        for j in range(finalDataFrame.shape[1]):
+            item = QTableWidgetItem(str(finalDataFrame.iloc[i, j]))
+            if i == 0:
+                item.setBackground(QColor('blue'))
+            if j == 0 and i != 0:
+                item.setBackground(QColor('green'))
+            if j == 1 and i != 0:  # Solo la segunda columna, excluyendo la primera fila
+                item.setBackground(QColor('gray'))
+            if i == 0 and j == 1:
+                item.setBackground(QColor('blue'))  # Para la esquina superior derecha
+            if i == 0 and j != 0:
+                item.setBackground(QColor('blue'))  # Para la primera fila
+            if i != 0 and j == 0:
+                item.setBackground(QColor('green'))  # Para la primera columna
+            if i != 0 and j != 0:
+                item.setBackground(QColor('yellow'))
+            tableWidget.setItem(i, j, item)
+
+    window.setCentralWidget(tableWidget)
+    window.show()
+    sys.exit(app.exec_())
+
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
+
+finally:
+    # Cerrar el resultado y la conexión
+    if 'resultProxy' in locals():
+        resultProxy.close()
+    if 'connection1' in locals():
+        connection1.close()
