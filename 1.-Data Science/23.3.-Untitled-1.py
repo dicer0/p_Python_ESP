@@ -91,16 +91,23 @@ try:
         worksheet.write(0, j, col, workbook.add_format({'bg_color': 'blue', 'bold': True}))
 
     # Aplicar formato de colores a todas las celdas en Excel
-    for i in range(finalDataFrame.shape[0]):
+    for i in range(finalDataFrame.shape[0] + 1):
         for j in range(finalDataFrame.shape[1]):
             cell_format = workbook.add_format()
             if j == 0:
                 cell_format.set_bg_color('green')
             elif j == 1:
                 cell_format.set_bg_color('gray')
+            elif i == finalDataFrame.shape[0]:
+                cell_format.set_bg_color('yellow')  # Pintar la última fila de amarillo
             else:
                 cell_format.set_bg_color('yellow')
-            worksheet.write(i + 1, j, finalDataFrame.iloc[i, j], cell_format)  # +1 para evitar la superposición con la fila de nombres de columna
+            worksheet.write(i + 1, j, finalDataFrame.iloc[i - 1, j], cell_format)  # +1 para evitar la superposición con la fila de nombres de columna
+
+    # Convertir las fechas al formato adecuado antes de escribirlas en el archivo de Excel y aplicar color amarillo
+    date_format = workbook.add_format({'num_format': 'yyyy-mm-dd', 'bg_color': 'yellow'})
+    for i in range(finalDataFrame.shape[0]):
+        worksheet.write(i + 1, finalDataFrame.columns.get_loc('fecha_publicacion'), finalDataFrame.iloc[i]['fecha_publicacion'], date_format)
 
     # Ajustar ancho de las columnas para que se vean correctamente
     for idx, col in enumerate(finalDataFrame):
