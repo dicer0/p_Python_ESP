@@ -36,8 +36,8 @@ try:
         filtered_rows = []
         for (index, row) in dataFramePandas.iterrows():
             if (row['estatus'] == indDicc['estatusFilter'] and
-                    row['usuarios_id'] == indDicc['userIdFilter'] and
-                    row['categorias_id'] == indDicc['categoryIdFilter']):
+                row['usuarios_id'] == indDicc['userIdFilter'] and
+                row['categorias_id'] == indDicc['categoryIdFilter']):
                 filtered_rows.append(row)
 
         for filtered_dataBase in filtered_rows:
@@ -48,18 +48,15 @@ try:
                 "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
             })
     finalDataFrame = pd.DataFrame(data=finalData)
-
-    # Guardar en un archivo Excel
+    print(finalDataFrame, "\n")
     finalDataFrame.to_excel('resultado.xlsx', index=False)
 
-    # Mostrar en un QTableWidget
     app = QApplication(sys.argv)
     window = QMainWindow()
     tableWidget = QTableWidget()
     tableWidget.setRowCount(finalDataFrame.shape[0])
     tableWidget.setColumnCount(finalDataFrame.shape[1])
 
-    # Establecer colores para las filas y columnas
     for i in range(finalDataFrame.shape[0]):
         for j in range(finalDataFrame.shape[1]):
             item = QTableWidgetItem(str(finalDataFrame.iloc[i, j]))
@@ -67,14 +64,14 @@ try:
                 item.setBackground(QColor('blue'))
             elif j == 0 and i != 0:
                 item.setBackground(QColor('green'))
-            elif j == 1 and i != 0:  # Solo la segunda columna, excluyendo la primera fila
+            elif j == 1 and i != 0:
                 item.setBackground(QColor('gray'))
             elif i == 0 and j == 1:
-                item.setBackground(QColor('blue'))  # Para la esquina superior derecha
+                item.setBackground(QColor('blue'))
             elif i == 0 and j != 0:
-                item.setBackground(QColor('blue'))  # Para la primera fila
+                item.setBackground(QColor('blue'))
             elif i != 0 and j == 0:
-                item.setBackground(QColor('green'))  # Para la primera columna
+                item.setBackground(QColor('green'))
             else:
                 item.setBackground(QColor('yellow'))
             tableWidget.setItem(i, j, item)
@@ -87,7 +84,6 @@ except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
 
 finally:
-    # Cerrar el resultado y la conexión
     if 'resultProxy' in locals():
         resultProxy.close()
     if 'connection1' in locals():

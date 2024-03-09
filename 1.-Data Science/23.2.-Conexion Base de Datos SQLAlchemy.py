@@ -126,10 +126,29 @@ try:
         #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones del 
         #filtro, se añaden y organizan los datos del DataFrame final que queremos obtener.
         for filtered_dataBase in filtered_rows:
-            #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de diccionarios 
-            #y la variable filtered_dataBase representa cada fila de la base de datos filtrada.
+            #De igual manera se pueden agregar valores solo cuando se cumpla una condición en la variable
+            #filtered_dataBase, para ello se utilizan condicionales de una sola línea que llevan la siguiente 
+            #sintaxis:
+            #variable =   valor_si_verdadero        if      condicion       else        valor_si_falso
+            #Si se quiere utilizar una estructura else-if, lo que se hace es agregar un paréntesis y varias 
+            #condiciones de una línea dentro.
+            #variable =   (
+            #               valor_si_verdadero1     if      condicion1      else        valor_si_falso1
+            #               valor_si_verdadero2     if      condicion2      else        valor_si_falso2
+            #               ...
+            #               valor_si_verdadero_n    if      condicion_n     else        valor_si_falso_n
+            #               valor_por_defecto
+            #             )
+            standardContent = """Phasellus laoreet eros nec vestibulum varius. Nunc id efficitur lacus, non imperdiet quam. Aliquam porta, tellus at porta semper, felis velit congue mauris, eu pharetra felis sem vitae tortor. Curabitur bibendum vehicula dolor, nec accumsan tortor ultrices ac. Vivamus nec tristique orci. Nullam fringilla eros magna, vitae imperdiet nisl mattis et. Ut quis malesuada felis. Proin at dictum eros, eget sodales libero. Sed egestas tristique nisi et tempor. Ut cursus sapien eu pellentesque posuere. Etiam eleifend varius cursus.\n\nNullam viverra quam porta orci efficitur imperdiet. Quisque magna erat, dignissim nec velit sit amet, hendrerit mollis mauris. Mauris sapien magna, consectetur et vulputate a, iaculis eget nisi. Nunc est diam, aliquam quis turpis ac, porta mattis neque. Quisque consequat dolor sit amet velit commodo sagittis. Donec commodo pulvinar odio, ut gravida velit pellentesque vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nMorbi vulputate ante quis elit pretium, ut blandit felis aliquet. Aenean a massa a leo tristique malesuada. Curabitur posuere, elit sed consectetur blandit, massa mauris tristique ante, in faucibus elit justo quis nisi. Ut viverra est et arcu egestas fringilla. Mauris condimentum, lorem id viverra placerat, libero lacus ultricies est, id volutpat metus sapien non justo. Nulla facilisis, sapien ut vehicula tristique, mauris lectus porta massa, sit amet malesuada dolor justo id lectus. Suspendisse sit amet tempor ligula. Nam sit amet nisl non magna lacinia finibus eget nec augue. Aliquam ornare cursus dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nDonec ornare sem eget massa pharetra rhoncus. Donec tempor sapien at posuere porttitor. Morbi sodales efficitur felis eu scelerisque. Quisque ultrices nunc ut dignissim vehicula. Donec id imperdiet orci, sed porttitor turpis. Etiam volutpat elit sed justo lobortis, tincidunt imperdiet velit pretium. Ut convallis elit sapien, ac egestas ipsum finibus a. Morbi sed odio et dui tincidunt rhoncus tempor id turpis.\n\nProin fringilla consequat imperdiet. Ut accumsan velit ac augue sollicitudin porta. Phasellus finibus porttitor felis, a feugiat purus tempus vel. Etiam vitae vehicula ex. Praesent ut tellus tellus. Fusce felis nunc, congue ac leo in, elementum vulputate nisi. Duis diam nulla, consequat ac mauris quis, viverra gravida urna."""
+            #En este caso la condición evalúa si en la columna contenido de la base de datos filtrada contiene 
+            #específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y si es así, coloca 
+            #un valor que se llama "standard", sino coloca "not conventional".
+            contentStatus = "standard" if (standardContent in filtered_dataBase["contenido"]) else "not conventional"
+            #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de diccionarios y la 
+            #variable filtered_dataBase representa cada fila de la base de datos filtrada.
             finalData.append({
                 "tituloStatic": indDicc["tituloStatic"],
+                "contentStatus": contentStatus,             #Columna agregada con condicionales.
                 "datoStatic": indDicc["datoStatic"],
                 "titulo": filtered_dataBase["titulo"],
                 "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
