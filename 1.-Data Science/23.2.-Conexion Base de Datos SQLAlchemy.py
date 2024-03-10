@@ -43,18 +43,10 @@ from sqlalchemy.orm import sessionmaker
 #pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
 
-#CONFIGURAR LA CONEXIÓN A DISTINTOS TIPOS DE BASES DE DATOS: Para ello de igual manera se debe realizar la
-#instalación de diferentes librerías.
-#MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de dos partes, try y except: 
-# - Primero se ejecuta el código que haya dentro del try y si es que llegara a ocurrir una excepción durante su 
-#   ejecución, el programa brinca al código del except
-# - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando ocurra 
-#   el error esperado. 
-#Se utiliza esta arquitectura de código cuando se quiera efectuar una acción donde se espera que pueda ocurrir un 
-#error durante su ejecución.
-#1.- MySQL: create_engine('mysql+pymysql://username:password@hostname:port/database_name')
-#instalation: pip install mysqlclient
-#instalation: pip install pymysql
+#En este caso lo que se hará es extraer datos de la base de datos, los cuales serán comparados con algunos valores 
+#de la siguiente lista de diccionarios y si algunos de ellos son iguales, se tomará algunos datos de la database 
+#(DB), se extraerán algunos otros de la lista de diccionarios y se agregarán unos nuevos para crear una nueva 
+#estructura de datos, que pueda ser agregada a un reporte y posteriormente mostrada a su vez en una GUI de PyQt5.
 finalData = []  #Array que almacenará lo que trae el ORM de la base de datos.
 compareDicc = [{
     "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
@@ -70,11 +62,26 @@ compareDicc = [{
     "userIdFilter": 2,
     "categoryIdFilter": 3
 }]
+#CONFIGURAR LA CONEXIÓN A DISTINTOS TIPOS DE BASES DE DATOS: Para ello de igual manera se debe realizar la
+#instalación de diferentes librerías.
+#MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
+# - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción durante su 
+#   ejecución, el programa brinca al código del except.
+# - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando ocurra 
+#   el error esperado.
+# - Po último, cuando no ocurra una excepción durante la ejecución del gestor de excepciones, se ejecutará el 
+#   código que esté incluido dentro del finally después de haber terminado de ejecutar lo que haya en el try, pero
+#   si ocurre una excepción, la ejecución terminará cuando se llegue al except.
+#Se utiliza esta arquitectura de código cuando se quiera efectuar una acción donde se espera que pueda ocurrir un 
+#error durante su ejecución.
+#1.- MySQL: create_engine('mysql+pymysql://username:password@hostname:port/database_name')
+#instalation: pip install mysqlclient
+#instalation: pip install pymysql
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     #create_engine().connect(): El método .connect() sirve para establecer la conexión con la base de datos.
     connection1 = mysql_engine.connect()
-    print("1.- MySQL Connection successful!!!\n")
+    print("1.- MySQL Connection successful!!!")
 
     #OBTENCIÓN DE DATOS DE LA BASE DE DATOS: Ya que estemos seguros que la conexión a la base de datos se ha 
     #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, 
@@ -156,46 +163,62 @@ try:
     #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las columnas 
     #en su constructor. 
     finalDataFrame = pandas.DataFrame(data = finalData)
-    print(finalDataFrame, "\n")
-
-    #CERRAR LA CONEXIÓN:
-    #.create_engine().connect().execute().close(): El cerrar la conexión con la consulta hecha con el método 
-    #.execute() asegura que se liberen los recursos asociados con ese objeto una vez que se haya terminado la 
-    #consulta. Aunque no es estrictamente necesario hacer esto, es una buena práctica para limpiar y liberar 
-    #cualquier recurso adicional que pueda estar asociado con él.
-    resultProxy.close()
-    #create_engine().close(): El método .close() sirve para cerrar una conexión previamente establecida con el 
-    #método .connect().
-    connection1.close()
+    print(finalDataFrame)
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
+finally:
+    #CERRAR LA CONEXIÓN CON LA BASE DE DATOS:
+    #locals(): Es un método de Python que devuelve un diccionario que contiene las variables locales activas, ya 
+    #sea las que se encuentran dentro de una función o en un bloque de código definido, como una clase. Es útil 
+    #en situaciones donde se necesita inspeccionar el ámbito local para verificar la presencia de una variable 
+    #específica antes de tomar una acción en consecuencia.
+    if ('resultProxy' in locals()):
+        #.create_engine().connect().execute().close(): El cerrar la conexión con la consulta hecha con el método 
+        #.execute() asegura que se liberen los recursos asociados con ese objeto una vez que se haya terminado el 
+        #query. Aunque no es estrictamente necesario hacer esto, es una buena práctica para limpiar y liberar 
+        #cualquier recurso adicional que pueda estar asociado con él.
+        resultProxy.close()
+    if ('connection1' in locals()):
+        print("1.- Connection 1 closed\n")
+        #create_engine().close(): El método .close() sirve para cerrar una conexión previamente configurada y 
+        #establecida con el método create_engine().connect().
+        connection1.close()
 #2.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
 #instalation: pip install psycopg2 
 try:
     postgresql_engine = create_engine('postgresql://username:password@hostname:port/database_name')
     connection2 = postgresql_engine.connect()
-    print("2.- PostgresSQL Connection successful!!!\n")
-    connection2.close()
+    print("2.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("2.- Ups an Error ocurred while Opening the PostgresSQL DataBase:\n" + str(error) + "\n")
+finally:
+    if ('connection2' in locals()):
+        print("2.- Connection 2 closed\n")
+        connection2.close()
 #3.- SQLite (path relativo): create_engine('sqlite:///mydatabase.db')
 #No additional installation is needed.
 try:
     sqlite_engine_relative = create_engine('sqlite:///mydatabase.db')
     connection3 = sqlite_engine_relative.connect()
-    print("3.- SQLite Connection successful!!!\n")
-    connection3.close()
+    print("3.- SQLite Connection successful!!!")
 except Exception as error:
     print("3.- Ups an Error ocurred while Opening the SQLite DataBase with a Relative Path:\n" + str(error) + "\n")
+finally:
+    if ('connection3' in locals()):
+        print("3.- Connection 3 closed\n")
+        connection3.close()
 #4.- SQLite (path absoluto): create_engine('sqlite:////absolute/path/to/mydatabase.db')
 #No additional installation is needed.
 try:
     sqlite_engine_absolute = create_engine('sqlite:////absolute/path/to/mydatabase.db')
     connection4 = sqlite_engine_absolute.connect()
-    print("4.- SQLite Connection successful!!!\n")
-    connection4.close()
+    print("4.- SQLite Connection successful!!!")
 except Exception as error:
     print("4.- Ups an Error ocurred while Opening the SQLite DataBase with an Absolute Path:\n" + str(error) + "\n")
+finally:
+    if ('connection4' in locals()):
+        print("4.- Connection 4 closed\n")
+        connection4.close()
 #5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://@mydsn')
 #instalation: pip install pyodbc
 #Este tipo de conexión es más compleja que las demás, ya que se debe ejecutar un paso intermedio donde se crea un 
@@ -213,10 +236,13 @@ except Exception as error:
 try:
     mssql_engine_windows = create_engine('mssql+pyodbc://@mydsn')
     connection5 = mssql_engine_windows.connect()
-    print("5.- Microsoft SQL Server Connection successful with Windows authentication!!!\n")
-    connection5.close()
+    print("5.- Microsoft SQL Server Connection successful with Windows authentication!!!")
 except Exception as error:
     print("5.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
+finally:
+    if ('connection5' in locals()):
+        print("5.- Connection 5 closed\n")
+        connection5.close()
 #6.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
 #instalation: pip install pyodbc
 #Este tipo de conexión es la misma a la descrita en el número 5, con la única diferencia que se incluye el nombre 
@@ -231,37 +257,10 @@ except Exception as error:
 try:
     mssql_engine_sql_auth = create_engine('mssql+pyodbc://username:password@mydsn')
     connection6 = mssql_engine_sql_auth.connect()
-    print("6.- Microsoft SQL Server Connection successful with Server authentication!!!\n")
-    connection6.close()
+    print("6.- Microsoft SQL Server Connection successful with Server authentication!!!")
 except Exception as error:
     print("6.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Server authentication:\n" + str(error) + "\n")
-
-
-#MANDAR DATOS A LA BASE DE DATOS:
-#declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
-Base = declarative_base()
-#Las clases que vayan a mandar datos a la DB deben heredar de la variable que haya usado el método 
-#declarative_base().
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-    gender = Column(CHAR)
-
-#Create a session to interact with the database
-Session = sessionmaker(bind = mysql_engine)
-session = Session()
-
-#Example: Inserting data into the database
-new_user = User(name = 'John', age = 30, gender = 'm')
-session.add(new_user)
-session.commit()
-
-#Example: Querying data from the database
-users = session.query(User).all()
-for user in users:
-    print(user.name, user.age)
-
-#Close the session when done
-session.close()
+finally:
+    if ('connection6' in locals()):
+        print("6.- Connection 6 closed\n")
+        connection6.close()

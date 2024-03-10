@@ -53,13 +53,37 @@ try:
     finalDataFrame = pd.DataFrame(data=finalData)
     print(finalDataFrame, "\n")
 
+    excel_writer = pd.ExcelWriter('resultado.xlsx', engine='xlsxwriter')
+    finalDataFrame.to_excel(excel_writer, index=False, sheet_name='Sheet1', startrow=1)
+    workbook = excel_writer.book
+    worksheet = excel_writer.sheets['Sheet1']
+    for j, col in enumerate(finalDataFrame.columns):
+        worksheet.write(0, j, col, workbook.add_format({'bg_color': 'blue', 'bold': True}))
+    for i in range(finalDataFrame.shape[0] + 1):
+        for j in range(finalDataFrame.shape[1]):
+            cell_format = workbook.add_format()
+            if j == 0:
+                cell_format.set_bg_color('green')
+            elif j == 1:
+                cell_format.set_bg_color('gray')
+            elif i == finalDataFrame.shape[0]:
+                cell_format.set_bg_color('yellow')
+            else:
+                cell_format.set_bg_color('yellow')
+            worksheet.write(i + 1, j, finalDataFrame.iloc[i - 1, j], cell_format)
+    date_format = workbook.add_format({'num_format': 'yyyy-mm-dd', 'bg_color': 'yellow'})
+    for i in range(finalDataFrame.shape[0]):
+        worksheet.write(i + 1, finalDataFrame.columns.get_loc('fecha_publicacion'), pd.to_datetime(finalDataFrame.iloc[i]['fecha_publicacion']).date(), date_format)
+    for idx, col in enumerate(finalDataFrame):
+        max_len = max(finalDataFrame[col].astype(str).map(len).max(), len(str(col))) + 1
+        worksheet.set_column(idx, idx, max_len)
+    excel_writer.save()
+
     app = QApplication(sys.argv)
     window = QMainWindow()
     tableWidget = QTableWidget()
     tableWidget.setRowCount(finalDataFrame.shape[0] + 1)  # +1 para incluir la fila de nombres de columna
     tableWidget.setColumnCount(finalDataFrame.shape[1])
-
-    # Mostrar nombres de columnas del DataFrame en la primera fila de la tabla y pintarla de azul
     for j in range(finalDataFrame.shape[1]):
         item = QTableWidgetItem(finalDataFrame.columns[j])
         item.setBackground(QColor('blue'))
@@ -78,50 +102,11 @@ try:
 
     window.setCentralWidget(tableWidget)
     window.showMaximized()
-
-    # Exportar DataFrame a Excel con el mismo formato que la GUI
-    excel_writer = pd.ExcelWriter('resultado.xlsx', engine='xlsxwriter')
-    finalDataFrame.to_excel(excel_writer, index=False, sheet_name='Sheet1', startrow=1)
-
-    workbook = excel_writer.book
-    worksheet = excel_writer.sheets['Sheet1']
-
-    # Escribir nombres de columnas en el archivo de Excel y aplicar formato a la fila de nombres de columna
-    for j, col in enumerate(finalDataFrame.columns):
-        worksheet.write(0, j, col, workbook.add_format({'bg_color': 'blue', 'bold': True}))
-
-    # Aplicar formato de colores a todas las celdas en Excel
-    for i in range(finalDataFrame.shape[0] + 1):
-        for j in range(finalDataFrame.shape[1]):
-            cell_format = workbook.add_format()
-            if j == 0:
-                cell_format.set_bg_color('green')
-            elif j == 1:
-                cell_format.set_bg_color('gray')
-            elif i == finalDataFrame.shape[0]:
-                cell_format.set_bg_color('yellow')  # Pintar la última fila de amarillo
-            else:
-                cell_format.set_bg_color('yellow')
-            worksheet.write(i + 1, j, finalDataFrame.iloc[i - 1, j], cell_format)  # +1 para evitar la superposición con la fila de nombres de columna
-
-    # Convertir las fechas al formato adecuado antes de escribirlas en el archivo de Excel y aplicar color amarillo
-    date_format = workbook.add_format({'num_format': 'yyyy-mm-dd', 'bg_color': 'yellow'})
-    for i in range(finalDataFrame.shape[0]):
-        worksheet.write(i + 1, finalDataFrame.columns.get_loc('fecha_publicacion'), pd.to_datetime(finalDataFrame.iloc[i]['fecha_publicacion']).date(), date_format)
-
-    # Ajustar ancho de las columnas para que se vean correctamente
-    for idx, col in enumerate(finalDataFrame):
-        max_len = max(finalDataFrame[col].astype(str).map(len).max(), len(str(col))) + 1
-        worksheet.set_column(idx, idx, max_len)
-
-    excel_writer.save()
     sys.exit(app.exec_())
-
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
-
 finally:
-    if 'resultProxy' in locals():
+    if ('resultProxy' in locals()):
         resultProxy.close()
-    if 'connection1' in locals():
+    if ('connection1' in locals()):
         connection1.close()
