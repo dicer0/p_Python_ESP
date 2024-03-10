@@ -258,7 +258,7 @@ try:
     # - font_color: Define el color de la fuente de la celda.
     # - font_name: Define el nombre de la fuente de la celda.
     # - font_size: Define el tamaño de la fuente de la celda.
-    # - font_bold: Define si el texto de la celda está en negrita (True) o no (False).
+    # - bold: Define si el texto de la celda está en negrita (True) o no (False).
     # - font_italic: Define si el texto de la celda está en cursiva (True) o no (False).
     # - font_underline: Define si el texto de la celda está subrayado (True) o no (False).
     # - align: Define la alineación del texto dentro de la celda ('left', 'center', 'right', 'justify', etc.).
@@ -268,7 +268,7 @@ try:
     # - border: Define los bordes de la celda (puedes especificar si quieres bordes en la parte superior, 
     #   inferior, izquierda, derecha, etc.).
     # - text_wrap: Define si el texto debe envolverse dentro de la celda (True) o no (False).
-    blue_format = workbook.add_format({'bg_color': '#0000FF', 'font_bold': True})
+    blue_format = workbook.add_format({'bg_color': '#0000FF'})
     green_format = workbook.add_format({'bg_color': '#00FF00'})
     grey_format = workbook.add_format({'bg_color': '#D3D3D3'})
     yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
