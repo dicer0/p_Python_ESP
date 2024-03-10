@@ -79,38 +79,51 @@ compareDicc = [{
 #instalation: pip install pymysql
 try:
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
+    #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con recursos 
+    #que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones de red o 
+    #conexiones a bases de datos. Su sintaxis básica es la siguiente: 
+    #       with expresion as variable:
+    # - expresion: Este parámetro recibe un método que devuelva un objeto, ya que este se comportará como el 
+    #   "contexto de ejecución", osea el recurso que debe ser gestionado, un ejemplo es open('archivo.txt', 'r').
+    # - variable: Es el nombre de la variable que se asigna al objeto de contexto dentro del bloque with.
+    #Utilizar el operador with es igual a asignar una variable, la única diferencia es que al utilizar el operador
+    #with nos aseguramos que el objeto que devuelva el método utilizado sea gestionado por un entorno temporal y 
+    #complete sus tareas correctamente, como cerrar un archivo, incluso si ocurren errores: 
+    #   nombreVariable = método() 
+    #   with método() as nombreVariable
+    #De igual manera, el operador with se asegura que no debamos guardar el archivo al terminar la acción, o cerrar 
+    #una conexión a la base de datos, ya que esta se maneja de forma automática por el operador.
     #create_engine().connect(): El método .connect() sirve para establecer la conexión con la base de datos.
-    connection1 = mysql_engine.connect()
-    print("1.- MySQL Connection successful!!!")
-
-    #OBTENCIÓN DE DATOS DE LA BASE DE DATOS: Ya que estemos seguros que la conexión a la base de datos se ha 
-    #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, esto se 
-    #realiza a través de la variable que haya utilizado el método .connect(), el método .execute() y .text().  
-    SQL_Query_string =  """SELECT 	  * 
-                            FROM 	    posts
-                            ORDER BY  titulo DESC;"""
-    SQL_TextObject = text(SQL_Query_string)
-    #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a través de 
-    #un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL y lo 
-    #que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
-    resultProxy = connection1.execute(SQL_TextObject)
-    print("Tipo de Dato ResultProxy: ", type(resultProxy))
-    #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos matricial en 
-    #forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de manera eficiente para 
-    #realizar diversas operaciones de análisis de datos, su constructor recibe los siguientes parámetros:
-    # - data: Este es el parámetro principal que especifica los datos que se utilizarán para crear el DataFrame.
-    #   Puede ser un diccionario, una lista de listas, un numpyArray, otra estructura de datos de Pandas (como 
-    #   otro DataFrame o una Serie), etc.
-    # - index (opcional): Este parámetro especifica las etiquetas de índice para las filas del DataFrame. 
-    #   Puede ser una lista, una matriz, una Serie, etc. Si no se especifica, se utilizarán índices enteros.
-    # - columns (opcional): Este parámetro opcional especifica los nombres de las columnas del DataFrame. Si no 
-    #   se especifica, se utilizarán nombres de columnas predeterminados (0, 1, 2, ...).
-    #       - .keys(): Como los objetos ResultProxy se manejan como diccionarios, se puede obtener el nombre de 
-    #         sus etiquetas (keys) para de esa manera asignar los nombres de las columnas de un DataFrame, pero 
-    #         si se quisiera obtener sus valores, no existe un método .values(), se debe acceder de otra forma. 
-    # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
-    dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
-    print(dataFramePandas, "\n")
+    with mysql_engine.connect() as connection1:
+        print("1.- MySQL Connection successful!!!")
+        #OBTENCIÓN DE DATOS DE LA BASE DE DATOS: Ya que estemos seguros que la conexión a la base de datos se ha 
+        #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, esto se 
+        #realiza a través de la variable que haya utilizado el método .connect(), el método .execute() y .text().  
+        SQL_Query_string =  """SELECT 	  * 
+                                FROM 	    posts
+                                ORDER BY  titulo DESC;"""
+        SQL_TextObject = text(SQL_Query_string)
+        #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a través de 
+        #un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL y lo 
+        #que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
+        resultProxy = connection1.execute(SQL_TextObject)
+        print("Tipo de Dato ResultProxy: ", type(resultProxy))
+        #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos matricial en 
+        #forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de manera eficiente para 
+        #realizar diversas operaciones de análisis de datos, su constructor recibe los siguientes parámetros:
+        # - data: Este es el parámetro principal que especifica los datos que se utilizarán para crear el DataFrame.
+        #   Puede ser un diccionario, una lista de listas, un numpyArray, otra estructura de datos de Pandas (como 
+        #   otro DataFrame o una Serie), etc.
+        # - index (opcional): Este parámetro especifica las etiquetas de índice para las filas del DataFrame. 
+        #   Puede ser una lista, una matriz, una Serie, etc. Si no se especifica, se utilizarán índices enteros.
+        # - columns (opcional): Este parámetro opcional especifica los nombres de las columnas del DataFrame. Si no 
+        #   se especifica, se utilizarán nombres de columnas predeterminados (0, 1, 2, ...).
+        #       - .keys(): Como los objetos ResultProxy se manejan como diccionarios, se puede obtener el nombre de 
+        #         sus etiquetas (keys) para de esa manera asignar los nombres de las columnas de un DataFrame, pero 
+        #         si se quisiera obtener sus valores, no existe un método .values(), se debe acceder de otra forma. 
+        # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
+        dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
+        print(dataFramePandas, "\n")
 
     #CREAR UN NUEVO ARRAY QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
     #bucle for each: Es un bucle que recorre la lista de diccionarios compareDicc, por lo que la variable 
@@ -220,20 +233,6 @@ try:
     #         espacio de 10 caracteres.
     #       - {:,}: Formatea el número con separadores de miles.
     pathExcel = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx"
-    #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con recursos 
-    #que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones de red o 
-    #conexiones a bases de datos. Su sintaxis básica es la siguiente: 
-    #       with expresion as variable:
-    # - expresion: Este parámetro recibe un método que devuelva un objeto, ya que este se comportará como el 
-    #   "contexto de ejecución", osea el recurso que debe ser gestionado, un ejemplo es open('archivo.txt', 'r').
-    # - variable: Es el nombre de la variable que se asigna al objeto de contexto dentro del bloque with.
-    #Utilizar el operador with es igual a asignar una variable, la única diferencia es que al utilizar el operador
-    #with nos aseguramos que el objeto que devuelva el método utilizado sea gestionado por un entorno temporal y 
-    #complete sus tareas correctamente, como cerrar un archivo, incluso si ocurren errores: 
-    #   nombreVariable = método() 
-    #   with método() as nombreVariable
-    #De igual manera el operador with se asegura que no debamos guardar el archivo al terminar la acción, este 
-    #se guarda de forma automática.
     with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S") as objetoExcel:
         #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de Excel.
         # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
@@ -326,59 +325,40 @@ try:
 
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
-finally:
-    #CERRAR LA CONEXIÓN CON LA BASE DE DATOS:
-    #locals(): Es un método de Python que devuelve un diccionario que contiene las variables locales activas, ya 
-    #sea las que se encuentran dentro de una función o en un bloque de código definido, como una clase. Es útil 
-    #en situaciones donde se necesita inspeccionar el ámbito local para verificar la presencia de una variable 
-    #específica antes de tomar una acción en consecuencia.
-    if ('resultProxy' in locals()):
-        #.create_engine().connect().execute().close(): El cerrar la conexión con la consulta hecha con el método 
-        #.execute() asegura que se liberen los recursos asociados con ese objeto una vez que se haya terminado el 
-        #query. Aunque no es estrictamente necesario hacer esto, es una buena práctica para limpiar y liberar 
-        #cualquier recurso adicional que pueda estar asociado con él.
-        resultProxy.close()
-    if ('connection1' in locals()):
-        print("1.- Connection 1 closed\n")
-        #create_engine().close(): El método .close() sirve para cerrar una conexión previamente configurada y 
-        #establecida con el método create_engine().connect().
-        connection1.close()
 #2.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
 #instalation: pip install psycopg2 
 try:
+    #with: Con este operador de contexto de ejecución se maneja la apertura y cierre de la conexión a la base de 
+    #datos de forma automática, por lo que esta no se debe abrir ni cerrar de forma manual, solo se llama al 
+    #método y se le asigna una variable para poderla utilizar.  
     postgresql_engine = create_engine('postgresql://username:password@hostname:port/database_name')
-    connection2 = postgresql_engine.connect()
-    print("2.- PostgresSQL Connection successful!!!")
+    with postgresql_engine.connect() as connection2:
+        print("2.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("2.- Ups an Error ocurred while Opening the PostgresSQL DataBase:\n" + str(error) + "\n")
-finally:
-    if ('connection2' in locals()):
-        print("2.- Connection 2 closed\n")
-        connection2.close()
 #3.- SQLite (path relativo): create_engine('sqlite:///mydatabase.db')
 #No additional installation is needed.
 try:
+    #Pero si no se utiliza el operador with, la conexión se debe abrir de forma manual con el método connect() 
+    #y luego cerrarse con el método .close(), pero el problema de hacer esto es que si se quiere rellenar un 
+    #reporte o algo del estilo, podrá haber problemas al momento de la extracción de datos.
     sqlite_engine_relative = create_engine('sqlite:///mydatabase.db')
     connection3 = sqlite_engine_relative.connect()
-    print("3.- SQLite Connection successful!!!")
+    print("5.- Microsoft SQL Server Connection successful with Windows authentication!!!")
 except Exception as error:
-    print("3.- Ups an Error ocurred while Opening the SQLite DataBase with a Relative Path:\n" + str(error) + "\n")
+    print("5.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
 finally:
     if ('connection3' in locals()):
-        print("3.- Connection 3 closed\n")
+        print("5.- Connection 5 closed\n")
         connection3.close()
 #4.- SQLite (path absoluto): create_engine('sqlite:////absolute/path/to/mydatabase.db')
 #No additional installation is needed.
 try:
     sqlite_engine_absolute = create_engine('sqlite:////absolute/path/to/mydatabase.db')
-    connection4 = sqlite_engine_absolute.connect()
-    print("4.- SQLite Connection successful!!!")
+    with postgresql_engine.connect() as connection4:
+        print("4.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("4.- Ups an Error ocurred while Opening the SQLite DataBase with an Absolute Path:\n" + str(error) + "\n")
-finally:
-    if ('connection4' in locals()):
-        print("4.- Connection 4 closed\n")
-        connection4.close()
 #5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://@mydsn')
 #instalation: pip install pyodbc
 #Este tipo de conexión es más compleja que las demás, ya que se debe ejecutar un paso intermedio donde se crea un 
