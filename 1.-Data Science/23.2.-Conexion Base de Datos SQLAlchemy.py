@@ -218,10 +218,29 @@ try:
     #       - {:0>10.2f}: Formatea el número con dos decimales y lo rellena con ceros a la izquierda en un 
     #         espacio de 10 caracteres.
     #       - {:,}: Formatea el número con separadores de miles.
-    excel_writer = pandas.ExcelWriter(path = 'resultado.xlsx', engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S")
-    finalDataFrame.to_excel(excel_writer, index=False, sheet_name='Sheet1', startrow=1)
-    workbook = excel_writer.book
-    worksheet = excel_writer.sheets['Sheet1']
+    pathExcel = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx"
+    objetoExcel = pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S")
+    #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de Excel.
+    # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
+    # - index: Es un booleano que especifica si se quiere incluir el índice del DataFrame en el archivo de Excel.
+    #   Si se establece en False, el índice no se incluirá en el Excel. El valor predeterminado es True.
+    # - index_label: Especifica el nombre que se le dará a la columna de índice en el archivo de Excel. Si se 
+    #   establece en None, no se asignará un nombre a la columna de índice. El valor predeterminado es 'index'.
+    # - sheet_name: Especifica el nombre de la hoja en el archivo de Excel donde se escribirán los datos. El valor 
+    #   predeterminado es 'Sheet1'.
+    # - startrow: Especifica la fila inicial donde se comenzará a escribir los datos del DataFrame. Esto es útil 
+    #   si se desea agregar los datos en una ubicación específica. El valor predeterminado es 0.
+    # - startcol: Especifica la columna inicial donde se comenzará a escribir los datos del DataFrame. Esto es útil 
+    #   si se desea agregar los datos en una ubicación específica. El valor predeterminado es 0.
+    # - header: Es un booleano que especifica si se debe incluir o no el encabezado (nombres de columna) del 
+    #   DataFrame en el archivo de Excel. El valor predeterminado es True.
+    # - merge_cells: Es un booleano que especifica si se deben fusionar las celdas que tengan columnas con encabezados 
+    #   duplicados. El valor predeterminado es True.
+    # - engine: Especifica el motor de escritura de Excel que se utilizará para escribir los datos, sus valores son los 
+    #   mismos que se indicaban en el objeto pandas.ExcelWriter. Si no se especifica, se utilizará el motor 'xlsxwriter'.
+    finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True, engine = 'xlsxwriter')
+    workbook = objetoExcel.book
+    worksheet = objetoExcel.sheets['Sheet1']
     for j, col in enumerate(finalDataFrame.columns):
         worksheet.write(0, j, col, workbook.add_format({'bg_color': 'blue', 'bold': True}))
     for i in range(finalDataFrame.shape[0] + 1):
@@ -242,7 +261,7 @@ try:
     for idx, col in enumerate(finalDataFrame):
         max_len = max(finalDataFrame[col].astype(str).map(len).max(), len(str(col))) + 1
         worksheet.set_column(idx, idx, max_len)
-    excel_writer.save()
+    objetoExcel.save()
 
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
@@ -346,31 +365,31 @@ finally:
         connection6.close()
 
 
-#MANDAR DATOS A LA BASE DE DATOS:
-#declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
-Base = declarative_base()
-#Las clases que vayan a mandar datos a la DB deben heredar de la variable que haya usado el método 
-#declarative_base().
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-    gender = Column(CHAR)
+# #MANDAR DATOS A LA BASE DE DATOS:
+# #declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
+# Base = declarative_base()
+# #Las clases que vayan a mandar datos a la DB deben heredar de la variable que haya usado el método 
+# #declarative_base().
+# class User(Base):
+#     __tablename__ = 'users'
+#     id = Column(Integer, primary_key=True)
+#     name = Column(String)
+#     age = Column(Integer)
+#     gender = Column(CHAR)
 
-#Create a session to interact with the database
-Session = sessionmaker(bind = mysql_engine)
-session = Session()
+# #Create a session to interact with the database
+# Session = sessionmaker(bind = mysql_engine)
+# session = Session()
 
-#Example: Inserting data into the database
-new_user = User(name = 'John', age = 30, gender = 'm')
-session.add(new_user)
-session.commit()
+# #Example: Inserting data into the database
+# new_user = User(name = 'John', age = 30, gender = 'm')
+# session.add(new_user)
+# session.commit()
 
-#Example: Querying data from the database
-users = session.query(User).all()
-for user in users:
-    print(user.name, user.age)
+# #Example: Querying data from the database
+# users = session.query(User).all()
+# for user in users:
+#     print(user.name, user.age)
 
-#Close the session when done
-session.close()
+# #Close the session when done
+# session.close()
