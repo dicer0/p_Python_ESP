@@ -220,94 +220,109 @@ try:
     #         espacio de 10 caracteres.
     #       - {:,}: Formatea el número con separadores de miles.
     pathExcel = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx"
-    objetoExcel = pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S")
-    #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de Excel.
-    # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
-    # - index: Es un booleano que especifica si se quiere incluir el índice del DataFrame en el archivo de Excel.
-    #   Si se establece en False, el índice no se incluirá en el Excel. El valor predeterminado es True.
-    # - index_label: Especifica el nombre que se le dará a la columna de índice en el archivo de Excel. Si se 
-    #   establece en None, no se asignará un nombre a la columna de índice. El valor predeterminado es 'index'.
-    # - sheet_name: Especifica el nombre de la hoja en el archivo de Excel donde se escribirán los datos. El valor 
-    #   predeterminado es 'Sheet1'.
-    # - startrow: Especifica la fila inicial donde se comenzará a escribir los datos del DataFrame. Esto es útil 
-    #   si se desea agregar los datos en una ubicación específica. El valor predeterminado es 0.
-    # - startcol: Especifica la columna inicial donde se comenzará a escribir los datos del DataFrame. Esto es 
-    #   útil si se desea agregar los datos en una ubicación específica. El valor predeterminado es 0.
-    # - header: Es un booleano que especifica si se debe incluir o no el encabezado (nombres de columna) del 
-    #   DataFrame en el archivo de Excel. El valor predeterminado es True.
-    # - merge_cells: Es un booleano que especifica si se deben fusionar las celdas que tengan columnas con 
-    #   encabezados duplicados. El valor predeterminado es True.
-    # - engine: Especifica el motor de escritura de Excel que se utilizará para escribir los datos, sus valores 
-    #   son los mismos que se indicaban en el objeto pandas.ExcelWriter. Si no se especifica, se utilizará el 
-    #   motor 'xlsxwriter'.
-    finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True, engine = 'xlsxwriter')
-    #Después de haber creado el objeto pandas.ExcelWriter y haber convertido el DataFrame a un excel con el método 
-    #.to_excel(), se debe extraer el book (archivo excel) y sheet (página dentro del book) del Excel para darle 
-    #formato al archivo, ambas cosas se deben almacenar en variables distintas y acceder a ellas a través del 
-    #objeto ExcelWriter. 
-    #pandas.ExcelWriter().book: Atributo que obtiene el libro del Excel.
-    workbook = objetoExcel.book
-    #pandas.ExcelWriter().sheets["nombreSheet"]: Atributo para obtener una página del Excel.
-    worksheet = objetoExcel.sheets['Sheet1']
-    #Una vez que se haya accedido al book y sheet deseado y guardado ambos en variables, se debe indicar los 
-    #formatos estáticos de sus celdas, guardando todos en variables y asignándolos al book a través del método 
-    #.add_format().
-    #pandas.ExcelWriter().book.add_format({}): Este método sirve para guardar en una variable un formato de celda, 
-    #el cual se indica en un diccionario porque se pueden encapsular varias propiedades:
-    # - bg_color: Define el color de fondo de la celda.
-    # - font_color: Define el color de la fuente de la celda.
-    # - font_name: Define el nombre de la fuente de la celda.
-    # - font_size: Define el tamaño de la fuente de la celda.
-    # - bold: Define si el texto de la celda está en negrita (True) o no (False).
-    # - font_italic: Define si el texto de la celda está en cursiva (True) o no (False).
-    # - font_underline: Define si el texto de la celda está subrayado (True) o no (False).
-    # - align: Define la alineación del texto dentro de la celda ('left', 'center', 'right', 'justify', etc.).
-    # - valign: Define la alineación vertical del texto dentro de la celda ('top', 'vcenter', 'bottom', 
-    #   'vjustify', etc.).
-    # - num_format: Define el formato numérico de la celda (por ejemplo, '0.00' para dos decimales).
-    # - border: Define los bordes de la celda (puedes especificar si quieres bordes en la parte superior, 
-    #   inferior, izquierda, derecha, etc.).
-    # - text_wrap: Define si el texto debe envolverse dentro de la celda (True) o no (False).
-    blue_format = workbook.add_format({'bg_color': '#0000FF'})
-    green_format = workbook.add_format({'bg_color': '#00FF00'})
-    grey_format = workbook.add_format({'bg_color': '#D3D3D3'})
-    yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
-    #Luego de haber definido todos los formatos que se quiere utilizar en el Excel, se deberá extraer el tamaño
-    #del DataFrame, esto se hará a través de su atributo pandas.DataFrame().shape, el cual devuelve una tupla 
-    #que indica su número de filas y columnas: (filas, columnas) = pandas.DataFrame().shape
-    (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
-    #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto ExcelWriter() a
-    #través del método conditional_format().
-    #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para aplicar un 
-    #formato a un rango de celdas en una hoja de cálculo específica (sheet) en un archivo Excel (book), para ello 
-    #cabe mencionar que las posiciones de las filas y columnas se empiezan a contar desde 0 pero su tamaño se 
-    #considera desde 1.
-    # - first_row: Es un número o variable que indica la celda inicial de las filas en la tabla.
-    # - first_col: Es un número o variable que indica la celda inicial de las columnas en la tabla.
-    # - last_row: Es un número o variable que indica la celda final de las filas en la tabla. Aquí es donde se usa
-    #   la variable filasDataFrame obtenida del atributo pandas.DataFrame().shape.
-    # - last_col: Es un número o variable que indica la celda final de las columnas en la tabla. Aquí es donde se 
-    #   usa la variable columnasDataFrame obtenida del atributo pandas.DataFrame().shape.
-    # - type: Este parámetro indica la condición que se debe cumplir para que se aplique un formato en una celda.
-    #       - 'cell_value': Aplica el formato si el valor de la celda cumple con cierta condición.
-    #       - 'no_blanks': Aplica el formato si la celda no está en blanco.
-    #       - 'formula': Aplica el formato si la fórmula en la celda devuelve verdadero.
-    #       - 'time_period': Aplica el formato si la fecha en la celda cae dentro de un cierto período de tiempo.
-    #       - 'text': Aplica el formato basado en el contenido de texto de la celda.
-    #       - 'average': Aplica el formato si el valor de la celda es un promedio dentro de un rango específico.
-    #       - 'duplicate': Aplica el formato si el valor de la celda es duplicado dentro de un rango específico.
-    #       - 'unique': Aplica el formato si el valor de la celda es único dentro de un rango específico.
-    #       - '3_color_scale': Aplica un formato de escala de 3 colores basado en los valores de las celdas.
-    #       - '2_color_scale': Aplica un formato de escala de 2 colores basado en los valores de las celdas.
-    #       - 'icon_set': Aplica un conjunto de iconos basado en los valores de las celdas.
-    # - format: Este parámetro recibe una variable de formato pandas.ExcelWriter().book.add_format({}).
-    #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
-    worksheet.conditional_format(0, 0, 0, columnasDataFrame - 1, {'type': 'no_blanks', 'format': blue_format})
-    worksheet.conditional_format(1, 0, filasDataFrame, 0, {'type': 'no_blanks', 'format': green_format})
-    worksheet.conditional_format(1, 1, filasDataFrame, 1, {'type': 'no_blanks', 'format': grey_format})
-    for col in range(2, columnasDataFrame):
-        worksheet.conditional_format(1, col, filasDataFrame, col, {'type': 'no_blanks', 'format': yellow_format})
-    objetoExcel.save()
+    #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con recursos 
+    #que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones de red o 
+    #conexiones a bases de datos. Su sintaxis básica es la siguiente: 
+    #       with expresion as variable:
+    # - expresion: Este parámetro recibe un método que devuelva un objeto, ya que este se comportará como el 
+    #   "contexto de ejecución", osea el recurso que debe ser gestionado, un ejemplo es open('archivo.txt', 'r').
+    # - variable: Es el nombre de la variable que se asigna al objeto de contexto dentro del bloque with.
+    #Utilizar el operador with es igual a asignar una variable, la única diferencia es que al utilizar el operador
+    #with nos aseguramos que el objeto que devuelva el método utilizado sea gestionado por un entorno temporal y 
+    #complete sus tareas correctamente, como cerrar un archivo, incluso si ocurren errores: 
+    #   nombreVariable = método() 
+    #   with método() as nombreVariable
+    #De igual manera el operador with se asegura que no debamos guardar el archivo al terminar la acción, este 
+    #se guarda de forma automática.
+    with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S") as objetoExcel:
+        #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de Excel.
+        # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
+        # - index: Es un booleano que especifica si se quiere incluir el índice del DataFrame en el Excel.
+        #   Si se establece en False, el índice no se incluirá en el Excel. El valor predeterminado es True.
+        # - index_label: Especifica el nombre que se le dará a la columna de índice en el archivo de Excel. Si se 
+        #   establece en None, no se asignará un nombre a la columna de índice. El valor predeterminado es 'index'.
+        # - sheet_name: Especifica el nombre de la hoja en el archivo de Excel donde se escribirán los datos. El 
+        #   valor predeterminado es 'Sheet1'.
+        # - startrow: Especifica la fila inicial donde se comenzará a escribir los datos del DataFrame. Esto es 
+        #   útil si se desea agregar los datos en una ubicación específica. El valor predeterminado es 0.
+        # - startcol: Especifica la columna inicial donde se comenzará a escribir los datos del DataFrame. Esto es 
+        #   útil si se desea agregar los datos en una ubicación específica. El valor predeterminado es 0.
+        # - header: Es un booleano que especifica si se debe incluir o no el encabezado (nombres de columna) del 
+        #   DataFrame en el archivo de Excel. El valor predeterminado es True.
+        # - merge_cells: Es un booleano que especifica si se deben fusionar las celdas que tengan columnas con 
+        #   encabezados duplicados. El valor predeterminado es True.
+        # - engine: Especifica el motor de escritura de Excel que se utilizará para escribir los datos, sus valores 
+        #   son los mismos que se indicaban en el objeto pandas.ExcelWriter. Si no se especifica, se utilizará el 
+        #   motor 'xlsxwriter'.
+        finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True, engine = 'xlsxwriter')
+        #Después de haber creado el objeto pandas.ExcelWriter y haber convertido el DataFrame a un excel con el 
+        #método .to_excel(), se debe extraer el book (archivo excel) y sheet (página dentro del book) del Excel 
+        #para darle formato al archivo, ambas cosas se deben almacenar en variables distintas y acceder a ellas a 
+        #través del objeto ExcelWriter. 
+        #pandas.ExcelWriter().book: Atributo que obtiene el libro del Excel.
+        workbook = objetoExcel.book
+        #pandas.ExcelWriter().sheets["nombreSheet"]: Atributo para obtener una página del Excel.
+        worksheet = objetoExcel.sheets['Sheet1']
+        #Una vez que se haya accedido al book y sheet deseado y guardado ambos en variables, se debe indicar los 
+        #formatos estáticos de sus celdas, guardando todos en variables y asignándolos al book a través del método 
+        #.add_format().
+        #pandas.ExcelWriter().book.add_format({}): Este método sirve para guardar en una variable un formato de 
+        #celda, el cual se indica en un diccionario porque se pueden encapsular varias propiedades:
+        # - bg_color: Define el color de fondo de la celda.
+        # - font_color: Define el color de la fuente de la celda.
+        # - font_name: Define el nombre de la fuente de la celda.
+        # - font_size: Define el tamaño de la fuente de la celda.
+        # - bold: Define si el texto de la celda está en negrita (True) o no (False).
+        # - font_italic: Define si el texto de la celda está en cursiva (True) o no (False).
+        # - font_underline: Define si el texto de la celda está subrayado (True) o no (False).
+        # - align: Define la alineación del texto dentro de la celda ('left', 'center', 'right', 'justify', etc.).
+        # - valign: Define la alineación vertical del texto dentro de la celda ('top', 'vcenter', 'bottom', 
+        #   'vjustify', etc.).
+        # - num_format: Define el formato numérico de la celda (por ejemplo, '0.00' para dos decimales).
+        # - border: Define los bordes de la celda (puedes especificar si quieres bordes en la parte superior, 
+        #   inferior, izquierda, derecha, etc.).
+        # - text_wrap: Define si el texto debe envolverse dentro de la celda (True) o no (False).
+        blue_format = workbook.add_format({'bg_color': '#0000FF'})
+        green_format = workbook.add_format({'bg_color': '#00FF00'})
+        grey_format = workbook.add_format({'bg_color': '#D3D3D3'})
+        yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
+        #Luego de haber definido todos los formatos que se quiere utilizar en el Excel, se deberá extraer el 
+        #tamaño del DataFrame, esto se hará a través de su atributo pandas.DataFrame().shape, el cual devuelve una 
+        #tupla que indica su número de filas y columnas: (filas, columnas) = pandas.DataFrame().shape
+        (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
+        #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto ExcelWriter() a
+        #través del método conditional_format().
+        #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para aplicar un 
+        #formato a un rango de celdas en una hoja de cálculo específica (sheet) en un archivo Excel (book), para 
+        #ello cabe mencionar que las posiciones de las filas y columnas se empiezan a contar desde 0 pero su 
+        #tamaño se considera desde 1.
+        # - first_row: Es un número o variable que indica la celda inicial de las filas en la tabla.
+        # - first_col: Es un número o variable que indica la celda inicial de las columnas en la tabla.
+        # - last_row: Es un número o variable que indica la celda final de las filas en la tabla. Aquí es donde se 
+        #   usa la variable filasDataFrame obtenida del atributo pandas.DataFrame().shape.
+        # - last_col: Es un número o variable que indica la celda final de las columnas en la tabla. Aquí es donde 
+        #   se usa la variable columnasDataFrame obtenida del atributo pandas.DataFrame().shape.
+        # - type: Este parámetro indica la condición que se debe cumplir para que se aplique un formato en una 
+        #   celda.
+        #       - 'cell_value': Aplica el formato si el valor de la celda cumple con cierta condición.
+        #       - 'no_blanks': Aplica el formato si la celda no está en blanco.
+        #       - 'formula': Aplica el formato si la fórmula en la celda devuelve verdadero.
+        #       - 'time_period': Aplica el formato si la fecha en la celda cae dentro de un cierto período de 
+        #         tiempo.
+        #       - 'text': Aplica el formato basado en el contenido de texto de la celda.
+        #       - 'average': Aplica el formato si el valor de la celda es un promedio de un rango específico.
+        #       - 'duplicate': Aplica el formato si el valor de la celda es duplicado de un rango específico.
+        #       - 'unique': Aplica el formato si el valor de la celda es único dentro de un rango específico.
+        #       - '3_color_scale': Aplica un formato de escala de 3 colores basado en los valores de las celdas.
+        #       - '2_color_scale': Aplica un formato de escala de 2 colores basado en los valores de las celdas.
+        #       - 'icon_set': Aplica un conjunto de iconos basado en los valores de las celdas.
+        # - format: Este parámetro recibe una variable de formato pandas.ExcelWriter().book.add_format({}).
+        #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
+        worksheet.conditional_format(0, 0, 0, columnasDataFrame - 1, {'type': 'no_blanks', 'format': blue_format})
+        worksheet.conditional_format(1, 0, filasDataFrame, 0, {'type': 'no_blanks', 'format': green_format})
+        worksheet.conditional_format(1, 1, filasDataFrame, 1, {'type': 'no_blanks', 'format': grey_format})
+        for col in range(2, columnasDataFrame):
+            worksheet.conditional_format(1, col, filasDataFrame, col, {'type': 'no_blanks', 'format': yellow_format})
 
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")

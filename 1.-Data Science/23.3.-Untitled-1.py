@@ -55,11 +55,11 @@ try:
 
     pathExcel = "resultado.xlsx"
 
-    with pd.ExcelWriter(pathExcel, engine='xlsxwriter') as writer:
-        finalDataFrame.to_excel(writer, index=False, sheet_name='Sheet1')
+    with pd.ExcelWriter(pathExcel, engine='xlsxwriter') as objetoExcel:
+        finalDataFrame.to_excel(objetoExcel, index=False, sheet_name='Sheet1')
 
-        workbook = writer.book
-        worksheet = writer.sheets['Sheet1']
+        workbook = objetoExcel.book
+        worksheet = objetoExcel.sheets['Sheet1']
 
         blue_format = workbook.add_format({'bg_color': '#0000FF'})
         green_format = workbook.add_format({'bg_color': '#00FF00'})
@@ -71,7 +71,6 @@ try:
         worksheet.conditional_format(1, 1, finalDataFrame.shape[0], 1, {'type': 'no_blanks', 'format': grey_format})
         for col in range(2, finalDataFrame.shape[1]):
             worksheet.conditional_format(1, col, finalDataFrame.shape[0], col, {'type': 'no_blanks', 'format': yellow_format})
-
     print("Excel file successfully created.")
 
 except Exception as error:
