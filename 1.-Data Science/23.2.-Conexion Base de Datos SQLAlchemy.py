@@ -84,21 +84,20 @@ try:
     print("1.- MySQL Connection successful!!!")
 
     #OBTENCIÓN DE DATOS DE LA BASE DE DATOS: Ya que estemos seguros que la conexión a la base de datos se ha 
-    #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, 
-    #esto se realiza a través de la variable que haya utilizado el método .connect(), el método .execute() y 
-    #.text().  
+    #realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta información, esto se 
+    #realiza a través de la variable que haya utilizado el método .connect(), el método .execute() y .text().  
     SQL_Query_string =  """SELECT 	  * 
                             FROM 	    posts
                             ORDER BY  titulo DESC;"""
     SQL_TextObject = text(SQL_Query_string)
-    #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a través 
-    #de un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL
-    #y lo que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
+    #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a través de 
+    #un objeto de variable textual (text) se puede realizar una consulta a la base de datos a través de SQL y lo 
+    #que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
     resultProxy = connection1.execute(SQL_TextObject)
     print("Tipo de Dato ResultProxy: ", type(resultProxy))
-    #pandas.DataFrame: La clase DataFrame representa una estructura de datos matricial en forma de tablas que 
-    #pueden contener datos de diferentes tipos y se pueden manipular de manera eficiente para realizar diversas 
-    #operaciones de análisis de datos, para crear un objeto su constructor recibe los siguientes parámetros:
+    #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos matricial en 
+    #forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de manera eficiente para 
+    #realizar diversas operaciones de análisis de datos, su constructor recibe los siguientes parámetros:
     # - data: Este es el parámetro principal que especifica los datos que se utilizarán para crear el DataFrame.
     #   Puede ser un diccionario, una lista de listas, un numpyArray, otra estructura de datos de Pandas (como 
     #   otro DataFrame o una Serie), etc.
@@ -130,8 +129,8 @@ try:
                 #Los datos que cumplan las condiciones, se agregan a la lista vacía filtered_rows.
                 filtered_rows.append(row)
 
-        #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones del 
-        #filtro, se añaden y organizan los datos del DataFrame final que queremos obtener.
+        #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones del filtro, 
+        #se añaden y organizan los datos del DataFrame final que queremos obtener.
         for filtered_dataBase in filtered_rows:
             #De igual manera se pueden agregar valores solo cuando se cumpla una condición en la variable
             #filtered_dataBase, para ello se utilizan condicionales de una sola línea que llevan la siguiente 
@@ -164,6 +163,87 @@ try:
     #en su constructor. 
     finalDataFrame = pandas.DataFrame(data = finalData)
     print(finalDataFrame)
+
+    #pandas.ExcelWriter: La clase ExcelWriter de la librería pandas permite crear un objeto específicamente creado 
+    #para escribir datos en un archivo de Excel, dándole formato y organizándolo en sheets, su constructor recibe 
+    #los siguientes parámetros:
+    # - path: Especifica la ruta y el nombre de archivo del archivo de Excel que se va a crear.
+    # - engine: Especifica el motor de escritura de Excel que se utilizará. Los valores comunes son 'xlsxwriter', 
+    #   'openpyxl' y 'xlwt'.
+    #       - 'xlsxwriter': Motor de escritura predeterminado para Excel, ofreciendo el formateo de celdas, la 
+    #         creación de gráficos y la adición de comentarios a las celdas.
+    #       - 'openpyxl': Motor de escritura compatible con formatos de archivos más modernos en Excel como .xlsx,
+    #         Proporciona funciones más avanzadas como la capacidad de cargar y modificar archivos existentes.
+    #       - 'xlwt': Motor de escritura compatible con formatos de archivos más antiguos en Excel como .xls,
+    #         Es útil para escribir en archivos con versiones más viejas de Excel.
+    # - options: Un diccionario que contiene opciones adicionales para el motor de escritura de Excel.
+    # - mode: Controla cómo se manejarán los datos cuando se escriban en el archivo de Excel. 
+    #       - 'w': Se utiliza para sobrescribir los datos del archivo.
+    #       - 'a': Se usa para agregar datos al final del archivo.
+    # - options: Un diccionario que contiene opciones adicionales para el motor de escritura de Excel.
+    # - datetime_format: Especifica el formato de fecha y hora que se utilizará para escribir en el Excel.
+    #   Se debe proporcionar un código que indique un formato compatible con la sintaxis de strftime de Python:
+    #       - %Y: Año con cuatro dígitos (ejemplo: 2022).
+    #       - %y: Año con dos dígitos (ejemplo: 22).
+    #       - %m: Mes como número decimal (01-12).
+    #       - %d: Día del mes como número decimal (01-31).
+    #       - %H: Hora (00-23).
+    #       - %I: Hora (01-12).
+    #       - %p: AM o PM.
+    #       - %M: Minuto (00-59).
+    #       - %S: Segundo (00-59).
+    #       - %f: Microsegundos (000000-999999).
+    #       - %j: Día del año (001-366).
+    #       - %U: Número de semana del año, comenzando por el domingo (00-53).
+    #       - %W: Número de semana del año, comenzando por el lunes (00-53).
+    #       - %a: Nombre corto del día de la semana (Sun, Mon, etc.).
+    #       - %A: Nombre completo del día de la semana (Sunday, Monday, etc.).
+    #       - %b: Nombre corto del mes (Jan, Feb, etc.).
+    #       - %B: Nombre completo del mes (January, February, etc.).
+    #       - %c: Representación de la fecha y hora local.
+    #       - %x: Representación de la fecha local.
+    #       - %X: Representación de la hora local.
+    # - date_format: Especifica el formato de solo fecha que se utilizará para escribir en el Excel.
+    #   Se debe proporcionar un código de formato strftime, igual que como se hacía con el parámetro anterior.
+    # - float_format: Especifica el formato de punto decimal (flotante) que se utilizará al escribir números.
+    #       - {:.2f}: Formatea el número con dos decimales.
+    #       - {:.4f}: Formatea el número con cuatro decimales.
+    #       - {:.0f}: Formatea el número sin decimales.
+    #       - {:+.2f}: Formatea el número con dos decimales e incluye el signo "+" para valores positivos.
+    #       - {:.2%}: Formatea el número como porcentaje con dos decimales.
+    #       - {:.2e}: Formatea el número en notación científica con dos decimales.
+    #       - {:<10.2f}: Formatea el número con dos decimales y lo alinea a la izquierda en un espacio de 10 
+    #         caracteres.
+    #       - {:^10.2f}: Formatea el número con dos decimales y lo centra en un espacio de 10 caracteres.
+    #       - {:0>10.2f}: Formatea el número con dos decimales y lo rellena con ceros a la izquierda en un 
+    #         espacio de 10 caracteres.
+    #       - {:,}: Formatea el número con separadores de miles.
+    excel_writer = pandas.ExcelWriter(path = 'resultado.xlsx', engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S")
+    finalDataFrame.to_excel(excel_writer, index=False, sheet_name='Sheet1', startrow=1)
+    workbook = excel_writer.book
+    worksheet = excel_writer.sheets['Sheet1']
+    for j, col in enumerate(finalDataFrame.columns):
+        worksheet.write(0, j, col, workbook.add_format({'bg_color': 'blue', 'bold': True}))
+    for i in range(finalDataFrame.shape[0] + 1):
+        for j in range(finalDataFrame.shape[1]):
+            cell_format = workbook.add_format()
+            if j == 0:
+                cell_format.set_bg_color('green')
+            elif j == 1:
+                cell_format.set_bg_color('gray')
+            elif i == finalDataFrame.shape[0]:
+                cell_format.set_bg_color('yellow')
+            else:
+                cell_format.set_bg_color('yellow')
+            worksheet.write(i + 1, j, finalDataFrame.iloc[i - 1, j], cell_format)
+    date_format = workbook.add_format({'num_format': 'yyyy-mm-dd', 'bg_color': 'yellow'})
+    for i in range(finalDataFrame.shape[0]):
+        worksheet.write(i + 1, finalDataFrame.columns.get_loc('fecha_publicacion'), pandas.to_datetime(finalDataFrame.iloc[i]['fecha_publicacion']).date(), date_format)
+    for idx, col in enumerate(finalDataFrame):
+        max_len = max(finalDataFrame[col].astype(str).map(len).max(), len(str(col))) + 1
+        worksheet.set_column(idx, idx, max_len)
+    excel_writer.save()
+
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
 finally:
