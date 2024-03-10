@@ -122,8 +122,10 @@ try:
         #         sus etiquetas (keys) para de esa manera asignar los nombres de las columnas de un DataFrame, pero 
         #         si se quisiera obtener sus valores, no existe un método .values(), se debe acceder de otra forma. 
         # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
-        dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())
+        dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())    
         print(dataFramePandas, "\n")
+        #pandas.to_datetime(): Convertir la columna de fecha_publicacion a formato de fecha------------------------
+        dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
     #CREAR UN NUEVO ARRAY QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
     #bucle for each: Es un bucle que recorre la lista de diccionarios compareDicc, por lo que la variable 
@@ -175,7 +177,7 @@ try:
     #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las columnas 
     #en su constructor. 
     finalDataFrame = pandas.DataFrame(data = finalData)
-    print(finalDataFrame)
+    print(finalDataFrame, "\n")
 
     #GUARDAR UN DATAFRAME EN UN ARCHIVO DE EXCEL, INDICANDO SU FORMATO ESTÁTICO, NO UNO QUE DEPENDA DE LOS DATOS:
     #pandas.ExcelWriter: La clase ExcelWriter de la librería pandas permite crear un objeto específicamente creado 
@@ -233,7 +235,7 @@ try:
     #         espacio de 10 caracteres.
     #       - {:,}: Formatea el número con separadores de miles.
     pathExcel = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx"
-    with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w", datetime_format = "%d-%m-%Y %H:%M:%S") as objetoExcel:
+    with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
         #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de Excel.
         # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
         # - index: Es un booleano que especifica si se quiere incluir el índice del DataFrame en el Excel.
@@ -349,7 +351,7 @@ except Exception as error:
     print("5.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
 finally:
     if ('connection3' in locals()):
-        print("5.- Connection 5 closed\n")
+        print("5.- Connection 5 closed manually\n")
         connection3.close()
 #4.- SQLite (path absoluto): create_engine('sqlite:////absolute/path/to/mydatabase.db')
 #No additional installation is needed.

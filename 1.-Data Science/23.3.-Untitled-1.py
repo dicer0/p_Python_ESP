@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, text
 import pandas as pd
+from sqlalchemy import create_engine, text
 
 finalData = []
 compareDicc = [
@@ -31,6 +31,9 @@ try:
         print("Tipo de Dato ResultProxy: ", type(resultProxy))
         dataFramePandas = pd.DataFrame(resultProxy, columns=resultProxy.keys())
         print(dataFramePandas, "\n")
+        
+        # Convertir la columna de fecha_publicacion a formato de fecha
+        dataFramePandas['fecha_publicacion'] = pd.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
     for indDicc in compareDicc:
         filtered_rows = []  
