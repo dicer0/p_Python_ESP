@@ -12,7 +12,7 @@
 
 #Importa de la clase Acount del archivo que originalmente era 11.-POO_Cuenta y se cambió porque Python no 
 #puede manejar bien este nombre de archivo para importar
-from Clases_Personalizadas.POO_17_3_Polynomial.POO_Polinomio_Declaración import Polynomial 
+from Clases_Personalizadas.POO_17_3_Polynomial.POO_Polinomio_Declaración import Polynomial
 
 #Objetos o Instancias de la clase Polynomial: Recibe el parámetros del constructor de la clase Polynomial, 
 #que es el vector (lista) de coeficientes del polinomio.

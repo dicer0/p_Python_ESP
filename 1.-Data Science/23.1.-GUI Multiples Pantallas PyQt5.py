@@ -37,6 +37,14 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 import sys #sys: Librería que permite interactuar directamente con el sistema operativo y consola del ordenador.
 
+#IMPORTACIÓN DE CLASES: Cuando se quiera importar una clase, el nombre de esta no puede empezar con un número, 
+#sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas o también llamados paquetes 
+#en la programación orientada a objetos (POO), por medio de puntos:
+# - Directorio normal:      carpeta1/carpeta2/carpeta3
+# - Directorio paquetes:    carpeta1.carpeta2.carpeta3
+#La parte del directorio se coloca después de la palabra reservada from y la clase a importar después de import.
+from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
+
 #MainWindow: La clase hereda de la clase QMainWindow, que a su vez hereda de la clase QtWidgets y ambas 
 #pertenecen a la librería PyQt5. El elemento representa la ventana del GUI y crea una instancia de la clase 
 #GraficaPyQt5 para agregar dentro de la ventana una gráfica.
@@ -406,6 +414,7 @@ class MainWindow(QtWidgets.QMainWindow):
     #En este caso el evento es activado cuando se presiona el botón y lo que hace es abrir una nueva ventana, 
     #que es instancia de la clase SecondaryWindow.
     def open_window1(self):
+        #ABRIR SEGUNDA PANTALLA:
         secondary_window = SecondaryWindow("Ventana 1") #Creación de ventana 1.
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
@@ -417,12 +426,20 @@ class MainWindow(QtWidgets.QMainWindow):
         #almacenar todas las instancias de la clase SecondaryWindow, asegurando que la ventana no se cierre 
         #después de que el método haya terminado de ejecutarse.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+
+        #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
+        db_handler = DatabaseExcelHandler('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
+        result = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
+        print(result)
     def open_window2(self):
+        #ABRIR SEGUNDA PANTALLA:
         secondary_window = SecondaryWindow("Ventana 2") #Creación de ventana 2.
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
 
+        #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
+        
 
 #SecondaryWindow: Clase que representa las ventanas adicionales abiertas en la GUI, a través de ella se 
 #pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.

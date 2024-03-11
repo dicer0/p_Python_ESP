@@ -184,11 +184,11 @@ class DatabaseExcelHandler:
                     #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de diccionarios 
                     #y la variable filtered_dataBase representa cada fila de la base de datos filtrada.
                     finalData.append({
-                        "tituloStatic": indDicc["tituloStatic"],
-                        "contentStatus": contentStatus,             #Columna agregada con condicionales.
-                        "datoStatic": indDicc["datoStatic"],
-                        "titulo": filtered_dataBase["titulo"],
-                        "fecha_publicacion": filtered_dataBase["fecha_publicacion"]
+                        "Titulo Static": indDicc["tituloStatic"],
+                        "Content Status": contentStatus,             #Columna agregada con condicionales.
+                        "Dato Static": indDicc["datoStatic"],
+                        "Titulo": filtered_dataBase["titulo"],
+                        "Fecha de Publicacion": filtered_dataBase["fecha_publicacion"]
                     })
             #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
             #columnas en su constructor. 
@@ -360,8 +360,3 @@ class DatabaseExcelHandler:
                 self.connection1.close()
                 print("MySQL Connection closed.")
                 return finalDataFrame
-
-# Uso de la clase
-db_handler = DatabaseExcelHandler('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
-result = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Oli.xlsx")
-print(result)
