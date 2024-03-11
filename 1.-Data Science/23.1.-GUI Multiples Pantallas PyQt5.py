@@ -426,11 +426,6 @@ class MainWindow(QtWidgets.QMainWindow):
         #almacenar todas las instancias de la clase SecondaryWindow, asegurando que la ventana no se cierre 
         #después de que el método haya terminado de ejecutarse.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
-
-        #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
-        db_handler = DatabaseExcelHandler('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
-        result = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
-        print(result)
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA:
         secondary_window = SecondaryWindow("Ventana 2") #Creación de ventana 2.
@@ -438,8 +433,6 @@ class MainWindow(QtWidgets.QMainWindow):
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
 
-        #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
-        
 
 #SecondaryWindow: Clase que representa las ventanas adicionales abiertas en la GUI, a través de ella se 
 #pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.
@@ -448,13 +441,43 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         super().__init__()                      #super(): Herencia de la clase QtWidgets.QMainWindow.
         self.setWindowTitle(title)              #Título de la ventana, que recibe la clase como parámetro.
         
-        #WIDGETS VENTANAS ADICIONALES:
+        #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
+        db_handler = DatabaseExcelHandler('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
+        resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
+        print(resultDataFrame)
         #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla editable 
         #para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden contener texto, 
         #números, imágenes u otros widgets.
-        table = QtWidgets.QTableWidget()                            #Tabla.
-        table.setRowCount(10)                                       #Número de filas de la tabla.
-        table.setColumnCount(10)                                    #Número de columnas de la tabla.
+        headers = resultDataFrame.columns.tolist()
+        resultDataFrame.loc[-1] = headers
+        resultDataFrame.index = resultDataFrame.index + 1
+        resultDataFrame = resultDataFrame.sort_index()
+        # Luego puedes proceder con el código que proporcionaste para llenar la QTableWidget
+        table = QtWidgets.QTableWidget() # Crear la tabla
+        num_rows, num_cols = resultDataFrame.shape
+        table.setRowCount(num_rows)
+        table.setColumnCount(num_cols)
+        # Establecer colores para las filas y columnas
+        for i in range(num_rows):
+            for j in range(num_cols):
+                item = QtWidgets.QTableWidgetItem(str(resultDataFrame.iloc[i, j]))
+                if i == 0:
+                    item.setBackground(QtGui.QColor('blue'))
+                elif j == 0 and i != 0:
+                    item.setBackground(QtGui.QColor('green'))
+                elif j == 1 and i != 0:  # Solo la segunda columna, excluyendo la primera fila
+                    item.setBackground(QtGui.QColor('gray'))
+                elif i == 0 and j == 1:
+                    item.setBackground(QtGui.QColor('blue'))  # Para la esquina superior derecha
+                elif i == 0 and j != 0:
+                    item.setBackground(QtGui.QColor('blue'))  # Para la primera fila
+                elif i != 0 and j == 0:
+                    item.setBackground(QtGui.QColor('green'))  # Para la primera columna
+                else:
+                    item.setBackground(QtGui.QColor('yellow'))
+                table.setItem(i, j, item)
+        
+        #CREACIÓN DE WIDGETS DE LAS VENTANAS ADICIONALES, QUE NO SON LA TABLA:
         confirmButton = QtWidgets.QPushButton("Texto del botón")    #Botón.
         createButtonStyle = "max-width: 250px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; border-radius: 25px; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
         confirmButton.setStyleSheet(createButtonStyle)              #Estilo del botón.
