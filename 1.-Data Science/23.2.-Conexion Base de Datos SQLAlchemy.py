@@ -69,7 +69,7 @@ compareDicc = [{
 #   ejecución, el programa brinca al código del except.
 # - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando ocurra 
 #   el error esperado.
-# - Po último, cuando no ocurra una excepción durante la ejecución del gestor de excepciones, se ejecutará el 
+# - Por último, cuando no ocurra una excepción durante la ejecución del gestor de excepciones, se ejecutará el 
 #   código que esté incluido dentro del finally después de haber terminado de ejecutar lo que haya en el try, pero
 #   si ocurre una excepción, la ejecución terminará cuando se llegue al except.
 #Se utiliza esta arquitectura de código cuando se quiera efectuar una acción donde se espera que pueda ocurrir un 
@@ -78,6 +78,7 @@ compareDicc = [{
 #instalation: pip install mysqlclient
 #instalation: pip install pymysql
 try:
+    #create_engine: Método que sirve para configurar la conexión a un tipo de base de datos en específico.
     mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
     #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con recursos 
     #que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones de red o 
