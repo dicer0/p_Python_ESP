@@ -42,7 +42,7 @@ import sys #sys: Librería que permite interactuar directamente con el sistema o
 #GraficaPyQt5 para agregar dentro de la ventana una gráfica.
 class MainWindow(QtWidgets.QMainWindow):
     #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
-    #crea un objeto que instancee la clase y en él se declaran los atributos que se reutilizarán en los demás 
+    #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
     #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
     #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
