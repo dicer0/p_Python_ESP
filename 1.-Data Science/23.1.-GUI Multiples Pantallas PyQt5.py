@@ -448,12 +448,11 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla editable 
         #para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden contener texto, 
         #números, imágenes u otros widgets.
+        table = QtWidgets.QTableWidget()
         headers = resultDataFrame.columns.tolist()
         resultDataFrame.loc[-1] = headers
         resultDataFrame.index = resultDataFrame.index + 1
         resultDataFrame = resultDataFrame.sort_index()
-        # Luego puedes proceder con el código que proporcionaste para llenar la QTableWidget
-        table = QtWidgets.QTableWidget() # Crear la tabla
         num_rows, num_cols = resultDataFrame.shape
         table.setRowCount(num_rows)
         table.setColumnCount(num_cols)
