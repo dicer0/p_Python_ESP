@@ -28,6 +28,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import text
 #pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
+#pandas: Librería que proporciona datos adicionales acerca de los errores detectados por una estructura try-except
+import traceback
 
 #DatabaseExcelHandler: La clase representa la acción de conectarse a la base de datos a través de una URL, 
 #procesar los datos y finalmente crear un reporte en Excel, para ello al constructor se le debe pasar dos 
@@ -354,6 +356,7 @@ class DatabaseExcelHandler:
                     worksheet.conditional_format(1, col, filasDataFrame, col, {'type': 'no_blanks', 'format': yellow_format})
         except Exception as error:
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
+            print("La línea donde ocurrió el error fue: ", traceback.format_exc())
             return "Error al procesar los datos y guardar en Excel."
         finally:
             if self.connection1:
