@@ -48,9 +48,9 @@ class MainWindow(QtWidgets.QMainWindow):
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
     #otros lenguajes de programación.
     def __init__(self):
-        #super(): Método para importar métodos específicos de una clase base (superclase) desde una subclase, 
-        #osea desde una clase que quiere heredar métodos de otra. En este caso se utiliza para importar el 
-        #constructor de la clase que estamos heredando.
+        #super(): Método para importar métodos de una clase base (superclase) desde una subclase, osea desde una 
+        #clase que quiere heredar métodos de otra. En este caso se utiliza para importar el constructor de la 
+        #clase que estamos heredando.
         super().__init__()
         #PyQt5.QtWidgets.QMainWindow.setWindowTitle(): Método para colocar un título al Window creado con PyQt5.
         self.setWindowTitle("Time Zone Selector")
