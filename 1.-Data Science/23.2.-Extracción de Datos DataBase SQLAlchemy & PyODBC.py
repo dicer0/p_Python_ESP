@@ -26,20 +26,6 @@ from sqlalchemy import create_engine
 #SQLAlchemy - text: El método text se utiliza para crear un objeto de expresión textual que recibe como parámetro 
 #el código de una consulta SQL en forma de String.
 from sqlalchemy import text
-#SQLAlchemy - Column: La clase Column de la biblioteca SQLAlchemy se utiliza para definir las columnas 
-#(atributos) en las tablas (entidades) de la base de datos utilizando el mapeo de objeto-relacional (ORM).
-from sqlalchemy import Column
-#SQLAlchemy - Integer, String, CHAR: Son los tipos de datos que pueden adoptar los objetos Column.
-from sqlalchemy import Integer, String, CHAR
-#SQLAlchemy.ext.declarative - declarative_base: El método declarative_base perteneciente al paquete orm permite 
-#definir clases de modelo en Python, las cuales definen la estructura de los datos que se busca crear o manipular 
-#en una database. Luego estas se mapean automáticamente a una tabla (entidad) en una base de datos relacional.
-from sqlalchemy.orm import declarative_base
-#SQLAlchemy.orm - sessionmaker: Una vez que se hayan definido las clases de modelo (si es que se quiere ingresar 
-#datos a la DB) y se haya configurado la conexión a la base de datos con el método create_engine, es necesario 
-#crear sesiones para poder realizar operaciones del CRUD (Create-Read-Update-Delete) como agregar, modificar o 
-#eliminar filas (registros) en las tablas (entidades) de la base de datos.
-from sqlalchemy.orm import sessionmaker
 #pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
 
@@ -375,7 +361,8 @@ except Exception as error:
 #Siguiente -> Autentificacion de Windows -> Siguiente -> Establecer la siguiente base de datos como predeterminada: 
 #Base de datos a la que nos queremos conectar -> Siguiente -> Finalizar -> Probar Origen de Datos -> Aceptar -> 
 #Aceptar.
-#Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión. 
+#Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión.
+#Cabe mencionar que para este tipo de bases de datos, conviene más utilizar la librería pyodbc de forma directa.
 try:
     mssql_engine_windows = create_engine('mssql+pyodbc://@mydsn')
     connection5 = mssql_engine_windows.connect()
@@ -397,6 +384,7 @@ finally:
 #conectar -> Siguiente -> Finalizar -> Probar Origen de Datos -> Aceptar -> Aceptar.
 #Después de haber realizado estos pasos, el nombre del ODBC se deberá añadir en el mydsn del URL de conexión y de 
 #igual manera se podrán añadir el nombre de usuario y contraseña de forma opcional.
+#Cabe mencionar que para este tipo de bases de datos, conviene más utilizar la librería pyodbc de forma directa.
 try:
     mssql_engine_sql_auth = create_engine('mssql+pyodbc://username:password@mydsn')
     connection6 = mssql_engine_sql_auth.connect()
@@ -408,32 +396,45 @@ finally:
         print("6.- Connection 6 closed\n")
         connection6.close()
 
-
-# #MANDAR DATOS A LA BASE DE DATOS:
-# #declarative_base(): Método para definir clases de modelo en python para mandar datos a la DB por medio del ORM.
-# Base = declarative_base()
-# #Las clases que vayan a mandar datos a la DB deben heredar de la variable que haya usado el método 
-# #declarative_base().
-# class User(Base):
-#     __tablename__ = 'users'
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String)
-#     age = Column(Integer)
-#     gender = Column(CHAR)
-
-# #Create a session to interact with the database
-# Session = sessionmaker(bind = mysql_engine)
-# session = Session()
-
-# #Example: Inserting data into the database
-# new_user = User(name = 'John', age = 30, gender = 'm')
-# session.add(new_user)
-# session.commit()
-
-# #Example: Querying data from the database
-# users = session.query(User).all()
-# for user in users:
-#     print(user.name, user.age)
-
-# #Close the session when done
-# session.close()
+#PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
+#Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
+#datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
+#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, puede servir usar esta 
+#librería cuando la conexión con SQLAlchemy se complica, como en los ejemplos 5 y 6.
+import pyodbc
+#7.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
+#instalation: pip install pyodbc
+#pyodbc.connect(stringConnection): El método pyodbc.connect() se utiliza para establecer una conexión a una base 
+#de datos, usualmente de tipo Microsoft SQL Server. Este toma un string de conexión como argumento que contiene 
+#información necesaria para la conexión establecida:
+# - DRIVER: Este parámetro especifica el nombre del controlador que se utilizará para la conexión, este cambia su 
+#   valor dependiendo de a qué base de datos nos queramos conectar.
+#       - Microsoft SQL Server: "SQL Server" o "ODBC Driver 17 for SQL Server"
+#       - MySQL: "MySQL ODBC 8.0 Unicode Driver" o "MySQL ODBC 5.3 Unicode Driver"
+#       - PostgreSQL: "PostgreSQL ANSI" o "PostgreSQL Unicode"
+#       - Oracle: "Oracle en OraClient11g_home1"
+#       - SQLite: "SQLite3 ODBC Driver"
+#       - IBM DB2: "DB2" o "IBM DB2 ODBC DRIVER"
+# - SERVER: Nombre o dirección IP del servidor de la base de datos a la que nos queremos conectar.
+# - DATABASE: Nombre de la base de datos a la que se desea conectar.
+# - UID/Username (opcional): Este parámetro se utiliza para especificar el nombre de usuario que se utilizará para 
+#   la autenticación en la base de datos. Si se utiliza la autenticación de Windows, este parámetro no es necesario.
+# - PWD/Password (opcional): Contraseña asociada al nombre de usuario especificado.
+# - Trusted_Connection: Este parámetro se establece en yes si se desea utilizar la autenticación de Windows para la 
+#   conexión (Trusted_Connection=yes). Si se utiliza la autenticación de SQL Server, este parámetro no es necesario.
+# - Other Connection Attributes: Además de los parámetros anteriores, puedes especificar otras propiedades de conexión 
+#   dependiendo del motor de base de datos específico y las opciones de configuración que permita el controlador ODBC. 
+#   Esto puede incluir cosas como el puerto, el nivel de aislamiento de la transacción, el tiempo de espera de la 
+#   conexión, etc.
+nombreServidor = "nombreServer"
+nombreBaseDeDatos = "nombreDatabase"
+stringConnection = f"DRIVER = {{SQL Server}}; SERVER = {nombreServidor}; DATABASE = {nombreBaseDeDatos}; Trusted_Connection = yes"
+try:
+    connection7 = pyodbc.connect(stringConnection)
+    print("7.- Microsoft SQL Server Connection successful with Server authentication!!!")
+except Exception as error:
+    print("7.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Server authentication:\n" + str(error) + "\n")
+finally:
+    if ('connection7' in locals()):
+        print("7.- Connection 7 closed\n")
+        connection7.close()
