@@ -87,11 +87,6 @@ class DatabaseExcelHandler:
                 print("MySQL Connection closed.")
                 return finalDataFrame
 
-server = "localhost"
-database = "1_platziblog_db"
-username = "root"
-password = "PincheTonto!123"
-stringConnection = f"DRIVER={{MySQL ODBC 8.0 Unicode Driver}};SERVER={server};DATABASE={database};UID={username};PWD={password};"
-db_handler = DatabaseExcelHandler(stringConnection)
+db_handler = DatabaseExcelHandler('DRIVER={SQL Server};SERVER=nombreServer;DATABASE=nombreDatabase;Trusted_Connection=yes')
 resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
 print(resultDataFrame)
