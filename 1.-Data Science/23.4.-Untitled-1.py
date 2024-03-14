@@ -1,35 +1,38 @@
-# -*- coding: utf-8 -*-
 import pandas
-import traceback
 import pyodbc
+import traceback
 
 class DatabaseExcelHandler:
-    def __init__(self, db_url):
-        self.db_url = db_url
+    def __init__(self, db_connection_string):
+        self.db_connection_string = db_connection_string
         self.connected = False
 
     def __connect_to_database(self):
         try:
-            self.connection1 = pyodbc.connect(self.db_url)
-            print("1.- MySQL Connection successful!!!")
+            self.connection = pyodbc.connect(self.db_connection_string)
+            self.cursor = self.connection.cursor()
+            print("1.- Database Connection successful!!!")
             self.connected = True
         except Exception as error:
-            print("Error occurred while opening the MySQL database:\n" + str(error) + "\n") 
+            print("Error occurred while opening the database:\n" + str(error) + "\n")
 
     def process_data_and_save_to_excel(self, pathExcel):
         self.__connect_to_database()
         if not self.connected:
             return "No se pudo realizar la conexión con la base de datos."
-
+        
         try:
-            SQL_Query_string =  """SELECT 	  * 
+            SQL_Query_string = """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
-            resultProxy = self.connection1.execute(SQL_Query_string)
-            print("Tipo de Dato ResultProxy: ", type(resultProxy))
-            dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())    
+            self.cursor.execute(SQL_Query_string)
+            rows = self.cursor.fetchall()
+
+            dataFramePandas = pandas.DataFrame([tuple(row) for row in rows], columns=[column[0] for column in self.cursor.description])
             print(dataFramePandas, "\n")
+
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
+
             finalData = []
             compareDicc = [{
                 "tituloStatic": "Grupo de Datos 1",
@@ -47,7 +50,7 @@ class DatabaseExcelHandler:
             }]
             for indDicc in compareDicc:
                 filtered_rows = []
-                for (index, row) in (dataFramePandas.iterrows()):
+                for index, row in dataFramePandas.iterrows():
                     if (row['estatus'] == indDicc['estatusFilter'] and
                         row['usuarios_id'] == indDicc['userIdFilter'] and
                         row['categorias_id'] == indDicc['categoryIdFilter']):
@@ -62,9 +65,10 @@ class DatabaseExcelHandler:
                         "Titulo": filtered_dataBase["titulo"],
                         "Fecha de Publicacion": filtered_dataBase["fecha_publicacion"]
                     })
-            finalDataFrame = pandas.DataFrame(data = finalData)
-            with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
-                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True, engine = 'xlsxwriter')
+            finalDataFrame = pandas.DataFrame(data=finalData)
+
+            with pandas.ExcelWriter(path=pathExcel, engine='xlsxwriter', mode="w") as objetoExcel:
+                finalDataFrame.to_excel(excel_writer=objetoExcel, index=False, index_label=None, sheet_name='Sheet1', startrow=0, startcol=0, header=True, engine='xlsxwriter')
                 workbook = objetoExcel.book
                 worksheet = objetoExcel.sheets['Sheet1']
                 blue_format = workbook.add_format({'bg_color': '#0000FF'})
@@ -77,16 +81,19 @@ class DatabaseExcelHandler:
                 worksheet.conditional_format(1, 1, filasDataFrame, 1, {'type': 'no_blanks', 'format': grey_format})
                 for col in range(2, columnasDataFrame):
                     worksheet.conditional_format(1, col, filasDataFrame, col, {'type': 'no_blanks', 'format': yellow_format})
+
         except Exception as error:
-            print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
+            print("1.- Ups an Error ocurred while Opening the DataBase:\n" + str(error) + "\n")
             print("La línea donde ocurrió el error fue: ", traceback.format_exc())
             return "Error al procesar los datos y guardar en Excel."
         finally:
-            if self.connection1:
-                self.connection1.close()
-                print("MySQL Connection closed.")
+            if self.connection:
+                self.connection.close()
+                print("Database Connection closed.")
                 return finalDataFrame
 
-db_handler = DatabaseExcelHandler('DRIVER={SQL Server};SERVER=nombreServer;DATABASE=nombreDatabase;Trusted_Connection=yes')
+#Es MUUUUY IMPORTANTE EN EL CONNECTION STRING NO USAR ESPACIOS, DEBE IR ASÍ TAL CUAL COMO SE MUESTRA.
+connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
+db_handler = DatabaseExcelHandler(connectionString)
 resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
 print(resultDataFrame)
