@@ -399,8 +399,12 @@ finally:
 #PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
 #Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
 #datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
-#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, puede servir usar esta 
-#librería cuando la conexión con SQLAlchemy se complica, como en los ejemplos 5 y 6.
+#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
+#una conexión ODBC.
+#No es que exista una manera mejor de manejar los datos, sino que dependiendo de la base de datos que se quiera 
+#utilizar, a veces conviene utilizar una librería en vez de otra.
+# - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
+# - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
 import pyodbc
 #7.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
 #instalation: pip install pyodbc

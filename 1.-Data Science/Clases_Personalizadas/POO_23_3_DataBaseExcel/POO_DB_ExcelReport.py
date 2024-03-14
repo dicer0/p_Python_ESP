@@ -21,11 +21,16 @@
 #Registro: También conocido como "fila" o "tupla", representa una instancia individual de una entidad en la tabla. 
 #Cada registro contiene los valores de los atributos correspondientes a esa instancia específica de la entidad.
 
-#SQLAlchemy - create_engine: El método create_engine sirve para configurar la conexión a la base de datos.
-from sqlalchemy import create_engine
-#SQLAlchemy - text: El método text se utiliza para crear un objeto de expresión textual que recibe como parámetro 
-#el código de una consulta SQL en forma de String.
-from sqlalchemy import text
+#PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
+#Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
+#datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
+#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
+#una conexión ODBC.
+#No es que exista una manera mejor de manejar los datos, sino que dependiendo de la base de datos que se quiera 
+#utilizar, a veces conviene utilizar una librería en vez de otra.
+# - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
+# - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
+import pyodbc
 #pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
 #pandas: Librería que proporciona datos adicionales acerca de los errores detectados por una estructura try-except
@@ -41,10 +46,10 @@ class DatabaseExcelHandler:
     #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
     #otros lenguajes de programación.
-    def __init__(self, db_url):
-        #De esta manera se asigna al atributo self.db_url el valor de la URL que recibe el constructor de la 
-        #clase como parámetro.
-        self.db_url = db_url    #Atributo db_url: URL de conexión para la base de datos.
+    def __init__(self, db_connection_string):
+        #De esta manera se asigna al atributo self.db_connection_string el valor de la URL que recibe el 
+        #constructor de la clase como parámetro.
+        self.db_connection_string = db_connection_string    #Atributo: URL de conexión para la base de datos.
         self.connected = False  #Atributo connected: Bandera que indica si la base de datos se pudo conectar.
     
     #Los métodos privados se indican mediante dos guiones bajos al inicio del nombre de la función y esto lo 
@@ -66,10 +71,13 @@ class DatabaseExcelHandler:
         #instalation: pip install mysqlclient
         #instalation: pip install pymysql
         try:
-            #create_engine: Método que sirve para configurar la conexión a un tipo de base de datos en específico.
-            self.mysql_engine = create_engine(self.db_url)
-            #create_engine().connect(): Método para establecer la conexión con la base de datos.
-            self.connection1 = self.mysql_engine.connect()
+            #pyodbc.connect(): Método para establecer la conexión con la base de datos usando PyODBC.
+            self.connection1 = pyodbc.connect(self.db_connection_string)
+            #pyodbc.connect().cursor(): Una vez que se ha establecido la conexión con el método pyodbc.connect(), 
+            #se crea un cursor con el método .cursor(), el cual es un objeto que se utiliza para ejecutar consultas 
+            #SQL en la base de datos y recuperar sus resultados, como la inserción, actualización o eliminación de 
+            #datos, así como la recuperación de datos de las tablas.
+            self.cursor = self.connection1.cursor()
             print("1.- MySQL Connection successful!!!")
             #El atributo connected se cambia manualmente a True cuando se ha realizado la conexión exitosamente.
             self.connected = True
@@ -95,12 +103,12 @@ class DatabaseExcelHandler:
             SQL_Query_string =  """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
-            SQL_TextObject = text(SQL_Query_string)
             #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a 
             #través de un objeto de variable textual (text) se puede realizar una consulta a la base de datos con 
             #SQL y lo que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un 
             #diccionario.
-            resultProxy = self.connection1.execute(SQL_TextObject)
+            self.cursor.execute(SQL_Query_string)
+            resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
             #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos 
             #matricial en forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de 
@@ -119,7 +127,7 @@ class DatabaseExcelHandler:
             #         DataFrame, pero si se quisiera obtener sus valores, no existe un método .values(), se debe 
             #         acceder de otra forma. 
             # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
-            dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())    
+            dataFramePandas = pandas.DataFrame([tuple(row) for row in resultProxy], columns=[column[0] for column in self.cursor.description])
             print(dataFramePandas, "\n")
             #pandas.to_datetime(): Convertir la columna de fecha_publicacion a formato de fecha------------------------
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')

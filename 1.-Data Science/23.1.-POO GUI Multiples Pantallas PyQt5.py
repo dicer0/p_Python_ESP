@@ -442,7 +442,8 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         self.setWindowTitle(title)              #Título de la ventana, que recibe la clase como parámetro.
         
         #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
-        db_handler = DatabaseExcelHandler('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
+        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
+        db_handler = DatabaseExcelHandler(connectionString)
         resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
         print(resultDataFrame)
         #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla editable 
