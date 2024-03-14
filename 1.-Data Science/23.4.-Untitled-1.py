@@ -1,30 +1,31 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import create_engine
-from sqlalchemy import text
 import pandas
 import traceback
+import pyodbc
+
 class DatabaseExcelHandler:
     def __init__(self, db_url):
         self.db_url = db_url
         self.connected = False
+
     def __connect_to_database(self):
         try:
-            self.mysql_engine = create_engine(self.db_url)
-            self.connection1 = self.mysql_engine.connect()
+            self.connection1 = pyodbc.connect(self.db_url)
             print("1.- MySQL Connection successful!!!")
             self.connected = True
         except Exception as error:
             print("Error occurred while opening the MySQL database:\n" + str(error) + "\n") 
+
     def process_data_and_save_to_excel(self, pathExcel):
         self.__connect_to_database()
-        if self.connected == False:
+        if not self.connected:
             return "No se pudo realizar la conexión con la base de datos."
+
         try:
             SQL_Query_string =  """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
-            SQL_TextObject = text(SQL_Query_string)
-            resultProxy = self.connection1.execute(SQL_TextObject)
+            resultProxy = self.connection1.execute(SQL_Query_string)
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
             dataFramePandas = pandas.DataFrame(data = resultProxy, columns = resultProxy.keys())    
             print(dataFramePandas, "\n")
@@ -85,3 +86,7 @@ class DatabaseExcelHandler:
                 self.connection1.close()
                 print("MySQL Connection closed.")
                 return finalDataFrame
+
+db_handler = DatabaseExcelHandler('DRIVER={SQL Server};SERVER=nombreServer;DATABASE=nombreDatabase;Trusted_Connection=yes')
+resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
+print(resultDataFrame)
