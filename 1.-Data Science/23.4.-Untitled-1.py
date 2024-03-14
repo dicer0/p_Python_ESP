@@ -31,7 +31,7 @@ class DatabaseExcelHandler:
 
             dataFramePandas = pandas.DataFrame([tuple(row) for row in rows], columns=[column[0] for column in self.cursor.description])
             print(dataFramePandas, "\n")
-            dataFramePandas['fecha_publicacion'] = dataFramePandas['fecha_publicacion'].apply(lambda x: '' if math.isnan(x) else x)
+            dataFramePandas['fecha_publicacion'] = dataFramePandas['fecha_publicacion'].apply(lambda x: '' if pandas.isna(x) else x)
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             finalData = []
