@@ -103,11 +103,15 @@ class DatabaseExcelHandler:
             SQL_Query_string =  """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
-            #.create_engine().connect().execute(): Ya que se haya realizado la conexión con la base de datos, a 
+            #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos, a 
             #través de un objeto de variable textual (text) se puede realizar una consulta a la base de datos con 
             #SQL y lo que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un 
             #diccionario.
             self.cursor.execute(SQL_Query_string)
+            #pyodbc.connect().cursor().execute().fetchall(): Después de ejecutar la consulta, se llama a este método 
+            #en el cursor para recuperar todos los resultados de la consulta. Devuelve una lista que contiene todas 
+            #las filas de resultados de la consulta. Cada fila de la lista es una tupla que contiene los valores de 
+            #las columnas de esa fila.
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
             #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos 
