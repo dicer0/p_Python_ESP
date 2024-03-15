@@ -21,19 +21,16 @@ class DatabaseExcelHandler:
         self.__connect_to_database()
         if not self.connected:
             return "No se pudo realizar la conexión con la base de datos."
-        
         try:
             SQL_Query_string = """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
             self.cursor.execute(SQL_Query_string)
             rows = self.cursor.fetchall()
-
             dataFramePandas = pandas.DataFrame([tuple(row) for row in rows], columns=[column[0] for column in self.cursor.description])
             print(dataFramePandas, "\n")
             dataFramePandas['fecha_publicacion'] = dataFramePandas['fecha_publicacion'].apply(lambda x: '' if pandas.isna(x) else x)
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
-
             finalData = []
             compareDicc = [{
                 "tituloStatic": "Grupo de Datos 1",
