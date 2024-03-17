@@ -5,14 +5,11 @@ import time
 
 # Get the screen resolution
 screen_width, screen_height = pyautogui.size()
-
 # Calculate the center of the screen
 center_x = screen_width // 2
 center_y = screen_height // 2
-
 # Set the radius of the circular motion
 radius = 100
-
 # Set the speed of the circular motion (adjust as needed)
 speed = 0.05  # Adjust this value to control the speed
 
@@ -26,16 +23,12 @@ angle = 0
 while not keyboard.is_pressed('s'):
     # Calculate the next position
     next_x, next_y = calculate_next_position(angle)
-    
     # Move the mouse to the next position
     pyautogui.moveTo(next_x, next_y, duration=0)
-    
     # Increment the angle
     angle += speed
-    
     # Wrap angle to keep it within 0 to 2*pi
     angle %= (2 * math.pi)
-    
     # Add a slight delay to control the speed
     time.sleep(0.01)
 
