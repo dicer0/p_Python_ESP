@@ -36,7 +36,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #Inyección de dependencias: Este es un concepto utilizado cuando una clase para funcionar necesita el 
         #objeto de otra clase, en este caso para que la clase SecondaryWindow funcione, necesita de un objeto 
         #DatabaseExcelHandler, a esto se le llama inyección de dependencias.
-        self.__db_handler = db_handler       #self.__db_handler: Atributo que recibe un objeto DatabaseExcelHandler.
+        self.__db_handler = db_handler       #self.__db_handler: Atributo de un objeto DatabaseExcelHandler.
         self.__excelFilePath = excelFilePath #self.__excelFilePath: Atributo que indica el directorio del Excel.
         #MÉTODOS EJECUTADOS POR DEFECTO EN EL CONSTRUCTOR:
         self.setWindowTitle(title)                  #Título de la ventana, que recibe la clase como parámetro.
@@ -67,6 +67,8 @@ class SecondaryWindow(QtWidgets.QMainWindow):
             #simplemente cuando no se quiere mostrar la tabla que incluye los datos.
             self.__createEmptyTable()
 
+    #__createWidgets():Método propio de la clase que sirve para declarar los widgets (botones y textos) que 
+    #siempre quiero que aparezcan en la GUI.
     def __createWidgets(self):
         #CREACIÓN DE WIDGETS DE LAS VENTANAS ADICIONALES, QUE NO SON LA TABLA:
         confirmButton = QtWidgets.QPushButton("Texto del botón")    #Botón.
@@ -104,6 +106,8 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         centralWidget.setLayout(self.contenedorVertical)    #Layout principal metido en un widget para centrarlo.
         self.setCentralWidget(centralWidget)                #Centralización del widget principal.
         
+    #__createTable():Método propio de la clase que sirve para crear y mostrar la tabla que contiene los datos 
+    #extraídos de la database.
     def __createTable(self):
         #EXTRAER DATOS DE LA BASE DE DATOS Y CREAR UN REPORTE EN EXCEL:
         try:
@@ -111,20 +115,23 @@ class SecondaryWindow(QtWidgets.QMainWindow):
             #el cual sirve para procesar los datos recopilados de una base de datos y guardarlos en cierto 
             #directorio en un archivo de Excel.
             resultDataFrame = self.__db_handler.process_data_and_save_to_excel(self.__excelFilePath)
+            print("Tipo de dato database: ", type(resultDataFrame))
             print(resultDataFrame)
             if (type(resultDataFrame) == str):
                 #Si pasa un error al procesar los datos, se mostrará un cuadro de diálogo con un mensaje.
                 self.__showErrorMessageBox(resultDataFrame)
             else:
+                #pandas.DataFrame().shape: Para extraer el tamaño de un DataFrame se puede utilizar el atributo 
+                #shape de la clase DataFrame, el cual devuelve una tupla que indica su número de filas y 
+                #columnas: (filas, columnas) = pandas.DataFrame().shape
+                (num_rows, num_cols) = resultDataFrame.shape
                 #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla 
                 #editable para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden 
                 #contener texto, números, imágenes u otros widgets.
                 table = QtWidgets.QTableWidget()
-                headers = resultDataFrame.columns.tolist()
-                resultDataFrame.loc[-1] = headers
-                resultDataFrame.index = resultDataFrame.index + 1
-                resultDataFrame = resultDataFrame.sort_index()
-                num_rows, num_cols = resultDataFrame.shape
+                #QtWidgets.QTableWidget().setRowCount() y setColumnCount(): Métodos que sirven para indicar el 
+                #número de filas y columnas de un objeto QTableWidget() en una GUI, en sus parámetros reciben 
+                #dicho tamaño.
                 table.setRowCount(num_rows)
                 table.setColumnCount(num_cols)
                 # Establecer colores para las filas y columnas
@@ -151,6 +158,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #con el mensaje de error.
         except Exception as errorDatabaseExcelHandler:
             self.__showErrorMessageBox(str(errorDatabaseExcelHandler))
+    
     #__createEmptyTable(): Método que crea una tabla vacía cuando showTable = False o cuando ocurra un error al 
     #conectarse a la base de datos o al procesarlos/guardarlos en un Excel.
     def __createEmptyTable(self):
@@ -158,8 +166,10 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         table.setRowCount(5)        #Número de filas arbitrario.
         table.setColumnCount(5)     #Número de columnas arbitrario.
         self.contenedorVertical.addWidget(table, 0, 0)          #Añadir la tabla vacía a la posición (0,0).
+    
     #__showErrorMessageBox(): Método que se utiliza para mostrar una ventana de diálogo, la cual indica un 
-    #mensaje de error.
+    #mensaje de error que recibe de la clase DatabaseExcelHandler, ya sea cuando ocurrió un error al 
+    #conectarse a la base de datos o cuando ocurrió un error al procesar/guardar los datos en un Excel.
     def __showErrorMessageBox(self, message):
         reply = QtWidgets.QMessageBox.critical(self, "Error", message, QtWidgets.QMessageBox.Ok)
         if reply == QtWidgets.QMessageBox.Ok:
