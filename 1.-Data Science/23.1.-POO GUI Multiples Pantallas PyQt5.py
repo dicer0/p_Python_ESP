@@ -414,7 +414,7 @@ class MainWindow(QtWidgets.QMainWindow):
     #En este caso el evento es activado cuando se presiona el botón y lo que hace es abrir una nueva ventana, 
     #que es instancia de la clase SecondaryWindow.
     def open_window1(self):
-        #ABRIR SEGUNDA PANTALLA:
+        #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
         connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
         db_handler1 = DatabaseExcelHandler(connectionString)
         excelFilePath1 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
@@ -430,7 +430,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #después de que el método haya terminado de ejecutarse.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
     def open_window2(self):
-        #ABRIR SEGUNDA PANTALLA:
+        #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
         connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
         db_handler2 = DatabaseExcelHandler(connectionString)
         excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
