@@ -6,15 +6,15 @@ class SecondaryWindow(QtWidgets.QMainWindow):
     def __init__(self, title, showTable=False):
         super().__init__() 
         self.setWindowTitle(title)
-        self.__createWidgets()  # Create constant widgets
+        self.__createWidgets()  # Crea los widgets constantes
         
         if showTable:
             try:
-                self.__createTable()  # Create and display the table if showTable is True
+                self.__createTable()  # Crea y muestra la tabla si showTable es True
             except Exception as e:
-                self.__showErrorMessageBox(str(e))  # Display a message box with the error message
+                self.__showErrorMessageBox(str(e))  # Muestra un cuadro de diálogo con el mensaje de error
         else:
-            self.__createEmptyTable()  # Create an empty table if showTable is False
+            self.__createEmptyTable()  # Crea una tabla vacía si showTable es False
         
     def __createWidgets(self):
         confirmButton = QtWidgets.QPushButton("Texto del botón")
@@ -29,21 +29,21 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             </p>"""
         texto_2 = QtWidgets.QLabel(text_content2)
 
-        # CONTAINERS:
+        # CONTENEDORES:
         widgetContenedor = QtWidgets.QWidget()
         widgetContenedor.setFixedHeight(100)
         widgetContenedor.setStyleSheet("background-color: #002550; padding: 5px;")
         contenedorMatricial = QtWidgets.QGridLayout(widgetContenedor)   
-        self.mainLayout = QtWidgets.QGridLayout()  # Use a QGridLayout to organize the elements
+        self.mainLayout = QtWidgets.QGridLayout()  # Usamos un QGridLayout para organizar los elementos
 
-        # ADD WIDGETS TO CONTAINERS:
+        # AÑADIR WIDGETS A LOS CONTENEDORES:
         contenedorMatricial.addWidget(texto_1, 0, 0)
         contenedorMatricial.addWidget(texto_2, 1, 0)
         contenedorMatricial.addWidget(confirmButton, 1, 2)
         
-        # MERGE THE CONTAINERS INTO A SINGLE WIDGET AND CENTER THE MAIN CONTAINER:
-        self.mainLayout.addWidget(widgetContenedor, 1, 0)  # Add the container of labels and buttons in row 1
-        self.setCentralWidget(QtWidgets.QWidget())  # Create a central widget for the main QGridLayout
+        # UNIR LOS CONTENEDORES EN UN SOLO WIDGET Y CENTRAR EL CONTENEDOR PRINCIPAL:
+        self.mainLayout.addWidget(widgetContenedor, 1, 0)  # Agregamos el contenedor de labels y botones en la fila 1
+        self.setCentralWidget(QtWidgets.QWidget())  # Creamos un widget central para el QGridLayout principal
         self.centralWidget().setLayout(self.mainLayout)
         
     def __createTable(self):
@@ -53,7 +53,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         try:
             resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
             if (type(resultDataFrame) == str):
-                # If there is an error processing the data, display a message box with the error message
+                # Si hay un error al procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
                 self.__showErrorMessageBox(resultDataFrame)
             else:
                 # Static data indicating the names of the first row of columns and the first column of rows
@@ -123,9 +123,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         else:
                             item.setBackground(QtGui.QColor('white'))  # Color for empty cells
                         table.setItem(i, j, item)
-
-                # Merge cells for "Static Data Above"
-                table.setSpan(0, 0, len(static_data_above), total_num_cols)
                 
                 # Populate the table with static data below
                 for i, row_data in enumerate(static_data_below):
@@ -136,22 +133,19 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         else:
                             item.setBackground(QtGui.QColor('white'))  # Color for empty cells
                         table.setItem(i + len(static_data_above) + db_num_rows + 1, j, item)  # Adjust row index to accommodate database data and empty row
-
-                # Merge cells for "Static Data Below"
-                table.setSpan(len(static_data_above) + db_num_rows + 1, 0, len(static_data_below), total_num_cols)
                 
                 self.mainLayout.addWidget(table, 0, 0)  # Add the table to the layout
                 
         except Exception as e:
-            # If there is an error connecting to the database or processing the data, display a message box with the error message
+            #Si ocurre un error al conectar a la base de datos o procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
             self.__showErrorMessageBox(str(e))
 
 
     def __createEmptyTable(self):
         table = QtWidgets.QTableWidget()
-        table.setRowCount(5)  # Define an arbitrary number of rows
-        table.setColumnCount(5)  # Define an arbitrary number of columns
-        self.mainLayout.addWidget(table, 0, 0)  # Add the table in row 0
+        table.setRowCount(5)  # Definimos un número de filas arbitrario
+        table.setColumnCount(5)  # Definimos un número de columnas arbitrario
+        self.mainLayout.addWidget(table, 0, 0)  # Agregamos la tabla en la fila 0
 
     def __showErrorMessageBox(self, message):
         reply = QtWidgets.QMessageBox.critical(self, "Error", message, QtWidgets.QMessageBox.Ok)
@@ -160,7 +154,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = SecondaryWindow("Ventana 2", showTable = True)  # You can set showTable to True or False as needed
+    window = SecondaryWindow("Ventana 2", showTable = True)  # Puedes establecer showTable a True o False según lo necesites
     window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
     window.showMaximized()
-    sys.exit(app.exec_())
+    app.exec_()
