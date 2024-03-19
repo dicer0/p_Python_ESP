@@ -57,7 +57,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         db_handler = DatabaseExcelHandler(connectionString)
         
         try:
-            resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos.xlsx")
+            resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx")
             if (type(resultDataFrame) == str):
                 # Si hay un error al procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
                 self.__showErrorMessageBox(resultDataFrame)
