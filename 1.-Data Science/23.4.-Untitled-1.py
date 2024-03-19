@@ -4,11 +4,6 @@ import pandas as pd
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
 
 class SecondaryWindow(QtWidgets.QMainWindow):
-    from PyQt5 import QtWidgets, QtGui
-import sys
-from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
-
-class SecondaryWindow(QtWidgets.QMainWindow):
     def __init__(self, title, showTable=False):
         super().__init__() 
         self.setWindowTitle(title)
@@ -58,7 +53,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         
         try:
             resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx")
-            if (type(resultDataFrame) == str):
+            if isinstance(resultDataFrame, str):
                 # Si hay un error al procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
                 self.__showErrorMessageBox(resultDataFrame)
             else:
@@ -81,18 +76,11 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['Static Row Z', '', '', '', '']
                 ]
                 
-                # Convert resultDataFrame to a list
-                db_data = resultDataFrame.values.tolist()
-
                 # Determine the number of rows and columns for the database data
-                db_num_rows = len(db_data)
-                db_num_cols = len(resultDataFrame.columns)
-
-                # Create the combined data list
-                combined_data = static_data_above + [['']*5] + db_data + [['']*5] + static_data_below
+                db_num_rows, db_num_cols = resultDataFrame.shape
 
                 # Determine the total number of rows and columns
-                total_num_rows = len(combined_data)
+                total_num_rows = len(static_data_above) + db_num_rows + len(static_data_below)
                 total_num_cols = max(5, db_num_cols)
 
                 # Create the table
@@ -100,8 +88,23 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 table.setRowCount(total_num_rows)
                 table.setColumnCount(total_num_cols)
                 
-                # Populate the table with database data
-                for i, row_data in enumerate(db_data):
+                # Populate the table with static data above
+                for i, row_data in enumerate(static_data_above):
+                    for j, value in enumerate(row_data):
+                        item = QtWidgets.QTableWidgetItem(str(value))
+                        if i == 0:
+                            item.setBackground(QtGui.QColor('red'))  # Color azul para la primera fila
+                        elif j == 0:
+                            item.setBackground(QtGui.QColor('yellow'))  # Color verde para la primera columna
+                        elif j == 1:
+                            item.setBackground(QtGui.QColor('darkgray'))  # Color gris para la segunda columna
+                        else:
+                            item.setBackground(QtGui.QColor('white'))  # Otros colores para las demás celdas
+                        table.setItem(i, j, item)
+                
+                # Populate the table with database data from DataFrame directly
+                for i, row in enumerate(resultDataFrame.iterrows()):
+                    index, row_data = row
                     for j, value in enumerate(row_data):
                         item = QtWidgets.QTableWidgetItem(str(value))
                         if i == 0:
@@ -114,25 +117,19 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             item.setBackground(QtGui.QColor('yellow'))
                         table.setItem(i + len(static_data_above), j, item)  # Adjust row index to accommodate static data
                 
-                # Populate the table with static data above
-                for i, row_data in enumerate(static_data_above):
-                    for j, value in enumerate(row_data):
-                        item = QtWidgets.QTableWidgetItem(str(value))
-                        if value.startswith('Static Data') or value.startswith('Static Col') or value.startswith('Static Row'):
-                            item.setBackground(QtGui.QColor('lightgray'))  # Color for static data
-                        else:
-                            item.setBackground(QtGui.QColor('white'))  # Color for empty cells
-                        table.setItem(i, j, item)
-                
                 # Populate the table with static data below
                 for i, row_data in enumerate(static_data_below):
                     for j, value in enumerate(row_data):
                         item = QtWidgets.QTableWidgetItem(str(value))
-                        if value.startswith('Static Data') or value.startswith('Static Col') or value.startswith('Static Row'):
-                            item.setBackground(QtGui.QColor('lightgray'))  # Color for static data
+                        if i == 0:
+                            item.setBackground(QtGui.QColor('tomato'))  # Color azul para la primera fila
+                        elif j == 0:
+                            item.setBackground(QtGui.QColor('lightblue'))  # Color verde para la primera columna
+                        elif j == 1:
+                            item.setBackground(QtGui.QColor('orange'))  # Color gris para la segunda columna
                         else:
-                            item.setBackground(QtGui.QColor('white'))  # Color for empty cells
-                        table.setItem(i + len(static_data_above) + db_num_rows + 1, j, item)  # Adjust row index to accommodate database data and empty row
+                            item.setBackground(QtGui.QColor('white'))  # Otros colores para las demás celdas
+                        table.setItem(i + len(static_data_above) + db_num_rows + 1, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y la fila vacía
                 
                 self.mainLayout.addWidget(table, 0, 0)  # Add the table to the layout
                 
@@ -154,7 +151,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = SecondaryWindow("Ventana 2", showTable = True)  # Puedes establecer showTable a True o False según lo necesites
+    window = SecondaryWindow("Ventana 2", showTable=True)  # Puedes establecer showTable a True o False según lo necesites
     window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
     window.showMaximized()
-    app.exec_()
+    sys.exit(app.exec_())
