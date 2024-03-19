@@ -134,25 +134,46 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #dicho tamaño.
                 table.setRowCount(num_rows)
                 table.setColumnCount(num_cols)
-                # Establecer colores para las filas y columnas
-                for i in range(num_rows):
-                    for j in range(num_cols):
-                        item = QtWidgets.QTableWidgetItem(str(resultDataFrame.iloc[i, j]))
-                        if i == 0:
-                            item.setBackground(QtGui.QColor('blue'))
-                        elif j == 0 and i != 0:
-                            item.setBackground(QtGui.QColor('green'))
-                        elif j == 1 and i != 0:  # Solo la segunda columna, excluyendo la primera fila
-                            item.setBackground(QtGui.QColor('gray'))
-                        elif i == 0 and j == 1:
-                            item.setBackground(QtGui.QColor('blue'))  # Para la esquina superior derecha
-                        elif i == 0 and j != 0:
-                            item.setBackground(QtGui.QColor('blue'))  # Para la primera fila
-                        elif i != 0 and j == 0:
-                            item.setBackground(QtGui.QColor('green'))  # Para la primera columna
-                        else:
-                            item.setBackground(QtGui.QColor('yellow'))
-                        table.setItem(i, j, item)
+                #Establecer colores para filas y columnas de la tabla con datos extraídos del database. 
+                #Para ello se debe hacer uso del objeto QTableWidgetItem que accede a cada celda de la tabla de 
+                #forma individual y además se debe obtener todos los valores del DataFrame que contiene los datos 
+                #del database para que estos se puedan colocar en la tabla y además darles color.
+                for i in range(num_rows):       #Bucle for que recorre las filas = i.
+                    for j in range(num_cols):   #Bucle for que recorre las columnas = j.
+                        #QtWidgets.QTableWidgetItem(): Es una clase de PyQt5 que representa una celda individual 
+                        #dentro de una tabla QTableWidget. Este elemento puede contener datos y proporcionar 
+                        #funcionalidades para editar su formato (color, letra, etc.) dentro de una tabla en la 
+                        #interfaz de usuario. En su constructor debe recibir el dato que mostrará cada celda en 
+                        #forma de string.
+                        #pandas.DataFrame.iloc[filas, columnas]: El método iloc sirve para acceder a uno o varios 
+                        #de los valores de un DataFrame a través de sus filas y/o columnas contando desde 0. 
+                        #Por ejemplo:
+                        # - DataFrame.iloc[0]: Selecciona la primera fila del DataFrame.
+                        # - DataFrame.iloc[:, 0]: Selecciona la primera columna del DataFrame.
+                        # - DataFrame.iloc[0:5, :]: Selecciona las primeras cinco filas del DataFrame.
+                        # - DataFrame.iloc[:, 0:2]: Selecciona las dos primeras columnas del DataFrame.
+                        celdaTabla = QtWidgets.QTableWidgetItem(str(resultDataFrame.iloc[i, j]))
+                        if (i == 0):                    #Color azul:    Fila 1 = (0, Ninguna Columna)
+                            #QtWidgets.QTableWidgetItem().setBackground(): Este método se utiliza para indicar el
+                            #color de fondo de un objeto QTableWidgetItem(), que representa una celda de una 
+                            #tabla QTableWidget(), este siempre recibe como parámetro un objeto QtGui.QColor(), 
+                            #el cual a su vez recibe como parámetro el color de fondo en formato rgb, hexadecimal
+                            #o string.
+                            celdaTabla.setBackground(QtGui.QColor('blue'))
+                        elif (i != 0 and j == 0):       #Color verde:   Columna 1 = (Todas las filas menos la primera, 0)
+                            celdaTabla.setBackground(QtGui.QColor('green'))
+                        elif (i != 0 and j == 1):       #Color gris:    Columna 2 = (Todas las filas menos la primera, 1)
+                            celdaTabla.setBackground(QtGui.QColor('gray'))
+                        else:                           #Color amarillo: Todas las demás celdas.
+                            celdaTabla.setBackground(QtGui.QColor('yellow'))
+                        #QtWidgets.QTableWidget().setItem(): El método setItem() se aplica a un objeto 
+                        #QTableWidget() y se utiliza para establecer un objeto QTableWidgetItem() en una posición 
+                        #específica dentro de una tabla.
+                        table.setItem(i, j, celdaTabla)
+                #QtWidgets.QGridLayout(): La variable self.contenedorVertical es un contenedor matricial, y a 
+                #través de indicar que la tabla se coloque en la posición (0,0) nos aseguramos que aunque la 
+                #tabla se cree después que el contenedor que tiene los demás widgets, esta se coloque hasta 
+                #arriba dentro de la GUI. 
                 self.contenedorVertical.addWidget(table, 0, 0)  #Añadir la tabla a la posición (0,0).
         #Si ocurre un error al conectar a la base de datos o procesar los datos, se mostrará un cuadro de diálogo 
         #con el mensaje de error.
