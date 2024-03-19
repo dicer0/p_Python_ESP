@@ -30,8 +30,6 @@ from PyQt5 import QtWidgets
 #PyQt5 - QtCore: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
 #archivos, directorios, señales, hilos, subprocesos, etc.
 from PyQt5 import QtCore
-#matplotlib - Figure: La clase Figure es la base para crear y organizar los elementos gráficos en Matplotlib, 
-#que es una librería de graficación matemática.
 #PyQt5 - QtGui: Clase que incluye clases y métodos para trabajar con gráficos, fuentes, colores, imágenes, 
 #íconos y otros elementos visuales utilizados en una interfaz gráfica (GUI) de PyQt5.
 from PyQt5 import QtGui
