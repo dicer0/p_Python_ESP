@@ -429,6 +429,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #almacenar todas las instancias de la clase SecondaryWindow, asegurando que la ventana no se cierre 
         #después de que el método haya terminado de ejecutarse.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+        
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
         connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
