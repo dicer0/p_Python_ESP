@@ -1,15 +1,5 @@
 # -*- coding: utf-8 -*-
 
-#En Python se introducen comentarios de una sola linea con el simbolo #.
-#La primera línea de código incluida en este programa se conoce como declaración de codificación o codificación 
-#de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo 
-#pueda contener caracteres especiales, letras acentuadas y otros caracteres no ASCII sin problemas, garantizando 
-#que Python interprete correctamente esos caracteres y evite posibles errores de codificación.
-#Se puede detener una ejecución con el comando [CTRL] + C puesto en consola, con el comando "cls" se borra su 
-#historial y en Visual Studio Code con el botón superior derecho de Play se corre el programa.
-#Para comentar en Visual Studio Code varias líneas de código se debe pulsar:
-#[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
-
 #SQLAlchemy: Para instalarlo se debe ejecutar el comando pip install sqlalchemy, y es una biblioteca de Python 
 #para SQL ORM (Object-Relacional-Mapping) que proporciona a los desarrolladores un conjunto de herramientas para 
 #interactuar con bases de datos utilizando objetos y métodos de Python, en lugar de escribir consultas SQL.
@@ -366,12 +356,13 @@ class DatabaseExcelHandler:
                 worksheet.conditional_format(1, 1, filasDataFrame, 1, {'type': 'no_blanks', 'format': grey_format})
                 for col in range(2, columnasDataFrame):
                     worksheet.conditional_format(1, col, filasDataFrame, col, {'type': 'no_blanks', 'format': yellow_format})
+            #Devolver el DataFrame procesado.
+            return finalDataFrame
         except Exception as error:
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
             print("La línea donde ocurrió el error fue: ", traceback.format_exc())
-            return "Error al procesar los datos y guardar en Excel."
+            return "Error al procesar los datos y guardarlos en un Excel."
         finally:
             if self.connection1:
                 self.connection1.close()
                 print("MySQL Connection closed.")
-                return finalDataFrame
