@@ -81,7 +81,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
 
                 # Determine the total number of rows and columns
                 total_num_rows = len(static_data_above) + db_num_rows + len(static_data_below)
-                total_num_cols = max(5, db_num_cols)
+                total_num_cols = max(7, db_num_cols)
 
                 # Create the table
                 table = QtWidgets.QTableWidget()
@@ -95,7 +95,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         if i == 0:
                             item.setBackground(QtGui.QColor('red'))  # Color azul para la primera fila
                         elif j == 0:
-                            item.setBackground(QtGui.QColor('yellow'))  # Color verde para la primera columna
+                            item.setBackground(QtGui.QColor('aqua'))  # Color verde para la primera columna
                         elif j == 1:
                             item.setBackground(QtGui.QColor('darkgray'))  # Color gris para la segunda columna
                         else:
