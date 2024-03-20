@@ -17,8 +17,9 @@
 #   conforman la GUI, se declara a través de la clase QMainWindow de la librería pyQt5 y es el equivalente al 
 #   Frame de PyQt5.
 from PyQt5 import QtWidgets
-#matplotlib - Figure: La clase Figure es la base para crear y organizar los elementos gráficos en Matplotlib, 
-#que es una librería de graficación matemática.
+#PyQt5 - QtCore: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
+#archivos, directorios, señales, hilos, subprocesos, etc.
+from PyQt5 import QtCore
 #PyQt5 - QtGui: Clase que incluye clases y métodos para trabajar con gráficos, fuentes, colores, imágenes, 
 #íconos y otros elementos visuales utilizados en una interfaz gráfica (GUI) de PyQt5.
 from PyQt5 import QtGui
@@ -122,10 +123,39 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #Si pasa un error al procesar los datos, se mostrará un cuadro de diálogo con un mensaje.
                 self.__showErrorMessageBox(resultDataFrame)
             else:
+                #DATOS ESTÁTICOS QUE SE VAN A COLOCAR ENCIMA Y DEBAJO DEL REPORTE EXTRAÍDO DEL DATABASE:
+                staticDataAbove_1 = [
+                    ['Title A1.1', 'Title A1.2', 'Title A1.3'],
+                    ['Static Row 1', '', ''],
+                    ['Static Row 2', '', ''],
+                    ['Static Row 3', '', ''],
+                    ['Static Row 4', '', ''],
+                    ['Static Row 5', '', ''],
+                    ['Static Row 6', '', '']
+                ]
+                staticDataBelow_1 = [
+                    ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
+                    ['Subtitle 1', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', ''],
+                    ['Static Row 2', '', '', '', '', '', ''],
+                    ['Static Row 3', '', '', '', '', '', ''],
+                    ['Static Row 4', '', '', '', '', '', ''],
+                    ['Static Row 5', '', '', '', '', '', ''],
+                    ['Static Row 6', '', '', '', '', '', ''],
+                    ['Static Row 7', '', '', '', '', '', ''],
+                    ['Subtitle 2', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', '']
+                ]
+                #TAMAÑO DE LA TABLA QUE CONTIENE TODAS LAS AGRUPACIONES DE DATOS:
                 #pandas.DataFrame().shape: Para extraer el tamaño de un DataFrame se puede utilizar el atributo 
                 #shape de la clase DataFrame, el cual devuelve una tupla que indica su número de filas y 
                 #columnas: (filas, columnas) = pandas.DataFrame().shape
-                (num_rows, num_cols) = resultDataFrame.shape
+                (db_numRows, db_numCols) = resultDataFrame.shape
+                #Para obtener el tamaño total de la tabla, se considera el tamaño de la lista de listas que 
+                #indican los datos estáticos y el número de filas del DataFrame.
+                totalRows = len(staticDataAbove_1) + db_numRows + len(staticDataBelow_1)   #Filas tabla.
+                #max(): Este método retorna el valor que sea mayor al comparar dos números.
+                totalCols = max(7, db_numCols)                                             #Columnas tabla.
                 #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla 
                 #editable para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden 
                 #contener texto, números, imágenes u otros widgets.
@@ -133,14 +163,35 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #QtWidgets.QTableWidget().setRowCount() y setColumnCount(): Métodos que sirven para indicar el 
                 #número de filas y columnas de un objeto QTableWidget() en una GUI, en sus parámetros reciben 
                 #dicho tamaño.
-                table.setRowCount(num_rows)
-                table.setColumnCount(num_cols)
+                table.setRowCount(totalRows)
+                table.setColumnCount(totalCols)
+
+                #Establecer colores para filas y columnas de la tabla con datos estáticos que se encuentren arriba de 
+                #los datos extraídos por la database.
+                #enumerate(): Es un método que devuelve tanto el índice como el valor de los elementos de una lista, 
+                #tupla u otro iterable.
+                for (i, row_data) in (enumerate(staticDataAbove_1)):
+                    for j, value in enumerate(row_data):
+                        item = QtWidgets.QTableWidgetItem(str(value))
+                        item.setTextAlignment(QtCore.Qt.AlignCenter)
+                        if i == 0:
+                            item.setBackground(QtGui.QColor('red'))
+                            item.setTextAlignment(QtCore.Qt.AlignCenter)
+                            table.setSpan(i, 0, 1, 5)
+                        elif j == 0:
+                            item.setBackground(QtGui.QColor('aqua'))
+                        elif j == 1:
+                            item.setBackground(QtGui.QColor('darkgray'))
+                        else:
+                            item.setBackground(QtGui.QColor('white'))
+                        table.setItem(i, j, item)
+
                 #Establecer colores para filas y columnas de la tabla con datos extraídos del database. 
                 #Para ello se debe hacer uso del objeto QTableWidgetItem que accede a cada celda de la tabla de 
                 #forma individual y además se debe obtener todos los valores del DataFrame que contiene los datos 
                 #del database para que estos se puedan colocar en la tabla y además darles color.
-                for i in range(num_rows):       #Bucle for que recorre las filas = i.
-                    for j in range(num_cols):   #Bucle for que recorre las columnas = j.
+                for i in range(db_numRows):       #Bucle for que recorre las filas = i.
+                    for j in range(db_numCols):   #Bucle for que recorre las columnas = j.
                         #QtWidgets.QTableWidgetItem(): Es una clase de PyQt5 que representa una celda individual 
                         #dentro de una tabla QTableWidget. Este elemento puede contener datos y proporcionar 
                         #funcionalidades para editar su formato (color, letra, etc.) dentro de una tabla en la 
@@ -171,6 +222,11 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         #QTableWidget() y se utiliza para establecer un objeto QTableWidgetItem() en una posición 
                         #específica dentro de una tabla.
                         table.setItem(i, j, celdaTabla)
+                
+                #Establecer colores para filas y columnas de la tabla con datos estáticos que se encuentren arriba de 
+                #los datos extraídos por la database.
+                
+                
                 #QtWidgets.QGridLayout(): La variable self.contenedorVertical es un contenedor matricial, y a 
                 #través de indicar que la tabla se coloque en la posición (0,0) nos aseguramos que aunque la 
                 #tabla se cree después que el contenedor que tiene los demás widgets, esta se coloque hasta 
