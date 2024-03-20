@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
 import pandas as pd
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
@@ -64,11 +64,9 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['Static Row 1', '', '', '', ''],
                     ['Static Row 2', '', '', '', ''],
                     ['Static Row 3', '', '', '', ''],
-                    ['', '', '', '', ''],  # Empty cells for spacing
                 ]
                 
                 static_data_below = [
-                    ['', '', '', '', ''],  # Empty cells for spacing
                     ['Static Data Below', '', '', '', ''],  # Empty cells for spacing
                     ['', 'Static Col A', 'Static Col B', 'Static Col C', ''],
                     ['Static Row X', '', '', '', ''],
@@ -80,7 +78,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 db_num_rows, db_num_cols = resultDataFrame.shape
 
                 # Determine the total number of rows and columns
-                total_num_rows = len(static_data_above) + db_num_rows + len(static_data_below)
+                total_num_rows = len(static_data_above) + db_num_rows + len(static_data_below) + 2  # Adding 2 for empty rows
                 total_num_cols = max(7, db_num_cols)
 
                 # Create the table
@@ -94,15 +92,18 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         item = QtWidgets.QTableWidgetItem(str(value))
                         if i == 0:
                             item.setBackground(QtGui.QColor('red'))  # Color azul para la primera fila
+                            item.setTextAlignment(QtCore.Qt.AlignCenter)  # Centrar el texto
+                            item.setFlags(QtCore.Qt.ItemIsEnabled)  # Deshabilitar la edición
+                            table.setSpan(i, 0, 1, total_num_cols)  # Fusionar las celdas horizontalmente
                         elif j == 0:
                             item.setBackground(QtGui.QColor('aqua'))  # Color verde para la primera columna
                         elif j == 1:
                             item.setBackground(QtGui.QColor('darkgray'))  # Color gris para la segunda columna
                         else:
                             item.setBackground(QtGui.QColor('white'))  # Otros colores para las demás celdas
-                        table.setItem(i, j, item)
+                        table.setItem(i + 1, j, item)  # Adjust row index to accommodate static data and empty row
                 
-                # Populate the table with database data from DataFrame directly
+                                # Populate the table with database data from DataFrame directly
                 for i, row in enumerate(resultDataFrame.iterrows()):
                     index, row_data = row
                     for j, value in enumerate(row_data):
@@ -115,7 +116,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             item.setBackground(QtGui.QColor('gray'))
                         else:
                             item.setBackground(QtGui.QColor('yellow'))
-                        table.setItem(i + len(static_data_above), j, item)  # Adjust row index to accommodate static data
+                        table.setItem(i + len(static_data_above) + 2, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y las filas vacías
                 
                 # Populate the table with static data below
                 for i, row_data in enumerate(static_data_below):
@@ -123,13 +124,16 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         item = QtWidgets.QTableWidgetItem(str(value))
                         if i == 0:
                             item.setBackground(QtGui.QColor('tomato'))  # Color azul para la primera fila
+                            item.setTextAlignment(QtCore.Qt.AlignCenter)  # Centrar el texto
+                            item.setFlags(QtCore.Qt.ItemIsEnabled)  # Deshabilitar la edición
+                            table.setSpan(i + len(static_data_above) + db_num_rows + 3, 0, 1, total_num_cols)  # Fusionar las celdas horizontalmente
                         elif j == 0:
                             item.setBackground(QtGui.QColor('lightblue'))  # Color verde para la primera columna
                         elif j == 1:
                             item.setBackground(QtGui.QColor('orange'))  # Color gris para la segunda columna
                         else:
                             item.setBackground(QtGui.QColor('white'))  # Otros colores para las demás celdas
-                        table.setItem(i + len(static_data_above) + db_num_rows + 1, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y la fila vacía
+                        table.setItem(i + len(static_data_above) + db_num_rows + 4, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y la fila vacía
                 
                 self.mainLayout.addWidget(table, 0, 0)  # Add the table to the layout
                 
