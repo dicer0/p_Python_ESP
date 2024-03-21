@@ -14,6 +14,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 self.__createTable()  # Crea y muestra la tabla si showTable es True
             except Exception as e:
                 self.__showErrorMessageBox(str(e))  # Muestra un cuadro de diálogo con el mensaje de error
+                print("Error: ", e)
         else:
             self.__createEmptyTable()  # Crea una tabla vacía si showTable es False
         
@@ -80,6 +81,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 # Determine the total number of rows and columns
                 total_num_rows = len(static_data_above) + db_num_rows + len(static_data_below) + 2  # Adding 2 for empty rows
                 total_num_cols = max(7, db_num_cols)
+                staticDataAbove_1_Cols = len(static_data_above[0])              #Columnas staticDataAbove_1.
 
                 # Create the table
                 table = QtWidgets.QTableWidget()
@@ -94,7 +96,10 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         if i == 0:
                             item.setBackground(QtGui.QColor('red'))
                             item.setTextAlignment(QtCore.Qt.AlignCenter)
-                            table.setSpan(i, 0, 1, 5)
+                            font = QtGui.QFont()
+                            font.setBold(True)
+                            item.setFont(font)
+                            table.setSpan(i, 0, 1, staticDataAbove_1_Cols)
                         elif j == 0:
                             item.setBackground(QtGui.QColor('aqua'))
                         elif j == 1:
@@ -117,7 +122,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             item.setBackground(QtGui.QColor('gray'))
                         else:
                             item.setBackground(QtGui.QColor('yellow'))
-                            item.setSizeHint(QtCore.QSize(0, 30))
                         table.setItem(i + len(static_data_above) + 1, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y las filas vacías
                 
                 # Populate the table with static data below
@@ -127,7 +131,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         item.setTextAlignment(QtCore.Qt.AlignCenter)  # Centrar el texto
                         if i == 0:
                             item.setBackground(QtGui.QColor('tomato'))  # Color azul para la primera fila
-                            table.setSpan(i + len(static_data_above) + db_num_rows + 2, 0, 1, 5)  # Fusionar las celdas horizontalmente
+                            table.setSpan((i + len(static_data_above) + db_num_rows + 2), 0, 1, 5)  # Fusionar las celdas horizontalmente
                         elif j == 0:
                             item.setBackground(QtGui.QColor('lightblue'))  # Color verde para la primera columna
                         elif j == 1:
@@ -139,11 +143,13 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 for column in range(table.columnCount()):
                     table.resizeColumnToContents(column)
                     table.setColumnWidth(3, 400)
+                
                 self.mainLayout.addWidget(table, 0, 0)  # Add the table to the layout
                 
         except Exception as e:
             #Si ocurre un error al conectar a la base de datos o procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
             self.__showErrorMessageBox(str(e))
+            print(e)
 
 
     def __createEmptyTable(self):
