@@ -191,7 +191,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 for column in range(table.columnCount()):
                     table.resizeColumnToContents(column)
                     anchoColumnas = table.columnWidth(column)
-                    limiteAncho = 400
+                    limiteAncho = 200
                     anchoMaxColumnas = min(anchoColumnas, limiteAncho)
                     table.setColumnWidth(column, anchoMaxColumnas)
 
