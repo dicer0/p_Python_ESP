@@ -188,19 +188,20 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             itemBelow1.setBackground(QtGui.QColor('#FFF2CC'))
                         table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), j, itemBelow1)
                 
-                # #REDIMENSIONAR EL ANCHO DE LAS CELDAS DE LAS COLUMNAS PARA MOSTRAR SU CONTENIDO COMPLETO:
-                # #QtWidgets.QTableWidget().columnCount(): El método columnCount() devuelve un número entero que 
-                # #representa el número de columnas de un objeto QtWidgets.QTableWidget().
-                # for column in range(table.columnCount()):
-                #     #QtWidgets.QTableWidget().resizeColumnToContents(): Este método se utiliza para ajustar 
-                #     #automáticamente el ancho de la columna de una tabla QtWidgets.QTableWidget().  
-                #     table.resizeColumnToContents(column)
-                #     #QtWidgets.QTableWidget().setColumnWidth(): Cuando el método resizeColumnToContents() por 
-                #     #alguna razón no haya redimensionado automáticamente de forma correcta el ancho de una 
-                #     #columna, esto se puede forzar a través del método setColumnWidth(), en el cual se indica
-                #     #el índice de la columna contando desde cero en su primer parámetro y el ancho en pixeles 
-                #     #en su segundo parámetro.
-                #     table.setColumnWidth(3, 400)
+                for column in range(table.columnCount()):
+                    table.resizeColumnToContents(column)
+                    anchoColumnas = table.columnWidth(column)
+                    limiteAncho = 400
+                    anchoMaxColumnas = min(anchoColumnas, limiteAncho)
+                    table.setColumnWidth(column, anchoMaxColumnas)
+
+                    # Analizar la altura de las celdas y limitarla según sea necesario
+                    for row in range(table.rowCount()):
+                        alturaCelda = table.sizeHintForRow(row)
+                        limiteAltura = 100
+                        alturaMaxCelda = min(alturaCelda, limiteAltura)
+                        table.setRowHeight(row, alturaMaxCelda)
+
                 
                 self.mainLayout.addWidget(table, 0, 0)
         except Exception as errorDatabaseExcelHandler:

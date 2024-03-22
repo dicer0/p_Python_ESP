@@ -170,7 +170,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1)
                 staticDataAbove_1_Rows = len(staticDataAbove_1)                 #Filas staticDataAbove_1.
                 staticDataAbove_2_Rows = len(staticDataAbove_2)                 #Filas staticDataAbove_1.
-                #max(): Este método retorna el valor que sea mayor al comparar dos números.
+                #max(num1, num2, num_n): Método que retorna el valor máximo al comparar varios números.
                 totalCols = max(7, db_numCols)                                              #Columnas tabla.
                 staticDataAbove_1_Cols = len(staticDataAbove_1[0])              #Columnas staticDataAbove_1.
                 staticDataAbove_2_Cols = len(staticDataAbove_2[0])              #Columnas staticDataAbove_2.
@@ -413,6 +413,41 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         #agrupaciones de datos anteriores.
                         table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), j, itemBelow1)
                 
+                #REDIMENSIONAR EL ANCHO DE LAS CELDAS DE LAS COLUMNAS PARA MOSTRAR SU CONTENIDO COMPLETO:
+                #QtWidgets.QTableWidget().columnCount(): El método columnCount() devuelve un número entero que 
+                #representa el número de columnas de un objeto QtWidgets.QTableWidget().
+                for column in range(table.columnCount()):
+                    #QtWidgets.QTableWidget().resizeColumnToContents(): Este método se utiliza para ajustar 
+                    #automáticamente el ancho de la columna de una tabla QtWidgets.QTableWidget().  
+                    table.resizeColumnToContents(column)
+                    #QtWidgets.QTableWidget().columnWidth(): Este método sirve para obtener el ancho actual 
+                    #de algunas de las columnas pertenecientes a una tabla QTableWidget, para ello recibe en su 
+                    #único parámetro la posición de la columna enumarada desde 0.  
+                    anchoColumnas = table.columnWidth(column)
+                    #min(num1, num2, num_n): Método que retorna el valor mínimo al comparar varios números. De 
+                    #esta forma es como se limita el ancho máximo que puede adoptar una columna en pixeles.
+                    limiteAncho = 200           #Anchura máxima de las celdas.
+                    anchoMaxColumnas = min(anchoColumnas, limiteAncho)
+                    #QtWidgets.QTableWidget().setColumnWidth(): Cuando el método resizeColumnToContents() por 
+                    #alguna razón no haya redimensionado automáticamente de forma correcta el ancho de una 
+                    #columna, esto se puede forzar a través del método setColumnWidth(), en el cual se indica
+                    #el índice de la columna contando desde 0 en su primer parámetro y el ancho en pixeles en su 
+                    #segundo parámetro: 
+                    table.setColumnWidth(column, anchoMaxColumnas)
+                    #ANALIZAR LA ALTURA DE LAS FILAS: Se repetirá el mismo proceso pero ahora con la altura de 
+                    #las filas para mostrar todo el contenido de la celda.
+                    #QtWidgets.QTableWidget().rowCount(): Método que devuelve el número de filas de una tabla.
+                    for row in range(table.rowCount()):
+                        #QtWidgets.QTableWidget().sizeHintForRow(): Este método se utiliza para obtener la altura 
+                        #recomendada de una fila en un QTableWidget en función del contenido de sus celdas.
+                        alturaCelda = table.sizeHintForRow(row)
+                        limiteAltura = 100      #Altura máxima de las celdas.
+                        alturaMaxCelda = min(alturaCelda, limiteAltura)
+                        #QtWidgets.QTableWidget().setRowHeight(): Método utilizado para indicar la altura de 
+                        #la fila de una tabla, para ello se debe indicar su índice contando desde 0 y su altura
+                        #en pixeles.
+                        table.setRowHeight(row, alturaMaxCelda)
+
                 #QtWidgets.QGridLayout(): La variable self.contenedorVertical es un contenedor matricial, y a 
                 #través de indicar que la tabla se coloque en la posición (0,0) nos aseguramos que aunque la 
                 #tabla se cree después que el contenedor que tiene los demás widgets, esta se coloque hasta 
