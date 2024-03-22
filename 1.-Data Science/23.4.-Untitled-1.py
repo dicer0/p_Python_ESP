@@ -1,22 +1,21 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
-import pandas as pd
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
 
 class SecondaryWindow(QtWidgets.QMainWindow):
     def __init__(self, title, showTable=False):
         super().__init__() 
         self.setWindowTitle(title)
-        self.__createWidgets()  # Crea los widgets constantes
+        self.__createWidgets()
         
         if showTable:
             try:
-                self.__createTable()  # Crea y muestra la tabla si showTable es True
+                self.__createTable()
             except Exception as e:
-                self.__showErrorMessageBox(str(e))  # Muestra un cuadro de diálogo con el mensaje de error
+                self.__showErrorMessageBox(str(e))
                 print("Error: ", e)
         else:
-            self.__createEmptyTable()  # Crea una tabla vacía si showTable es False
+            self.__createEmptyTable()
         
     def __createWidgets(self):
         confirmButton = QtWidgets.QPushButton("Texto del botón")
@@ -36,7 +35,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         widgetContenedor.setFixedHeight(100)
         widgetContenedor.setStyleSheet("background-color: #002550; padding: 5px;")
         contenedorMatricial = QtWidgets.QGridLayout(widgetContenedor)   
-        self.mainLayout = QtWidgets.QGridLayout()  # Usamos un QGridLayout para organizar los elementos
+        self.mainLayout = QtWidgets.QGridLayout()
 
         # AÑADIR WIDGETS A LOS CONTENEDORES:
         contenedorMatricial.addWidget(texto_1, 0, 0)
@@ -44,9 +43,10 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         contenedorMatricial.addWidget(confirmButton, 1, 2)
         
         # UNIR LOS CONTENEDORES EN UN SOLO WIDGET Y CENTRAR EL CONTENEDOR PRINCIPAL:
-        self.mainLayout.addWidget(widgetContenedor, 1, 0)  # Agregamos el contenedor de labels y botones en la fila 1
-        self.setCentralWidget(QtWidgets.QWidget())  # Creamos un widget central para el QGridLayout principal
-        self.centralWidget().setLayout(self.mainLayout)
+        self.mainLayout.addWidget(widgetContenedor, 1, 0)
+        centralWidget = QtWidgets.QWidget()
+        centralWidget.setLayout(self.mainLayout)
+        self.setCentralWidget(centralWidget)
         
     def __createTable(self):
         connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
@@ -54,110 +54,164 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         
         try:
             resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx")
-            if isinstance(resultDataFrame, str):
-                # Si hay un error al procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
+            if (type(resultDataFrame) == str):
                 self.__showErrorMessageBox(resultDataFrame)
             else:
-                # Static data indicating the names of the first row of columns and the first column of rows
-                static_data_above = [
-                    ['Static Data Above', '', '', '', ''],  # Empty cells for spacing
-                    ['', 'Static Col 1', 'Static Col 2', 'Static Col 3', ''],
-                    ['Static Row 1', '', '', '', ''],
-                    ['Static Row 2', '', '', '', ''],
-                    ['Static Row 3', '', '', '', ''],
+                staticDataAbove_1 = [
+                    ['Title A1.1', 'Title A1.2', 'Title A1.3'],
+                    ['Static Row 1', '', ''],
+                    ['Static Row 2', '', ''],
+                    ['Static Row 3', '', ''],
+                    ['Static Row 4', '', ''],
+                    ['Static Row 5', '', ''],
+                    ['Static Row 6', '', '']
                 ]
-                
-                static_data_below = [
-                    ['Static Data Below', '', '', '', ''],  # Empty cells for spacing
-                    ['', 'Static Col A', 'Static Col B', 'Static Col C', ''],
-                    ['Static Row X', '', '', '', ''],
-                    ['Static Row Y', '', '', '', ''],
-                    ['Static Row Z', '', '', '', '']
+                staticDataAbove_2 = [
+                    ['Title A2', '', '', '', '', '', ''],
+                    ['Subtitle A2.1', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Subtitle A2.2', '', '', '', '', '', ''],
+                    ['Static Row 2', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Subtitle A2.3', '', '', '', '', '', ''],
+                    ['Static Row 3', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
                 ]
-                
-                # Determine the number of rows and columns for the database data
-                db_num_rows, db_num_cols = resultDataFrame.shape
-
-                # Determine the total number of rows and columns
-                total_num_rows = len(static_data_above) + db_num_rows + len(static_data_below) + 2  # Adding 2 for empty rows
-                total_num_cols = max(7, db_num_cols)
-                staticDataAbove_1_Cols = len(static_data_above[0])              #Columnas staticDataAbove_1.
-
-                # Create the table
+                staticDataBelow_1 = [
+                    ['Title B1', '', '', '', '', '', ''],
+                    ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
+                    ['Subtitle 1', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', ''],
+                    ['Static Row 2', '', '', '', '', '', ''],
+                    ['Static Row 3', '', '', '', '', '', ''],
+                    ['Static Row 4', '', '', '', '', '', ''],
+                    ['Static Row 5', '', '', '', '', '', ''],
+                    ['Static Row 6', '', '', '', '', '', ''],
+                    ['Static Row 7', '', '', '', '', '', ''],
+                    ['Subtitle 2', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', '']
+                ]
+                (db_numRows, db_numCols) = resultDataFrame.shape
+                totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1)
+                staticDataAbove_1_Rows = len(staticDataAbove_1)
+                staticDataAbove_2_Rows = len(staticDataAbove_2)
+                totalCols = max(7, db_numCols)
+                staticDataAbove_1_Cols = len(staticDataAbove_1[0]) 
+                staticDataAbove_2_Cols = len(staticDataAbove_2[0]) 
+                staticDataBelow_1_Cols = len(staticDataBelow_1[0]) 
                 table = QtWidgets.QTableWidget()
-                table.setRowCount(total_num_rows)
-                table.setColumnCount(total_num_cols)
-                
-                # Populate the table with static data above
-                for (i, row_data) in (enumerate(static_data_above)):
-                    for (j, value) in (enumerate(row_data)):
-                        item = QtWidgets.QTableWidgetItem(str(value))
-                        item.setTextAlignment(QtCore.Qt.AlignCenter)
+                table.setRowCount(totalRows)
+                table.setColumnCount(totalCols)
+
+                for (i, row_data) in (enumerate(staticDataAbove_1)):
+                    for (j, value) in (enumerate(row_data)): 
+                        itemAbove1 = QtWidgets.QTableWidgetItem(str(value)) 
+                        itemAbove1.setTextAlignment(QtCore.Qt.AlignCenter)
                         if i == 0:
-                            item.setBackground(QtGui.QColor('red'))
-                            item.setTextAlignment(QtCore.Qt.AlignCenter)
+                            itemAbove1.setBackground(QtGui.QColor('#4f81bd'))
                             font = QtGui.QFont()
                             font.setBold(True)
-                            item.setFont(font)
-                            table.setSpan(i, 0, 1, staticDataAbove_1_Cols)
-                        elif j == 0:
-                            item.setBackground(QtGui.QColor('aqua'))
-                        elif j == 1:
-                            item.setBackground(QtGui.QColor('darkgray'))
-                        else:
-                            item.setBackground(QtGui.QColor('white'))
-                        table.setItem(i, j, item)
-                
-                                # Populate the table with database data from DataFrame directly
-                for i, row in enumerate(resultDataFrame.iterrows()):
-                    index, row_data = row
-                    for j, value in enumerate(row_data):
-                        item = QtWidgets.QTableWidgetItem(str(value))
-                        item.setTextAlignment(QtCore.Qt.AlignCenter)  # Centrar el texto
+                            itemAbove1.setFont(font)
+                            itemAbove1.setForeground(QtGui.QColor('white'))
+                            table.setSpan(i, 1, 1, staticDataAbove_1_Cols)
+                        elif (i != 0 and j == 1):
+                            itemAbove1.setBackground(QtGui.QColor('#0070c0'))
+                        else:                          
+                            itemAbove1.setBackground(QtGui.QColor('#d3dfee'))   
+                            font = QtGui.QFont() 
+                            font.setBold(True)
+                            itemAbove1.setFont(font)
+                        table.setItem(i, (j + 1), itemAbove1)
+                for (i, row_data) in (enumerate(staticDataAbove_2)): 
+                    for (j, value) in (enumerate(row_data)): 
+                        itemAbove2 = QtWidgets.QTableWidgetItem(str(value)) 
+                        itemAbove2.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+                        font = QtGui.QFont() 
+                        font.setBold(True)
+                        table.setSpan((i + staticDataAbove_1_Rows + 1), 0, 1, staticDataAbove_2_Cols)
                         if i == 0:
-                            item.setBackground(QtGui.QColor('blue'))
-                        elif j == 0 and i != 0:
-                            item.setBackground(QtGui.QColor('green'))
-                        elif j == 1 and i != 0:
-                            item.setBackground(QtGui.QColor('gray'))
+                            itemAbove2.setBackground(QtGui.QColor('#4f81bd'))
+                            itemAbove2.setFont(font)
+                        elif (i == 1 or i == 4 or i == 7):
+                            itemAbove2.setBackground(QtGui.QColor('white'))  
+                            font.setUnderline(True)
+                            itemAbove2.setFont(font)
                         else:
-                            item.setBackground(QtGui.QColor('yellow'))
-                        table.setItem(i + len(static_data_above) + 1, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y las filas vacías
+                            itemAbove2.setBackground(QtGui.QColor('white'))  
+                        table.setItem((i + staticDataAbove_1_Rows + 1), j, itemAbove2)
+
+                for i in range(db_numRows): 
+                    for j in range(db_numCols): 
+                        celda_Db = QtWidgets.QTableWidgetItem(str(resultDataFrame.iloc[i, j]))
+                        celda_Db.setTextAlignment(QtCore.Qt.AlignCenter)
+                        font = QtGui.QFont() 
+                        font.setBold(True)
+                        if (i == 0): 
+                            celda_Db.setBackground(QtGui.QColor('blue'))     
+                            celda_Db.setFont(font)
+                        elif (i != 0 and j == 0): 
+                            celda_Db.setBackground(QtGui.QColor('green'))
+                            celda_Db.setFont(font)
+                        elif (i != 0 and j == 1): 
+                            celda_Db.setBackground(QtGui.QColor('gray'))
+                        else:
+                            celda_Db.setBackground(QtGui.QColor('yellow'))
+                        table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), j, celda_Db)
                 
-                # Populate the table with static data below
-                for i, row_data in enumerate(static_data_below):
-                    for j, value in enumerate(row_data):
-                        item = QtWidgets.QTableWidgetItem(str(value))
-                        item.setTextAlignment(QtCore.Qt.AlignCenter)  # Centrar el texto
+                for i, row_data in enumerate(staticDataBelow_1): 
+                    for j, value in enumerate(row_data): 
+                        itemBelow1 = QtWidgets.QTableWidgetItem(str(value)) 
+                        itemBelow1.setTextAlignment(QtCore.Qt.AlignCenter)
+                        font = QtGui.QFont() 
+                        font.setBold(True)
                         if i == 0:
-                            item.setBackground(QtGui.QColor('tomato'))  # Color azul para la primera fila
-                            table.setSpan((i + len(static_data_above) + db_num_rows + 2), 0, 1, 5)  # Fusionar las celdas horizontalmente
-                        elif j == 0:
-                            item.setBackground(QtGui.QColor('lightblue'))  # Color verde para la primera columna
-                        elif j == 1:
-                            item.setBackground(QtGui.QColor('orange'))  # Color gris para la segunda columna
+                            itemBelow1.setBackground(QtGui.QColor('white'))
+                            font.setUnderline(True)
+                            itemBelow1.setFont(font)
+                            itemBelow1.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+                            table.setSpan((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), 0, 1, staticDataBelow_1_Cols)
+                        elif i == 1:
+                            itemBelow1.setBackground(QtGui.QColor('#4472c4'))
+                            itemBelow1.setFont(font)
+                        elif i == 2:
+                            itemBelow1.setBackground(QtGui.QColor('#A7BFDE'))
+                            itemBelow1.setFont(font)
+                            table.setSpan((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), 0, 1, staticDataBelow_1_Cols)
+                        elif (i != (0 & 1 & 2) and j == 0):
+                            itemBelow1.setBackground(QtGui.QColor('#5EC268'))
+                            itemBelow1.setFont(font)
+                        elif (i != (0 & 1 & 2) and j == 1):
+                            itemBelow1.setBackground(QtGui.QColor('gray'))
                         else:
-                            item.setBackground(QtGui.QColor('white'))  # Otros colores para las demás celdas
-                        table.setItem(i + len(static_data_above) + db_num_rows + 2, j, item)  # Ajustar el índice de fila para acomodar los datos de la base de datos y la fila vacía
+                            itemBelow1.setBackground(QtGui.QColor('#FFF2CC'))
+                        table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), j, itemBelow1)
                 
-                for column in range(table.columnCount()):
-                    table.resizeColumnToContents(column)
-                    table.setColumnWidth(3, 400)
+                # #REDIMENSIONAR EL ANCHO DE LAS CELDAS DE LAS COLUMNAS PARA MOSTRAR SU CONTENIDO COMPLETO:
+                # #QtWidgets.QTableWidget().columnCount(): El método columnCount() devuelve un número entero que 
+                # #representa el número de columnas de un objeto QtWidgets.QTableWidget().
+                # for column in range(table.columnCount()):
+                #     #QtWidgets.QTableWidget().resizeColumnToContents(): Este método se utiliza para ajustar 
+                #     #automáticamente el ancho de la columna de una tabla QtWidgets.QTableWidget().  
+                #     table.resizeColumnToContents(column)
+                #     #QtWidgets.QTableWidget().setColumnWidth(): Cuando el método resizeColumnToContents() por 
+                #     #alguna razón no haya redimensionado automáticamente de forma correcta el ancho de una 
+                #     #columna, esto se puede forzar a través del método setColumnWidth(), en el cual se indica
+                #     #el índice de la columna contando desde cero en su primer parámetro y el ancho en pixeles 
+                #     #en su segundo parámetro.
+                #     table.setColumnWidth(3, 400)
                 
-                self.mainLayout.addWidget(table, 0, 0)  # Add the table to the layout
-                
-        except Exception as e:
-            #Si ocurre un error al conectar a la base de datos o procesar los datos, mostrar un cuadro de diálogo con el mensaje de error
-            self.__showErrorMessageBox(str(e))
-            print(e)
-
-
+                self.mainLayout.addWidget(table, 0, 0)
+        except Exception as errorDatabaseExcelHandler:
+            self.__showErrorMessageBox(str(errorDatabaseExcelHandler))
+    
     def __createEmptyTable(self):
         table = QtWidgets.QTableWidget()
-        table.setRowCount(5)  # Definimos un número de filas arbitrario
-        table.setColumnCount(5)  # Definimos un número de columnas arbitrario
-        self.mainLayout.addWidget(table, 0, 0)  # Agregamos la tabla en la fila 0
-
+        table.setRowCount(5)
+        table.setColumnCount(5)
+        self.contenedorVertical.addWidget(table, 0, 0)
+        
     def __showErrorMessageBox(self, message):
         reply = QtWidgets.QMessageBox.critical(self, "Error", message, QtWidgets.QMessageBox.Ok)
         if reply == QtWidgets.QMessageBox.Ok:
@@ -165,7 +219,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = SecondaryWindow("Ventana 2", showTable=True)  # Puedes establecer showTable a True o False según lo necesites
+    window = SecondaryWindow("Ventana 2", showTable=True)
     window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
     window.showMaximized()
     sys.exit(app.exec_())

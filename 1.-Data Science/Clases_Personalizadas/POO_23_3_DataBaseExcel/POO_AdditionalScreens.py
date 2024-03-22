@@ -23,7 +23,6 @@ from PyQt5 import QtCore
 #PyQt5 - QtGui: Clase que incluye clases y métodos para trabajar con gráficos, fuentes, colores, imágenes, 
 #íconos y otros elementos visuales utilizados en una interfaz gráfica (GUI) de PyQt5.
 from PyQt5 import QtGui
-import sys #sys: Librería que permite interactuar directamente con el sistema operativo y consola del ordenador.
 
 #SecondaryWindow: Clase que representa las ventanas adicionales abiertas en la GUI, a través de ella se 
 #pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.
@@ -133,7 +132,21 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['Static Row 5', '', ''],
                     ['Static Row 6', '', '']
                 ]
+                staticDataAbove_2 = [
+                    ['Title A2', '', '', '', '', '', ''],
+                    ['Subtitle A2.1', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Subtitle A2.2', '', '', '', '', '', ''],
+                    ['Static Row 2', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Subtitle A2.3', '', '', '', '', '', ''],
+                    ['Static Row 3', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
+                ]
                 staticDataBelow_1 = [
+                    ['Title B1', '', '', '', '', '', ''],
                     ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
                     ['Subtitle 1', '', '', '', '', '', ''],
                     ['Static Row 1', '', '', '', '', '', ''],
@@ -153,11 +166,14 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 (db_numRows, db_numCols) = resultDataFrame.shape
                 #Para obtener el tamaño total de la tabla, se considera el tamaño de la lista de listas que 
                 #indican los datos estáticos y el número de filas del DataFrame.
-                totalRows = len(staticDataAbove_1) + db_numRows + len(staticDataBelow_1)    #Filas tabla.
+                #NÚMERO DE FILAS DE LA TABLA QUE GUARDA TODOS LOS DATOS.
+                totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1)
                 staticDataAbove_1_Rows = len(staticDataAbove_1)                 #Filas staticDataAbove_1.
+                staticDataAbove_2_Rows = len(staticDataAbove_2)                 #Filas staticDataAbove_1.
                 #max(): Este método retorna el valor que sea mayor al comparar dos números.
                 totalCols = max(7, db_numCols)                                              #Columnas tabla.
                 staticDataAbove_1_Cols = len(staticDataAbove_1[0])              #Columnas staticDataAbove_1.
+                staticDataAbove_2_Cols = len(staticDataAbove_2[0])              #Columnas staticDataAbove_2.
                 staticDataBelow_1_Cols = len(staticDataBelow_1[0])              #Columnas staticDataBelow_1.
                 #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla 
                 #editable para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden 
@@ -206,7 +222,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             #tabla QTableWidget(), este siempre recibe como parámetro un objeto QtGui.QColor(), 
                             #el cual a su vez recibe como parámetro el color de fondo en formato rgb, hexadecimal
                             #o string.
-                            itemAbove1.setBackground(QtGui.QColor('#4f81bd'))
+                            itemAbove1.setBackground(QtGui.QColor('#4f81bd'))   #Color de celdas.
                             #QtWidgets.QTableWidgetItem().setFont(): Este método sirve para indicar el estilo de 
                             #letra que se usará en el texto de la celda, para ello recibe como parámetro un 
                             #objeto QtGui.QFont(), el cual a su vez puede indicar su tipo de letra y tamaño. Si 
@@ -229,7 +245,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             #A los objetos QtGui.QFont() se les pueden aplicar los siguientes métodos, pero es 
                             #muy importante que para que esto funcione, primero se cree el objeto, luego se 
                             #aplique el método y finalmente esa variable se asigne al método .setFont():
-                            # setFamily(family): Establece la familia de fuentes para la fuente.
+                            # - setFamily(family): Establece la familia de fuentes para la fuente.
                             # - setPointSize(size): Establece el tamaño del punto de la fuente.
                             # - setPointSizeF(size): Establece el tamaño de punto flotante de la fuente.
                             # - setBold(bold): Establece si la fuente es negrita.
@@ -257,21 +273,21 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             #color del texto de una celda de una tabla, este siempre recibe como parámetro un 
                             #objeto QtGui.QColor(), el cual a su vez recibe como parámetro el color de texto en 
                             #formato rgb, hexadecimal o string.
-                            itemAbove1.setForeground(QtGui.QColor('white'))
+                            itemAbove1.setForeground(QtGui.QColor('white'))     #Color de letra blanco.
                             #QtWidgets.QTableWidget().setSpan(): El método .setSpan() permite fusionar un 
                             #conjunto de celdas que se encuentren una alado de la otra (adyacentes) en una sola 
                             #celda más grande dentro de una tabla, osea un objeto QtWidgets.QTableWidget(), para 
-                            #ello se deben indicar lo siguiente: setSpan(row, column, rowSpan, columnSpan)
-                            # - row: Índice de fila (y o vertical) de la tabla desde donde se quiere empezar 
-                            #   a fusionar las celdas.
-                            # - column: Índice de columna (x u horizontal) de la tabla desde donde se quiere 
+                            #ello se deben indicar lo siguiente: setSpan(inicio_y, inicio_x, alto, ancho).
+                            # - inicio_y: Índice de fila ("y" o vertical) de la tabla desde donde se quiere 
                             #   empezar a fusionar las celdas.
-                            # - rowSpan: Número de filas que se fusionarán a partir de la celda especificada por 
-                            #   row y column.
-                            # - columnSpan: Número de columnas que se fusionarán a partir de la celda 
-                            #   especificada por row y column.
-                            #A continuación se fusionarán todas las celdas de la 1era fila de la tabla.
-                            table.setSpan(i, 0, 1, staticDataAbove_1_Cols)
+                            # - inicio_x: Índice de columna ("x" u horizontal) de la tabla desde donde se quiere 
+                            #   empezar a fusionar las celdas.
+                            # - alto: Número de filas que se fusionarán a partir de la celda especificada por 
+                            #   inicio_y e inicio_x.
+                            # - ancho: Número de columnas que se fusionarán a partir de la celda especificada por 
+                            #   inicio_y e inicio_x.
+                            #A continuación, se fusionarán todas las celdas de la 1era fila de la tabla.
+                            table.setSpan(i, 1, 1, staticDataAbove_1_Cols)
                         elif (i != 0 and j == 1):       #Azul obscuro:  Columna 2 = (Todas las filas menos la primera, 1)
                             itemAbove1.setBackground(QtGui.QColor('#0070c0'))
                         else:                           #Gris azulado:  Todas las demás celdas.
@@ -282,7 +298,28 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         #QtWidgets.QTableWidget().setItem(): El método setItem() se aplica a un objeto 
                         #QTableWidget() y se utiliza para establecer un objeto QTableWidgetItem() en una posición 
                         #específica dentro de una tabla.
-                        table.setItem(i, j, itemAbove1)
+                        table.setItem(i, (j + 1), itemAbove1)
+                #STATIC DATA ABOVE 2:
+                for (i, row_data) in (enumerate(staticDataAbove_2)): #Bucle que recorre las filas de la tabla.
+                    for (j, value) in (enumerate(row_data)):         #Bucle que recorre las columnas de la tabla.
+                        itemAbove2 = QtWidgets.QTableWidgetItem(str(value))     #Celdas individuales de la tabla.
+                        #Texto alineado a la izquierda horizontalmente y en medio de la celda verticalmente.
+                        itemAbove2.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+                        font = QtGui.QFont()                                    #Tipo de letra en negritas.
+                        font.setBold(True)                                      #Tipo de letra en negritas.
+                        #Fusionar celdas: setSpan(inicio_y, inicio_x, alto, ancho).
+                        table.setSpan((i + staticDataAbove_1_Rows + 1), 0, 1, staticDataAbove_2_Cols)
+                        if i == 0:                      #Color azul:    Fila 1 = (0, Ninguna Columna)
+                            itemAbove2.setBackground(QtGui.QColor('#4f81bd'))   #Color de celdas.
+                            itemAbove2.setFont(font)                            #Tipo de letra en negritas.
+                        elif (i == 1 or i == 4 or i == 7):#Letra subrayada y en negritas: Filas 2, 5 y 8.
+                            itemAbove2.setBackground(QtGui.QColor('white'))     #Color de celdas.
+                            font.setUnderline(True)                             #Letra subrayada.
+                            itemAbove2.setFont(font)                            #Letra subrayada y en negritas.
+                        else:                           #Color blanco:  Todas las demás celdas.
+                            itemAbove2.setBackground(QtGui.QColor('white'))     #Color de celdas.
+                        #Colocar agrupación de datos.
+                        table.setItem((i + staticDataAbove_1_Rows + 1), j, itemAbove2)
 
                 #AGREGACIÓN DE DATOS EXTRAÍDOS DE UNA DATABASE DENTRO DE UNA TABLA:
                 #Establecer colores para filas y columnas de la tabla con datos extraídos del database. 
@@ -324,7 +361,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         #de dejar un espacio entre ellos, por eso es que se debe sumar un 1 al número de filas 
                         #más el número de filas de la tabla o tablas superiores, pero para dejar un espacio entre 
                         #ellas los datos inferiores deberán aumentar en 1 el espacio.
-                        table.setItem((i + staticDataAbove_1_Rows + 1), j, celda_Db)
+                        table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), j, celda_Db)
                 
                 #AGREGACIÓN DE DATOS ESTÁTICOS INFERIORES EN LA TABLA:
                 #Establecer colores para filas y columnas de la tabla con datos estáticos que se encuentren 
@@ -335,47 +372,46 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         itemBelow1.setTextAlignment(QtCore.Qt.AlignCenter)    #Alineación del texto en medio.
                         font = QtGui.QFont()                                #Tipo de letra en negritas.
                         font.setBold(True)                                  #Tipo de letra en negritas.
-                        if i == 0:                      #Color azul:    Fila 1 = (0, Ninguna Columna)
-                            itemBelow1.setBackground(QtGui.QColor('#4472c4'))   #Color de celdas.
-                            itemBelow1.setFont(font)                            #Letra en negritas.
+                        if i == 0:
+                            itemBelow1.setBackground(QtGui.QColor('white')) #Color de celdas.
+                            font.setUnderline(True)                         #Letra subrayada.
+                            itemBelow1.setFont(font)                        #Letra subrayada y en negritas.
+                            #Texto alineado a la izquierda horizontalmente y en medio de la celda verticalmente.
+                            itemBelow1.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
                             #QtWidgets.QTableWidget().setSpan(): El método .setSpan() permite fusionar un 
                             #conjunto de celdas que se encuentren una alado de la otra (adyacentes) en una sola 
                             #celda más grande dentro de una tabla, osea un objeto QtWidgets.QTableWidget(), para 
-                            #ello se deben indicar lo siguiente: setSpan(inicio_y, inicio_x, ancho, alto).
+                            #ello se deben indicar lo siguiente: setSpan(inicio_y, inicio_x, alto, ancho).
                             #Cabe mencionar que como entre las agrupaciones de datos dentro de la tabla se está 
                             #considerando un espacio de separación, se debe sumar + 1 cada que se agrega una 
                             #nueva agrupación de datos, además de que se debe considerar específicamente la 
                             #posición de la fila donde se quiere fusionar las celdas.
-                            table.setSpan((i + staticDataAbove_1_Rows + db_numRows + 1 + 2), 0, 1, staticDataBelow_1_Cols)
-                        elif i == 1:                    #Gris azulado:  Fila 2 = (1, Ninguna Columna)
+                            table.setSpan((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), 0, 1, staticDataBelow_1_Cols)
+                        elif i == 1:                    #Color azul:    Fila 1 = (0, Ninguna Columna)
+                            itemBelow1.setBackground(QtGui.QColor('#4472c4'))   #Color de celdas.
+                            itemBelow1.setFont(font)                            #Letra en negritas.
+                        elif i == 2:                    #Gris azulado:  Fila 2 = (1, Ninguna Columna)
                             itemBelow1.setBackground(QtGui.QColor('#A7BFDE'))   #Color de celdas.
                             itemBelow1.setFont(font)                            #Letra en negritas.
-                        elif (i != (0 & 1) and j == 0): #Color verde:   Columna 1 = (Todas las filas menos las primeras 2, 0)
+                            #QtWidgets.QTableWidget().setSpan(): El método .setSpan() permite fusionar un 
+                            #conjunto de celdas que se encuentren una alado de la otra (adyacentes) en una sola 
+                            #celda más grande dentro de una tabla, osea un objeto QtWidgets.QTableWidget(), para 
+                            #ello se deben indicar lo siguiente: setSpan(inicio_y, inicio_x, alto, ancho).
+                            #Se debe considerar específicamente la posición de la fila donde se quiere fusionar 
+                            #las celdas.
+                            table.setSpan((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), 0, 1, staticDataBelow_1_Cols)
+                        elif (i != (0 & 1 & 2) and j == 0): #Color verde:   Columna 1 = (Todas las filas menos las primeras 2, 0)
                             itemBelow1.setBackground(QtGui.QColor('#5EC268'))   #Color de celdas.
                             itemBelow1.setFont(font)                            #Letra en negritas.
-                        elif (i != (0 & 1) and j == 1): #Color gris:    Columna 2 = (Todas las filas menos las primeras 2, 0)
-                            itemBelow1.setBackground(QtGui.QColor('#D0CECE'))
+                        elif (i != (0 & 1 & 2) and j == 1): #Color gris:    Columna 2 = (Todas las filas menos las primeras 2, 0)
+                            itemBelow1.setBackground(QtGui.QColor('gray'))
                         else:                           #Color amarillo: Todas las demás celdas.
                             itemBelow1.setBackground(QtGui.QColor('#FFF2CC'))
                         #QtWidgets.QTableWidget().setItem(): Método para establecer cada celda en una posición 
                         #específica dentro de una tabla. Es importante tomar en cuenta los espacios entre las
                         #agrupaciones de datos que se incluyen en la tabla, además de las filas de todas las 
                         #agrupaciones de datos anteriores.
-                        table.setItem((i + staticDataAbove_1_Rows + db_numRows + 1 + 1), j, itemBelow1)
-
-                #REDIMENSIONAR EL ANCHO DE LAS CELDAS DE LAS COLUMNAS PARA MOSTRAR SU CONTENIDO COMPLETO:
-                #QtWidgets.QTableWidget().columnCount(): El método columnCount() devuelve un número entero que 
-                #representa el número de columnas de un objeto QtWidgets.QTableWidget().
-                for column in range(table.columnCount()):
-                    #QtWidgets.QTableWidget().resizeColumnToContents(): Este método se utiliza para ajustar 
-                    #automáticamente el ancho de la columna de una tabla QtWidgets.QTableWidget().  
-                    table.resizeColumnToContents(column)
-                    #QtWidgets.QTableWidget().setColumnWidth(): Cuando el método resizeColumnToContents() por 
-                    #alguna razón no haya redimensionado automáticamente de forma correcta el ancho de una 
-                    #columna, esto se puede forzar a través del método setColumnWidth(), en el cual se indica
-                    #el índice de la columna contando desde cero en su primer parámetro y el ancho en pixeles 
-                    #en su segundo parámetro.
-                    table.setColumnWidth(3, 400)
+                        table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), j, itemBelow1)
                 
                 #QtWidgets.QGridLayout(): La variable self.contenedorVertical es un contenedor matricial, y a 
                 #través de indicar que la tabla se coloque en la posición (0,0) nos aseguramos que aunque la 
