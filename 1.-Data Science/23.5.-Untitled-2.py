@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pyodbc
-import pandas
+import pandas as pd
 import traceback
 
 class DatabaseExcelHandler:
@@ -28,9 +28,9 @@ class DatabaseExcelHandler:
             self.cursor.execute(SQL_Query_string)
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
-            dataFramePandas = pandas.DataFrame([tuple(row) for row in resultProxy], columns=[column[0] for column in self.cursor.description])
+            dataFramePandas = pd.DataFrame([tuple(row) for row in resultProxy], columns=[column[0] for column in self.cursor.description])
             print(dataFramePandas, "\n")
-            dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
+            dataFramePandas['fecha_publicacion'] = pd.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             finalData = []
             compareDicc = [{
@@ -64,9 +64,63 @@ class DatabaseExcelHandler:
                         "Titulo": filtered_dataBase["titulo"],
                         "Fecha de Publicacion": filtered_dataBase["fecha_publicacion"]
                     })
-            finalDataFrame = pandas.DataFrame(data = finalData)
-            with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
-                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True, engine = 'xlsxwriter')
+            finalDataFrame = pd.DataFrame(data = finalData)
+            
+            # staticDataAbove_1
+            static_data_above_1 = [
+                ['Title A1.1', 'Title A1.2', 'Title A1.3'],
+                ['Static Row 1', '', '', '', '', '', ''],
+                ['Static Row 2', '', '', '', '', '', ''],
+                ['Static Row 3', '', '', '', '', '', ''],
+                ['Static Row 4', '', '', '', '', '', ''],
+                ['Static Row 5', '', '', '', '', '', ''],
+                ['Static Row 6', '', '', '', '', '', '']
+            ]
+            
+            # staticDataAbove_2
+            static_data_above_2 = [
+                ['Title A2', '', '', '', '', '', ''],
+                ['Subtitle A2.1', '', '', '', '', '', ''],
+                ['Static Row 1', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['Subtitle A2.2', '', '', '', '', '', ''],
+                ['Static Row 2', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['Subtitle A2.3', '', '', '', '', '', ''],
+                ['Static Row 3', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
+            ]
+
+            # staticDataBelow_1
+            static_data_below_1 = [
+                ['Title B1', '', '', '', '', '', ''],
+                ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
+                ['Subtitle 1', '', '', '', '', '', ''],
+                ['Static Row 1', '', '', '', '', '', ''],
+                ['Static Row 2', '', '', '', '', '', ''],
+                ['Static Row 3', '', '', '', '', '', ''],
+                ['Static Row 4', '', '', '', '', '', ''],
+                ['Static Row 5', '', '', '', '', '', ''],
+                ['Static Row 6', '', '', '', '', '', ''],
+                ['Static Row 7', '', '', '', '', '', ''],
+                ['Subtitle 2', '', '', '', '', '', ''],
+                ['Static Row 1', '', '', '', '', '', '']
+            ]
+            
+            with pd.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
+                # Escribir staticDataAbove_1
+                pd.DataFrame(static_data_above_1).to_excel(excel_writer=objetoExcel, index=False, header=False)
+                
+                # Escribir finalDataFrame
+                finalDataFrame.to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + 1)
+                
+                # Escribir staticDataAbove_2
+                pd.DataFrame(static_data_above_2).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + 3, header=False)
+                
+                # Escribir staticDataBelow_1
+                pd.DataFrame(static_data_below_1).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + len(static_data_above_2) + 5, header=False)
+
                 workbook = objetoExcel.book
                 worksheet = objetoExcel.sheets['Sheet1']
                 blue_format = workbook.add_format({'bg_color': '#0000FF'})

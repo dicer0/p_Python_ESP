@@ -16,8 +16,8 @@
 #datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
 #Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
 #una conexión ODBC.
-#No es que exista una manera mejor de manejar los datos, sino que dependiendo de la base de datos que se quiera 
-#utilizar, a veces conviene utilizar una librería en vez de otra.
+#No es que exista una mejor librería de manejo de datos, sino que dependiendo de la base de datos a la que nos 
+#queramos conectar, a veces conviene utilizar una biblioteca en vez de otra.
 # - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
 # - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
 import pyodbc
@@ -47,7 +47,7 @@ class DatabaseExcelHandler:
     def __connect_to_database(self):
         #CONFIGURAR LA CONEXIÓN A DISTINTOS TIPOS DE BASES DE DATOS: Para ello de igual manera se debe realizar 
         #la instalación de diferentes librerías.
-        #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
+        #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o 3 partes, try, except y finally: 
         # - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción 
         #   durante su ejecución, el programa brinca al código del except.
         # - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando 
