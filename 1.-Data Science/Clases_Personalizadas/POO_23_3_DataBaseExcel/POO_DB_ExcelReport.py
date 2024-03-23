@@ -160,7 +160,44 @@ class DatabaseExcelHandler:
             # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
             dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
             print(dataFramePandas, "\n")
-            #pandas.to_datetime(): Convertir la columna de fecha_publicacion a formato de fecha--------------------
+            #pandas.to_datetime(): Este método se utiliza para convertir un objeto iterable como una lista, tupla, 
+            #DataFrame, Serie de Pandas, etc. que contiene fechas o marcas de tiempo en un objeto de tipo DateTime.
+            #pandas.to_datetime().dt: El atributo .dt proporciona acceso a una serie de métodos para obtener o 
+            #manipular las fechas/horas de su objeto DateTime. Algunas de las cosas que se pueden hacer con el 
+            #atributo .dt son:
+            # - Fechas/horas individuales: Se puede acceder al año, mes, día, hora, minuto, segundo, etc.
+            #       - Obtener el año:               pandas.DataFrame['key_ObjetoDateTime'].dt.year 
+            #       - Obtener el mes:               pandas.DataFrame['key_ObjetoDateTime'].dt.month
+            #       - Obtener el día:               pandas.DataFrame['key_ObjetoDateTime'].dt.day
+            #       - Obtener la hora:              pandas.DataFrame['key_ObjetoDateTime'].dt.hour
+            #       - Obtener el día de la semana:  pandas.DataFrame['key_ObjetoDateTime'].dt.dayofweek
+            # - Convertir el formato de fecha/hora: Especifica el formato de fecha y hora que se utilizará para 
+            #   mostrar el objeto DateTime, para ello se debe proporcionar un código que indique algún formato 
+            #   compatible con la sintaxis de strftime de Python:
+            #       - %Y: Año con cuatro dígitos (ejemplo: 2022).
+            #       - %y: Año con dos dígitos (ejemplo: 22).
+            #       - %m: Mes como número decimal (01-12).
+            #       - %d: Día del mes como número decimal (01-31).
+            #       - %H: Hora (00-23).
+            #       - %I: Hora (01-12).
+            #       - %p: AM o PM.
+            #       - %M: Minuto (00-59).
+            #       - %S: Segundo (00-59).
+            #       - %f: Microsegundos (000000-999999).
+            #       - %j: Día del año (001-366).
+            #       - %U: Número de semana del año, comenzando por el domingo (00-53).
+            #       - %W: Número de semana del año, comenzando por el lunes (00-53).
+            #       - %a: Nombre corto del día de la semana (Sun, Mon, etc.).
+            #       - %A: Nombre completo del día de la semana (Sunday, Monday, etc.).
+            #       - %b: Nombre corto del mes (Jan, Feb, etc.).
+            #       - %B: Nombre completo del mes (January, February, etc.).
+            #       - %c: Representación de la fecha y hora local.
+            #       - %x: Representación de la fecha local.
+            #       - %X: Representación de la hora local.
+            # - Calcular diferencias de tiempo: Se pueden calcular diferencias de tiempo entre fechas y horas.
+            #       - pandas.DataFrame['DateTime_fecha_fin'] - pandas.DataFrame['DateTime_fecha_inicio']
+            # - Agregar o restar intervalos de tiempo: Se puede sumar o restar tiempo a las fechas y horas.
+            #       - pandas.DataFrame['DateTime_fecha'] + pandas.Timedelta(days = 1)
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             #En este caso lo que se hará es extraer datos de la base de datos, los cuales serán comparados con 
@@ -253,33 +290,6 @@ class DatabaseExcelHandler:
             # - mode: Controla cómo se manejarán los datos cuando se escriban en el archivo de Excel. 
             #       - 'w': Se utiliza para sobrescribir los datos del archivo.
             #       - 'a': Se usa para agregar datos al final del archivo.
-            # - options: Un diccionario que contiene opciones adicionales para el motor de escritura de Excel.
-            # - datetime_format: Especifica el formato de fecha y hora que se utilizará para escribir en el Excel.
-            #   Se debe proporcionar un código que indique un formato compatible con la sintaxis de strftime de 
-            #   Python:
-            #       - %Y: Año con cuatro dígitos (ejemplo: 2022).
-            #       - %y: Año con dos dígitos (ejemplo: 22).
-            #       - %m: Mes como número decimal (01-12).
-            #       - %d: Día del mes como número decimal (01-31).
-            #       - %H: Hora (00-23).
-            #       - %I: Hora (01-12).
-            #       - %p: AM o PM.
-            #       - %M: Minuto (00-59).
-            #       - %S: Segundo (00-59).
-            #       - %f: Microsegundos (000000-999999).
-            #       - %j: Día del año (001-366).
-            #       - %U: Número de semana del año, comenzando por el domingo (00-53).
-            #       - %W: Número de semana del año, comenzando por el lunes (00-53).
-            #       - %a: Nombre corto del día de la semana (Sun, Mon, etc.).
-            #       - %A: Nombre completo del día de la semana (Sunday, Monday, etc.).
-            #       - %b: Nombre corto del mes (Jan, Feb, etc.).
-            #       - %B: Nombre completo del mes (January, February, etc.).
-            #       - %c: Representación de la fecha y hora local.
-            #       - %x: Representación de la fecha local.
-            #       - %X: Representación de la hora local.
-            # - date_format: Especifica el formato de solo fecha que se utilizará para escribir en el Excel.
-            #   Se debe proporcionar un código de formato strftime, igual que como se hacía con el parámetro 
-            #   anterior.
             # - float_format: Especifica el formato de punto decimal (flotante) que se utilizará al escribir 
             #   números.
             #       - {:.2f}: Formatea el número con dos decimales.
