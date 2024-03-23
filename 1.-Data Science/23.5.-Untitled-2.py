@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pyodbc
-import pandas as pd
+import pandas
 import traceback
 
 class DatabaseExcelHandler:
@@ -28,9 +28,10 @@ class DatabaseExcelHandler:
             self.cursor.execute(SQL_Query_string)
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
-            dataFramePandas = pd.DataFrame([tuple(row) for row in resultProxy], columns=[column[0] for column in self.cursor.description])
+            cursorRows = [tuple(row) for row in resultProxy]
+            dataFramePandas = pandas.DataFrame(data = cursorRows, columns = [column[0] for column in self.cursor.description])
             print(dataFramePandas, "\n")
-            dataFramePandas['fecha_publicacion'] = pd.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
+            dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             finalData = []
             compareDicc = [{
@@ -64,7 +65,7 @@ class DatabaseExcelHandler:
                         "Titulo": filtered_dataBase["titulo"],
                         "Fecha de Publicacion": filtered_dataBase["fecha_publicacion"]
                     })
-            finalDataFrame = pd.DataFrame(data = finalData)
+            finalDataFrame = pandas.DataFrame(data = finalData)
             
             # staticDataAbove_1
             static_data_above_1 = [
@@ -108,18 +109,18 @@ class DatabaseExcelHandler:
                 ['Static Row 1', '', '', '', '', '', '']
             ]
             
-            with pd.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
+            with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
                 # Escribir staticDataAbove_1
-                pd.DataFrame(static_data_above_1).to_excel(excel_writer=objetoExcel, index=False, header=False)
+                pandas.DataFrame(static_data_above_1).to_excel(excel_writer=objetoExcel, index=False, header=False)
                 
                 # Escribir finalDataFrame
                 finalDataFrame.to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + 1)
                 
                 # Escribir staticDataAbove_2
-                pd.DataFrame(static_data_above_2).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + 3, header=False)
+                pandas.DataFrame(static_data_above_2).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + 3, header=False)
                 
                 # Escribir staticDataBelow_1
-                pd.DataFrame(static_data_below_1).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + len(static_data_above_2) + 5, header=False)
+                pandas.DataFrame(static_data_below_1).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + len(static_data_above_2) + 5, header=False)
 
                 workbook = objetoExcel.book
                 worksheet = objetoExcel.sheets['Sheet1']

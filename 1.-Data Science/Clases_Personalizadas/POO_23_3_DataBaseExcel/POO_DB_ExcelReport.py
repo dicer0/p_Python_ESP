@@ -94,22 +94,60 @@ class DatabaseExcelHandler:
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
             #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos a través 
-            #de un objeto cursor, se puede realizar una consulta a la base de datos con SQL y lo que devuelve es un 
-            #objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
+            #de un objeto cursor, se puede realizar una consulta a la base de datos con SQL.
             self.cursor.execute(SQL_Query_string)
             #pyodbc.connect().cursor().execute().fetchall(): Después de ejecutar la consulta, se llama a este método 
-            #en el cursor para recuperar todos los resultados de la consulta. Devuelve una lista que contiene todas 
-            #las filas de resultados de la consulta. Cada fila de la lista es una tupla que contiene los valores de 
-            #las columnas de esa fila.
+            #en el cursor para recuperar todos los resultados de la consulta, el cual devuelve una lista de tuplas 
+            #que contiene todas las filas de resultados de la consulta. Cada fila de la lista es una tupla que 
+            #incluye los valores de las columnas de esa fila. Pero cabe mencionar que se deberá realizar una 
+            #conversión futura de tupla a tupla, que no cambia nada de los datos, pero sirve para que el programa 
+            #identifique que está lidiando con una lista de tuplas, sino cree que es una lista de 1 elemento.
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
+            #TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia que estos pueden tener es que algunos 
+            #tienen cierto órden (índice y valor) y otros no, además de que algunos son editables o mutables, donde 
+            #se les puede agregar, eliminar, o modificar elementos y otros son inmutables, donde sus datos no se 
+            #pueden cambiar.
+            # - Listas (list): Una lista es una colección ordenada y mutable (editable) de elementos. Se definen 
+            #   utilizando corchetes [].
+            #       Ejemplo: mi_lista = [1, 2, "hola", True].
+            # - Tuplas (tuple): Una tupla es una colección ordenada e inmutable de elementos. Se definen utilizando 
+            #   paréntesis ().
+            #       Ejemplo: mi_tupla = (1, 2, "hola", True).
+            # - Diccionarios (dict): Un diccionario es una colección desordenada y mutable de pares clave-valor. Se 
+            #   definen utilizando llaves {} y separando cada par clave-valor por dos puntos :.
+            #       Ejemplo: mi_diccionario = {"nombre": "Juan", "edad": 30, "ciudad": "Madrid"}.
+            # - Conjuntos (set): Un conjunto es una colección desordenada y mutable de elementos únicos. No permite 
+            #   elementos duplicados y no tiene un orden definido. Se definen utilizando llaves {} o utilizando la 
+            #   función set().
+            #       Ejemplo: mi_conjunto = {1, 2, 3, 4, 5}.
+            #ES MUY IMPORTANTE MENCIONAR QUE: Cuando obtenemos datos de una database utilizando PyODBC u otra 
+            #librería similar como SQLAlchemy, los datos generalmente se obtienen como una lista de tuplas, donde 
+            #cada tupla representa una fila de la tabla. Pero cuando queramos convertir esto a un DataFrame para 
+            #manejar mejor los datos al introducirlos en un Excel, debemos realizar de forma explícita la conversión 
+            #de las tuplas internas a tuplas, ya que sino el programa podría pensar que es una lista de 1 sola 
+            #columna en vez de detectar que se encuentra con una lista de varias columnas, para ello se puede usar 
+            #un bucle for de una sola línea, la cual se conforma de la siguiente sintaxis:
+            #   resultadoBucleFor = [acción_Realizada      for     variable_Interna_i    in     estructura_De_Datos]
+            cursorRows = [tuple(row) for row in resultProxy]            #Conversión explícita de las filas a tuplas.
+            #pyodbc.connect().cursor().description: El atributo description perteneciente al objeto cursor de la 
+            #librería PyODBC sirve para proporcionar información sobre las columnas de un Query en una tupla de 
+            #tuplas, las cuales indican lo siguiente en ese específico órden:
+            # - Nombre de la columna: El nombre de la columna tal como está en la base de datos.
+            # - Tipo de datos de la columna: El tipo de datos de la columna según la base de datos.
+            # - Tamaño de la columna (en bytes): El tamaño máximo de la columna en bytes.
+            # - Bytes reservados para la columna: El número de bytes reservados para la columna puede ser None.
+            # - Dígitos de precisión: El número de dígitos de precisión para tipos numéricos puede ser None.
+            # - Dígitos decimales: El número de dígitos decimales para tipos numéricos puede ser None.
+            # - Indicador de si la columna puede ser NULL: Si se puede contener valores NULL (True) o no (False).
+            cursorCols = [col[0] for col in self.cursor.description]    #Obtención del título de las columnas.
             #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos 
             #matricial en forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de 
             #manera eficiente para realizar diversas operaciones de análisis de datos, su constructor recibe los 
             #siguientes parámetros:
             # - data: Este es el parámetro principal que especifica los datos que se utilizarán para crear el 
-            #   DataFrame. Puede ser un diccionario, una lista de listas, un numpyArray, otra estructura de datos 
-            #   de Pandas (como otro DataFrame o una Serie), etc.
+            #   DataFrame. Puede ser un diccionario, una lista de listas, lista de tuplas, un numpyArray, otra 
+            #   estructura de datos de Pandas (como otro DataFrame o una Serie), etc.
             # - index (opcional): Este parámetro especifica las etiquetas de índice para las filas del DataFrame. 
             #   Puede ser una lista, una matriz, una Serie, etc. Si no se especifica, se utilizarán índices 
             #   enteros.
@@ -118,9 +156,9 @@ class DatabaseExcelHandler:
             #       - .keys(): Como los objetos ResultProxy se manejan como diccionarios, se puede obtener el 
             #         nombre de sus etiquetas (keys) para de esa manera asignar los nombres de las columnas de un 
             #         DataFrame, pero si se quisiera obtener sus valores, no existe un método .values(), se debe 
-            #         acceder de otra forma. 
+            #         acceder de otra forma.
             # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
-            dataFramePandas = pandas.DataFrame([tuple(row) for row in resultProxy], columns=[column[0] for column in self.cursor.description])
+            dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
             print(dataFramePandas, "\n")
             #pandas.to_datetime(): Convertir la columna de fecha_publicacion a formato de fecha------------------------
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
