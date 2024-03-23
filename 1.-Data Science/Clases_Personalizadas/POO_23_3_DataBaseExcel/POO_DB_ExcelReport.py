@@ -11,7 +11,7 @@
 #Registro: También conocido como "fila" o "tupla", representa una instancia individual de una entidad en la tabla. 
 #Cada registro contiene los valores de los atributos correspondientes a esa instancia específica de la entidad.
 
-#PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
+#PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open DataBase 
 #Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
 #datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
 #Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
@@ -160,7 +160,7 @@ class DatabaseExcelHandler:
             # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
             dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
             print(dataFramePandas, "\n")
-            #pandas.to_datetime(): Convertir la columna de fecha_publicacion a formato de fecha------------------------
+            #pandas.to_datetime(): Convertir la columna de fecha_publicacion a formato de fecha--------------------
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             #En este caso lo que se hará es extraer datos de la base de datos, los cuales serán comparados con 
@@ -168,7 +168,7 @@ class DatabaseExcelHandler:
             #algunos datos de la database (DB), se extraerán algunos otros de la lista de diccionarios y se 
             #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte 
             #y posteriormente mostrada a su vez en una GUI de PyQt5.
-            finalData = []  #Array que almacenará lo que trae el ORM de la base de datos.
+            finalData = []  #Array que almacenará los datos que trae PyODBC del DataBase.
             compareDicc = [{
                 "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
                 "datoStatic": "Dato grupo 1",         
@@ -186,12 +186,12 @@ class DatabaseExcelHandler:
 
             #CREAR UN ARRAY QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
             #bucle for each: Es un bucle que recorre la lista de diccionarios compareDicc, por lo que la variable 
-            #filter_item lleva contenidos todos los diccionarios en cada iteración, uno por uno.
+            #indDicc lleva contenidos todos los diccionarios en cada iteración, uno por uno.
             for indDicc in compareDicc:
                 filtered_rows = []  #Lista vacía para almacenar los elementos extraídos de la base de datos.
                 #pandas.DataFrame().iterrows(): El método iterrows() se debe aplicar a algun objeto de la clase 
-                #DataFrame y siempre se encontrar como parámetro de un bucle for ya que este recorre todos los 
-                #datos de su DataFrame, devolviendo una tupla que indica el índice de cada fila y su contenido.  
+                #DataFrame y siempre se encontrará como parámetro de un bucle for, ya que este recorre todos los 
+                #datos de su DataFrame, devolviendo una tupla que indica el índice de cada fila y su contenido.
                 for (index, row) in (dataFramePandas.iterrows()):
                     #En este punto con el contenido de las filas del DataFrame y la variable que recorre la lista 
                     #de diccionarios es donde se pueden realizar las comparaciones para filtrar los datos.
@@ -204,7 +204,7 @@ class DatabaseExcelHandler:
                 #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones del 
                 #filtro, se añaden y organizan los datos del DataFrame final que queremos obtener.
                 for filtered_dataBase in filtered_rows:
-                    #De igual manera se pueden agregar valores solo cuando se cumpla una condición en la variable
+                    #De igual manera, se pueden agregar valores solo cuando se cumpla una condición en la variable
                     #filtered_dataBase, para ello se utilizan condicionales de una sola línea que llevan la 
                     #siguiente sintaxis:
                     #variable =   valor_si_verdadero        if      condicion       else        valor_si_falso
@@ -232,7 +232,7 @@ class DatabaseExcelHandler:
                         "Fecha de Publicacion": filtered_dataBase["fecha_publicacion"]
                     })
             #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
-            #columnas en su constructor. 
+            #columnas en su constructor, se pasa directamente a su parámetro data.
             finalDataFrame = pandas.DataFrame(data = finalData)
 
             #GUARDAR UN DATAFRAME EN UN EXCEL, INDICANDO SU FORMATO ESTÁTICO, NO UNO QUE DEPENDA DE LOS DATOS:
