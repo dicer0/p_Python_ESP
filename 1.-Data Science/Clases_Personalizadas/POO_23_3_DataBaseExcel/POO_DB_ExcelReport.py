@@ -88,15 +88,14 @@ class DatabaseExcelHandler:
         try:
             #OBTENCIÓN DE DATOS DE LA BASE DE DATOS: Ya que estemos seguros que la conexión a la base de datos 
             #se ha realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta 
-            #información, esto se realiza a través de la variable que haya utilizado el método .connect(), el 
-            #método .execute() y .text().  
+            #información, esto se realiza a través de la variable que haya utilizado el método .connect() y el 
+            #método .cursor() de la librería pyodbc.
             SQL_Query_string =  """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
-            #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos, a 
-            #través de un objeto de variable textual (text) se puede realizar una consulta a la base de datos con 
-            #SQL y lo que devuelve es un objeto llamado ResultProxy, el cual en algunas cosas se maneja como un 
-            #diccionario.
+            #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos a través 
+            #de un objeto cursor, se puede realizar una consulta a la base de datos con SQL y lo que devuelve es un 
+            #objeto llamado ResultProxy, el cual en algunas cosas se maneja como un diccionario.
             self.cursor.execute(SQL_Query_string)
             #pyodbc.connect().cursor().execute().fetchall(): Después de ejecutar la consulta, se llama a este método 
             #en el cursor para recuperar todos los resultados de la consulta. Devuelve una lista que contiene todas 
