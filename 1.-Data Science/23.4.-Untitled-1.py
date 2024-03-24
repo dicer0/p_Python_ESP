@@ -93,6 +93,10 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['Subtitle 2', '', '', '', '', '', ''],
                     ['Static Row 1', '', '', '', '', '', '']
                 ]
+                headers = resultDataFrame.columns.tolist()
+                resultDataFrame.loc[-1] = headers
+                resultDataFrame.index = resultDataFrame.index + 1
+                resultDataFrame = resultDataFrame.sort_index()
                 (db_numRows, db_numCols) = resultDataFrame.shape
                 totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1)
                 staticDataAbove_1_Rows = len(staticDataAbove_1)
@@ -201,7 +205,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         limiteAltura = 100
                         alturaMaxCelda = min(alturaCelda, limiteAltura)
                         table.setRowHeight(row, alturaMaxCelda)
-
                 
                 self.mainLayout.addWidget(table, 0, 0)
         except Exception as errorDatabaseExcelHandler:

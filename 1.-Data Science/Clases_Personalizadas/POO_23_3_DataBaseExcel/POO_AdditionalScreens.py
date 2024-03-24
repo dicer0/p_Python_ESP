@@ -92,14 +92,14 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         self.contenedorVertical = QtWidgets.QGridLayout()
 
         #AÑADIR WIDGETS A LOS CONTENEDORES:
-        #------------------------------------------CONTENEDOR MATRICIAL------------------------------------------
+        #------------------------------------------CONTENEDOR MATRICIAL-------------------------------------------
         contenedorMatricial.addWidget(texto_1, 0, 0)        #Añadir texto a la posición matricial (0,0).
         contenedorMatricial.addWidget(texto_2, 1, 0)        #Añadir texto a la posición matricial (1,0).
         contenedorMatricial.addWidget(confirmButton, 1, 2)  #Añadir botón a la posición matricial (1,2).
-        #------------------------------------------CONTENEDOR MATRICIAL------------------------------------------
-        #-------------------------------------------CONTENEDOR VERTICAL------------------------------------------
+        #------------------------------------------CONTENEDOR MATRICIAL-------------------------------------------
+        #-------------------------------------------CONTENEDOR VERTICAL-------------------------------------------
         self.contenedorVertical.addWidget(widgetContenedor, 1, 0)   #Añadir el contenedor a la posición (1,0).
-        #-------------------------------------------CONTENEDOR VERTICAL------------------------------------------
+        #-------------------------------------------CONTENEDOR VERTICAL-------------------------------------------
         
         #UNIR LOS CONTENEDORES EN UN SOLO WIDGET Y CENTRAR EL CONTENEDOR PRINCIPAL:
         centralWidget = QtWidgets.QWidget()                 #Widget que incluye todos los contenedores.
@@ -160,6 +160,46 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['Static Row 1', '', '', '', '', '', '']
                 ]
                 #TAMAÑO DE LA TABLA QUE CONTIENE TODAS LAS AGRUPACIONES DE DATOS:
+                #pandas.DataFrame().columns: El atributo .columns devuelve un objeto de tipo Index que representa 
+                #los nombres de las columnas de un DataFrame. Los objetos Index de igual manera se pueden utilizar
+                #de forma opcional para nombrar las filas, no solo las columnas. 
+                headers = resultDataFrame.columns       #Extraer objetos Index que dicen el nombre de las columnas.
+                #pandas.DataFrame().loc[]: El método .loc[] sirve para extraer o seleccionar datos dentro de un 
+                #DataFrame de las siguientes distintas formas:
+                # - Selección de filas y columnas por etiqueta (objeto Index): El método .loc[] se puede utilizar 
+                #   para seleccionar un subconjunto de filas y columnas de un DataFrame, esto se puede realizar 
+                #   indicando sus etiquetas de fila y columna o su número de fila y nombre de columna.
+                #       - subConjunto = pandas.DataFrame().loc['etiqueta_fila', 'etiqueta_columna']
+                #       - subConjunto = pandas.DataFrame().loc[numero_fila,     'etiqueta_columna']
+                # - Selección de una sola columna: Se puede utilizar la nomenclatura de dos puntos (:) para 
+                #   extraer todos los datos de una columna.
+                #       - columna = pandas.DataFrame().loc[:, 'etiqueta_columna']
+                # - Selección de múltiples filas y columnas: También se pueden seleccionar múltiples filas y 
+                #   columnas especificando de igual forma sus etiquetas o números.
+                #       - subConjunto = pandas.DataFrame().loc[['fila_1', 'fila_2'], ['columna_1', 'columna_2']]
+                # - Selección condicional de filas: Se puede seleccionar filas o columnas que cumplan con ciertas 
+                #   condiciones lógicas.
+                #       - subConjunto = pandas.DataFrame().loc[df['columna'] > 5]
+                # - Actualizar una fila existente: Se puede usar para actualizar valores en una fila existente.
+                #       - pandas.DataFrame().loc['etiqueta_fila'] = ['nuevo_valor1', 'nuevo_valor2']
+                # - Eliminar una fila: Si se pasa un valor None a una fila existente con el método loc[], se 
+                #   elimina esa fila del DataFrame.
+                #       - pandas.DataFrame().loc['etiqueta_fila'] = None
+                # - Añadir una nueva fila: Al pasar -1 como índice de fila, se añadirá una nueva fila al final del 
+                #   DataFrame.
+                #       - pandas.DataFrame().loc[-1] = ['nuevo_valor1', 'nuevo_valor2']
+                resultDataFrame.loc[-1] = headers       #Agregar los nombres de columnas al final del DataFrame.
+                #pandas.DataFrame().index: El atributo .index devuelve un objeto que indica los índices de las 
+                #filas de un DataFrame. Si los índices de las filas del dataframe son numéricos devuelve un 
+                #objeto RangeIndex y si son strings que nombran las filas devuelve un objeto Index. Pero el 
+                #chiste de este atributo es poder acceder y modificar los índices de un DataFrame, para así 
+                #manipular la posición existente de las filas, si se pone +1 se desplazan hacia abajo y si se 
+                #usa la operación -1 se desplazan hacia arriba 1 posición, pero al hacer esto, las filas se 
+                #reordenan por sí solas, donde la que estaba hasta abajo se coloca hasta arriba o viceversa.
+                resultDataFrame.index = resultDataFrame.index + 1   #Desplazar las filas 1 posición hacia abajo.
+                #pandas.DataFrame().sort_index(): El método .sort_index() se utiliza para ordenar o actualizar el 
+                #índice asignado a cada fila de un DataFrame. 
+                resultDataFrame = resultDataFrame.sort_index()      #Actualizar los índices asignados a las filas.
                 #pandas.DataFrame().shape: Para extraer el tamaño de un DataFrame se puede utilizar el atributo 
                 #shape de la clase DataFrame, el cual devuelve una tupla que indica su número de filas y 
                 #columnas: (filas, columnas) = pandas.DataFrame().shape

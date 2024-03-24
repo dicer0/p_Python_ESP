@@ -326,10 +326,7 @@ class DatabaseExcelHandler:
                 #   columna) del DataFrame en el archivo de Excel. El valor predeterminado es True.
                 # - merge_cells: Es un booleano que especifica si se deben fusionar las celdas que tengan columnas 
                 #   con encabezados duplicados. El valor predeterminado es True.
-                # - engine: Especifica el motor de escritura de Excel que se utilizará para escribir los datos, 
-                #   sus valores son los mismos que se indicaban en el objeto pandas.ExcelWriter. Si no se 
-                #   especifica, se utilizará el motor 'xlsxwriter'.
-                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True, engine = 'xlsxwriter')
+                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = 0, startcol = 0, header = True)
                 #Después de haber creado el objeto pandas.ExcelWriter y haber convertido el DataFrame a un excel 
                 #con el método .to_excel(), se debe extraer el book (archivo excel) y sheet (página dentro del 
                 #book) del Excel para darle formato al archivo, ambas cosas se deben almacenar en variables 
