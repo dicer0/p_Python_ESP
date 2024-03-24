@@ -116,16 +116,13 @@ class DatabaseExcelHandler:
             
             with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
                 # Escribir staticDataAbove_1
-                pandas.DataFrame(static_data_above_1).to_excel(excel_writer=objetoExcel, index=False, header=False)
-                
+                pandas.DataFrame(static_data_above_1).to_excel(excel_writer=objetoExcel, index = False, header = False)
                 # Escribir finalDataFrame
-                finalDataFrame.to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + 1)
-                
+                finalDataFrame.to_excel(excel_writer=objetoExcel, index=False, startrow = len(static_data_above_1) + 1)
                 # Escribir staticDataAbove_2
-                pandas.DataFrame(static_data_above_2).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + 3, header=False)
-                
+                pandas.DataFrame(static_data_above_2).to_excel(excel_writer=objetoExcel, index=False, startrow = len(static_data_above_1) + len(finalDataFrame) + 3, header = False)
                 # Escribir staticDataBelow_1
-                pandas.DataFrame(static_data_below_1).to_excel(excel_writer=objetoExcel, index=False, startrow=len(static_data_above_1) + len(finalDataFrame) + len(static_data_above_2) + 5, header=False)
+                pandas.DataFrame(static_data_below_1).to_excel(excel_writer=objetoExcel, index=False, startrow = len(static_data_above_1) + len(finalDataFrame) + len(static_data_above_2) + 5, header = False)
 
                 workbook = objetoExcel.book
                 worksheet = objetoExcel.sheets['Sheet1']
@@ -134,11 +131,11 @@ class DatabaseExcelHandler:
                 grey_format = workbook.add_format({'bg_color': '#D3D3D3'})
                 yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
                 (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
-                worksheet.conditional_format(0, 0, 0, columnasDataFrame - 1, {'type': 'no_blanks', 'format': blue_format})
-                worksheet.conditional_format(1, 0, filasDataFrame, 0, {'type': 'no_blanks', 'format': green_format})
-                worksheet.conditional_format(1, 1, filasDataFrame, 1, {'type': 'no_blanks', 'format': grey_format})
+                worksheet.conditional_format(8, 0, 8, columnasDataFrame - 1, {'type': 'no_blanks', 'format': blue_format})
+                worksheet.conditional_format(9, 0, filasDataFrame + 9, 0, {'type': 'no_blanks', 'format': green_format})
+                worksheet.conditional_format(9, 1, filasDataFrame + 9, 1, {'type': 'no_blanks', 'format': grey_format})
                 for col in range(2, columnasDataFrame):
-                    worksheet.conditional_format(1, col, filasDataFrame, col, {'type': 'no_blanks', 'format': yellow_format})
+                    worksheet.conditional_format(9, col, filasDataFrame + 9, col, {'type': 'no_blanks', 'format': yellow_format})
             return finalDataFrame
         except Exception as error:
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
