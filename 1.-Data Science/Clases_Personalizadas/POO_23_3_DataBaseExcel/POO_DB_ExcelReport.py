@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#pyinstaller nombreArchivo.py --onefile --windowed
+
 #SQLAlchemy: Para instalarlo se debe ejecutar el comando pip install sqlalchemy, y es una biblioteca de Python 
 #para SQL ORM (Object-Relacional-Mapping) que proporciona a los desarrolladores un conjunto de herramientas para 
 #interactuar con bases de datos utilizando objetos y métodos de Python, en lugar de escribir consultas SQL.

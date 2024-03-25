@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#pyinstaller nombreArchivo.py --onefile --windowed
+
 #PyQt5 - QtWidgets: La clase QtWidgets proporciona todos los elementos que conforman las interfaces gráficas 
 #(GUI) hechas con la librería PyQt5, entre dichas herramientas se incluyen: 
 # - Widgets: Elementos gráficos básicos de los que se conforma una GUI como lo son botones (QPushButton), cajas 
