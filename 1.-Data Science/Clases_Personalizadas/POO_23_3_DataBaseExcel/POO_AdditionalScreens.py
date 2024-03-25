@@ -314,20 +314,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             #objeto QtGui.QColor(), el cual a su vez recibe como parámetro el color de texto en 
                             #formato rgb, hexadecimal o string.
                             itemAbove1.setForeground(QtGui.QColor('white'))     #Color de letra blanco.
-                            #QtWidgets.QTableWidget().setSpan(): El método .setSpan() permite fusionar un 
-                            #conjunto de celdas que se encuentren una alado de la otra (adyacentes) en una sola 
-                            #celda más grande dentro de una tabla, osea un objeto QtWidgets.QTableWidget(), para 
-                            #ello se deben indicar lo siguiente: setSpan(inicio_y, inicio_x, alto, ancho).
-                            # - inicio_y: Índice de fila ("y" o vertical) de la tabla desde donde se quiere 
-                            #   empezar a fusionar las celdas.
-                            # - inicio_x: Índice de columna ("x" u horizontal) de la tabla desde donde se quiere 
-                            #   empezar a fusionar las celdas.
-                            # - alto: Número de filas que se fusionarán a partir de la celda especificada por 
-                            #   inicio_y e inicio_x.
-                            # - ancho: Número de columnas que se fusionarán a partir de la celda especificada por 
-                            #   inicio_y e inicio_x.
-                            #A continuación, se fusionarán todas las celdas de la 1era fila de la tabla.
-                            table.setSpan(i, 1, 1, staticDataAbove_1_Cols)
                         elif (i != 0 and j == 1):       #Azul obscuro:  Columna 2 = (Todas las filas menos la primera, 1)
                             itemAbove1.setBackground(QtGui.QColor('#0070c0'))
                         else:                           #Gris azulado:  Todas las demás celdas.
@@ -347,7 +333,19 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         itemAbove2.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
                         font = QtGui.QFont()                                    #Tipo de letra en negritas.
                         font.setBold(True)                                      #Tipo de letra en negritas.
-                        #Fusionar celdas: setSpan(inicio_y, inicio_x, alto, ancho).
+                        #QtWidgets.QTableWidget().setSpan(): El método .setSpan() permite fusionar un 
+                            #conjunto de celdas que se encuentren una alado de la otra (adyacentes) en una sola 
+                            #celda más grande dentro de una tabla, osea un objeto QtWidgets.QTableWidget(), para 
+                            #ello se deben indicar lo siguiente: setSpan(inicio_y, inicio_x, alto, ancho).
+                            # - inicio_y: Índice de fila ("y" o vertical) de la tabla desde donde se quiere 
+                            #   empezar a fusionar las celdas.
+                            # - inicio_x: Índice de columna ("x" u horizontal) de la tabla desde donde se quiere 
+                            #   empezar a fusionar las celdas.
+                            # - alto: Número de filas que se fusionarán a partir de la celda especificada por 
+                            #   inicio_y e inicio_x.
+                            # - ancho: Número de columnas que se fusionarán a partir de la celda especificada por 
+                            #   inicio_y e inicio_x.
+                            #A continuación, se fusionarán todas las celdas de la 1era fila de la tabla.
                         table.setSpan((i + staticDataAbove_1_Rows + 1), 0, 1, staticDataAbove_2_Cols)
                         if i == 0:                      #Color azul:    Fila 1 = (0, Ninguna Columna)
                             itemAbove2.setBackground(QtGui.QColor('#4f81bd'))   #Color de celdas.

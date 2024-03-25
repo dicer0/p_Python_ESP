@@ -119,7 +119,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             font.setBold(True)
                             itemAbove1.setFont(font)
                             itemAbove1.setForeground(QtGui.QColor('white'))
-                            table.setSpan(i, 1, 1, staticDataAbove_1_Cols)
                         elif (i != 0 and j == 1):
                             itemAbove1.setBackground(QtGui.QColor('#0070c0'))
                         else:                          

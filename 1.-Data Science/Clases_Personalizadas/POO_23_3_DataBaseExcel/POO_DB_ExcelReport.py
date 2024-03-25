@@ -205,7 +205,6 @@ class DatabaseExcelHandler:
             #algunos datos de la database (DB), se extraerán algunos otros de la lista de diccionarios y se 
             #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte 
             #y posteriormente mostrada a su vez en una GUI de PyQt5.
-            finalData = []  #Array que almacenará los datos que trae PyODBC del DataBase.
             compareDicc = [{
                 "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
                 "datoStatic": "Dato grupo 1",         
@@ -221,52 +220,70 @@ class DatabaseExcelHandler:
                 "categoryIdFilter": 3
             }]            
 
-            #CREAR UN ARRAY QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
+            #CREAR UN DICCIONARIO QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
+            finalData = []  #Diccionario que almacenará los datos que trae PyODBC del DataBase.
             #bucle for each: Es un bucle que recorre la lista de diccionarios compareDicc, por lo que la variable 
             #indDicc lleva contenidos todos los diccionarios en cada iteración, uno por uno.
             for indDicc in compareDicc:
-                filtered_rows = []  #Lista vacía para almacenar los elementos extraídos de la base de datos.
-                #pandas.DataFrame().iterrows(): El método iterrows() se debe aplicar a algun objeto de la clase 
-                #DataFrame y siempre se encontrará como parámetro de un bucle for, ya que este recorre todos los 
-                #datos de su DataFrame, devolviendo una tupla que indica el índice de cada fila y su contenido.
-                for (index, row) in (dataFramePandas.iterrows()):
-                    #En este punto con el contenido de las filas del DataFrame y la variable que recorre la lista 
-                    #de diccionarios es donde se pueden realizar las comparaciones para filtrar los datos.
-                    if (row['estatus'] == indDicc['estatusFilter'] and
-                        row['usuarios_id'] == indDicc['userIdFilter'] and
-                        row['categorias_id'] == indDicc['categoryIdFilter']):
-                        #Los datos que cumplan las condiciones, se agregan a la lista vacía filtered_rows.
-                        filtered_rows.append(row)
-
-                #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones del 
-                #filtro, se añaden y organizan los datos del DataFrame final que queremos obtener.
-                for filtered_dataBase in filtered_rows:
-                    #De igual manera, se pueden agregar valores solo cuando se cumpla una condición en la variable
-                    #filtered_dataBase, para ello se utilizan condicionales de una sola línea que llevan la 
-                    #siguiente sintaxis:
-                    #variable =   valor_si_verdadero        if      condicion       else        valor_si_falso
-                    #Si se quiere utilizar una estructura else-if, lo que se hace es agregar un paréntesis y 
-                    #varias condiciones de una línea dentro.
-                    #variable =   (
-                    #               valor_si_verdadero1     if      condicion1      else        valor_si_falso1
-                    #               valor_si_verdadero2     if      condicion2      else        valor_si_falso2
-                    #               ...
-                    #               valor_si_verdadero_n    if      condicion_n     else        valor_si_falso_n
-                    #               valor_por_defecto
-                    #             )
-                    standardContent = """Phasellus laoreet eros nec vestibulum varius. Nunc id efficitur lacus, non imperdiet quam. Aliquam porta, tellus at porta semper, felis velit congue mauris, eu pharetra felis sem vitae tortor. Curabitur bibendum vehicula dolor, nec accumsan tortor ultrices ac. Vivamus nec tristique orci. Nullam fringilla eros magna, vitae imperdiet nisl mattis et. Ut quis malesuada felis. Proin at dictum eros, eget sodales libero. Sed egestas tristique nisi et tempor. Ut cursus sapien eu pellentesque posuere. Etiam eleifend varius cursus.\n\nNullam viverra quam porta orci efficitur imperdiet. Quisque magna erat, dignissim nec velit sit amet, hendrerit mollis mauris. Mauris sapien magna, consectetur et vulputate a, iaculis eget nisi. Nunc est diam, aliquam quis turpis ac, porta mattis neque. Quisque consequat dolor sit amet velit commodo sagittis. Donec commodo pulvinar odio, ut gravida velit pellentesque vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nMorbi vulputate ante quis elit pretium, ut blandit felis aliquet. Aenean a massa a leo tristique malesuada. Curabitur posuere, elit sed consectetur blandit, massa mauris tristique ante, in faucibus elit justo quis nisi. Ut viverra est et arcu egestas fringilla. Mauris condimentum, lorem id viverra placerat, libero lacus ultricies est, id volutpat metus sapien non justo. Nulla facilisis, sapien ut vehicula tristique, mauris lectus porta massa, sit amet malesuada dolor justo id lectus. Suspendisse sit amet tempor ligula. Nam sit amet nisl non magna lacinia finibus eget nec augue. Aliquam ornare cursus dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nDonec ornare sem eget massa pharetra rhoncus. Donec tempor sapien at posuere porttitor. Morbi sodales efficitur felis eu scelerisque. Quisque ultrices nunc ut dignissim vehicula. Donec id imperdiet orci, sed porttitor turpis. Etiam volutpat elit sed justo lobortis, tincidunt imperdiet velit pretium. Ut convallis elit sapien, ac egestas ipsum finibus a. Morbi sed odio et dui tincidunt rhoncus tempor id turpis.\n\nProin fringilla consequat imperdiet. Ut accumsan velit ac augue sollicitudin porta. Phasellus finibus porttitor felis, a feugiat purus tempus vel. Etiam vitae vehicula ex. Praesent ut tellus tellus. Fusce felis nunc, congue ac leo in, elementum vulputate nisi. Duis diam nulla, consequat ac mauris quis, viverra gravida urna."""
-                    #En este caso la condición evalúa si en la columna contenido de la base de datos filtrada 
-                    #contiene específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y si 
-                    #es así, coloca un valor que se llama "standard", sino coloca "not conventional".
-                    contentStatus = "standard" if (standardContent in filtered_dataBase["contenido"]) else "not conventional"
-                    #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de diccionarios 
-                    #y la variable filtered_dataBase representa cada fila de la base de datos filtrada.
+                #Indexación booleana: Es una técnica que se realiza con estructuras de datos de la librería pandas 
+                #para filtrar las filas de un DataFrame basándose en el uso de operadores lógicos simples como 
+                #& (and), | (or) y ~ (not). La operación solo devolverá las filas del DataFrame que cumplan con 
+                #las condiciones descritas dentro de su corchete (osea que devuelvan un True):
+                #resultadoFiltrado = pandas.DataFrame()[~(operacionLogica_1 & operacionLogica_2 | operacionLogica_n)]
+                #En este punto con el contenido de las filas del DataFrame y la variable indDicc que recorre la 
+                #lista de diccionarios es donde se pueden realizar las comparaciones para filtrar los datos.
+                filtered = dataFramePandas[(dataFramePandas['estatus'] == indDicc['estatusFilter']) &
+                                        (dataFramePandas['usuarios_id'] == indDicc['userIdFilter']) &
+                                        (dataFramePandas['categorias_id'] == indDicc['categoryIdFilter'])]
+                #pandas.DataFrame().empty: El atributo .empty devuelve un valor True cuando su DataFrame está vacío 
+                #y False cuando el DataFrame si cuenta con filas y columnas.
+                #El operador not simplemente es una negación (~), osea que cuando algo sea True, lo volverá False 
+                #y viceversa, esto se utiliza porque los if se ejecutan cuando su condición vale True.
+                if (not(filtered.empty)):
+                    #pandas.DataFrame().iterrows(): El método iterrows() se debe aplicar a algun objeto de la clase 
+                    #DataFrame y siempre se encontrará como parámetro de un bucle for, ya que este recorre todos los 
+                    #datos de su DataFrame, devolviendo una tupla que indica el índice de cada fila y su contenido.
+                    for (index, row) in (filtered.iterrows()):
+                        #Una vez obtenido el índice y contenido de los elementos del DataFrame, se pueden agregar 
+                        #un valor u otro a la lista final dependiendo de si se cumple o no una condición, para ello 
+                        #se utilizan condicionales de una sola línea que llevan la siguiente sintaxis:
+                        #variable =   valor_si_verdadero        if      condicion       else        valor_si_falso
+                        #Si se quiere utilizar una estructura else-if, lo que se hace es agregar un paréntesis y 
+                        #varias condiciones de una línea dentro.
+                        #variable =   (
+                        #               valor_si_verdadero1     if      condicion1      else        valor_si_falso1
+                        #               valor_si_verdadero2     if      condicion2      else        valor_si_falso2
+                        #               ...
+                        #               valor_si_verdadero_n    if      condicion_n     else        valor_si_falso_n
+                        #               valor_por_defecto
+                        #             )
+                        standardContent = """Phasellus laoreet eros nec vestibulum varius. Nunc id efficitur lacus, non imperdiet quam. Aliquam porta, tellus at porta semper, felis velit congue mauris, eu pharetra felis sem vitae tortor. Curabitur bibendum vehicula dolor, nec accumsan tortor ultrices ac. Vivamus nec tristique orci. Nullam fringilla eros magna, vitae imperdiet nisl mattis et. Ut quis malesuada felis. Proin at dictum eros, eget sodales libero. Sed egestas tristique nisi et tempor. Ut cursus sapien eu pellentesque posuere. Etiam eleifend varius cursus.\n\nNullam viverra quam porta orci efficitur imperdiet. Quisque magna erat, dignissim nec velit sit amet, hendrerit mollis mauris. Mauris sapien magna, consectetur et vulputate a, iaculis eget nisi. Nunc est diam, aliquam quis turpis ac, porta mattis neque. Quisque consequat dolor sit amet velit commodo sagittis. Donec commodo pulvinar odio, ut gravida velit pellentesque vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nMorbi vulputate ante quis elit pretium, ut blandit felis aliquet. Aenean a massa a leo tristique malesuada. Curabitur posuere, elit sed consectetur blandit, massa mauris tristique ante, in faucibus elit justo quis nisi. Ut viverra est et arcu egestas fringilla. Mauris condimentum, lorem id viverra placerat, libero lacus ultricies est, id volutpat metus sapien non justo. Nulla facilisis, sapien ut vehicula tristique, mauris lectus porta massa, sit amet malesuada dolor justo id lectus. Suspendisse sit amet tempor ligula. Nam sit amet nisl non magna lacinia finibus eget nec augue. Aliquam ornare cursus dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nDonec ornare sem eget massa pharetra rhoncus. Donec tempor sapien at posuere porttitor. Morbi sodales efficitur felis eu scelerisque. Quisque ultrices nunc ut dignissim vehicula. Donec id imperdiet orci, sed porttitor turpis. Etiam volutpat elit sed justo lobortis, tincidunt imperdiet velit pretium. Ut convallis elit sapien, ac egestas ipsum finibus a. Morbi sed odio et dui tincidunt rhoncus tempor id turpis.\n\nProin fringilla consequat imperdiet. Ut accumsan velit ac augue sollicitudin porta. Phasellus finibus porttitor felis, a feugiat purus tempus vel. Etiam vitae vehicula ex. Praesent ut tellus tellus. Fusce felis nunc, congue ac leo in, elementum vulputate nisi. Duis diam nulla, consequat ac mauris quis, viverra gravida urna."""
+                        #En este caso la condición evalúa si en la columna contenido de la base de datos filtrada 
+                        #contiene específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y si 
+                        #es así, coloca un valor que se llama "standard", sino coloca "not conventional".
+                        contentStatus = "standard" if (standardContent in row["contenido"]) else "not conventional"
+                        #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de 
+                        #diccionarios que realiza el filtrado y la variable row representa cada fila de la base 
+                        #de datos filtrada.
+                        finalData.append({
+                            "Titulo Static": indDicc["tituloStatic"],
+                            "Content Status": contentStatus,
+                            "Dato Static": indDicc["datoStatic"],
+                            "Titulo": row["titulo"],
+                            "Fecha de Publicacion": row["fecha_publicacion"]
+                        })
+                #Dentro del else se consideran los datos que no cumplan con las condiciones del filtro, para que 
+                #estos no sean despreciados, sino clasificados.
+                else:
+                    #Una vez teniendo almacenados todos los datos de la base de datos que cumplan las condiciones 
+                    #del filtro, se añaden y organizan los datos del DataFrame final que queramos recopilar dentro 
+                    #de la lista vacía finalData que no lo hayan hecho.
                     finalData.append({
-                        "Titulo Static": indDicc["tituloStatic"],
-                        "Content Status": contentStatus,             #Columna agregada con condicionales.
-                        "Dato Static": indDicc["datoStatic"],
-                        "Titulo": filtered_dataBase["titulo"],
-                        "Fecha de Publicacion": filtered_dataBase["fecha_publicacion"]
+                        "Titulo Static": "Not categorized",
+                        "Content Status": "Not categorized",
+                        "Dato Static": "Not categorized",
+                        "Titulo": row["titulo"],
+                        "Fecha de Publicacion": row["fecha_publicacion"]
                     })
             #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
             #columnas en su constructor, se pasa directamente a su parámetro data.
