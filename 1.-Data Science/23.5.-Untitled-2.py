@@ -2,7 +2,6 @@
 import pyodbc
 import pandas
 import traceback
-import textwrap
 
 class DatabaseExcelHandler:
     def __init__(self, db_connection_string):
@@ -30,7 +29,8 @@ class DatabaseExcelHandler:
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
             cursorRows = [tuple(row) for row in resultProxy]
-            dataFramePandas = pandas.DataFrame(data = cursorRows, columns = [column[0] for column in self.cursor.description])
+            cursorCols = [col[0] for col in self.cursor.description]
+            dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
             print(dataFramePandas, "\n")
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
             compareDicc = [{
@@ -109,22 +109,21 @@ class DatabaseExcelHandler:
                 ['Subtitle 2', '.', '.', '.', '.', '.', '.'],
                 ['Static Row 1', '.', '.', '.', '.', '.', '.']
             ]
+            (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
+            staticDataAbove_1_Rows = len(staticDataAbove_1)
+            staticDataAbove_2_Rows = len(staticDataAbove_2)
+            staticDataBelow_1_Rows = len(staticDataBelow_1)
+            staticDataAbove_1_Cols = len(staticDataAbove_1[0])
+            staticDataAbove_2_Cols = len(staticDataAbove_2[0])
+            staticDataBelow_1_Cols = len(staticDataBelow_1[0])
             
             with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
-                (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
-                staticDataAbove_1_Rows = len(staticDataAbove_1)
-                staticDataAbove_2_Rows = len(staticDataAbove_2)
-                staticDataBelow_1_Rows = len(staticDataBelow_1)
-                staticDataAbove_1_Cols = len(staticDataAbove_1[0])
-                staticDataAbove_2_Cols = len(staticDataAbove_2[0])
-                staticDataBelow_1_Cols = len(staticDataBelow_1[0])
-
                 # Escribir staticDataAbove_1
                 pandas.DataFrame(staticDataAbove_1).to_excel(excel_writer = objetoExcel, index = False, header = False)
                 # Escribir staticDataAbove_2
                 pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
                 # Escribir finalDataFrame
-                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1)
+                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
                 # Escribir staticDataBelow_1
                 pandas.DataFrame(staticDataBelow_1).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
 
@@ -150,33 +149,11 @@ class DatabaseExcelHandler:
                 grayRowDataBelow1_format = workbook.add_format({'bg_color': 'gray'})
                 yellowRowDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})
 
-                max_lengths = [len(str(col)) for col in finalDataFrame.columns]
-                for index, row in finalDataFrame.iterrows():
-                    for i, value in enumerate(row):
-                        max_lengths[i] = max(max_lengths[i], len(str(value)))
-
-                # Aplicar los anchos máximos a las columnas del dataframe
-                for i, max_length in enumerate(max_lengths):
-                    worksheet.set_column(i, i, max_length + 1)  # Agregar un margen de 1 para mejor aspecto
-
-                # Iterar sobre las filas y actualizar el DataFrame y Excel
-                for index, row in finalDataFrame.iterrows():
-                    for i, value in enumerate(row):
-                        # Obtener el ancho de la columna en Excel
-                        column_width = max_lengths[i]
-                        # Si el texto es más largo que el ancho de la columna en Excel, dividirlo
-                        if len(str(value)) > column_width:
-                            finalDataFrame.at[index, finalDataFrame.columns[i]] = '\n'.join(textwrap.wrap(str(value), width=column_width))
-
-
-
                 #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
                 worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove1_format})
                 worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
                 worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'no_blanks', 'format': blueColDataAbove1_format})
                 worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
-
-
                 
                 rowPositionStaticDataAbove2 = (staticDataAbove_1_Rows + 1) + 1
                 ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)    #Position  A9:G9
@@ -188,8 +165,6 @@ class DatabaseExcelHandler:
                     worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
                     worksheet.conditional_format((staticDataAbove_1_Rows + 2), 0, (staticDataAbove_1_Rows + 2), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataAbove2_format})
 
-
-
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
                 worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
                 worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'no_blanks', 'format': grayDB_format})
@@ -199,7 +174,6 @@ class DatabaseExcelHandler:
 
                 #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
                 rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
-                print(rowPositionStaticDataBelow1)
                 ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A29:G29
                 worksheet.merge_range(ExcelCell, data = None)
                 worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
@@ -213,6 +187,14 @@ class DatabaseExcelHandler:
                 for col in range(2, staticDataBelow_1_Cols):
                     worksheet.conditional_format(rowPositionStaticDataBelow1, col, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), col, {'type': 'no_blanks', 'format': yellowRowDataBelow1_format})
 
+
+                max_lengths = [len(str(col)) for col in finalDataFrame.columns]
+                for index, row in finalDataFrame.iterrows():
+                    for i, value in enumerate(row):
+                        max_lengths[i] = max(max_lengths[i], len(str(value)))
+                # Aplicar los anchos máximos a las columnas del dataframe
+                for i, max_length in enumerate(max_lengths):
+                    worksheet.set_column(i, i, max_length + 1)  # Agregar un margen de 1 para mejor aspecto
 
             return finalDataFrame
         except Exception as error:
