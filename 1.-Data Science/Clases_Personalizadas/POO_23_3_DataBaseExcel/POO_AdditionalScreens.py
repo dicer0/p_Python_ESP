@@ -209,7 +209,9 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #Para obtener el tamaño total de la tabla, se considera el tamaño de la lista de listas que 
                 #indican los datos estáticos y el número de filas del DataFrame.
                 #NÚMERO DE FILAS DE LA TABLA QUE GUARDA TODOS LOS DATOS.
-                totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1)
+                numberOfDataSets = 4
+                numberOfSpaces = numberOfDataSets - 1
+                totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1) + numberOfSpaces
                 staticDataAbove_1_Rows = len(staticDataAbove_1)                 #Filas staticDataAbove_1.
                 staticDataAbove_2_Rows = len(staticDataAbove_2)                 #Filas staticDataAbove_1.
                 #max(num1, num2, num_n): Método que retorna el valor máximo al comparar varios números.
