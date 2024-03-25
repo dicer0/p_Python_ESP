@@ -2,6 +2,7 @@
 import pyodbc
 import pandas
 import traceback
+import textwrap
 
 class DatabaseExcelHandler:
     def __init__(self, db_connection_string):
@@ -72,70 +73,147 @@ class DatabaseExcelHandler:
                     })
             finalDataFrame = pandas.DataFrame(data = finalData)
             
-            # staticDataAbove_1
-            static_data_above_1 = [
+            staticDataAbove_1 = [
                 ['Title A1.1', 'Title A1.2', 'Title A1.3'],
-                ['Static Row 1', '', '', '', '', '', ''],
-                ['Static Row 2', '', '', '', '', '', ''],
-                ['Static Row 3', '', '', '', '', '', ''],
-                ['Static Row 4', '', '', '', '', '', ''],
-                ['Static Row 5', '', '', '', '', '', ''],
-                ['Static Row 6', '', '', '', '', '', '']
+                ['Static Row 1', '.', '.'],
+                ['Static Row 2', '.', '.'],
+                ['Static Row 3', '.', '.'],
+                ['Static Row 4', '.', '.'],
+                ['Static Row 5', '.', '.'],
+                ['Static Row 6', '.', '.']
             ]
-            
-            # staticDataAbove_2
-            static_data_above_2 = [
-                ['Title A2', '', '', '', '', '', ''],
-                ['Subtitle A2.1', '', '', '', '', '', ''],
-                ['Static Row 1', '', '', '', '', '', ''],
-                ['', '', '', '', '', '', ''],
-                ['Subtitle A2.2', '', '', '', '', '', ''],
-                ['Static Row 2', '', '', '', '', '', ''],
-                ['', '', '', '', '', '', ''],
-                ['Subtitle A2.3', '', '', '', '', '', ''],
-                ['Static Row 3', '', '', '', '', '', ''],
-                ['', '', '', '', '', '', ''],
-                ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
+            staticDataAbove_2 = [
+                ['Title A2', '.', '.', '.', '.', '.', '.'],
+                ['Subtitle A2.1', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 1', '.', '.', '.', '.', '.', '.'],
+                ['.', '.', '.', '.', '.', '.', '.'],
+                ['Subtitle A2.2', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 2', '.', '.', '.', '.', '.', '.'],
+                ['.', '.', '.', '.', '.', '.', '.'],
+                ['Subtitle A2.3', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 3', '.', '.', '.', '.', '.', '.'],
+                ['.', '.', '.', '.', '.', '.', '.'],
+                ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '.', '.', '.', '.', '.', '.']
             ]
-
-            # staticDataBelow_1
-            static_data_below_1 = [
-                ['Title B1', '', '', '', '', '', ''],
+            staticDataBelow_1 = [
+                ['Title B1', '.', '.', '.', '.', '.', '.'],
                 ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
-                ['Subtitle 1', '', '', '', '', '', ''],
-                ['Static Row 1', '', '', '', '', '', ''],
-                ['Static Row 2', '', '', '', '', '', ''],
-                ['Static Row 3', '', '', '', '', '', ''],
-                ['Static Row 4', '', '', '', '', '', ''],
-                ['Static Row 5', '', '', '', '', '', ''],
-                ['Static Row 6', '', '', '', '', '', ''],
-                ['Static Row 7', '', '', '', '', '', ''],
-                ['Subtitle 2', '', '', '', '', '', ''],
-                ['Static Row 1', '', '', '', '', '', '']
+                ['Subtitle 1', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 1', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 2', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 3', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 4', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 5', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 6', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 7', '.', '.', '.', '.', '.', '.'],
+                ['Subtitle 2', '.', '.', '.', '.', '.', '.'],
+                ['Static Row 1', '.', '.', '.', '.', '.', '.']
             ]
             
             with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
+                (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
+                staticDataAbove_1_Rows = len(staticDataAbove_1)
+                staticDataAbove_2_Rows = len(staticDataAbove_2)
+                staticDataBelow_1_Rows = len(staticDataBelow_1)
+                staticDataAbove_1_Cols = len(staticDataAbove_1[0])
+                staticDataAbove_2_Cols = len(staticDataAbove_2[0])
+                staticDataBelow_1_Cols = len(staticDataBelow_1[0])
+
                 # Escribir staticDataAbove_1
-                pandas.DataFrame(static_data_above_1).to_excel(excel_writer=objetoExcel, index = False, header = False)
-                # Escribir finalDataFrame
-                finalDataFrame.to_excel(excel_writer=objetoExcel, index=False, startrow = len(static_data_above_1) + 1)
+                pandas.DataFrame(staticDataAbove_1).to_excel(excel_writer = objetoExcel, index = False, header = False)
                 # Escribir staticDataAbove_2
-                pandas.DataFrame(static_data_above_2).to_excel(excel_writer=objetoExcel, index=False, startrow = len(static_data_above_1) + len(finalDataFrame) + 3, header = False)
+                pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
+                # Escribir finalDataFrame
+                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1)
                 # Escribir staticDataBelow_1
-                pandas.DataFrame(static_data_below_1).to_excel(excel_writer=objetoExcel, index=False, startrow = len(static_data_above_1) + len(finalDataFrame) + len(static_data_above_2) + 5, header = False)
+                pandas.DataFrame(staticDataBelow_1).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
 
                 workbook = objetoExcel.book
                 worksheet = objetoExcel.sheets['Sheet1']
-                blue_format = workbook.add_format({'bg_color': '#0000FF'})
-                green_format = workbook.add_format({'bg_color': '#00FF00'})
-                grey_format = workbook.add_format({'bg_color': '#D3D3D3'})
-                yellow_format = workbook.add_format({'bg_color': '#FFFF00'})
-                (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
-                worksheet.conditional_format(8, 0, 8, columnasDataFrame - 1, {'type': 'no_blanks', 'format': blue_format})
-                worksheet.conditional_format(9, 0, filasDataFrame + 9, 0, {'type': 'no_blanks', 'format': green_format})
-                worksheet.conditional_format(9, 1, filasDataFrame + 9, 1, {'type': 'no_blanks', 'format': grey_format})
+                
+                blueRowDataAbove1_format = workbook.add_format({'bg_color': '#4f81bd'})
+                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})
+                blueTableDataAbove1_format = workbook.add_format({'bg_color': '#d3dfee'})
+
+                blueRowDataAbove2_format = workbook.add_format({'bg_color': '#4f81bd'})
+                whiteRowDataAbove2_format = workbook.add_format({'bg_color': 'white'})
+                
+                blueDB_format = workbook.add_format({'bg_color': 'blue'})
+                greenDB_format = workbook.add_format({'bg_color': 'green'})
+                grayDB_format = workbook.add_format({'bg_color': 'gray'})
+                yellowDB_format = workbook.add_format({'bg_color': 'yellow'})
+
+                whiteRowDataBelow1_format = workbook.add_format({'bg_color': 'white'})
+                darkBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#4f81bd'})
+                lightBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#A7BFDE'})
+                greenRowDataBelow1_format = workbook.add_format({'bg_color': '#5EC268'})
+                grayRowDataBelow1_format = workbook.add_format({'bg_color': 'gray'})
+                yellowRowDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})
+
+                max_lengths = [len(str(col)) for col in finalDataFrame.columns]
+                for index, row in finalDataFrame.iterrows():
+                    for i, value in enumerate(row):
+                        max_lengths[i] = max(max_lengths[i], len(str(value)))
+
+                # Aplicar los anchos máximos a las columnas del dataframe
+                for i, max_length in enumerate(max_lengths):
+                    worksheet.set_column(i, i, max_length + 1)  # Agregar un margen de 1 para mejor aspecto
+
+                # Iterar sobre las filas y actualizar el DataFrame y Excel
+                for index, row in finalDataFrame.iterrows():
+                    for i, value in enumerate(row):
+                        # Obtener el ancho de la columna en Excel
+                        column_width = max_lengths[i]
+                        # Si el texto es más largo que el ancho de la columna en Excel, dividirlo
+                        if len(str(value)) > column_width:
+                            finalDataFrame.at[index, finalDataFrame.columns[i]] = '\n'.join(textwrap.wrap(str(value), width=column_width))
+
+
+
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove1_format})
+                worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
+                worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'no_blanks', 'format': blueColDataAbove1_format})
+                worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
+
+
+                
+                rowPositionStaticDataAbove2 = (staticDataAbove_1_Rows + 1) + 1
+                ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)    #Position  A9:G9
+                worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1), 0, (staticDataAbove_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove2_format})
+                for i in range(0, staticDataAbove_2_Rows - 1): #Position  A10:G10 - A19:G19 
+                    rowPositionStaticDataAbove2 += 1
+                    ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)
+                    worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
+                    worksheet.conditional_format((staticDataAbove_1_Rows + 2), 0, (staticDataAbove_1_Rows + 2), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataAbove2_format})
+
+
+
+                worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
+                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
+                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'no_blanks', 'format': grayDB_format})
                 for col in range(2, columnasDataFrame):
-                    worksheet.conditional_format(9, col, filasDataFrame + 9, col, {'type': 'no_blanks', 'format': yellow_format})
+                    worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'no_blanks', 'format': yellowDB_format})
+                
+
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
+                print(rowPositionStaticDataBelow1)
+                ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A29:G29
+                worksheet.merge_range(ExcelCell, data = None)
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, rowPositionStaticDataBelow1, (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': darkBlueRowDataBelow1_format})
+                rowPositionStaticDataBelow1 += 2
+                ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A31:G31
+                worksheet.merge_range(ExcelCell, data = None)
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 0, {'type': 'no_blanks', 'format': greenRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 1, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 1, {'type': 'no_blanks', 'format': grayRowDataBelow1_format})
+                for col in range(2, staticDataBelow_1_Cols):
+                    worksheet.conditional_format(rowPositionStaticDataBelow1, col, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), col, {'type': 'no_blanks', 'format': yellowRowDataBelow1_format})
+
+
             return finalDataFrame
         except Exception as error:
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")

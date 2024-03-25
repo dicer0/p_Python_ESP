@@ -212,7 +212,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 staticDataAbove_2_Rows = len(staticDataAbove_2)                 #Filas staticDataAbove_1.
                 #max(num1, num2, num_n): Método que retorna el valor máximo al comparar varios números.
                 totalCols = max(7, db_numCols)                                              #Columnas tabla.
-                staticDataAbove_1_Cols = len(staticDataAbove_1[0])              #Columnas staticDataAbove_1.
                 staticDataAbove_2_Cols = len(staticDataAbove_2[0])              #Columnas staticDataAbove_2.
                 staticDataBelow_1_Cols = len(staticDataBelow_1[0])              #Columnas staticDataBelow_1.
                 #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla 

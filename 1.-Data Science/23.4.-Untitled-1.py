@@ -102,7 +102,6 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 staticDataAbove_1_Rows = len(staticDataAbove_1)
                 staticDataAbove_2_Rows = len(staticDataAbove_2)
                 totalCols = max(7, db_numCols)
-                staticDataAbove_1_Cols = len(staticDataAbove_1[0]) 
                 staticDataAbove_2_Cols = len(staticDataAbove_2[0]) 
                 staticDataBelow_1_Cols = len(staticDataBelow_1[0]) 
                 table = QtWidgets.QTableWidget()
@@ -152,7 +151,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         font = QtGui.QFont() 
                         font.setBold(True)
                         if (i == 0): 
-                            celda_Db.setBackground(QtGui.QColor('blue'))     
+                            celda_Db.setBackground(QtGui.QColor('blue'))
                             celda_Db.setFont(font)
                         elif (i != 0 and j == 0): 
                             celda_Db.setBackground(QtGui.QColor('green'))

@@ -412,7 +412,7 @@ class DatabaseExcelHandler:
                 #       - 'icon_set': Aplica un conjunto de iconos basado en los valores de las celdas.
                 # - format: Este parámetro recibe una variable de formato pandas.ExcelWriter().book.add_format({}).
                 #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
-                worksheet.conditional_format(0, 0, 0, columnasDataFrame - 1, {'type': 'no_blanks', 'format': blue_format})
+                worksheet.conditional_format(0, 0, 0, (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blue_format})
                 worksheet.conditional_format(1, 0, filasDataFrame, 0, {'type': 'no_blanks', 'format': green_format})
                 worksheet.conditional_format(1, 1, filasDataFrame, 1, {'type': 'no_blanks', 'format': grey_format})
                 for col in range(2, columnasDataFrame):
