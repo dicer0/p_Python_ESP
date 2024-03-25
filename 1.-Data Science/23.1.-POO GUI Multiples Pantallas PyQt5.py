@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#pyinstaller nombreArchivo.py --onefile --windowed
+
 #En Python se introducen comentarios de una sola linea con el simbolo #.
 #La primera línea de código incluida en este programa se conoce como declaración de codificación o codificación 
 #de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo 
