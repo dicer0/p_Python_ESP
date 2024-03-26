@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 #pyinstaller nombreArchivo.py --onefile --windowed
+#pyinstaller: Es la librería que se debe instalar para convertir un programa de Python a un archivo .exe.
+#--onefile: Sirve para que cuando se ejecute el comando de pyinstaller, se cree un solo archivo ejecutable .exe.
+#--windowed: Sirve para que cuando se ejecute el ejecutable, no se abra la consola.
 
 #SQLAlchemy: Para instalarlo se debe ejecutar el comando pip install sqlalchemy, y es una biblioteca de Python 
 #para SQL ORM (Object-Relacional-Mapping) que proporciona a los desarrolladores un conjunto de herramientas para 

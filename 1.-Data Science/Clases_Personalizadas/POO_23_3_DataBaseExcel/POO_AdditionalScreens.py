@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 #pyinstaller nombreArchivo.py --onefile --windowed
+#pyinstaller: Es la librería que se debe instalar para convertir un programa de Python a un archivo .exe.
+#--onefile: Sirve para que cuando se ejecute el comando de pyinstaller, se cree un solo archivo ejecutable .exe.
+#--windowed: Sirve para que cuando se ejecute el ejecutable, no se abra la consola.
 
 #PyQt5 - QtWidgets: La clase QtWidgets proporciona todos los elementos que conforman las interfaces gráficas 
 #(GUI) hechas con la librería PyQt5, entre dichas herramientas se incluyen: 

@@ -2,7 +2,6 @@
 import pyodbc
 import pandas
 import traceback
-
 class DatabaseExcelHandler:
     def __init__(self, db_connection_string):
         self.db_connection_string = db_connection_string

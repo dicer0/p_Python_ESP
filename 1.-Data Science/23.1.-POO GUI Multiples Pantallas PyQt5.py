@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 #pyinstaller nombreArchivo.py --onefile --windowed
+#pyinstaller: Es la librería que se debe instalar para convertir un programa de Python a un archivo .exe.
+#--onefile: Sirve para que cuando se ejecute el comando de pyinstaller, se cree un solo archivo ejecutable .exe.
+#--windowed: Sirve para que cuando se ejecute el ejecutable, no se abra la consola.
 
 #En Python se introducen comentarios de una sola linea con el simbolo #.
 #La primera línea de código incluida en este programa se conoce como declaración de codificación o codificación 
