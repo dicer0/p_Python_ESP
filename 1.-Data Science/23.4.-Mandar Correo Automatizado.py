@@ -44,8 +44,8 @@ def send_email():
     #están asignando valores a sus keys.
     message = MIMEMultipart()
     #MI CORREO, MI CONTRASEÑA, EL DESTINATARIO Y EL ASUNTO DEL CORREO SE INDICAN EN FORMA DE STRING:
-    sender_email = "dcervantesr1401@alumno.ipn.mx" #Mi correo:                     tucorreo@gmail.com
-    password = "tucontraseña"                   #Mi contraseña:                 tucontraseña
+    sender_email = "dcervantesr1401@alumno.ipn.mx"  #Mi correo:                     tucorreo@gmail.com
+    password = "tucontraseña"                       #Mi contraseña:                 tucontraseña
     receiver_email = "diego-rko@live.com.mx"        #Correo a quién se le envía:    destinatario@gmail.com
     subject = "Olis crayolis automatizado"
     #ASIGNACIÓN DE REMITENTE, DESTINATARIO Y ASUNTO AL OBJETO MIMEMultipart:
@@ -59,6 +59,14 @@ def send_email():
     emailPlainContent = MIMEText(_text = body, _subtype = "plain", _charset = "utf-8")
     message.attach(emailPlainContent)
 
+    #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
+    # - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción 
+    #   durante su ejecución, el programa brinca al código del except.
+    # - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando 
+    #   ocurra el error esperado.
+    # - Por último, cuando no ocurra una excepción durante la ejecución del gestor de excepciones, se ejecutará 
+    #   el código que esté incluido dentro del finally después de haber terminado de ejecutar lo que haya en el 
+    #   try, pero si ocurre una excepción, la ejecución terminará cuando se llegue al except.
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.starttls()
