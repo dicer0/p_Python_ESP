@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -6,28 +8,27 @@ import time
 
 def send_email():
     message = MIMEMultipart()
-    print(message)
-    sender_email = "tucorreo@gmail.com"
-    receiver_email = "destinatario@gmail.com"
+    sender_email = "diego-rko@live.com.mx"
     password = "tucontraseña"
-
-    subject = "Asunto del correo"
-    body = "Contenido del correo"
-    
+    receiver_email = "diego-rko@live.com.mx"
+    subject = "Olis crayolis automatizado"
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = subject
-    print(message)
-    message.attach(MIMEText(body, "plain"))
+    
+    body = "Contenido del correo"
+    emailPlainContent = MIMEText(_text = body, _subtype = "plain", _charset = "utf-8")
+    message.attach(emailPlainContent)
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        with smtplib.SMTP("smtp-mail.outlook.com", 587) as server:
             server.starttls()
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, message.as_string())
             print("Correo electrónico enviado correctamente.")
     except Exception as e:
         print(f"Error al enviar el correo electrónico: {e}")
+
 
 def send_email_at_specific_time(hour, minute):
     intentosEmail = 0
@@ -41,4 +42,4 @@ def send_email_at_specific_time(hour, minute):
             print("Intento número", intentosEmail, "de mandar el correo...")
             intentosEmail += 1
 
-send_email_at_specific_time(1, 55)
+send_email_at_specific_time(3, 6)

@@ -44,18 +44,21 @@ def send_email():
     #están asignando valores a sus keys.
     message = MIMEMultipart()
     #MI CORREO, MI CONTRASEÑA, EL DESTINATARIO Y EL ASUNTO DEL CORREO SE INDICAN EN FORMA DE STRING:
-    sender_email = "tucorreo@gmail.com"         #Mi correo:                     tucorreo@gmail.com
-    password = "tucontraseña"                   #Mi contraseña.
-    receiver_email = "destinatario@gmail.com"   #Correo a quién se le envía:    destinatario@gmail.com
-    subject = "Asunto del correo"
-    #
-    body = "Contenido del correo"
-    #
+    sender_email = "dcervantesr1401@alumno.ipn.mx" #Mi correo:                     tucorreo@gmail.com
+    password = "tucontraseña"                   #Mi contraseña:                 tucontraseña
+    receiver_email = "diego-rko@live.com.mx"        #Correo a quién se le envía:    destinatario@gmail.com
+    subject = "Olis crayolis automatizado"
+    #ASIGNACIÓN DE REMITENTE, DESTINATARIO Y ASUNTO AL OBJETO MIMEMultipart:
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = subject
+    
+    #CONTENIDO DEL CORREO:
+    body = "Contenido del correo"
+    #MIMEText(): 
+    emailPlainContent = MIMEText(_text = body, _subtype = "plain", _charset = "utf-8")
+    message.attach(emailPlainContent)
 
-    message.attach(MIMEText(body, "plain"))
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.starttls()
@@ -79,4 +82,4 @@ def send_email_at_specific_time(hour, minute):
             intentosEmail += 1
 
 # Uso: Enviar correo a las 10:30 AM
-send_email_at_specific_time(1, 54)
+send_email_at_specific_time(2, 26)
