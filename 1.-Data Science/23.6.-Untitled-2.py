@@ -2,9 +2,7 @@
 import pyodbc
 import pandas
 import traceback
-from openpyxl import Workbook
-from openpyxl.styles import PatternFill
-from openpyxl.formatting.rule import CellIsRule
+import openpyxl
 
 class DatabaseExcelHandler:
     def __init__(self, db_connection_string):
@@ -121,25 +119,25 @@ class DatabaseExcelHandler:
             staticDataAbove_2_Cols = len(staticDataAbove_2[0])
             staticDataBelow_1_Cols = len(staticDataBelow_1[0])
             
-            workbook = Workbook()
+            workbook = openpyxl.Workbook()
             worksheet = workbook.active
             worksheet.title = 'Sheet1'
 
-            blueRowDataAbove1_format = PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
-            blueTableDataAbove1_format = PatternFill(start_color="d9e1f2", end_color="d9e1f2", fill_type="solid")
-            blueColDataAbove1_format = PatternFill(start_color="dae3f5", end_color="dae3f5", fill_type="solid")
-            whiteRowDataAbove2_format = PatternFill(start_color="ffffff", end_color="ffffff", fill_type="solid")
-            blueRowDataAbove2_format = PatternFill(start_color="9dc3e6", end_color="9dc3e6", fill_type="solid")
-            whiteRowDataBelow1_format = PatternFill(start_color="ffffff", end_color="ffffff", fill_type="solid")
-            darkBlueRowDataBelow1_format = PatternFill(start_color="284157", end_color="284157", fill_type="solid")
-            lightBlueRowDataBelow1_format = PatternFill(start_color="cfe2f3", end_color="cfe2f3", fill_type="solid")
-            greenRowDataBelow1_format = PatternFill(start_color="6fa53e", end_color="6fa53e", fill_type="solid")
-            grayRowDataBelow1_format = PatternFill(start_color="d9d9d9", end_color="d9d9d9", fill_type="solid")
-            yellowRowDataBelow1_format = PatternFill(start_color="ffff00", end_color="ffff00", fill_type="solid")
-            blueDB_format = PatternFill(start_color="a9d18e", end_color="a9d18e", fill_type="solid")
-            greenDB_format = PatternFill(start_color="6fa53e", end_color="6fa53e", fill_type="solid")
-            grayDB_format = PatternFill(start_color="d9d9d9", end_color="d9d9d9", fill_type="solid")
-            yellowDB_format = PatternFill(start_color="ffff00", end_color="ffff00", fill_type="solid")
+            blueRowDataAbove1_format = openpyxl.styles.PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
+            blueTableDataAbove1_format = openpyxl.styles.PatternFill(start_color="d9e1f2", end_color="d9e1f2", fill_type="solid")
+            blueColDataAbove1_format = openpyxl.styles.PatternFill(start_color="dae3f5", end_color="dae3f5", fill_type="solid")
+            whiteRowDataAbove2_format = openpyxl.styles.PatternFill(start_color="ffffff", end_color="ffffff", fill_type="solid")
+            blueRowDataAbove2_format = openpyxl.styles.PatternFill(start_color="9dc3e6", end_color="9dc3e6", fill_type="solid")
+            whiteRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="ffffff", end_color="ffffff", fill_type="solid")
+            darkBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="284157", end_color="284157", fill_type="solid")
+            lightBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="cfe2f3", end_color="cfe2f3", fill_type="solid")
+            greenRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="6fa53e", end_color="6fa53e", fill_type="solid")
+            grayRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="d9d9d9", end_color="d9d9d9", fill_type="solid")
+            yellowRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="ffff00", end_color="ffff00", fill_type="solid")
+            blueDB_format = openpyxl.styles.PatternFill(start_color="a9d18e", end_color="a9d18e", fill_type="solid")
+            greenDB_format = openpyxl.styles.PatternFill(start_color="6fa53e", end_color="6fa53e", fill_type="solid")
+            grayDB_format = openpyxl.styles.PatternFill(start_color="d9d9d9", end_color="d9d9d9", fill_type="solid")
+            yellowDB_format = openpyxl.styles.PatternFill(start_color="ffff00", end_color="ffff00", fill_type="solid")
 
             # Writing staticDataAbove_1
             for row_index, row_data in enumerate(staticDataAbove_1):
@@ -162,61 +160,61 @@ class DatabaseExcelHandler:
                     worksheet.cell(row=row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2, column=col_index + 1, value=cell_data)
             
             # Applying cell background colors
-            fill = PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
+            fill = openpyxl.styles.PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
             for row in worksheet.iter_rows(min_row=1, max_row=1, min_col=1, max_col=3):
                 for cell in row:
                     cell.fill = fill
 
             # Applying conditional formatting
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueRowDataAbove1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueRowDataAbove1_format)
             worksheet.conditional_formatting.add('A1:C' + str(staticDataAbove_1_Rows), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueColDataAbove1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueColDataAbove1_format)
             worksheet.conditional_formatting.add('B1:B' + str(staticDataAbove_1_Rows), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueTableDataAbove1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueTableDataAbove1_format)
             worksheet.conditional_formatting.add('C1:C' + str(staticDataAbove_1_Rows), rule)
             
             rowPositionStaticDataAbove2 = staticDataAbove_1_Rows + 2
             ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)
             worksheet.merge_cells(ExcelCellsStaticDataAbove2)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueRowDataAbove2_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueRowDataAbove2_format)
             worksheet.conditional_formatting.add(ExcelCellsStaticDataAbove2, rule)
 
             for i in range(1, staticDataAbove_2_Rows):
                 rowPositionStaticDataAbove2 += 1
                 ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)
                 worksheet.merge_cells(ExcelCellsStaticDataAbove2)
-                rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=whiteRowDataAbove2_format)
+                rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=whiteRowDataAbove2_format)
                 worksheet.conditional_formatting.add(ExcelCellsStaticDataAbove2, rule)
 
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueDB_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueDB_format)
             worksheet.conditional_formatting.add('A' + str(staticDataAbove_1_Rows + staticDataAbove_2_Rows + 2) + ':' + chr(ord('A') + columnasDataFrame - 1) + str(staticDataAbove_1_Rows + staticDataAbove_2_Rows + 2), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=greenDB_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=greenDB_format)
             worksheet.conditional_formatting.add('A' + str(staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3) + ':' + 'A' + str(filasDataFrame + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=grayDB_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=grayDB_format)
             worksheet.conditional_formatting.add('B' + str(staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3) + ':' + 'B' + str(filasDataFrame + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3), rule)
             for col in range(2, columnasDataFrame):
-                rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=yellowDB_format)
+                rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=yellowDB_format)
                 worksheet.conditional_formatting.add(chr(ord('A') + col) + str(staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3) + ':' + chr(ord('A') + col) + str(filasDataFrame + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3), rule)
 
             rowPositionStaticDataBelow1 = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 4
             ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)
             worksheet.merge_cells(ExcelCell)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=whiteRowDataBelow1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=whiteRowDataBelow1_format)
             worksheet.conditional_formatting.add('A' + str(rowPositionStaticDataBelow1 - 1) + ':' + chr(ord('G')) + str(rowPositionStaticDataBelow1 - 1), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=darkBlueRowDataBelow1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=darkBlueRowDataBelow1_format)
             worksheet.conditional_formatting.add('A' + str(rowPositionStaticDataBelow1) + ':' + chr(ord('G')) + str(rowPositionStaticDataBelow1), rule)
 
             rowPositionStaticDataBelow1 += 2
             ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)
             worksheet.merge_cells(ExcelCell)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=lightBlueRowDataBelow1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=lightBlueRowDataBelow1_format)
             worksheet.conditional_formatting.add('A' + str(rowPositionStaticDataBelow1 - 1) + ':' + chr(ord('G')) + str(rowPositionStaticDataBelow1 - 1), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=greenRowDataBelow1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=greenRowDataBelow1_format)
             worksheet.conditional_formatting.add('A' + str(rowPositionStaticDataBelow1) + ':' + 'A' + str(rowPositionStaticDataBelow1 + staticDataBelow_1_Rows - 1), rule)
-            rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=grayRowDataBelow1_format)
+            rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=grayRowDataBelow1_format)
             worksheet.conditional_formatting.add('B' + str(rowPositionStaticDataBelow1) + ':' + 'B' + str(rowPositionStaticDataBelow1 + staticDataBelow_1_Rows - 1), rule)
             for col in range(2, staticDataBelow_1_Cols):
-                rule = CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=yellowRowDataBelow1_format)
+                rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=yellowRowDataBelow1_format)
                 worksheet.conditional_formatting.add(chr(ord('A') + col) + str(rowPositionStaticDataBelow1) + ':' + chr(ord('A') + col) + str(rowPositionStaticDataBelow1 + staticDataBelow_1_Rows - 1), rule)
 
             workbook.save(pathExcel)
