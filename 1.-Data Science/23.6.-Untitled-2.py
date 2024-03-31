@@ -3,6 +3,7 @@ import pyodbc
 import pandas
 import traceback
 import openpyxl
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 class DatabaseExcelHandler:
     def __init__(self, db_connection_string):
@@ -73,6 +74,15 @@ class DatabaseExcelHandler:
                         "Fecha de Publicacion": row["fecha_publicacion"]
                     })
             finalDataFrame = pandas.DataFrame(data=finalData)
+
+            # Agregar títulos de las celdas al DataFrame
+            finalDataFrame.columns = [
+                "Titulo Static",
+                "Content Status",
+                "Dato Static",
+                "Titulo",
+                "Fecha de Publicacion"
+            ]
 
             staticDataAbove_1 = [
                 ['Title A1.1', 'Title A1.2', 'Title A1.3'],
@@ -147,17 +157,17 @@ class DatabaseExcelHandler:
             # Writing staticDataAbove_2
             for row_index, row_data in enumerate(staticDataAbove_2):
                 for col_index, cell_data in enumerate(row_data):
-                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + 1, column=col_index + 1, value=cell_data)
+                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + 2, column=col_index + 1, value=cell_data)
 
             # Writing finalDataFrame
-            for row_index, row_data in finalDataFrame.iterrows():
-                for col_index, cell_data in enumerate(row_data):
-                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1, column=col_index + 1, value=cell_data)
+            for r_idx, row in enumerate(dataframe_to_rows(finalDataFrame, index=False, header=True), 1):
+                for c_idx, value in enumerate(row, 1):
+                    worksheet.cell(row=r_idx + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3, column=c_idx, value=value)
 
             # Writing staticDataBelow_1
             for row_index, row_data in enumerate(staticDataBelow_1):
                 for col_index, cell_data in enumerate(row_data):
-                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2, column=col_index + 1, value=cell_data)
+                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 4, column=col_index + 1, value=cell_data)
             
             # Applying cell background colors
             fill = openpyxl.styles.PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
@@ -219,11 +229,11 @@ class DatabaseExcelHandler:
 
             workbook.save(pathExcel)
             print("Database table data successfully written to Excel file")
-            return "Proceso de exportación de datos a Excel finalizado con éxito."
-        except Exception as e:
-            print("Error occurred while processing data and saving to Excel:\n" + str(e) + "\n")
-            print(traceback.format_exc())
-            return "Se produjo un error al procesar los datos y guardar en Excel."
+            return "Proceso de exportación de datos a Excel finalizado correctamente."
+        except Exception as error:
+            print("Error occurred while exporting data to Excel:\n" + str(error) + "\n")
+            traceback.print_exc()
+            return "Ocurrió un error durante la exportación de datos a Excel."
 
 if __name__ == "__main__":
     connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
