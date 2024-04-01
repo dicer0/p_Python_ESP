@@ -434,7 +434,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         elif i == 1:                    #Color azul:    Fila 1 = (0, Ninguna Columna)
                             itemBelow1.setBackground(QtGui.QColor('#4472c4'))   #Color de celdas.
                             itemBelow1.setFont(font)                            #Letra en negritas.
-                        elif i == 2:                    #Gris azulado:  Fila 2 = (1, Ninguna Columna)
+                        elif (i == 2 or i == 10):                       #Gris azulado:  Fila 2 = (1, Ninguna Columna)
                             itemBelow1.setBackground(QtGui.QColor('#A7BFDE'))   #Color de celdas.
                             itemBelow1.setFont(font)                            #Letra en negritas.
                             #QtWidgets.QTableWidget().setSpan(): El método .setSpan() permite fusionar un 

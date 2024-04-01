@@ -297,39 +297,39 @@ class DatabaseExcelHandler:
             #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
             staticDataAbove_1 = [
                 ['Title A1.1', 'Title A1.2', 'Title A1.3'],
-                ['Static Row 1', '.', '.'],
-                ['Static Row 2', '.', '.'],
-                ['Static Row 3', '.', '.'],
-                ['Static Row 4', '.', '.'],
-                ['Static Row 5', '.', '.'],
-                ['Static Row 6', '.', '.']
+                ['Static Row 1', '', ''],
+                ['Static Row 2', '', ''],
+                ['Static Row 3', '', ''],
+                ['Static Row 4', '', ''],
+                ['Static Row 5', '', ''],
+                ['Static Row 6', '', '']
             ]
             staticDataAbove_2 = [
-                ['Title A2', '.', '.', '.', '.', '.', '.'],
-                ['Subtitle A2.1', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 1', '.', '.', '.', '.', '.', '.'],
-                ['.', '.', '.', '.', '.', '.', '.'],
-                ['Subtitle A2.2', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 2', '.', '.', '.', '.', '.', '.'],
-                ['.', '.', '.', '.', '.', '.', '.'],
-                ['Subtitle A2.3', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 3', '.', '.', '.', '.', '.', '.'],
-                ['.', '.', '.', '.', '.', '.', '.'],
-                ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '.', '.', '.', '.', '.', '.']
+                ['Title A2', '', '', '', '', '', ''],
+                ['Subtitle A2.1', '', '', '', '', '', ''],
+                ['Static Row 1', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['Subtitle A2.2', '', '', '', '', '', ''],
+                ['Static Row 2', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['Subtitle A2.3', '', '', '', '', '', ''],
+                ['Static Row 3', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
             ]
             staticDataBelow_1 = [
-                ['Title B1', '.', '.', '.', '.', '.', '.'],
+                ['Title B1', '', '', '', '', '', ''],
                 ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
-                ['Subtitle 1', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 1', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 2', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 3', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 4', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 5', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 6', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 7', '.', '.', '.', '.', '.', '.'],
-                ['Subtitle 2', '.', '.', '.', '.', '.', '.'],
-                ['Static Row 1', '.', '.', '.', '.', '.', '.']
+                ['Subtitle 1', '', '', '', '', '', ''],
+                ['Static Row 1', '', '', '', '', '', ''],
+                ['Static Row 2', '', '', '', '', '', ''],
+                ['Static Row 3', '', '', '', '', '', ''],
+                ['Static Row 4', '', '', '', '', '', ''],
+                ['Static Row 5', '', '', '', '', '', ''],
+                ['Static Row 6', '', '', '', '', '', ''],
+                ['Static Row 7', '', '', '', '', '', ''],
+                ['Subtitle 2', '', '', '', '', '', ''],
+                ['Static Row 1', '', '', '', '', '', '']
             ]
             #Para añadir las distintas tablas tanto dinámicas como estáticas se deberá extraer el tamaño del 
             #DataFrame, esto se hará a través de su atributo pandas.DataFrame().shape, el cual devuelve una tupla 
@@ -379,7 +379,39 @@ class DatabaseExcelHandler:
             #       - {:0>10.2f}: Formatea el número con dos decimales y lo rellena con ceros a la izquierda en un 
             #         espacio de 10 caracteres.
             #       - {:,}: Formatea el número con separadores de miles.
+            #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con 
+            #recursos que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones 
+            #de red o conexiones a bases de datos. Su sintaxis básica es la siguiente: 
+            #       with expresion as variable:
+            # - expresion: Este parámetro recibe un método que devuelva un objeto, ya que este se comportará como el 
+            #   "contexto de ejecución", osea el recurso que debe ser gestionado, un ejemplo es: 
+            #   open('archivo.txt', 'r').
+            # - variable: Es el nombre de la variable que se asigna al objeto de contexto dentro del bloque with.
+            #Utilizar el operador with es igual a asignar una variable, la única diferencia es que al utilizar el 
+            #operador with nos aseguramos que el objeto que devuelva el método utilizado sea gestionado por un 
+            #entorno temporal y complete sus tareas correctamente, como cerrar un archivo, incluso si ocurren 
+            #errores: 
+            #   nombreVariable = método() 
+            #   with método() as nombreVariable
+            #De igual manera, el operador with se asegura que no debamos guardar el archivo al terminar la acción, 
+            #o cerrar una conexión a la base de datos, ya que esta se maneja de forma automática por el operador.
             with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
+                #pandas.DataFrame(): El método DataFrame() sirve para convertir cualquier estructura de datos en 
+                #un DataFrame, que es un objeto de la librería pandas que sirve para estructurar los datos de forma 
+                #matricial en tablas.
+                staticDataAbove_1_DataFrame = pandas.DataFrame(staticDataAbove_1)
+                #pandas.DataFrame().style.set_properties(): El método style.set_properties se utiliza más que nada 
+                #para establecer la alineación del texto de un objeto DataFrame de pandas dentro de una celda de 
+                #Excel, ya que las demás características se pueden indicar después de forma específica para cada 
+                #fila o columna.
+                #El método recibe dos parámetros, subset y **kwargs:
+                # - subset: Es un parámetro que especifica las filas y columnas a las que se aplicarán las 
+                #   propiedades de estilo. Puede ser una lista de tuplas que contienen índices de fila y nombres de 
+                #   columna o una función que filtre las celdas.
+                # - **kwargs: KWArgs (Key Word Arguments) es un parámetro que recibe comandos de estilo en forma 
+                #   de clave-valor que se usan para renderizar el DataFrame en el backend y se indican en código 
+                #   HTML, CSS o Excel después de dos signos de multiplicación **.
+                staticDataAbove_1_DataFrame_textAligned = staticDataAbove_1_DataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
                 #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de 
                 #Excel, si este recibe una lista de listas como parámetro, la convertirá en un DataFrame.
                 # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
@@ -407,10 +439,13 @@ class DatabaseExcelHandler:
                 #aquí es donde se ve la importancia de saber el número de filas y columnas de cada grupo de datos, 
                 #ya que en el parámetro startrow, se colocará el número de filas de la agrupación anterior + 1 
                 #porque así se añade una fila de separación entre ellas.
-                pandas.DataFrame(staticDataAbove_1).to_excel(excel_writer = objetoExcel, index = False, header = False)
+                staticDataAbove_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = 0, header = False)
                 pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
-                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
-                pandas.DataFrame(staticDataBelow_1).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
+                finalDataFrame_textAligned = finalDataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
+                finalDataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
+                staticDataBelow_1_DataFrame = pandas.DataFrame(staticDataBelow_1)   #Conversión de lista de listas a DataFrame.
+                staticDataBelow_1_DataFrame_textAligned = staticDataBelow_1_DataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
+                staticDataBelow_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
                 #Después de haber creado el objeto pandas.ExcelWriter y haber convertido el DataFrame a un excel 
                 #con el método .to_excel(), se debe extraer el book (archivo excel) y sheet (página dentro del 
                 #book) del Excel para darle formato al archivo, ambas cosas se deben almacenar en variables 
@@ -432,21 +467,33 @@ class DatabaseExcelHandler:
                 # - bold: Define si el texto de la celda está en negrita (True) o no (False).
                 # - font_italic: Define si el texto de la celda está en cursiva (True) o no (False).
                 # - font_underline: Define si el texto de la celda está subrayado (True) o no (False).
-                # - align: Define la alineación del texto dentro de la celda ('left', 'center', 'right', 
-                #   'justify', etc.).
-                # - valign: Define la alineación vertical del texto dentro de la celda ('top', 'vcenter', 
-                #   'bottom', 'vjustify', etc.).
                 # - num_format: Define el formato numérico de la celda (por ejemplo, '0.00' para dos decimales).
                 # - border: Define los bordes de la celda (puedes especificar si quieres bordes en la parte 
                 #   superior, inferior, izquierda, derecha, etc.).
                 # - text_wrap: Define si el texto debe envolverse dentro de la celda (True) o no (False).
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
-                blueRowDataAbove1_format = workbook.add_format({'bg_color': '#4f81bd'})     #Fila 1 azul.
-                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})     #Col  2 azul.
-                blueTableDataAbove1_format = workbook.add_format({'bg_color': '#d3dfee'})   #Demás celdas azules.
+                blueRowDataAbove1_format = workbook.add_format({
+                    'bg_color': '#4f81bd',  #Color de celda azul claro.
+                    'color': 'white',       #Letras blancas.
+                    'bold': True            #Letras en negritas.
+                })                                                                          #Fila 1 azul, letras blancas, negritas y alineadas al centro.
+                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})     #Col  2 azul obscuro.
+                blueTableDataAbove1_format = workbook.add_format({
+                    'bg_color': '#d3dfee',  #Color de celda azul muy claro.
+                    'bold': True            #Letras en negritas.
+                })                                                                          #Demás celdas azules muy claro, letras negritas y alineadas al centro.
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
-                blueRowDataAbove2_format = workbook.add_format({'bg_color': '#4f81bd'})     #Fila 1 azul.
-                whiteRowDataAbove2_format = workbook.add_format({'bg_color': 'white'})      #Demás celdas blancas.
+                blueRowDataAbove2_format = workbook.add_format({
+                    'bg_color': '#4f81bd',  #Color de celda azul obscuro.
+                    'bold': True,           #Letras en negritas.
+                    'underline': True       #Letras subrayadas.
+                })                                                                          #Fila 1 azul obscuro y letras negritas.
+                whiteRowDataAbove2_format = workbook.add_format({
+                    'bg_color': 'white',    #Color de celda blanco.
+                    'bold': True,           #Letras en negritas.
+                    'underline': True       #Letras subrayadas.
+                })                                                                          #Fila 2 blanca, con letras negritas y subrayadas.
+                whiteTableDataAbove2_format = workbook.add_format({'bg_color': 'white'})    #Demás celdas blancas.
                 #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
                 blueDB_format = workbook.add_format({'bg_color': 'blue'})                   #Fila 1 azul.
                 greenDB_format = workbook.add_format({'bg_color': 'green'})                 #Col  1 verde.
@@ -456,9 +503,11 @@ class DatabaseExcelHandler:
                 whiteRowDataBelow1_format = workbook.add_format({'bg_color': 'white'})      #Fila 1 blanca.
                 darkBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#4f81bd'}) #Fila 2 azul.
                 lightBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#A7BFDE'})#Fila 3 azul claro.
-                greenRowDataBelow1_format = workbook.add_format({'bg_color': '#5EC268'})    #Col  1 verde.
-                grayRowDataBelow1_format = workbook.add_format({'bg_color': 'gray'})        #Col  2 gris.
-                yellowRowDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
+                greenColDataBelow1_format = workbook.add_format({'bg_color': '#5EC268'})    #Col  1 verde.
+                grayColDataBelow1_format = workbook.add_format({'bg_color': 'gray'})        #Col  2 gris.
+                yellowColDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
+                #FORMATO DE COLOR PARA LOS SEPARADORES DE DATOS:
+                dataSeparation_format = workbook.add_format({'bg_color': 'white'})
                 #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto 
                 #ExcelWriter() a través del método conditional_format().
                 #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para 
@@ -492,57 +541,82 @@ class DatabaseExcelHandler:
                 #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
                 worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove1_format})
                 worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
+                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, 
+                #considerar el tamaño de los conjuntos de datos y anteriores las filas de separación.
+                worksheet.conditional_format(staticDataAbove_1_Rows, 0, staticDataAbove_1_Rows, (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
                 worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'no_blanks', 'format': blueColDataAbove1_format})
+                worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'blanks',    'format': blueColDataAbove1_format})
                 worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
+                worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'blanks',    'format': blueTableDataAbove1_format})
 
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
-                #pandas.ExcelWriter(engine = 'xlsxwriter').sheets["nombreSheet"].merge_range(): El método 
-                #.merge_range() solo se puede utilizar cuando se haya elegido el engine xlsxwriter, y lo que hace 
-                #es permitirnos fusionar celdas, para ello puede recibir 3 parámetros:
-                # - Código de Celdas de Excel: Recibe el código de celdas de excel de donde a dónde se quiere 
-                #   fusionar las celdas, las cuales se indican por medio de una letra y un número, las letras 
-                #   indican la columna y el número la fila. Ejemplo: A1:G10 
-                #       - Cuando se quiera fusionar celdas conviene concatenar el número de la fila con el nombre 
-                #         de la celda, ya que de esta manera se puede automatizar el proceso cuando se busca 
-                #         fusionar las celdas de más de 1 fila.
-                # - data: Este parámetro recibe el texto (dato) que se va a mostrar en la celda fusionada, si no se 
-                #   quiere añadir ningún texto, se deja como None.
-                # - format (opcional): Se puede crear un formato de letra para que se aplique a esta celda.
                 rowPositionStaticDataAbove2 = (staticDataAbove_1_Rows + 1) + 1
-                ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)    #Position  A9:G9
-                worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
-                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1), 0, (staticDataAbove_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove2_format})
-                for i in range(0, staticDataAbove_2_Rows - 1): #Position  A10:G10 - A19:G19
-                    rowPositionStaticDataAbove2 += 1
-                    ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)
+                for i in range(rowPositionStaticDataAbove2, rowPositionStaticDataAbove2 + staticDataAbove_2_Rows): #Position  A9:G9 - A19:G19
+                    #pandas.ExcelWriter(engine = 'xlsxwriter').sheets["nombreSheet"].merge_range(): El método 
+                    #.merge_range() solo se puede utilizar cuando se haya elegido el engine xlsxwriter, y lo que 
+                    #hace es permitirnos fusionar celdas específicas del archivo Excel, para ello pueden recibir 3 
+                    #parámetros:
+                    # - Código de Celdas de Excel: Recibe el código de celdas de excel de donde a dónde se quiere 
+                    #   fusionar las celdas, las cuales se indican por medio de una letra y un número, las letras 
+                    #   indican la columna y el número la fila. Ejemplo: A1:G10 
+                    #       - Cuando se quiera fusionar celdas conviene concatenar el número de la fila con el 
+                    #         nombre de la celda, ya que de esta manera se puede automatizar el proceso cuando se 
+                    #         busca fusionar las celdas de más de 1 fila.
+                    # - data: Este parámetro recibe el texto (dato) que se va a mostrar en la celda fusionada, si no 
+                    #   se quiere añadir ningún texto, se deja como None.
+                    # - format (opcional): Se puede crear un formato de letra para que se aplique a esta celda.
+                    ExcelCellsStaticDataAbove2 = "A" + str(i) + ":G" + str(i)
                     worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
-                    worksheet.conditional_format((staticDataAbove_1_Rows + 2), 0, (staticDataAbove_1_Rows + 2), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataAbove2_format})
+                    if (i == 9):                                                        #Posición  A9:G9
+                        #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove2_format})
+                    elif (i == 10 or i == 13 or i == 16):                               #Posición  A10:G10 - A19:G19
+                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataAbove2_format})
+                    else:                                                               #Posición  Las demás celdas de la tabla.
+                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteTableDataAbove2_format})
                 
                 #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
                 #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
+                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, 
+                #considerar el tamaño de los conjuntos de datos y anteriores las filas de separación.
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
                 worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
+                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'blanks',    'format': greenDB_format})
                 worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'no_blanks', 'format': grayDB_format})
+                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'blanks',    'format': grayDB_format})
                 for col in range(2, columnasDataFrame):
                     worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'no_blanks', 'format': yellowDB_format})
+                    worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'blanks',    'format': yellowDB_format})
                 
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
                 #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                #FORMATO DE COLOR DE LAS CELDAS DE LAS FILAS FUSIONADAS:
                 rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
                 ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A29:G29
                 worksheet.merge_range(ExcelCell, data = None)
-                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
-                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, rowPositionStaticDataBelow1, (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': darkBlueRowDataBelow1_format})
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks',   'format': whiteRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, rowPositionStaticDataBelow1, (staticDataBelow_1_Cols - 1), {'type': 'no_blanks',   'format': darkBlueRowDataBelow1_format})
                 rowPositionStaticDataBelow1 += 2
                 ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A31:G31
                 worksheet.merge_range(ExcelCell, data = None)
-                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
-                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 0, {'type': 'no_blanks', 'format': greenRowDataBelow1_format})
-                worksheet.conditional_format(rowPositionStaticDataBelow1, 1, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 1, {'type': 'no_blanks', 'format': grayRowDataBelow1_format})
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks',   'format': lightBlueRowDataBelow1_format})
+                rowPositionStaticDataBelow1 += 8
+                ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A39:G39
+                worksheet.merge_range(ExcelCell, data = None)
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks',   'format': lightBlueRowDataBelow1_format})
+                #FORMATO DE COLOR DE LAS COLUMNAS:
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 0, {'type': 'no_blanks',   'format': greenColDataBelow1_format})
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 0, {'type': 'blanks',      'format': greenColDataBelow1_format})
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 1, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 1, {'type': 'no_blanks',   'format': grayColDataBelow1_format})
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 1, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 1, {'type': 'blanks',      'format': grayColDataBelow1_format})
                 for col in range(2, staticDataBelow_1_Cols):
-                    worksheet.conditional_format(rowPositionStaticDataBelow1, col, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), col, {'type': 'no_blanks', 'format': yellowRowDataBelow1_format})
-            
+                    worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), col, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), col, {'type': 'no_blanks',   'format': yellowColDataBelow1_format})
+                    worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), col, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), col, {'type': 'blanks',      'format': yellowColDataBelow1_format})
+                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, 
+                #considerar el tamaño de los conjuntos de datos y anteriores las filas de separación.
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
+
                 #AJUSTAR LAS DIMENSIONES DE LAS CELDAS PARA MOSTRAR SU CONTENIDO COMPLETO:  
                 max_lengths = [len(str(col)) for col in finalDataFrame.columns]
                 for index, row in finalDataFrame.iterrows():
@@ -553,7 +627,9 @@ class DatabaseExcelHandler:
                     worksheet.set_column(i, i, max_length + 1)  #Agregar un margen de 1 para mejor aspecto
             
             #Devolver el DataFrame procesado.
+            print(finalDataFrame, "\n")
             return finalDataFrame
+        
         except Exception as error:
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
             print("La línea donde ocurrió el error fue: ", traceback.format_exc())
