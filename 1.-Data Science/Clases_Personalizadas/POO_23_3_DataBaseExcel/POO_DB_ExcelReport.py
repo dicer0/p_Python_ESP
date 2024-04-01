@@ -496,14 +496,30 @@ class DatabaseExcelHandler:
                 whiteTableDataAbove2_format = workbook.add_format({'bg_color': 'white'})    #Demás celdas blancas.
                 #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
                 blueDB_format = workbook.add_format({'bg_color': 'blue'})                   #Fila 1 azul.
-                greenDB_format = workbook.add_format({'bg_color': 'green'})                 #Col  1 verde.
+                greenDB_format = workbook.add_format({
+                    'bg_color': 'green',    #Color de celda verde.
+                    'bold': True            #Letras en negritas.
+                })                                                                          #Col  1 verde.
                 grayDB_format = workbook.add_format({'bg_color': 'gray'})                   #Col  2 gris.
                 yellowDB_format = workbook.add_format({'bg_color': 'yellow'})               #Demás celdas amarillas.
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
-                whiteRowDataBelow1_format = workbook.add_format({'bg_color': 'white'})      #Fila 1 blanca.
-                darkBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#4f81bd'}) #Fila 2 azul.
-                lightBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#A7BFDE'})#Fila 3 azul claro.
-                greenColDataBelow1_format = workbook.add_format({'bg_color': '#5EC268'})    #Col  1 verde.
+                whiteRowDataBelow1_format = workbook.add_format({
+                    'bg_color': 'white',    #Color de celda blanco.
+                    'bold': True,           #Letras en negritas.
+                    'underline': True       #Letras subrayadas.
+                })                                                                          #Fila 1 blanca.
+                darkBlueRowDataBelow1_format = workbook.add_format({
+                    'bg_color': '#4f81bd',  #Color de celda azul obscuro.
+                    'bold': True            #Letras en negritas.
+                })                                                                          #Fila 2 azul.
+                lightBlueRowDataBelow1_format = workbook.add_format({
+                    'bg_color': '#A7BFDE',  #Color de celda azul claro.
+                    'bold': True            #Letras en negritas.
+                })                                                                          #Fila 3 azul claro.
+                greenColDataBelow1_format = workbook.add_format({
+                    'bg_color': '#5EC268',  #Color de celda verde.
+                    'bold': True            #Letras en negritas.
+                })                                                                          #Col  1 verde.
                 grayColDataBelow1_format = workbook.add_format({'bg_color': 'gray'})        #Col  2 gris.
                 yellowColDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
                 #FORMATO DE COLOR PARA LOS SEPARADORES DE DATOS:
