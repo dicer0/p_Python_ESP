@@ -133,47 +133,46 @@ class DatabaseExcelHandler:
             worksheet = workbook.active
             worksheet.title = 'Sheet1'
 
-            blueRowDataAbove1_format = openpyxl.styles.PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
-            blueTableDataAbove1_format = openpyxl.styles.PatternFill(start_color="d9e1f2", end_color="d9e1f2", fill_type="solid")
-            blueColDataAbove1_format = openpyxl.styles.PatternFill(start_color="dae3f5", end_color="dae3f5", fill_type="solid")
-            whiteRowDataAbove2_format = openpyxl.styles.PatternFill(start_color="ffffff", end_color="ffffff", fill_type="solid")
-            blueRowDataAbove2_format = openpyxl.styles.PatternFill(start_color="9dc3e6", end_color="9dc3e6", fill_type="solid")
-            whiteRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="ffffff", end_color="ffffff", fill_type="solid")
-            darkBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="284157", end_color="284157", fill_type="solid")
-            lightBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="cfe2f3", end_color="cfe2f3", fill_type="solid")
-            greenRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="6fa53e", end_color="6fa53e", fill_type="solid")
-            grayRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="d9d9d9", end_color="d9d9d9", fill_type="solid")
-            yellowRowDataBelow1_format = openpyxl.styles.PatternFill(start_color="ffff00", end_color="ffff00", fill_type="solid")
-            blueDB_format = openpyxl.styles.PatternFill(start_color="a9d18e", end_color="a9d18e", fill_type="solid")
-            greenDB_format = openpyxl.styles.PatternFill(start_color="6fa53e", end_color="6fa53e", fill_type="solid")
-            grayDB_format = openpyxl.styles.PatternFill(start_color="d9d9d9", end_color="d9d9d9", fill_type="solid")
-            yellowDB_format = openpyxl.styles.PatternFill(start_color="ffff00", end_color="ffff00", fill_type="solid")
+            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
+            blueRowDataAbove1_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")       #Fila 1 azul. 
+            blueColDataAbove1_format = openpyxl.styles.PatternFill(start_color = "0070c0", end_color = "0070c0", fill_type = "solid")       #Col  2 azul.
+            blueTableDataAbove1_format = openpyxl.styles.PatternFill(start_color = "d3dfee", end_color = "d3dfee", fill_type = "solid")     #Demás celdas azules.
+            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
+            blueRowDataAbove2_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")       #Fila 1 azul.
+            whiteRowDataAbove2_format = openpyxl.styles.PatternFill(start_color = "ffffff", end_color = "ffffff", fill_type = "solid")      #Demás celdas blancas.
+            #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
+            blueDB_format = openpyxl.styles.PatternFill(start_color = "0000ff", end_color = "0000ff", fill_type = "solid")                  #Fila 1 azul.
+            greenDB_format = openpyxl.styles.PatternFill(start_color = "008000", end_color = "008000", fill_type = "solid")                 #Col  1 verde.
+            grayDB_format = openpyxl.styles.PatternFill(start_color = "808080", end_color = "808080", fill_type = "solid")                  #Col  2 gris.
+            yellowDB_format = openpyxl.styles.PatternFill(start_color = "ffff00", end_color = "ffff00", fill_type = "solid")                #Demás celdas amarillas.
+            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
+            whiteRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "ffffff", end_color = "ffffff", fill_type = "solid")      #Fila 1 blanca.  
+            darkBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")   #Fila 2 azul.
+            lightBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "A7BFDE", end_color = "A7BFDE", fill_type = "solid")  #Fila 3 azul claro.
+            greenRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "5EC268", end_color = "5EC268", fill_type = "solid")      #Col  1 verde.
+            grayRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "808080", end_color = "808080", fill_type = "solid")       #Col  2 gris.
+            yellowRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "FFF2CC", end_color = "FFF2CC", fill_type = "solid")     #Demás celdas amarillas.
 
             # Writing staticDataAbove_1
-            for row_index, row_data in enumerate(staticDataAbove_1):
-                for col_index, cell_data in enumerate(row_data):
-                    worksheet.cell(row=row_index + 1, column=col_index + 1, value=cell_data)
+            for row_index, row_data in enumerate(staticDataAbove_1, start = 1):
+                for col_index, cell_data in enumerate(row_data, start = 1):
+                    worksheet.cell(row = row_index, column = col_index, value = cell_data)
             
             # Writing staticDataAbove_2
-            for row_index, row_data in enumerate(staticDataAbove_2):
-                for col_index, cell_data in enumerate(row_data):
-                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + 2, column=col_index + 1, value=cell_data)
+            for row_index, row_data in enumerate(staticDataAbove_2, start = 1):
+                for col_index, cell_data in enumerate(row_data, start = 1):
+                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + 1, column = col_index, value = cell_data)
 
             # Writing finalDataFrame
-            for r_idx, row in enumerate(dataframe_to_rows(finalDataFrame, index=False, header=True), 1):
-                for c_idx, value in enumerate(row, 1):
-                    worksheet.cell(row=r_idx + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 3, column=c_idx, value=value)
+            listDbData = dataframe_to_rows(finalDataFrame, index = False, header = True)
+            for row_index, row_data in enumerate(listDbData, start = 1):
+                for col_index, value in enumerate(row_data, start = 1):
+                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 2, column = col_index, value = value)
 
             # Writing staticDataBelow_1
-            for row_index, row_data in enumerate(staticDataBelow_1):
-                for col_index, cell_data in enumerate(row_data):
-                    worksheet.cell(row=row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 4, column=col_index + 1, value=cell_data)
-            
-            # Applying cell background colors
-            fill = openpyxl.styles.PatternFill(start_color="4f81bd", end_color="4f81bd", fill_type="solid")
-            for row in worksheet.iter_rows(min_row=1, max_row=1, min_col=1, max_col=3):
-                for cell in row:
-                    cell.fill = fill
+            for row_index, row_data in enumerate(staticDataBelow_1, start = 1):
+                for col_index, cell_data in enumerate(row_data, start = 1):
+                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 4, column = col_index, value = cell_data)
 
             # Applying conditional formatting
             rule = openpyxl.formatting.rule.CellIsRule(operator='notEqual', formula=['" "'], stopIfTrue=True, fill=blueRowDataAbove1_format)

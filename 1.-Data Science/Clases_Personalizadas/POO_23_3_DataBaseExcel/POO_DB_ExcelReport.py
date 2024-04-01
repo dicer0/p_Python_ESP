@@ -32,6 +32,10 @@ import pandas
 #fórmulas de cálculo, dando formato de color o tipo de letra a sus celdas, trabajando con gráficos incrustados, 
 #imágenes, etc.   
 import openpyxl
+#openpyxl.utils.dataframe: El método dataframe_to_rows es útil cuando se desea escribir los datos de un DataFrame 
+#de pandas en un archivo de Excel utilizando la biblioteca openpyxl, ya que dicha librería no puede manejar de 
+#forma directa los DataFrames, por lo que este se debe convertir a una lista de listas.
+from openpyxl.utils.dataframe import dataframe_to_rows
 #pandas: Librería que proporciona datos adicionales acerca de los errores detectados por una estructura try-except
 import traceback
 
@@ -212,8 +216,8 @@ class DatabaseExcelHandler:
             #En este caso lo que se hará es extraer datos de la base de datos, los cuales serán comparados con 
             #algunos valores de la siguiente lista de diccionarios y si algunos de ellos son iguales, se tomará 
             #algunos datos de la database (DB), se extraerán algunos otros de la lista de diccionarios y se 
-            #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte 
-            #y posteriormente mostrada a su vez en una GUI de PyQt5.
+            #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte y 
+            #posteriormente mostrada a su vez en una GUI de PyQt5.
             compareDicc = [{
                 "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
                 "datoStatic": "Dato grupo 1",         
@@ -364,76 +368,92 @@ class DatabaseExcelHandler:
             #del archivo de Excel (workbook).
             worksheet.title = "Sheet1"
 
-            #RELLENAR EL WORKBOOK DEL EXCEL CON VALORES DINÁMICOS EXTRAÍDOS DE LA DATABASE Y ESTÁTICOS:
+            #RELLENAR EL WORKBOOK DEL EXCEL CON VALORES ESTÁTICOS Y DINÁMICOS EXTRAÍDOS DE LA DATABASE:
             #STATIC DATA ABOVE 1:
             #enumerate(): Es un método que devuelve tanto el índice como el valor de los elementos de una lista, 
-            #tupla, diccionario, DataFrame, etc. en forma de una tupla de dos valores (indice, valor).
+            #tupla, diccionario, DataFrame, etc. en forma de una tupla de dos valores (indice, valor). En su segundo 
+            #parámetro llamado start, de forma opcional se puede indicar desde qué número empieza a contar el 
+            #índice, su valor por defecto es 0 si no se indica nada.
             #Cuando se quiere acceder a los valores de una lista de listas (tabla), primero se recorren las filas.
-            for row_index, row_data in enumerate(staticDataAbove_1):    #Bucle que recorre las filas de la tabla.
+            for row_index, row_data in enumerate(staticDataAbove_1, start = 1): #Bucle para las filas de la tabla.
                 #Y luego se recorren los valores de las columnas, accediendo a las filas de forma individual.
-                for col_index, cell_data in enumerate(row_data):        #Bucle que recorre las columnas de la tabla.
+                for col_index, cell_data in enumerate(row_data, start = 1):     #Bucle para las columnas.
                     #openpyxl.Workbook().active.cell(): El método cell() se utiliza para acceder a una celda 
                     #específica en la hoja de cálculo activa de un archivo de Excel, para ello se debe indicar sus 
                     #coordenadas de fila (y_vertical), columna (x_horizontal) y el valor que se le quiere colocar.
                     #Es muy importante mencionar que cuando se utiliza el método enumerate() para extraer los 
-                    #índices de las columnas y filas, se les debe sumar un 1 por default, ya que el método .cell()
-                    #empieza a contar desde 1 sus coordenadas, no desde 0.
-                    row_coordenate = row_index + 1
-                    col_coordenate = col_index + 1
-                    worksheet.cell(row = row_coordenate, column = col_coordenate, value = cell_data)
+                    #índices de las columnas y filas, se les debe sumar un 1 por default si es que no se ha indicado 
+                    #como 1 el parámetro start del método enumerate(), ya que el método .cell() empieza a contar 
+                    #desde 1 sus coordenadas, no desde 0.
+                    worksheet.cell(row = row_index, column = col_index, value = cell_data)
             #STATIC DATA ABOVE 2:
-            for row_index, row_data in enumerate(staticDataAbove_2):    #Bucle que recorre las filas de la tabla.
-                for col_index, cell_data in enumerate(row_data):        #Bucle que recorre las columnas de la tabla.
-                    #openpyxl.Workbook().active.cell(): El método cell funciona para colocar datos de forma individual 
-                    #en cada celda de la hoja activa de un archivo de Excel.
-                    #Se suma +1 por default a las coordenadas porque enumerate() cuenta desde 0 y cell() desde 1.
-                    row_coordenate = row_index + 1
-                    col_coordenate = col_index + 1
-                    worksheet.cell(row = row_coordenate, column = col_coordenate, value = cell_data)
-            
-            finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
-            pandas.DataFrame(staticDataBelow_1).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
+            for row_index, row_data in enumerate(staticDataAbove_2, start = 1): #Bucle para las filas de la tabla.
+                for col_index, cell_data in enumerate(row_data, start = 1):     #Bucle para las columnas.
+                    #openpyxl.Workbook().active.cell(): Método para colocar datos en cada celda de la hoja activa 
+                    #de un archivo de Excel, cada que se agregue una agrupación de datos adicional, se le debe sumar 
+                    #un 1 para que exista una fila de separación entre ellas.
+                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + 1, column = col_index + 1, value = cell_data)
+            #DYNAMIC DATA FROM THE DATABASE:
+            #openpyxl.utils.dataframe.dataframe_to_rows(): El método dataframe_to_rows() del paquete utils.dataframe 
+            #perteneciente a la librería openpyxl sirve para convertir un objeto pandas.DataFrame en una lista de 
+            #listas, para que puedan ser escritos sus datos en un archivo de Excel utilizando la librería OpenPyXL, 
+            #para ello el método puede recibir los siguientes parámetros:
+            # - DataFrame: Este parámetro no tiene nombre y se refiere al DataFrame de pandas que se desea convertir 
+            #   en una lista de listas.
+            # - index: Es un booleano que indica si se deben incluir los índices de las filas en la lista de listas 
+            #   convertidas. Por defecto es True.
+            # - header: Es un booleano que indica si se deben incluir los nombres de las columnas como la primera 
+            #   fila en la lista de listas convertidas. Por defecto es True.
+            # - columns (opcional): Es una secuencia de nombres de columnas que se utilizarán para seleccionar las 
+            #   columnas del DataFrame que se convertirán en una lista de listas. Si no se proporciona, se 
+            #   convertirán todas las columnas del DataFrame.
+            listDbData = dataframe_to_rows(finalDataFrame, index = False, header = True)
+            for row_index, row_data in enumerate(listDbData, start = 1):        #Bucle para las filas de la tabla.
+                for col_index, value in enumerate(row_data, start = 1):         #Bucle para las columnas.
+                    #openpyxl.Workbook().active.cell(): Método para colocar datos en cada celda de la hoja activa 
+                    #de un archivo de Excel, cada que se agregue una agrupación de datos adicional, se le debe sumar 
+                    #un 1 para que exista una fila de separación entre ellas.
+                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 2, column = col_index, value = value)
+            #STATIC DATA BELOW 1:
+            for row_index, row_data in enumerate(staticDataBelow_1, start = 1): #Bucle para las filas de la tabla.
+                for col_index, cell_data in enumerate(row_data, start = 1):     #Bucle para las columnas.
+                    #openpyxl.Workbook().active.cell(): Método para colocar datos en cada celda de la hoja activa 
+                    #de un archivo de Excel, cada que se agregue una agrupación de datos adicional, se le debe sumar 
+                    #un 1 para que exista una fila de separación entre ellas.
+                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3, column = col_index, value = cell_data)
 
-            #Una vez que se haya accedido al book y sheet deseado y guardado ambos en variables, se debe 
-            #indicar los formatos estáticos de sus celdas, guardando todos en variables y asignándolos al 
-            #book a través del método .add_format().
-            #pandas.ExcelWriter().book.add_format({}): Este método sirve para guardar en una variable un 
-            #formato de celda, el cual se indica en un diccionario porque se pueden encapsular varias 
-            #propiedades:
-            # - bg_color: Define el color de fondo de la celda.
-            # - font_color: Define el color de la fuente de la celda.
-            # - font_name: Define el nombre de la fuente de la celda.
-            # - font_size: Define el tamaño de la fuente de la celda.
-            # - bold: Define si el texto de la celda está en negrita (True) o no (False).
-            # - font_italic: Define si el texto de la celda está en cursiva (True) o no (False).
-            # - font_underline: Define si el texto de la celda está subrayado (True) o no (False).
-            # - align: Define la alineación del texto dentro de la celda ('left', 'center', 'right', 
-            #   'justify', etc.).
-            # - valign: Define la alineación vertical del texto dentro de la celda ('top', 'vcenter', 
-            #   'bottom', 'vjustify', etc.).
-            # - num_format: Define el formato numérico de la celda (por ejemplo, '0.00' para dos decimales).
-            # - border: Define los bordes de la celda (puedes especificar si quieres bordes en la parte 
-            #   superior, inferior, izquierda, derecha, etc.).
-            # - text_wrap: Define si el texto debe envolverse dentro de la celda (True) o no (False).
+            #Una vez que se haya creado el book y sheet del archivo de Excel y luego se hayan añadido los datos 
+            #estáticos y dinámicos a su tabla, se deben indicar los formatos estáticos de color de sus celdas, 
+            #guardándolos todos en variables y asignándolos al book a través de un objeto PatternFill().
+            #openpyxl.styles.PatternFill(): Este método se utiliza para guardar en una variable un formato de color 
+            #de celda que puede ser gradiente o sólido, el cual recibe los siguientes parámetros:
+            # - start_color: Define el color de fondo inicial de la celda.
+            # - end_color: Define el color de fondo final de la celda.
+            # - fill_type: Es el tipo de relleno que se aplicará. 
+            #   - "none": Indica que no se aplica ningún relleno al estilo.
+            #   - "solid": Indica un relleno sólido con un solo color.
+            #   - "gradient": Indica un relleno con gradiente de color que cambia a través de la celda. El parámetro 
+            #     end_color solo se utiliza cuando fill_type es "gradient", de lo contrario, se ignora.
+            #Los colores deben ser indicados en formato hexadecimal (sin añadir el signo de #). 
             #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
-            blueRowDataAbove1_format = workbook.add_format({'bg_color': '#4f81bd'})     #Fila 1 azul.
-            blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})     #Col  2 azul.
-            blueTableDataAbove1_format = workbook.add_format({'bg_color': '#d3dfee'})   #Demás celdas azules.
+            blueRowDataAbove1_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")       #Fila 1 azul. 
+            blueColDataAbove1_format = openpyxl.styles.PatternFill(start_color = "0070c0", end_color = "0070c0", fill_type = "solid")       #Col  2 azul.
+            blueTableDataAbove1_format = openpyxl.styles.PatternFill(start_color = "d3dfee", end_color = "d3dfee", fill_type = "solid")     #Demás celdas azules.
             #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
-            blueRowDataAbove2_format = workbook.add_format({'bg_color': '#4f81bd'})     #Fila 1 azul.
-            whiteRowDataAbove2_format = workbook.add_format({'bg_color': 'white'})      #Demás celdas blancas.
+            blueRowDataAbove2_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")       #Fila 1 azul.
+            whiteRowDataAbove2_format = openpyxl.styles.PatternFill(start_color = "ffffff", end_color = "ffffff", fill_type = "solid")      #Demás celdas blancas.
             #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
-            blueDB_format = workbook.add_format({'bg_color': 'blue'})                   #Fila 1 azul.
-            greenDB_format = workbook.add_format({'bg_color': 'green'})                 #Col  1 verde.
-            grayDB_format = workbook.add_format({'bg_color': 'gray'})                   #Col  2 gris.
-            yellowDB_format = workbook.add_format({'bg_color': 'yellow'})               #Demás celdas amarillas.
+            blueDB_format = openpyxl.styles.PatternFill(start_color = "0000ff", end_color = "0000ff", fill_type = "solid")                  #Fila 1 azul.
+            greenDB_format = openpyxl.styles.PatternFill(start_color = "008000", end_color = "008000", fill_type = "solid")                 #Col  1 verde.
+            grayDB_format = openpyxl.styles.PatternFill(start_color = "808080", end_color = "808080", fill_type = "solid")                  #Col  2 gris.
+            yellowDB_format = openpyxl.styles.PatternFill(start_color = "ffff00", end_color = "ffff00", fill_type = "solid")                #Demás celdas amarillas.
             #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
-            whiteRowDataBelow1_format = workbook.add_format({'bg_color': 'white'})      #Fila 1 blanca.
-            darkBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#4f81bd'}) #Fila 2 azul.
-            lightBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#A7BFDE'})#Fila 3 azul claro.
-            greenRowDataBelow1_format = workbook.add_format({'bg_color': '#5EC268'})    #Col  1 verde.
-            grayRowDataBelow1_format = workbook.add_format({'bg_color': 'gray'})        #Col  2 gris.
-            yellowRowDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
+            whiteRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "ffffff", end_color = "ffffff", fill_type = "solid")      #Fila 1 blanca.  
+            darkBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")   #Fila 2 azul.
+            lightBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "A7BFDE", end_color = "A7BFDE", fill_type = "solid")  #Fila 3 azul claro.
+            greenRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "5EC268", end_color = "5EC268", fill_type = "solid")      #Col  1 verde.
+            grayRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "808080", end_color = "808080", fill_type = "solid")       #Col  2 gris.
+            yellowRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "FFF2CC", end_color = "FFF2CC", fill_type = "solid")     #Demás celdas amarillas.
             #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto 
             #ExcelWriter() a través del método conditional_format().
             #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para 
@@ -537,3 +557,9 @@ class DatabaseExcelHandler:
             if self.connection1:
                 self.connection1.close()
                 print("MySQL Connection closed.")
+
+if __name__ == "__main__":
+    connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
+    db_handler1 = DatabaseExcelHandler(connectionString)
+    excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
+    db_handler1.process_data_and_save_to_excel(excelFilePath2)
