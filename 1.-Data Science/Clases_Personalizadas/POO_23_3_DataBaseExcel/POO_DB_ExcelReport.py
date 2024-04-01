@@ -28,14 +28,6 @@
 import pyodbc
 #pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
-#openpyxl: Esta librería permite leer, escribir y modificar archivos Excel, creando o eliminando sheets, agregando 
-#fórmulas de cálculo, dando formato de color o tipo de letra a sus celdas, trabajando con gráficos incrustados, 
-#imágenes, etc.   
-import openpyxl
-#openpyxl.utils.dataframe: El método dataframe_to_rows es útil cuando se desea escribir los datos de un DataFrame 
-#de pandas en un archivo de Excel utilizando la biblioteca openpyxl, ya que dicha librería no puede manejar de 
-#forma directa los DataFrames, por lo que este se debe convertir a una lista de listas.
-from openpyxl.utils.dataframe import dataframe_to_rows
 #pandas: Librería que proporciona datos adicionales acerca de los errores detectados por una estructura try-except
 import traceback
 
@@ -216,8 +208,8 @@ class DatabaseExcelHandler:
             #En este caso lo que se hará es extraer datos de la base de datos, los cuales serán comparados con 
             #algunos valores de la siguiente lista de diccionarios y si algunos de ellos son iguales, se tomará 
             #algunos datos de la database (DB), se extraerán algunos otros de la lista de diccionarios y se 
-            #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte y 
-            #posteriormente mostrada a su vez en una GUI de PyQt5.
+            #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte 
+            #y posteriormente mostrada a su vez en una GUI de PyQt5.
             compareDicc = [{
                 "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
                 "datoStatic": "Dato grupo 1",         
@@ -356,196 +348,209 @@ class DatabaseExcelHandler:
             staticDataBelow_1_Cols = len(staticDataBelow_1[0])
 
             #GUARDAR UN DATAFRAME EN UN EXCEL, INDICANDO SU FORMATO ESTÁTICO, NO UNO QUE DEPENDA DE LOS DATOS:
-            #openpyxl.Workbook(): El objeto Workbook() de la librería openpyxl sirve para crear el book (archivo de 
-            #excel) y sheet (página dentro del book) del Excel para darle formato al archivo. 
-            workbook = openpyxl.Workbook()
-            #openpyxl.Workbook().active: El atributo active se utiliza para acceder a la hoja de cálculo (sheet) 
-            #activa en un libro de trabajo (workbook) creado con openpyxl, ya que como los workbooks contienen una o 
-            #más hojas de cálculo, la hoja activa es la que está seleccionada por defecto cuando se abre el libro de 
-            #trabajo del Excel.
-            worksheet = workbook.active
-            #openpyxl.Workbook().active.title = "nombreSheet": Atributo para indicar el título de la página activa 
-            #del archivo de Excel (workbook).
-            worksheet.title = "Sheet1"
+            #pandas.ExcelWriter: La clase ExcelWriter de la librería pandas permite crear un objeto 
+            #específicamente creado para escribir datos en un archivo de Excel, dándole formato y organizándolo en 
+            #sheets, su constructor recibe los siguientes parámetros:
+            # - path: Especifica la ruta y el nombre de archivo del archivo de Excel que se va a crear.
+            # - engine: Especifica el motor de escritura de Excel que se utilizará. Los valores comunes son 
+            #   'xlsxwriter', 'openpyxl' y 'xlwt'.
+            #       - 'xlsxwriter': Motor de escritura predeterminado para Excel, ofreciendo el formateo de 
+            #         celdas, la creación de gráficos y la adición de comentarios a las celdas.
+            #       - 'openpyxl': Motor de escritura compatible con formatos de archivos más modernos en Excel 
+            #         como .xlsx, proporciona funciones más avanzadas como la capacidad de cargar y modificar 
+            #         archivos existentes.
+            #       - 'xlwt': Motor de escritura compatible con formatos de archivos más antiguos en Excel como 
+            #         .xls, es útil para escribir en archivos con versiones más viejas de Excel.
+            # - options: Un diccionario que contiene opciones adicionales para el motor de escritura de Excel.
+            # - mode: Controla cómo se manejarán los datos cuando se escriban en el archivo de Excel. 
+            #       - 'w': Se utiliza para sobrescribir los datos del archivo.
+            #       - 'a': Se usa para agregar datos al final del archivo.
+            # - float_format: Especifica el formato de punto decimal (flotante) que se utilizará al escribir 
+            #   números.
+            #       - {:.2f}: Formatea el número con dos decimales.
+            #       - {:.4f}: Formatea el número con cuatro decimales.
+            #       - {:.0f}: Formatea el número sin decimales.
+            #       - {:+.2f}: Formatea el número con dos decimales e incluye el signo "+" para valores positivos.
+            #       - {:.2%}: Formatea el número como porcentaje con dos decimales.
+            #       - {:.2e}: Formatea el número en notación científica con dos decimales.
+            #       - {:<10.2f}: Formatea el número con dos decimales y lo alinea a la izquierda en un espacio de 
+            #         10 caracteres.
+            #       - {:^10.2f}: Formatea el número con dos decimales y lo centra en un espacio de 10 caracteres.
+            #       - {:0>10.2f}: Formatea el número con dos decimales y lo rellena con ceros a la izquierda en un 
+            #         espacio de 10 caracteres.
+            #       - {:,}: Formatea el número con separadores de miles.
+            with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
+                #pandas.DataFrame().to_excel(): Método para escribir el contenido de un DataFrame en un archivo de 
+                #Excel, si este recibe una lista de listas como parámetro, la convertirá en un DataFrame.
+                # - excel_writer: Recibe el objeto pandas.ExcelWriter que especifica ciertos aspectos del Excel.
+                # - index: Es un booleano que especifica si se quiere incluir el índice del DataFrame en el Excel.
+                #   Si se establece en False, el índice no se incluirá en el Excel. El valor predeterminado es 
+                #   True.
+                # - index_label: Especifica el nombre que se le dará a la columna de índice en el archivo de 
+                #   Excel. Si se establece en None, no se asignará un nombre a la columna de índice. El valor 
+                #   predeterminado es 'index'.
+                # - sheet_name: Especifica el nombre de la hoja en el archivo de Excel donde se escribirán los 
+                #   datos. El valor predeterminado es 'Sheet1'.
+                # - startrow: Especifica la fila inicial donde se comenzará a escribir los datos del DataFrame. 
+                #   Esto es útil si se desea agregar los datos en una ubicación específica. El valor 
+                #   predeterminado es 0.
+                # - startcol: Especifica la columna inicial donde se comenzará a escribir los datos del DataFrame. 
+                #   Esto es útil si se desea agregar los datos en una ubicación específica. El valor 
+                #   predeterminado es 0.
+                # - header: Es un booleano que especifica si se debe incluir o no el encabezado (nombres de 
+                #   columna) del DataFrame en el archivo de Excel. El valor predeterminado es True.
+                # - merge_cells: Es un booleano que especifica si se deben fusionar las celdas que tengan columnas 
+                #   con encabezados duplicados. El valor predeterminado es True.
+                #CONVERSIÓN DE LISTAS DE LISTAS A DATAFRAMES, PARA AÑARILOS A UN MISMO EXCEL: Todas las agrupaciones 
+                #de datos estáticas se transformarán en un DataFrame y luego se añadirán al Excel, mientras que a la 
+                #tabla que se rellena con la base de datos se le aplica el método .to_excel() de forma directa, pero 
+                #aquí es donde se ve la importancia de saber el número de filas y columnas de cada grupo de datos, 
+                #ya que en el parámetro startrow, se colocará el número de filas de la agrupación anterior + 1 
+                #porque así se añade una fila de separación entre ellas.
+                pandas.DataFrame(staticDataAbove_1).to_excel(excel_writer = objetoExcel, index = False, header = False)
+                pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
+                finalDataFrame.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
+                pandas.DataFrame(staticDataBelow_1).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
+                #Después de haber creado el objeto pandas.ExcelWriter y haber convertido el DataFrame a un excel 
+                #con el método .to_excel(), se debe extraer el book (archivo excel) y sheet (página dentro del 
+                #book) del Excel para darle formato al archivo, ambas cosas se deben almacenar en variables 
+                #distintas y acceder a ellas a través del objeto ExcelWriter. 
+                #pandas.ExcelWriter().book: Atributo que obtiene el libro del Excel.
+                workbook = objetoExcel.book
+                #pandas.ExcelWriter().sheets["nombreSheet"]: Atributo para obtener una página del Excel.
+                worksheet = objetoExcel.sheets['Sheet1']
+                #Una vez que se haya accedido al book y sheet deseado y guardado ambos en variables, se debe 
+                #indicar los formatos estáticos de sus celdas, guardando todos en variables y asignándolos al 
+                #book a través del método .add_format().
+                #pandas.ExcelWriter().book.add_format({}): Este método sirve para guardar en una variable un 
+                #formato de celda, el cual se indica en un diccionario porque se pueden encapsular varias 
+                #propiedades:
+                # - bg_color: Define el color de fondo de la celda.
+                # - font_color: Define el color de la fuente de la celda.
+                # - font_name: Define el nombre de la fuente de la celda.
+                # - font_size: Define el tamaño de la fuente de la celda.
+                # - bold: Define si el texto de la celda está en negrita (True) o no (False).
+                # - font_italic: Define si el texto de la celda está en cursiva (True) o no (False).
+                # - font_underline: Define si el texto de la celda está subrayado (True) o no (False).
+                # - align: Define la alineación del texto dentro de la celda ('left', 'center', 'right', 
+                #   'justify', etc.).
+                # - valign: Define la alineación vertical del texto dentro de la celda ('top', 'vcenter', 
+                #   'bottom', 'vjustify', etc.).
+                # - num_format: Define el formato numérico de la celda (por ejemplo, '0.00' para dos decimales).
+                # - border: Define los bordes de la celda (puedes especificar si quieres bordes en la parte 
+                #   superior, inferior, izquierda, derecha, etc.).
+                # - text_wrap: Define si el texto debe envolverse dentro de la celda (True) o no (False).
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
+                blueRowDataAbove1_format = workbook.add_format({'bg_color': '#4f81bd'})     #Fila 1 azul.
+                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})     #Col  2 azul.
+                blueTableDataAbove1_format = workbook.add_format({'bg_color': '#d3dfee'})   #Demás celdas azules.
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
+                blueRowDataAbove2_format = workbook.add_format({'bg_color': '#4f81bd'})     #Fila 1 azul.
+                whiteRowDataAbove2_format = workbook.add_format({'bg_color': 'white'})      #Demás celdas blancas.
+                #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
+                blueDB_format = workbook.add_format({'bg_color': 'blue'})                   #Fila 1 azul.
+                greenDB_format = workbook.add_format({'bg_color': 'green'})                 #Col  1 verde.
+                grayDB_format = workbook.add_format({'bg_color': 'gray'})                   #Col  2 gris.
+                yellowDB_format = workbook.add_format({'bg_color': 'yellow'})               #Demás celdas amarillas.
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
+                whiteRowDataBelow1_format = workbook.add_format({'bg_color': 'white'})      #Fila 1 blanca.
+                darkBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#4f81bd'}) #Fila 2 azul.
+                lightBlueRowDataBelow1_format = workbook.add_format({'bg_color': '#A7BFDE'})#Fila 3 azul claro.
+                greenRowDataBelow1_format = workbook.add_format({'bg_color': '#5EC268'})    #Col  1 verde.
+                grayRowDataBelow1_format = workbook.add_format({'bg_color': 'gray'})        #Col  2 gris.
+                yellowRowDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
+                #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto 
+                #ExcelWriter() a través del método conditional_format().
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para 
+                #aplicar un formato a un rango de celdas en una hoja de cálculo específica (sheet) en un archivo 
+                #Excel (book), para ello cabe mencionar que las posiciones de las filas y columnas se empiezan a 
+                #contar desde 0 pero su tamaño se considera desde 1.
+                # - first_row: Es un número o variable que indica la celda inicial de las filas en la tabla.
+                # - first_col: Es un número o variable que indica la celda inicial de las columnas en la tabla.
+                # - last_row: Es un número o variable que indica la celda final de las filas en la tabla. Aquí es 
+                #   donde se usa la variable filasDataFrame obtenida del atributo pandas.DataFrame().shape.
+                # - last_col: Es un número o variable que indica la celda final de las columnas en la tabla. Aquí 
+                #   es donde se usa la variable columnasDataFrame obtenida del atributo pandas.DataFrame().shape.
+                # - type: Este parámetro indica la condición que se debe cumplir para que se aplique un formato en 
+                #   una celda.
+                #       - 'cell_value': Aplica el formato si el valor de la celda cumple con cierta condición.
+                #       - 'no_blanks': Aplica el formato si la celda no está en blanco.
+                #       - 'formula': Aplica el formato si la fórmula en la celda devuelve verdadero.
+                #       - 'time_period': Aplica el formato si la fecha en la celda cae dentro de un cierto período 
+                #         de tiempo.
+                #       - 'text': Aplica el formato basado en el contenido de texto de la celda.
+                #       - 'average': Aplica el formato si el valor de la celda es un promedio de un rango.
+                #       - 'duplicate': Aplica el formato si el valor de la celda es duplicado de un rango.
+                #       - 'unique': Aplica el formato si el valor de la celda es único dentro de un rango.
+                #       - '3_color_scale': Aplica un formato de escala de 3 colores basado en los valores de las 
+                #         celdas.
+                #       - '2_color_scale': Aplica un formato de escala de 2 colores basado en los valores de las 
+                #         celdas.
+                #       - 'icon_set': Aplica un conjunto de iconos basado en los valores de las celdas.
+                # - format: Este parámetro recibe una variable de formato pandas.ExcelWriter().book.add_format({}).
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
+                #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
+                worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove1_format})
+                worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
+                worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'no_blanks', 'format': blueColDataAbove1_format})
+                worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
 
-            #RELLENAR EL WORKBOOK DEL EXCEL CON VALORES ESTÁTICOS Y DINÁMICOS EXTRAÍDOS DE LA DATABASE:
-            #STATIC DATA ABOVE 1:
-            #enumerate(): Es un método que devuelve tanto el índice como el valor de los elementos de una lista, 
-            #tupla, diccionario, DataFrame, etc. en forma de una tupla de dos valores (indice, valor). En su segundo 
-            #parámetro llamado start, de forma opcional se puede indicar desde qué número empieza a contar el 
-            #índice, su valor por defecto es 0 si no se indica nada.
-            #Cuando se quiere acceder a los valores de una lista de listas (tabla), primero se recorren las filas.
-            for row_index, row_data in enumerate(staticDataAbove_1, start = 1): #Bucle para las filas de la tabla.
-                #Y luego se recorren los valores de las columnas, accediendo a las filas de forma individual.
-                for col_index, cell_data in enumerate(row_data, start = 1):     #Bucle para las columnas.
-                    #openpyxl.Workbook().active.cell(): El método cell() se utiliza para acceder a una celda 
-                    #específica en la hoja de cálculo activa de un archivo de Excel, para ello se debe indicar sus 
-                    #coordenadas de fila (y_vertical), columna (x_horizontal) y el valor que se le quiere colocar.
-                    #Es muy importante mencionar que cuando se utiliza el método enumerate() para extraer los 
-                    #índices de las columnas y filas, se les debe sumar un 1 por default si es que no se ha indicado 
-                    #como 1 el parámetro start del método enumerate(), ya que el método .cell() empieza a contar 
-                    #desde 1 sus coordenadas, no desde 0.
-                    worksheet.cell(row = row_index, column = col_index, value = cell_data)
-            #STATIC DATA ABOVE 2:
-            for row_index, row_data in enumerate(staticDataAbove_2, start = 1): #Bucle para las filas de la tabla.
-                for col_index, cell_data in enumerate(row_data, start = 1):     #Bucle para las columnas.
-                    #openpyxl.Workbook().active.cell(): Método para colocar datos en cada celda de la hoja activa 
-                    #de un archivo de Excel, cada que se agregue una agrupación de datos adicional, se le debe sumar 
-                    #un 1 para que exista una fila de separación entre ellas.
-                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + 1, column = col_index + 1, value = cell_data)
-            #DYNAMIC DATA FROM THE DATABASE:
-            #openpyxl.utils.dataframe.dataframe_to_rows(): El método dataframe_to_rows() del paquete utils.dataframe 
-            #perteneciente a la librería openpyxl sirve para convertir un objeto pandas.DataFrame en una lista de 
-            #listas, para que puedan ser escritos sus datos en un archivo de Excel utilizando la librería OpenPyXL, 
-            #para ello el método puede recibir los siguientes parámetros:
-            # - DataFrame: Este parámetro no tiene nombre y se refiere al DataFrame de pandas que se desea convertir 
-            #   en una lista de listas.
-            # - index: Es un booleano que indica si se deben incluir los índices de las filas en la lista de listas 
-            #   convertidas. Por defecto es True.
-            # - header: Es un booleano que indica si se deben incluir los nombres de las columnas como la primera 
-            #   fila en la lista de listas convertidas. Por defecto es True.
-            # - columns (opcional): Es una secuencia de nombres de columnas que se utilizarán para seleccionar las 
-            #   columnas del DataFrame que se convertirán en una lista de listas. Si no se proporciona, se 
-            #   convertirán todas las columnas del DataFrame.
-            listDbData = dataframe_to_rows(finalDataFrame, index = False, header = True)
-            for row_index, row_data in enumerate(listDbData, start = 1):        #Bucle para las filas de la tabla.
-                for col_index, value in enumerate(row_data, start = 1):         #Bucle para las columnas.
-                    #openpyxl.Workbook().active.cell(): Método para colocar datos en cada celda de la hoja activa 
-                    #de un archivo de Excel, cada que se agregue una agrupación de datos adicional, se le debe sumar 
-                    #un 1 para que exista una fila de separación entre ellas.
-                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 2, column = col_index, value = value)
-            #STATIC DATA BELOW 1:
-            for row_index, row_data in enumerate(staticDataBelow_1, start = 1): #Bucle para las filas de la tabla.
-                for col_index, cell_data in enumerate(row_data, start = 1):     #Bucle para las columnas.
-                    #openpyxl.Workbook().active.cell(): Método para colocar datos en cada celda de la hoja activa 
-                    #de un archivo de Excel, cada que se agregue una agrupación de datos adicional, se le debe sumar 
-                    #un 1 para que exista una fila de separación entre ellas.
-                    worksheet.cell(row = row_index + staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3, column = col_index, value = cell_data)
-
-            #Una vez que se haya creado el book y sheet del archivo de Excel y luego se hayan añadido los datos 
-            #estáticos y dinámicos a su tabla, se deben indicar los formatos estáticos de color de sus celdas, 
-            #guardándolos todos en variables y asignándolos al book a través de un objeto PatternFill().
-            #openpyxl.styles.PatternFill(): Este método se utiliza para guardar en una variable un formato de color 
-            #de celda que puede ser gradiente o sólido, el cual recibe los siguientes parámetros:
-            # - start_color: Define el color de fondo inicial de la celda.
-            # - end_color: Define el color de fondo final de la celda.
-            # - fill_type: Es el tipo de relleno que se aplicará. 
-            #   - "none": Indica que no se aplica ningún relleno al estilo.
-            #   - "solid": Indica un relleno sólido con un solo color.
-            #   - "gradient": Indica un relleno con gradiente de color que cambia a través de la celda. El parámetro 
-            #     end_color solo se utiliza cuando fill_type es "gradient", de lo contrario, se ignora.
-            #Los colores deben ser indicados en formato hexadecimal (sin añadir el signo de #). 
-            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
-            blueRowDataAbove1_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")       #Fila 1 azul. 
-            blueColDataAbove1_format = openpyxl.styles.PatternFill(start_color = "0070c0", end_color = "0070c0", fill_type = "solid")       #Col  2 azul.
-            blueTableDataAbove1_format = openpyxl.styles.PatternFill(start_color = "d3dfee", end_color = "d3dfee", fill_type = "solid")     #Demás celdas azules.
-            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
-            blueRowDataAbove2_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")       #Fila 1 azul.
-            whiteRowDataAbove2_format = openpyxl.styles.PatternFill(start_color = "ffffff", end_color = "ffffff", fill_type = "solid")      #Demás celdas blancas.
-            #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
-            blueDB_format = openpyxl.styles.PatternFill(start_color = "0000ff", end_color = "0000ff", fill_type = "solid")                  #Fila 1 azul.
-            greenDB_format = openpyxl.styles.PatternFill(start_color = "008000", end_color = "008000", fill_type = "solid")                 #Col  1 verde.
-            grayDB_format = openpyxl.styles.PatternFill(start_color = "808080", end_color = "808080", fill_type = "solid")                  #Col  2 gris.
-            yellowDB_format = openpyxl.styles.PatternFill(start_color = "ffff00", end_color = "ffff00", fill_type = "solid")                #Demás celdas amarillas.
-            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
-            whiteRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "ffffff", end_color = "ffffff", fill_type = "solid")      #Fila 1 blanca.  
-            darkBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "4f81bd", end_color = "4f81bd", fill_type = "solid")   #Fila 2 azul.
-            lightBlueRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "A7BFDE", end_color = "A7BFDE", fill_type = "solid")  #Fila 3 azul claro.
-            greenRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "5EC268", end_color = "5EC268", fill_type = "solid")      #Col  1 verde.
-            grayRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "808080", end_color = "808080", fill_type = "solid")       #Col  2 gris.
-            yellowRowDataBelow1_format = openpyxl.styles.PatternFill(start_color = "FFF2CC", end_color = "FFF2CC", fill_type = "solid")     #Demás celdas amarillas.
-            #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto 
-            #ExcelWriter() a través del método conditional_format().
-            #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para 
-            #aplicar un formato a un rango de celdas en una hoja de cálculo específica (sheet) en un archivo 
-            #Excel (book), para ello cabe mencionar que las posiciones de las filas y columnas se empiezan a 
-            #contar desde 0 pero su tamaño se considera desde 1.
-            # - first_row: Es un número o variable que indica la celda inicial de las filas en la tabla.
-            # - first_col: Es un número o variable que indica la celda inicial de las columnas en la tabla.
-            # - last_row: Es un número o variable que indica la celda final de las filas en la tabla. Aquí es 
-            #   donde se usa la variable filasDataFrame obtenida del atributo pandas.DataFrame().shape.
-            # - last_col: Es un número o variable que indica la celda final de las columnas en la tabla. Aquí 
-            #   es donde se usa la variable columnasDataFrame obtenida del atributo pandas.DataFrame().shape.
-            # - type: Este parámetro indica la condición que se debe cumplir para que se aplique un formato en 
-            #   una celda.
-            #       - 'cell_value': Aplica el formato si el valor de la celda cumple con cierta condición.
-            #       - 'no_blanks': Aplica el formato si la celda no está en blanco.
-            #       - 'formula': Aplica el formato si la fórmula en la celda devuelve verdadero.
-            #       - 'time_period': Aplica el formato si la fecha en la celda cae dentro de un cierto período 
-            #         de tiempo.
-            #       - 'text': Aplica el formato basado en el contenido de texto de la celda.
-            #       - 'average': Aplica el formato si el valor de la celda es un promedio de un rango.
-            #       - 'duplicate': Aplica el formato si el valor de la celda es duplicado de un rango.
-            #       - 'unique': Aplica el formato si el valor de la celda es único dentro de un rango.
-            #       - '3_color_scale': Aplica un formato de escala de 3 colores basado en los valores de las 
-            #         celdas.
-            #       - '2_color_scale': Aplica un formato de escala de 2 colores basado en los valores de las 
-            #         celdas.
-            #       - 'icon_set': Aplica un conjunto de iconos basado en los valores de las celdas.
-            # - format: Este parámetro recibe una variable de formato pandas.ExcelWriter().book.add_format({}).
-            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
-            #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
-            worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'all', 'format': blueRowDataAbove1_format})
-            worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'all', 'format': blueTableDataAbove1_format})
-            worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'all', 'format': blueColDataAbove1_format})
-            worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'all', 'format': blueTableDataAbove1_format})
-
-            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
-            #pandas.ExcelWriter(engine = 'xlsxwriter').sheets["nombreSheet"].merge_range(): El método 
-            #.merge_range() solo se puede utilizar cuando se haya elegido el engine xlsxwriter, y lo que hace 
-            #es permitirnos fusionar celdas, para ello puede recibir 3 parámetros:
-            # - Código de Celdas de Excel: Recibe el código de celdas de excel de donde a dónde se quiere 
-            #   fusionar las celdas, las cuales se indican por medio de una letra y un número, las letras 
-            #   indican la columna y el número la fila. Ejemplo: A1:G10 
-            #       - Cuando se quiera fusionar celdas conviene concatenar el número de la fila con el nombre 
-            #         de la celda, ya que de esta manera se puede automatizar el proceso cuando se busca 
-            #         fusionar las celdas de más de 1 fila.
-            # - data: Este parámetro recibe el texto (dato) que se va a mostrar en la celda fusionada, si no se 
-            #   quiere añadir ningún texto, se deja como None.
-            # - format (opcional): Se puede crear un formato de letra para que se aplique a esta celda.
-            rowPositionStaticDataAbove2 = (staticDataAbove_1_Rows + 1) + 1
-            ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)    #Position  A9:G9
-            worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
-            #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
-            worksheet.conditional_format((staticDataAbove_1_Rows + 1), 0, (staticDataAbove_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'all', 'format': blueRowDataAbove2_format})
-            for i in range(0, staticDataAbove_2_Rows - 1): #Position  A10:G10 - A19:G19
-                rowPositionStaticDataAbove2 += 1
-                ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
+                #pandas.ExcelWriter(engine = 'xlsxwriter').sheets["nombreSheet"].merge_range(): El método 
+                #.merge_range() solo se puede utilizar cuando se haya elegido el engine xlsxwriter, y lo que hace 
+                #es permitirnos fusionar celdas, para ello puede recibir 3 parámetros:
+                # - Código de Celdas de Excel: Recibe el código de celdas de excel de donde a dónde se quiere 
+                #   fusionar las celdas, las cuales se indican por medio de una letra y un número, las letras 
+                #   indican la columna y el número la fila. Ejemplo: A1:G10 
+                #       - Cuando se quiera fusionar celdas conviene concatenar el número de la fila con el nombre 
+                #         de la celda, ya que de esta manera se puede automatizar el proceso cuando se busca 
+                #         fusionar las celdas de más de 1 fila.
+                # - data: Este parámetro recibe el texto (dato) que se va a mostrar en la celda fusionada, si no se 
+                #   quiere añadir ningún texto, se deja como None.
+                # - format (opcional): Se puede crear un formato de letra para que se aplique a esta celda.
+                rowPositionStaticDataAbove2 = (staticDataAbove_1_Rows + 1) + 1
+                ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)    #Position  A9:G9
                 worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
-                worksheet.conditional_format((staticDataAbove_1_Rows + 2), 0, (staticDataAbove_1_Rows + 2), (staticDataAbove_2_Cols - 1), {'type': 'all', 'format': whiteRowDataAbove2_format})
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                worksheet.conditional_format((staticDataAbove_1_Rows + 1), 0, (staticDataAbove_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove2_format})
+                for i in range(0, staticDataAbove_2_Rows - 1): #Position  A10:G10 - A19:G19
+                    rowPositionStaticDataAbove2 += 1
+                    ExcelCellsStaticDataAbove2 = "A" + str(rowPositionStaticDataAbove2) + ":G" + str(rowPositionStaticDataAbove2)
+                    worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
+                    worksheet.conditional_format((staticDataAbove_1_Rows + 2), 0, (staticDataAbove_1_Rows + 2), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataAbove2_format})
+                
+                #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
+                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
+                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'no_blanks', 'format': grayDB_format})
+                for col in range(2, columnasDataFrame):
+                    worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'no_blanks', 'format': yellowDB_format})
+                
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
+                ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A29:G29
+                worksheet.merge_range(ExcelCell, data = None)
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, rowPositionStaticDataBelow1, (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': darkBlueRowDataBelow1_format})
+                rowPositionStaticDataBelow1 += 2
+                ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A31:G31
+                worksheet.merge_range(ExcelCell, data = None)
+                worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 0, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 0, {'type': 'no_blanks', 'format': greenRowDataBelow1_format})
+                worksheet.conditional_format(rowPositionStaticDataBelow1, 1, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 1, {'type': 'no_blanks', 'format': grayRowDataBelow1_format})
+                for col in range(2, staticDataBelow_1_Cols):
+                    worksheet.conditional_format(rowPositionStaticDataBelow1, col, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), col, {'type': 'no_blanks', 'format': yellowRowDataBelow1_format})
             
-            #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
-            #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
-            worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'all', 'format': blueDB_format})
-            worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'all', 'format': greenDB_format})
-            worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'all', 'format': grayDB_format})
-            for col in range(2, columnasDataFrame):
-                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'all', 'format': yellowDB_format})
-            
-            #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
-            #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
-            rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
-            ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A29:G29
-            worksheet.merge_range(ExcelCell, data = None)
-            worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'all', 'format': whiteRowDataBelow1_format})
-            worksheet.conditional_format(rowPositionStaticDataBelow1, 0, rowPositionStaticDataBelow1, (staticDataBelow_1_Cols - 1), {'type': 'all', 'format': darkBlueRowDataBelow1_format})
-            rowPositionStaticDataBelow1 += 2
-            ExcelCell = "A" + str(rowPositionStaticDataBelow1) + ":G" + str(rowPositionStaticDataBelow1)    #Position  A31:G31
-            worksheet.merge_range(ExcelCell, data = None)
-            worksheet.conditional_format((rowPositionStaticDataBelow1 - 1), 0, (rowPositionStaticDataBelow1 - 1), (staticDataBelow_1_Cols - 1), {'type': 'all', 'format': lightBlueRowDataBelow1_format})
-            worksheet.conditional_format(rowPositionStaticDataBelow1, 0, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 0, {'type': 'all', 'format': greenRowDataBelow1_format})
-            worksheet.conditional_format(rowPositionStaticDataBelow1, 1, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), 1, {'type': 'all', 'format': grayRowDataBelow1_format})
-            for col in range(2, staticDataBelow_1_Cols):
-                worksheet.conditional_format(rowPositionStaticDataBelow1, col, (staticDataBelow_1_Rows + rowPositionStaticDataBelow1), col, {'type': 'all', 'format': yellowRowDataBelow1_format})
-        
-            #AJUSTAR LAS DIMENSIONES DE LAS CELDAS PARA MOSTRAR SU CONTENIDO COMPLETO:  
-            max_lengths = [len(str(col)) for col in finalDataFrame.columns]
-            for index, row in finalDataFrame.iterrows():
-                for i, value in enumerate(row):
-                    max_lengths[i] = max(max_lengths[i], len(str(value)))
-            #Aplicar los anchos máximos a las columnas del DataFrame
-            for i, max_length in enumerate(max_lengths):
-                worksheet.set_column(i, i, max_length + 1)  #Agregar un margen de 1 para mejor aspecto
+                #AJUSTAR LAS DIMENSIONES DE LAS CELDAS PARA MOSTRAR SU CONTENIDO COMPLETO:  
+                max_lengths = [len(str(col)) for col in finalDataFrame.columns]
+                for index, row in finalDataFrame.iterrows():
+                    for i, value in enumerate(row):
+                        max_lengths[i] = max(max_lengths[i], len(str(value)))
+                #Aplicar los anchos máximos a las columnas del DataFrame
+                for i, max_length in enumerate(max_lengths):
+                    worksheet.set_column(i, i, max_length + 1)  #Agregar un margen de 1 para mejor aspecto
             
             #Devolver el DataFrame procesado.
             return finalDataFrame
@@ -561,5 +566,5 @@ class DatabaseExcelHandler:
 if __name__ == "__main__":
     connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
     db_handler1 = DatabaseExcelHandler(connectionString)
-    excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
+    excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
     db_handler1.process_data_and_save_to_excel(excelFilePath2)
