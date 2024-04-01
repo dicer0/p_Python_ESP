@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import pyodbc
-#pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
-#pandas: Librería que proporciona datos adicionales acerca de los errores detectados por una estructura try-except
 import traceback
 
 class DatabaseExcelHandler:
     def __init__(self, db_connection_string):
-        self.db_connection_string = db_connection_string    #Atributo: URL de conexión para la base de datos.
+        self.db_connection_string = db_connection_string
         self.connected = False
     def __connect_to_database(self):
         try:
@@ -37,21 +35,20 @@ class DatabaseExcelHandler:
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             compareDicc = [{
-                "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
+                "tituloStatic": "Grupo de Datos 1",     
                 "datoStatic": "Dato grupo 1",         
-                "estatusFilter": "activo",              #Datos de filtrado.
+                "estatusFilter": "activo",              
                 "userIdFilter": 1,
                 "categoryIdFilter": 2
             },
             {
-                "tituloStatic": "Grupo de Datos 2",     #Datos que así se pasan al diccionario final.
+                "tituloStatic": "Grupo de Datos 2",     
                 "datoStatic": "Dato grupo 2",         
-                "estatusFilter": "inactivo",            #Datos de filtrado.
+                "estatusFilter": "inactivo",            
                 "userIdFilter": 2,
                 "categoryIdFilter": 3
             }]            
 
-            #CREAR UN DICCIONARIO QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
             finalData = []
             for indDicc in compareDicc:
                 filtered = dataFramePandas[(dataFramePandas['estatus'] == indDicc['estatusFilter']) &
@@ -78,7 +75,6 @@ class DatabaseExcelHandler:
                     })
             finalDataFrame = pandas.DataFrame(data = finalData)
 
-            #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
             staticDataAbove_1 = [
                 ['Title A1.1', 'Title A1.2', 'Title A1.3'],
                 ['Static Row 1', '', ''],
