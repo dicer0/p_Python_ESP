@@ -49,7 +49,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(centralWidget)
         
     def __createTable(self):
-        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
+        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
         db_handler = DatabaseExcelHandler(connectionString)
         
         try:

@@ -420,7 +420,7 @@ class MainWindow(QtWidgets.QMainWindow):
     #que es instancia de la clase SecondaryWindow.
     def open_window1(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
+        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
         db_handler1 = DatabaseExcelHandler(connectionString)
         excelFilePath1 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
         secondary_window = SecondaryWindow("Ventana 1", db_handler1, excelFilePath1, showTable = True) #Creación de ventana 1.
@@ -437,7 +437,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=PincheTonto!123;'
+        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
         db_handler2 = DatabaseExcelHandler(connectionString)
         excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
         secondary_window = SecondaryWindow("Ventana 2", db_handler2, excelFilePath2, showTable = False) #Creación de ventana 2.
