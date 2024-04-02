@@ -18,7 +18,7 @@
 #PyQt5 - QtWidgets: La clase QtWidgets proporciona todos los elementos que conforman las interfaces gráficas 
 #(GUI) hechas con la librería PyQt5, entre dichas herramientas se incluyen: 
 # - Widgets: Elementos gráficos básicos de los que se conforma una GUI como lo son botones (QPushButton), cajas 
-#   de texto (QLineEdit), texto estático (QLabel), listas desplegables (QComboBox), barras de progreso 
+#   de texto (QLineEdit), texto estático (QLabel), listas desplegables (QComboBox), barras de progreso
 #   (QProgressBar), casillas de verificación (QCheckBox), imágenes (QLabel), etc.
 #   - Diálogos: Los diálogos son elementos gráficos que  facilitan la interacción con el usuario, incluyen 
 #     widgets como cuadros de diálogo de mensajes (QMessageBox), cuadros de diálogo para seleccionar archivos o 
