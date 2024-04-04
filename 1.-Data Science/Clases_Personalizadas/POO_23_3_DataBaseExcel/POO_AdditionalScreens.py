@@ -396,6 +396,12 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                             celda_Db.setFont(font)                              #Letra en negritas.
                         elif (i != 0 and j == 1):       #Color gris:    Columna 2 = (Todas las filas menos la primera, 1)
                             celda_Db.setBackground(QtGui.QColor('gray'))
+                            #De igual manera, se puede analizar el contenido de las celdas y/o columnas para asignar un 
+                            #color condicional a sus celdas, para ello se hará uso de un if anidado, recordando que la 
+                            #variable "j" accede a las columnas de la tabla, la "i" a sus filas y el método iloc accede 
+                            #a un valor en específico dadas la coordenada de su [fila, columna]:
+                            if ((resultDataFrame.columns[j] == "Content Status") and (resultDataFrame.iloc[i, j] == "standard")):
+                                celda_Db.setBackground(QtGui.QColor('#00f1ba')) #Color condicional.
                         else:                           #Color amarillo: Todas las demás celdas.
                             celda_Db.setBackground(QtGui.QColor('yellow'))
                         #QtWidgets.QTableWidget().setItem(): El método setItem() se aplica a un objeto 

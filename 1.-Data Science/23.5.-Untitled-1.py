@@ -145,7 +145,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         table.setItem((i + staticDataAbove_1_Rows + 1), j, itemAbove2)
 
                 for i in range(db_numRows): 
-                    for j in range(db_numCols): 
+                    for j in range(db_numCols):
                         celda_Db = QtWidgets.QTableWidgetItem(str(resultDataFrame.iloc[i, j]))
                         celda_Db.setTextAlignment(QtCore.Qt.AlignCenter)
                         font = QtGui.QFont() 
@@ -153,11 +153,13 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         if (i == 0): 
                             celda_Db.setBackground(QtGui.QColor('blue'))
                             celda_Db.setFont(font)
-                        elif (i != 0 and j == 0): 
+                        elif (i != 0 and j == 0):
                             celda_Db.setBackground(QtGui.QColor('green'))
                             celda_Db.setFont(font)
                         elif (i != 0 and j == 1): 
                             celda_Db.setBackground(QtGui.QColor('gray'))
+                            if ((resultDataFrame.columns[j] == "Content Status") and (resultDataFrame.iloc[i, j] == "standard")):
+                                celda_Db.setBackground(QtGui.QColor('#00f1ba')) #Color condicional.
                         else:
                             celda_Db.setBackground(QtGui.QColor('yellow'))
                         table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), j, celda_Db)
