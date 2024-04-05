@@ -29,22 +29,22 @@ class DatabaseExcelHandler:
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
             cursorRows = [tuple(row) for row in resultProxy]
-            cursorCols = [col[0] for col in self.cursor.description] 
+            cursorCols = [col[0] for col in self.cursor.description]
             dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
             print(dataFramePandas, "\n")
             dataFramePandas['fecha_publicacion'] = pandas.to_datetime(dataFramePandas['fecha_publicacion']).dt.strftime('%d-%m-%Y')
 
             compareDicc = [{
-                "tituloStatic": "Grupo de Datos 1",     
+                "tituloStatic": "Grupo de Datos 1",
                 "datoStatic": "Dato grupo 1",         
-                "estatusFilter": "activo",              
+                "estatusFilter": "activo",        
                 "userIdFilter": 1,
                 "categoryIdFilter": 2
             },
             {
-                "tituloStatic": "Grupo de Datos 2",     
+                "tituloStatic": "Grupo de Datos 2",
                 "datoStatic": "Dato grupo 2",         
-                "estatusFilter": "inactivo",            
+                "estatusFilter": "inactivo",
                 "userIdFilter": 2,
                 "categoryIdFilter": 3
             }]            
@@ -75,6 +75,7 @@ class DatabaseExcelHandler:
                     })
             finalDataFrame = pandas.DataFrame(data = finalData)
 
+            #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
             staticDataAbove_1 = [
                 ['Title A1.1', 'Title A1.2', 'Title A1.3'],
                 ['Static Row 1', '', ''],
@@ -118,121 +119,93 @@ class DatabaseExcelHandler:
             staticDataAbove_1_Cols = len(staticDataAbove_1[0])
             staticDataAbove_2_Cols = len(staticDataAbove_2[0])
             staticDataBelow_1_Cols = len(staticDataBelow_1[0])
-
             with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
                 staticDataAbove_1_DataFrame = pandas.DataFrame(staticDataAbove_1)
                 staticDataAbove_1_DataFrame_textAligned = staticDataAbove_1_DataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
                 staticDataAbove_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = 0, header = False)
-                
                 pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
-
                 finalDataFrame_textAligned = finalDataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
                 finalDataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
-                
                 staticDataBelow_1_DataFrame = pandas.DataFrame(staticDataBelow_1)
                 staticDataBelow_1_DataFrame_textAligned = staticDataBelow_1_DataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
                 staticDataBelow_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
-                
                 workbook = objetoExcel.book
                 worksheet = objetoExcel.sheets['Sheet1']
-                worksheet.set_column('A:G', None, None, {'text_wrap': True, 'align': 'left', 'valign': 'vcenter'})
-
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
                 blueRowDataAbove1_format = workbook.add_format({
-                    'bg_color': '#4f81bd',  #Color de celda azul claro.
-                    'color': 'white',       #Letras blancas.
-                    'bold': True,           #Letras negritas.
-                    'align': 'center',      #Alineación en el centro.
-                    'valign': 'vcenter'     #Alineación vertical en el centro.
-                })                                                                          #Fila 1 azul, letras blancas y negritas y alineadas al centro.
-                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})     #Col  2 azul.
+                    'bg_color': '#4f81bd',  
+                    'color': 'white',       
+                    'bold': True            
+                })                                                                     
+                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})
                 blueTableDataAbove1_format = workbook.add_format({
-                    'bg_color': '#d3dfee',  #Color de celda azul muy claro.
-                    'bold': True            #Letras negritas.
-                })                                                                          #Demás celdas azules.
-                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
-                blueRowDataAbove1_format = workbook.add_format({
-                    'bg_color': '#4f81bd',  #Color de celda azul claro.
-                    'color': 'white',       #Letras blancas.
-                    'bold': True            #Letras en negritas.
-                })                                                                          #Fila 1 azul, letras blancas, negritas y alineadas al centro.
-                blueColDataAbove1_format = workbook.add_format({'bg_color': '#0070c0'})     #Col  2 azul obscuro.
-                blueTableDataAbove1_format = workbook.add_format({
-                    'bg_color': '#d3dfee',  #Color de celda azul muy claro.
-                    'bold': True            #Letras en negritas.
-                })                                                                          #Demás celdas azules muy claro, letras negritas y alineadas al centro.
+                    'bg_color': '#d3dfee',  
+                    'bold': True            
+                })                          
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
                 blueRowDataAbove2_format = workbook.add_format({
-                    'bg_color': '#4f81bd',  #Color de celda azul obscuro.
-                    'bold': True,           #Letras en negritas.
-                    'underline': True       #Letras subrayadas.
-                })                                                                          #Fila 1 azul obscuro y letras negritas.
+                    'bg_color': '#4f81bd',  
+                    'bold': True,           
+                    'underline': True       
+                })                          
                 whiteRowDataAbove2_format = workbook.add_format({
-                    'bg_color': 'white',    #Color de celda blanco.
-                    'bold': True,           #Letras en negritas.
-                    'underline': True       #Letras subrayadas.
-                })                                                                          #Fila 2 blanca, con letras negritas y subrayadas.
-                whiteTableDataAbove2_format = workbook.add_format({'bg_color': 'white'})    #Demás celdas blancas.
+                    'bg_color': 'white',    
+                    'bold': True,           
+                    'underline': True       
+                })                                                                          
+                whiteTableDataAbove2_format = workbook.add_format({'bg_color': 'white'})    
                 #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
-                blueDB_format = workbook.add_format({'bg_color': 'blue'})                   #Fila 1 azul.
+                blueDB_format = workbook.add_format({'bg_color': 'blue'})                   
                 greenDB_format = workbook.add_format({
-                    'bg_color': 'green',    #Color de celda verde.
-                    'bold': True            #Letras en negritas.
-                })                                                                          #Col  1 verde.
-                grayDB_format = workbook.add_format({'bg_color': 'gray'})                   #Col  2 gris.
-                yellowDB_format = workbook.add_format({'bg_color': 'yellow'})               #Demás celdas amarillas.
+                    'bg_color': 'green',    
+                    'bold': True            
+                })                                                                          
+                grayDB_format = workbook.add_format({'bg_color': 'gray'})                   
+                yellowDB_format = workbook.add_format({'bg_color': 'yellow'})               
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
                 whiteRowDataBelow1_format = workbook.add_format({
-                    'bg_color': 'white',    #Color de celda blanco.
-                    'bold': True,           #Letras en negritas.
-                    'underline': True       #Letras subrayadas.
-                })                                                                          #Fila 1 blanca.
+                    'bg_color': 'white',    
+                    'bold': True,           
+                    'underline': True       
+                })                          
                 darkBlueRowDataBelow1_format = workbook.add_format({
-                    'bg_color': '#4f81bd',  #Color de celda azul obscuro.
-                    'bold': True            #Letras en negritas.
-                })                                                                          #Fila 2 azul.
+                    'bg_color': '#4f81bd',  
+                    'bold': True            
+                })                          
                 lightBlueRowDataBelow1_format = workbook.add_format({
-                    'bg_color': '#A7BFDE',  #Color de celda azul claro.
-                    'bold': True            #Letras en negritas.
-                })                                                                          #Fila 3 azul claro.
+                    'bg_color': '#A7BFDE',  
+                    'bold': True            
+                })                          
                 greenColDataBelow1_format = workbook.add_format({
-                    'bg_color': '#5EC268',  #Color de celda verde.
-                    'bold': True            #Letras en negritas.
-                })                                                                          #Col  1 verde.
-                grayColDataBelow1_format = workbook.add_format({'bg_color': 'gray'})        #Col  2 gris.
-                yellowColDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
+                    'bg_color': '#5EC268',  
+                    'bold': True            
+                })                                                                       
+                grayColDataBelow1_format = workbook.add_format({'bg_color': 'gray'})     
+                yellowColDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})
                 #FORMATO DE COLOR PARA LOS SEPARADORES DE DATOS:
                 dataSeparation_format = workbook.add_format({'bg_color': 'white'})
-                #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
                 worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove1_format})
-                worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'blanks', 'format': blueRowDataAbove1_format})
                 worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
-                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, considerar el tamaño de los conjuntos de 
-                #datos y anteriores las filas de separación.
                 worksheet.conditional_format(staticDataAbove_1_Rows, 0, staticDataAbove_1_Rows, (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
-                #COLOR DE LAS COLUMNAS:
                 worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'no_blanks', 'format': blueColDataAbove1_format})
                 worksheet.conditional_format(1, 1, staticDataAbove_1_Rows, 1, {'type': 'blanks',    'format': blueColDataAbove1_format})
                 worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
                 worksheet.conditional_format(1, 2, staticDataAbove_1_Rows, 2, {'type': 'blanks',    'format': blueTableDataAbove1_format})
 
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 2:
                 rowPositionStaticDataAbove2 = (staticDataAbove_1_Rows + 1) + 1
-                for i in range(rowPositionStaticDataAbove2, rowPositionStaticDataAbove2 + staticDataAbove_2_Rows): #Position  A10:G10 - A19:G19
+                for i in range(rowPositionStaticDataAbove2, rowPositionStaticDataAbove2 + staticDataAbove_2_Rows):
                     ExcelCellsStaticDataAbove2 = "A" + str(i) + ":G" + str(i)
                     worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
-                    if (i == 9):                                                        #Posición  A9:G9
+                    if (i == 9):
                         worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove2_format})
-                    elif (i == 10 or i == 13 or i == 16):                               #Posición  A10:G10 - A19:G19
+                    elif (i == 10 or i == 13 or i == 16):
                         worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataAbove2_format})
-                    else:                                                               #Posición  Las demás celdas de la tabla.
+                    else:
                         worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteTableDataAbove2_format})
-                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, considerar el tamaño de los conjuntos de 
-                #datos y anteriores las filas de separación.
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
                 
+                #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
-                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, considerar el tamaño de los conjuntos de 
-                #datos y anteriores las filas de separación.
                 worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
                 worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
                 worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'blanks',    'format': greenDB_format})
@@ -242,35 +215,44 @@ class DatabaseExcelHandler:
                     worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'no_blanks', 'format': yellowDB_format})
                     worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'blanks',    'format': yellowDB_format})
                 
-                #worksheet.conditional_format(first_row, first_col, last_row, last_col, {'type': 'condition', 'format': formato})
-                #Variable para fusión de celdas: Para ello se considera las filas de los conjuntos anteriores y sus separaciones.
-                rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + 1) + 1
-                for i in range(rowPositionStaticDataBelow1, rowPositionStaticDataBelow1 + staticDataBelow_1_Rows): #Position  A29:G29 - A40:G40
-                    if (i == 29):                                                       #Posición  A29:G29
-                        #Creación de coordenadas: El método .merge_range() pide las coordenadas en formato de Excel.
-                        ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)
-                        worksheet.merge_range(ExcelCellsStaticDataBelow1, data = None)
-                        #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
-                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
-                    elif (i == 30):                                                     #Posición  A30:G30
-                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': darkBlueRowDataBelow1_format})
-                    elif (i == 31 or i == 39):                                          #Posición  A31:G31 o A39:G39
-                        ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)
-                        worksheet.merge_range(ExcelCellsStaticDataBelow1, data = None)
-                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
-                    else:                                                               #Posición  Las demás celdas de la tabla.
-                        worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteTableDataAbove2_format})
-                #Formato de Columnas de la tabla.
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 0, {'type': 'no_blanks',   'format': greenColDataBelow1_format})
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 0, {'type': 'blanks',      'format': greenColDataBelow1_format})
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 1, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 1, {'type': 'no_blanks',   'format': grayColDataBelow1_format})
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 1, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), 1, {'type': 'blanks',      'format': grayColDataBelow1_format})
-                for col in range(2, staticDataBelow_1_Cols):
-                    worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), col, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), col, {'type': 'no_blanks',   'format': yellowColDataBelow1_format})
-                    worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), col, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows), col, {'type': 'blanks',      'format': yellowColDataBelow1_format})
-                #COLOR DEL SEPARADOR DE DATOS: Este se debe poner siempre antes del color de las columnas, considerar el tamaño de los conjuntos de 
-                #datos y anteriores las filas de separación.
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
+                rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
+                # Variables to track if the merging has been done for the first, second, and last rows
+                merged_first_row = False
+                merged_second_row = False
+                merged_last_row = False
+
+                for i in range(rowPositionStaticDataBelow1, rowPositionStaticDataBelow1 + staticDataBelow_1_Rows):
+                    for j in range(staticDataBelow_1_Cols):
+                        if i == 29 and not merged_first_row:
+                            ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)
+                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data=None)
+                            worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
+                            merged_first_row = True
+                        elif i == 30:
+                            worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': darkBlueRowDataBelow1_format})
+                        elif i == 31 and not merged_second_row:
+                            ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)
+                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data=None)
+                            worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
+                            merged_second_row = True
+                        elif i == 39 and not merged_last_row:
+                            ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)
+                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data=None)
+                            worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
+                            merged_last_row = True
+                        elif j == 0:
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': greenColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': greenColDataBelow1_format})
+                        elif j == 1:
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': grayColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': grayColDataBelow1_format})
+                        else:
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': yellowColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': yellowColDataBelow1_format})
+
+                #COLOR DEL SEPARADOR DE DATOS:
+                worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
 
                 max_lengths = [len(str(col)) for col in finalDataFrame.columns]
                 for index, row in finalDataFrame.iterrows():
@@ -279,7 +261,9 @@ class DatabaseExcelHandler:
                 for i, max_length in enumerate(max_lengths):
                     worksheet.set_column(i, i, max_length + 1)
             
+            print(finalDataFrame, "\n")
             return finalDataFrame
+        
         except Exception as error:
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
             print("La línea donde ocurrió el error fue: ", traceback.format_exc())
