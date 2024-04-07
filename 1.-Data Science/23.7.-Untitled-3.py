@@ -42,4 +42,28 @@ def send_email_at_specific_time(hour, minute):
             print("Intento número", intentosEmail, "de mandar el correo...")
             intentosEmail += 1
 
-send_email_at_specific_time(3, 6)
+send_email_at_specific_time(14, 11)
+
+
+import socket
+def test_port_connection(host, port):
+    try:
+        # Create a TCP socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Set a timeout for connection attempt (adjust as needed)
+        sock.settimeout(2)
+        # Attempt to connect to the host and port
+        result = sock.connect_ex((host, port))
+        if result == 0:
+            print(f"Success: Port {port} is open on {host}")
+        else:
+            print(f"Failed: Port {port} is not open on {host}")
+        sock.close()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# Example usage:
+# Replace "example.com" and the port numbers with the ones you want to test
+test_port_connection("https://dicer0.com/", 80)  # Test HTTP port
+test_port_connection("https://dicer0.com/", 443)  # Test HTTPS port
+test_port_connection("smtp.office365.com", 587)  # Test SMTP port for Office365
