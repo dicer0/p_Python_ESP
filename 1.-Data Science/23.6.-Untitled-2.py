@@ -184,6 +184,8 @@ class DatabaseExcelHandler:
                 yellowColDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})
                 #FORMATO DE COLOR PARA LOS SEPARADORES DE DATOS:
                 dataSeparation_format = workbook.add_format({'bg_color': 'white'})
+
+                #FORMATOS DE COLOR DE LA TABLA ESTÁTICA SUPERIOR 1:
                 worksheet.conditional_format(0, 0, 0, (staticDataAbove_1_Cols - 1), {'type': 'no_blanks', 'format': blueRowDataAbove1_format})
                 worksheet.conditional_format(1, 0, staticDataAbove_1_Rows, 0, {'type': 'no_blanks', 'format': blueTableDataAbove1_format})
                 worksheet.conditional_format(staticDataAbove_1_Rows, 0, staticDataAbove_1_Rows, (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
@@ -205,15 +207,23 @@ class DatabaseExcelHandler:
                         worksheet.conditional_format((i - 1), 0, (i - 1), (staticDataAbove_2_Cols - 1), {'type': 'no_blanks', 'format': whiteTableDataAbove2_format})
                 
                 #FORMATOS DE COLOR DE LA TABLA DINÁMICA:
-                worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
-                worksheet.conditional_format((staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), 0, (staticDataAbove_1_Rows + 1 + staticDataAbove_2_Rows + 1 + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
-                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
-                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 0, {'type': 'blanks',    'format': greenDB_format})
-                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'no_blanks', 'format': grayDB_format})
-                worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), 1, {'type': 'blanks',    'format': grayDB_format})
+                rowPositionStaticDataDB = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 2
+                worksheet.conditional_format((rowPositionStaticDataDB), 0, (rowPositionStaticDataDB), (columnasDataFrame - 1), {'type': 'no_blanks', 'format': blueDB_format})
+                worksheet.conditional_format((rowPositionStaticDataDB + filasDataFrame + 1), 0, (rowPositionStaticDataDB + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
+                worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 0, filasDataFrame + ((rowPositionStaticDataDB) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
+                worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 0, filasDataFrame + ((rowPositionStaticDataDB) + 1), 0, {'type': 'blanks',    'format': greenDB_format})
+                worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'blanks', 'format': grayDB_format})
+                worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'text',
+                                                                                                                                        'criteria': 'containing',
+                                                                                                                                        'value': 'standard',
+                                                                                                                                        'format': greenColDataBelow1_format})
+                worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'text',
+                                                                                                                                        'criteria': 'containing',
+                                                                                                                                        'value': 'not conventional',
+                                                                                                                                        'format': yellowDB_format})
                 for col in range(2, columnasDataFrame):
-                    worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'no_blanks', 'format': yellowDB_format})
-                    worksheet.conditional_format(((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, filasDataFrame + ((staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1) + 1), col, {'type': 'blanks',    'format': yellowDB_format})
+                    worksheet.conditional_format((rowPositionStaticDataDB + 1), col, ((rowPositionStaticDataDB + 1) + filasDataFrame), col, {'type': 'no_blanks', 'format': yellowDB_format})
+                    worksheet.conditional_format((rowPositionStaticDataDB + 1), col, ((rowPositionStaticDataDB + 1) + filasDataFrame), col, {'type': 'blanks',    'format': yellowDB_format})
                 
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
                 rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
@@ -221,7 +231,6 @@ class DatabaseExcelHandler:
                 merged_first_row = False
                 merged_second_row = False
                 merged_last_row = False
-
                 for i in range(rowPositionStaticDataBelow1, rowPositionStaticDataBelow1 + staticDataBelow_1_Rows):
                     for j in range(staticDataBelow_1_Cols):
                         if i == 29 and not merged_first_row:
@@ -250,7 +259,6 @@ class DatabaseExcelHandler:
                         else:
                             worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': yellowColDataBelow1_format})
                             worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': yellowColDataBelow1_format})
-
                 #COLOR DEL SEPARADOR DE DATOS:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
 
