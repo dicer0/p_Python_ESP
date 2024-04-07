@@ -1,33 +1,45 @@
-import pandas as pd
+# -*- coding: utf-8 -*-
 
-data = [[i, 'standards' if i % 3 == 0 else 'not standard' if i % 2 == 0 else 'olis'] for i in range(1, 11)]
-df = pd.DataFrame(data, columns=['A', 'B'])
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import datetime
+import time
 
-writer = pd.ExcelWriter('output.xlsx', engine='xlsxwriter')
+def send_email():
+    message = MIMEMultipart()
+    sender_email = "diego-rko@live.com.mx"
+    password = "tucontraseña"
+    receiver_email = "diego-rko@live.com.mx"
+    subject = "Olis crayolis automatizado"
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+    
+    body = "Contenido del correo"
+    emailPlainContent = MIMEText(_text = body, _subtype = "plain", _charset = "utf-8")
+    message.attach(emailPlainContent)
 
-df.to_excel(writer, index=False, sheet_name='nombreSheet')
+    try:
+        with smtplib.SMTP("smtp-mail.outlook.com", 587) as server:
+            server.starttls()
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+            print("Correo electrónico enviado correctamente.")
+    except Exception as e:
+        print(f"Error al enviar el correo electrónico: {e}")
 
-workbook = writer.book
 
-worksheet = writer.sheets['nombreSheet']
+def send_email_at_specific_time(hour, minute):
+    intentosEmail = 0
+    while True:
+        now = datetime.datetime.now()
+        if now.hour == hour and now.minute == minute:
+            send_email()
+            break
+        else:
+            time.sleep(5)
+            print("Intento número", intentosEmail, "de mandar el correo...")
+            intentosEmail += 1
 
-red_format = workbook.add_format({'bg_color': '#FF0000'})
-green_format = workbook.add_format({'bg_color': '#00FF00'})
-blue_format = workbook.add_format({'bg_color': '#0000FF'})
-
-worksheet.conditional_format('B2:B{}'.format(len(df) + 1), {'type': 'text',
-                                                             'criteria': 'containing',
-                                                             'value': 'standards',
-                                                             'format': red_format})
-
-worksheet.conditional_format('B2:B{}'.format(len(df) + 1), {'type': 'text',
-                                                             'criteria': 'containing',
-                                                             'value': 'not standard',
-                                                             'format': green_format})
-
-worksheet.conditional_format('B2:B{}'.format(len(df) + 1), {'type': 'text',
-                                                             'criteria': 'containing',
-                                                             'value': 'olis',
-                                                             'format': blue_format})
-
-writer.save()
+send_email_at_specific_time(3, 6)
