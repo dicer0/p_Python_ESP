@@ -264,11 +264,12 @@ class DatabaseExcelHandler:
 
                 # Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
                 # Itera sobre todas las columnas posibles en las tablas estáticas y dinámicas
-                for column in range(max(staticDataAbove_1_Cols, staticDataAbove_2_Cols, columnasDataFrame, staticDataBelow_1_Cols)):
-                    max_width = 16
+                max_cols = max(staticDataAbove_1_Cols, staticDataAbove_2_Cols, finalDataFrame.shape[1], staticDataBelow_1_Cols)
+                for column in range(max_cols):
+                    max_width = 20
                     max_height = 1  # Inicializa max_height fuera del bucle para la columna actual
                     # Verifica si la columna actual existe en el DataFrame antes de intentar acceder a ella
-                    if column < columnasDataFrame:
+                    if column < finalDataFrame.shape[1]:
                         # Itera a través de cada fila en la columna y encuentra el ancho y la altura máximos
                         for index, value in finalDataFrame.iloc[:, column].iteritems():
                             cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
@@ -281,6 +282,7 @@ class DatabaseExcelHandler:
                     worksheet.set_column(column, column, min(max_width + 2, 200))
                     # Establece la altura de la fila para todas las filas en la columna al máximo alto encontrado, limitado a un máximo de 100
                     worksheet.set_row(0, min(max_height * 15, 100))  # Suponiendo 15 píxeles por línea, ajustar según sea necesario
+
             
             print(finalDataFrame, "\n")
             return finalDataFrame
