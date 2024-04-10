@@ -262,24 +262,25 @@ class DatabaseExcelHandler:
                 #COLOR DEL SEPARADOR DE DATOS:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
 
-                # Adjusting cell width and height
-                for column in range(finalDataFrame.shape[1]):
-                    max_width = 20
-                    max_height = 1  # Initialize max_height outside the loop for the current column
-                    # Iterate through each row in the column and find the maximum width and height
-                    for index, value in finalDataFrame.iloc[:, column].iteritems():
-                        cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
-                        if cell_width > max_width:
-                            max_width = cell_width
-                        cell_height = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n').__len__()
-                        if cell_height > max_height:
-                            max_height = cell_height
-                    # Set the column width to the maximum width found, capped at a maximum width of 200
+                # Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
+                # Itera sobre todas las columnas posibles en las tablas estáticas y dinámicas
+                for column in range(max(staticDataAbove_1_Cols, staticDataAbove_2_Cols, finalDataFrame.shape[1], staticDataBelow_1_Cols)):
+                    max_width = 16
+                    max_height = 1  # Inicializa max_height fuera del bucle para la columna actual
+                    # Verifica si la columna actual existe en el DataFrame antes de intentar acceder a ella
+                    if column < finalDataFrame.shape[1]:
+                        # Itera a través de cada fila en la columna y encuentra el ancho y la altura máximos
+                        for index, value in finalDataFrame.iloc[:, column].iteritems():
+                            cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
+                            if cell_width > max_width:
+                                max_width = cell_width
+                            cell_height = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n').__len__()
+                            if cell_height > max_height:
+                                max_height = cell_height
+                    # Establece el ancho de la columna al máximo ancho encontrado, limitado a un máximo de 200
                     worksheet.set_column(column, column, min(max_width + 2, 200))
-                    # Set the row height for all rows in the column to the maximum height found, capped at a maximum height of 100
-                    worksheet.set_row(0, min(max_height * 15, 100))  # Assuming 15 pixels per line, adjust as necessary
-
-
+                    # Establece la altura de la fila para todas las filas en la columna al máximo alto encontrado, limitado a un máximo de 100
+                    worksheet.set_row(0, min(max_height * 15, 100))  # Suponiendo 15 píxeles por línea, ajustar según sea necesario
 
             
             print(finalDataFrame, "\n")
