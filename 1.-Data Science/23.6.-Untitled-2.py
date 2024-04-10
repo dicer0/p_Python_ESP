@@ -281,7 +281,6 @@ class DatabaseExcelHandler:
                     worksheet.set_column(column, column, min(max_width + 2, 200))
                     # Establece la altura de la fila para todas las filas en la columna al máximo alto encontrado, limitado a un máximo de 100
                     worksheet.set_row(0, min(max_height * 15, 100))  # Suponiendo 15 píxeles por línea, ajustar según sea necesario
-
             
             print(finalDataFrame, "\n")
             return finalDataFrame
