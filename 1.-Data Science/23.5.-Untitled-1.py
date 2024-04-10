@@ -1,54 +1,229 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-import os
+from PyQt5 import QtWidgets, QtGui, QtCore
+import sys
+from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
 
-def send_email_with_attachment():
-    sender_email = "diego-rko@live.com.mx"
-    receiver_email = "diego-rko@live.com.mx"
-    subject = "Olis crayolis automatizado"
-    body = "Contenido del correo"
-    attachment_path = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
+class SecondaryWindow(QtWidgets.QMainWindow):
+    def __init__(self, title, showTable=False):
+        super().__init__() 
+        self.setWindowTitle(title)
+        self.__createWidgets()
+        
+        if showTable:
+            try:
+                self.__createTable()
+            except Exception as e:
+                self.__showErrorMessageBox(str(e))
+                print("Error: ", e)
+        else:
+            self.__createEmptyTable()
+        
+    def __createWidgets(self):
+        confirmButton = QtWidgets.QPushButton("Texto del botón")
+        createButtonStyle = "max-width: 250px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; border-radius: 25px; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
+        confirmButton.setStyleSheet(createButtonStyle)
+        text_content1 =  """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: white; font-weight: bold;'> 
+                                Título ventana adicional 
+                            </p>"""
+        texto_1 = QtWidgets.QLabel(text_content1)
+        text_content2 =   """<p style = 'font-size: 20px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
+                                Texto del botón
+                            </p>"""
+        texto_2 = QtWidgets.QLabel(text_content2)
 
-    message = MIMEMultipart()
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
+        # CONTENEDORES:
+        widgetContenedor = QtWidgets.QWidget()
+        widgetContenedor.setFixedHeight(100)
+        widgetContenedor.setStyleSheet("background-color: #002550; padding: 5px;")
+        contenedorMatricial = QtWidgets.QGridLayout(widgetContenedor)   
+        self.mainLayout = QtWidgets.QGridLayout()
 
-    # Add body to email
-    message.attach(MIMEText(body, "plain"))
+        # AÑADIR WIDGETS A LOS CONTENEDORES:
+        contenedorMatricial.addWidget(texto_1, 0, 0)
+        contenedorMatricial.addWidget(texto_2, 1, 0)
+        contenedorMatricial.addWidget(confirmButton, 1, 2)
+        
+        # UNIR LOS CONTENEDORES EN UN SOLO WIDGET Y CENTRAR EL CONTENEDOR PRINCIPAL:
+        self.mainLayout.addWidget(widgetContenedor, 1, 0)
+        centralWidget = QtWidgets.QWidget()
+        centralWidget.setLayout(self.mainLayout)
+        self.setCentralWidget(centralWidget)
+        
+    def __createTable(self):
+        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
+        db_handler = DatabaseExcelHandler(connectionString)
+        
+        try:
+            resultDataFrame = db_handler.process_data_and_save_to_excel("C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx")
+            if (type(resultDataFrame) == str):
+                self.__showErrorMessageBox(resultDataFrame)
+            else:
+                staticDataAbove_1 = [
+                    ['Title A1.1', 'Title A1.2', 'Title A1.3'],
+                    ['Static Row 1', '', ''],
+                    ['Static Row 2', '', ''],
+                    ['Static Row 3', '', ''],
+                    ['Static Row 4', '', ''],
+                    ['Static Row 5', '', ''],
+                    ['Static Row 6', '', '']
+                ]
+                staticDataAbove_2 = [
+                    ['Title A2', '', '', '', '', '', ''],
+                    ['Subtitle A2.1', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Subtitle A2.2', '', '', '', '', '', ''],
+                    ['Static Row 2', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Subtitle A2.3', '', '', '', '', '', ''],
+                    ['Static Row 3', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', ''],
+                    ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
+                ]
+                staticDataBelow_1 = [
+                    ['Title B1', '', '', '', '', '', ''],
+                    ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
+                    ['Subtitle 1', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', ''],
+                    ['Static Row 2', '', '', '', '', '', ''],
+                    ['Static Row 3', '', '', '', '', '', ''],
+                    ['Static Row 4', '', '', '', '', '', ''],
+                    ['Static Row 5', '', '', '', '', '', ''],
+                    ['Static Row 6', '', '', '', '', '', ''],
+                    ['Static Row 7', '', '', '', '', '', ''],
+                    ['Subtitle 2', '', '', '', '', '', ''],
+                    ['Static Row 1', '', '', '', '', '', '']
+                ]
+                headers = resultDataFrame.columns.tolist()
+                resultDataFrame.loc[-1] = headers
+                resultDataFrame.index = resultDataFrame.index + 1
+                resultDataFrame = resultDataFrame.sort_index()
+                (db_numRows, db_numCols) = resultDataFrame.shape
+                totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1)
+                staticDataAbove_1_Rows = len(staticDataAbove_1)
+                staticDataAbove_2_Rows = len(staticDataAbove_2)
+                totalCols = max(7, db_numCols)
+                staticDataAbove_2_Cols = len(staticDataAbove_2[0]) 
+                staticDataBelow_1_Cols = len(staticDataBelow_1[0]) 
+                table = QtWidgets.QTableWidget()
+                table.setRowCount(totalRows)
+                table.setColumnCount(totalCols)
 
-    # Open the file in binary mode
-    with open(attachment_path, "rb") as attachment:
-        # Add file as application/octet-stream
-        # Email client can usually download this automatically as attachment
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(attachment.read())
+                for (i, row_data) in (enumerate(staticDataAbove_1)):
+                    for (j, value) in (enumerate(row_data)): 
+                        itemAbove1 = QtWidgets.QTableWidgetItem(str(value)) 
+                        itemAbove1.setTextAlignment(QtCore.Qt.AlignCenter)
+                        if i == 0:
+                            itemAbove1.setBackground(QtGui.QColor('#4f81bd'))
+                            font = QtGui.QFont()
+                            font.setBold(True)
+                            itemAbove1.setFont(font)
+                            itemAbove1.setForeground(QtGui.QColor('white'))
+                        elif (i != 0 and j == 1):
+                            itemAbove1.setBackground(QtGui.QColor('#0070c0'))
+                        else:                          
+                            itemAbove1.setBackground(QtGui.QColor('#d3dfee'))   
+                            font = QtGui.QFont() 
+                            font.setBold(True)
+                            itemAbove1.setFont(font)
+                        table.setItem(i, (j + 1), itemAbove1)
+                for (i, row_data) in (enumerate(staticDataAbove_2)): 
+                    for (j, value) in (enumerate(row_data)): 
+                        itemAbove2 = QtWidgets.QTableWidgetItem(str(value)) 
+                        itemAbove2.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+                        font = QtGui.QFont() 
+                        font.setBold(True)
+                        table.setSpan((i + staticDataAbove_1_Rows + 1), 0, 1, staticDataAbove_2_Cols)
+                        if i == 0:
+                            itemAbove2.setBackground(QtGui.QColor('#4f81bd'))
+                            itemAbove2.setFont(font)
+                        elif (i == 1 or i == 4 or i == 7):
+                            itemAbove2.setBackground(QtGui.QColor('white'))  
+                            font.setUnderline(True)
+                            itemAbove2.setFont(font)
+                        else:
+                            itemAbove2.setBackground(QtGui.QColor('white'))  
+                        table.setItem((i + staticDataAbove_1_Rows + 1), j, itemAbove2)
 
-    # Encode file in ASCII characters to send by email    
-    encoders.encode_base64(part)
+                for i in range(db_numRows): 
+                    for j in range(db_numCols):
+                        celda_Db = QtWidgets.QTableWidgetItem(str(resultDataFrame.iloc[i, j]))
+                        celda_Db.setTextAlignment(QtCore.Qt.AlignCenter)
+                        font = QtGui.QFont() 
+                        font.setBold(True)
+                        if (i == 0): 
+                            celda_Db.setBackground(QtGui.QColor('blue'))
+                            celda_Db.setFont(font)
+                        elif (i != 0 and j == 0):
+                            celda_Db.setBackground(QtGui.QColor('green'))
+                            celda_Db.setFont(font)
+                        elif (i != 0 and j == 1): 
+                            celda_Db.setBackground(QtGui.QColor('gray'))
+                            if ((resultDataFrame.columns[j] == "Content Status") and (resultDataFrame.iloc[i, j] == "standard")):
+                                celda_Db.setBackground(QtGui.QColor('#00f1ba')) #Color condicional.
+                        else:
+                            celda_Db.setBackground(QtGui.QColor('yellow'))
+                        table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1), j, celda_Db)
+                
+                for i, row_data in enumerate(staticDataBelow_1): 
+                    for j, value in enumerate(row_data): 
+                        itemBelow1 = QtWidgets.QTableWidgetItem(str(value)) 
+                        itemBelow1.setTextAlignment(QtCore.Qt.AlignCenter)
+                        font = QtGui.QFont() 
+                        font.setBold(True)
+                        if i == 0:
+                            itemBelow1.setBackground(QtGui.QColor('white'))
+                            font.setUnderline(True)
+                            itemBelow1.setFont(font)
+                            itemBelow1.setTextAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+                            table.setSpan((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), 0, 1, staticDataBelow_1_Cols)
+                        elif i == 1:
+                            itemBelow1.setBackground(QtGui.QColor('#4472c4'))
+                            itemBelow1.setFont(font)
+                        elif i == 2:
+                            itemBelow1.setBackground(QtGui.QColor('#A7BFDE'))
+                            itemBelow1.setFont(font)
+                            table.setSpan((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), 0, 1, staticDataBelow_1_Cols)
+                        elif (i != (0 & 1 & 2) and j == 0):
+                            itemBelow1.setBackground(QtGui.QColor('#5EC268'))
+                            itemBelow1.setFont(font)
+                        elif (i != (0 & 1 & 2) and j == 1):
+                            itemBelow1.setBackground(QtGui.QColor('gray'))
+                        else:
+                            itemBelow1.setBackground(QtGui.QColor('#FFF2CC'))
+                        table.setItem((i + staticDataAbove_1_Rows + staticDataAbove_2_Rows + db_numRows + 1 + 1 + 1), j, itemBelow1)
+                
+                for column in range(table.columnCount()):
+                    table.resizeColumnToContents(column)
+                    anchoColumnas = table.columnWidth(column)
+                    limiteAncho = 200
+                    anchoMaxColumnas = min(anchoColumnas, limiteAncho)
+                    table.setColumnWidth(column, anchoMaxColumnas)
 
-    # Add header as key/value pair to attachment part
-    part.add_header(
-        "Content-Disposition",
-        f"attachment; filename= {os.path.basename(attachment_path)}",
-    )
+                    # Analizar la altura de las celdas y limitarla según sea necesario
+                    for row in range(table.rowCount()):
+                        alturaCelda = table.sizeHintForRow(row)
+                        limiteAltura = 100
+                        alturaMaxCelda = min(alturaCelda, limiteAltura)
+                        table.setRowHeight(row, alturaMaxCelda)
+                
+                self.mainLayout.addWidget(table, 0, 0)
+        except Exception as errorDatabaseExcelHandler:
+            self.__showErrorMessageBox(str(errorDatabaseExcelHandler))
+    
+    def __createEmptyTable(self):
+        table = QtWidgets.QTableWidget()
+        table.setRowCount(5)
+        table.setColumnCount(5)
+        self.contenedorVertical.addWidget(table, 0, 0)
+        
+    def __showErrorMessageBox(self, message):
+        reply = QtWidgets.QMessageBox.critical(self, "Error", message, QtWidgets.QMessageBox.Ok)
+        if reply == QtWidgets.QMessageBox.Ok:
+            self.__createEmptyTable()
 
-    # Add attachment to message and convert message to string
-    message.attach(part)
-    text = message.as_string()
-
-    try:
-        # Log in to SMTP server and send email
-        with smtplib.SMTP("smtp.office365.com", 587) as server:
-            server.starttls()
-            # Replace 'password' with your corporate email password or app password
-            server.login(sender_email, "password")
-            server.sendmail(sender_email, receiver_email, text)
-        print("Email sent successfully.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-send_email_with_attachment()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = SecondaryWindow("Ventana 2", showTable=True)
+    window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
+    window.showMaximized()
+    sys.exit(app.exec_())

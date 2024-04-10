@@ -262,12 +262,28 @@ class DatabaseExcelHandler:
                 #COLOR DEL SEPARADOR DE DATOS:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
 
-                max_lengths = [len(str(col)) for col in finalDataFrame.columns]
-                for index, row in finalDataFrame.iterrows():
-                    for i, value in enumerate(row):
-                        max_lengths[i] = max(max_lengths[i], len(str(value)))
-                for i, max_length in enumerate(max_lengths):
-                    worksheet.set_column(i, i, max_length + 1)
+                # Adjusting cell width and height
+                for column in range(finalDataFrame.shape[1]):
+                    max_width = 20
+                    # Iterate through each row in the column and find the maximum width
+                    for index, value in finalDataFrame.iloc[:, column].iteritems():
+                        cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
+                        if cell_width > max_width:
+                            max_width = cell_width
+                    # Set the column width to the maximum width found, capped at a maximum width of 200
+                    worksheet.set_column(column, column, min(max_width + 2, 200))
+                    
+                    # Adjusting cell height
+                    for index, value in finalDataFrame.iloc[:, column].iteritems():
+                        max_height = 1
+                        # Iterate through each cell in the column and find the maximum height
+                        cell_height = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n').__len__()
+                        if cell_height > max_height:
+                            max_height = cell_height
+                        # Set the row height to the maximum height found, capped at a maximum height of 100
+                        worksheet.set_row(index, min(max_height * 15, 100))  # Assuming 15 pixels per line, adjust as necessary
+
+
             
             print(finalDataFrame, "\n")
             return finalDataFrame
