@@ -212,7 +212,6 @@ class DatabaseExcelHandler:
                 worksheet.conditional_format((rowPositionStaticDataDB + filasDataFrame + 1), 0, (rowPositionStaticDataDB + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 0, filasDataFrame + ((rowPositionStaticDataDB) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 0, filasDataFrame + ((rowPositionStaticDataDB) + 1), 0, {'type': 'blanks',    'format': greenDB_format})
-                worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'blanks', 'format': grayDB_format})
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'text',
                                                                                                                                         'criteria': 'containing',
                                                                                                                                         'value': 'standard',
@@ -220,7 +219,7 @@ class DatabaseExcelHandler:
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'text',
                                                                                                                                         'criteria': 'containing',
                                                                                                                                         'value': 'not conventional',
-                                                                                                                                        'format': yellowDB_format})
+                                                                                                                                        'format': grayDB_format})
                 for col in range(2, columnasDataFrame):
                     worksheet.conditional_format((rowPositionStaticDataDB + 1), col, ((rowPositionStaticDataDB + 1) + filasDataFrame), col, {'type': 'no_blanks', 'format': yellowDB_format})
                     worksheet.conditional_format((rowPositionStaticDataDB + 1), col, ((rowPositionStaticDataDB + 1) + filasDataFrame), col, {'type': 'blanks',    'format': yellowDB_format})
