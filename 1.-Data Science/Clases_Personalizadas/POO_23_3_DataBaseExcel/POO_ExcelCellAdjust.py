@@ -1,75 +1,83 @@
 # -*- coding: utf-8 -*-
 
-#openpyxl: 
+#openpyxl: Librería que permite crear, leer, escribir y modificar archivos de Excel (.xlsx).
 import openpyxl
 
-def ajustar_celdas_excel(ruta_excel, ancho_maximo, altura_maxima):
-    # Cargar el libro de trabajo de Excel existente
-    wb = openpyxl.load_workbook(ruta_excel)
+#ExcelCellAdjuster: Clase propia que ajusta el ancho de las celdas de un Excel en función de su contenido.
+class ExcelCellAdjuster:
+    #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
+    #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
+    #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
+    #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
+    #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
+    #otros lenguajes de programación.
+    def __init__(self, ruta_excel, ancho_maximo, altura_maxima):
+        #De esta manera se asignan valores a los atributos que recibe el constructor de la clase como parámetro:
+        self.ruta_excel = ruta_excel        #Path del archivo de excel.
+        self.ancho_maximo = ancho_maximo    #Ancho máximo de las celdas en el Excel después del ajuste.
+        self.altura_maxima = altura_maxima  #Altura máxima de las celdas en el Excel después del ajuste.
 
-    # Obtener la hoja activa del libro de trabajo
-    ws = wb.active
+    #ajustar_celdas(): Método que recibe todos los parámetros del constructor y trabaja con ellos para 
+    #ajustar de forma automática el tamaño de las celdas del Excel, pero al mismo tiempo limitar dicho tamaño.
+    def ajustar_celdas(self):
+        #openpyxl.load_workbook(): Método para cargar un archivo (libro) de Excel para acceder a sus hojas de 
+        #cálculo, leer, modificar celdas, trabajar con gráficos, estilos, rangos de celdas fusionadas, etc.
+        wb = openpyxl.load_workbook(self.ruta_excel)
+        #openpyxl.load_workbook().active: El atributo active permite el acceso a la hoja de cálculo activa 
+        #(principal o actual) dentro del workbook cargado con el método  openpyxl.load_workbook().
+        ws = wb.active
 
-    # Ajustar el ancho de la primera columna basado en el contenido
-    max_length_first_col = 0
-    for cell in ws[ws.cell(row=1, column=1).column]:
-        try:
-            if len(str(cell.value)) > max_length_first_col:
-                max_length_first_col = len(str(cell.value))
-        except:
-            pass
-    adjusted_width_first_col = min((max_length_first_col + 2) * 1.2, ancho_maximo)
-    ws.column_dimensions['A'].width = adjusted_width_first_col
-
-    # Convertir el objeto generador en una lista para poder acceder a sus elementos
-    columns_list = list(ws.columns)
-    # Ajustar el ancho de las columnas restantes basado en el contenido
-    for col in columns_list[1:]:
-        max_length = 0
-        column = col[0].column_letter
-        for cell in col:
+        #Cuando se tengan filas fusionadas en el archivo de Excel, vale la pena manejar la primera columna 
+        #por separado, ya que si el contenido de alguna de las filas es demasiado largo, el ancho de esta no 
+        #se ajustará correctamente.
+        max_length_first_col = 0
+        for cell in ws[ws.cell(row=1, column=1).column]:
             try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(str(cell.value))
+                if len(str(cell.value)) > max_length_first_col:
+                    max_length_first_col = len(str(cell.value))
             except:
                 pass
-        adjusted_width = min((max_length + 2) * 1.2, ancho_maximo)
-        ws.column_dimensions[column].width = adjusted_width
+        adjusted_width_first_col = min((max_length_first_col + 2) * 1.2, self.ancho_maximo)
+        ws.column_dimensions['A'].width = adjusted_width_first_col
 
-    # Ajustar la altura de las filas basada en el contenido y las filas fusionadas
-    for row in ws.iter_rows():
-        max_height = 0
-        for cell in row:
-            try:
-                lines = str(cell.value).count('\n') + 1
-                height = lines * 15
-                if height > max_height:
-                    max_height = height
-            except:
-                pass
-        # Considerar filas fusionadas
-        for cell in row:
-            if cell.coordinate in ws.merged_cells:
-                for range_ in ws.merged_cells.ranges:
-                    if cell.coordinate in range_:
-                        for row_ in range(range_.min_row, range_.max_row + 1):
-                            # Verificar si la altura es None antes de comparar
-                            if ws.row_dimensions[row_].height is not None:
-                                max_height = max(max_height, ws.row_dimensions[row_].height)
-        # Asignar un valor predeterminado si la altura es None
-        if max_height == 0:
-            max_height = 15  # Valor predeterminado
-        adjusted_height = min(max_height, altura_maxima)
-        ws.row_dimensions[row[0].row].height = adjusted_height
+        # Adjust the width of the remaining columns based on the content
+        for col in list(ws.columns)[1:]:
+            max_length = 0
+            column = col[0].column_letter
+            for cell in col:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(str(cell.value))
+                except:
+                    pass
+            adjusted_width = min((max_length + 2) * 1.2, self.ancho_maximo)
+            ws.column_dimensions[column].width = adjusted_width
 
-    # Guardar el libro de trabajo con los ajustes realizados
-    wb.save(ruta_excel)
+        # Adjust the height of the rows based on the content
+        for row in ws.iter_rows():
+            max_height = 0
+            for cell in row:
+                try:
+                    lines = str(cell.value).count('\n') + 1
+                    height = lines * 15
+                    if height > max_height:
+                        max_height = height
+                except:
+                    pass
+            # Set a default value if the height is None
+            if max_height == 0:
+                max_height = 15  # Default value
+            adjusted_height = min(max_height, self.altura_maxima)
+            ws.row_dimensions[row[0].row].height = adjusted_height
 
-# Ruta del archivo Excel a ajustar
-excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
-# Ancho máximo de las celdas (en caracteres)
+        # Save the workbook with the adjustments made
+        wb.save(self.ruta_excel)
+
+# Usage:
+excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
 ancho_maximo = 40
-# Altura máxima de las celdas (en píxeles)
 altura_maxima = 20
-# Llamar a la función para ajustar las celdas del archivo Excel
-ajustar_celdas_excel(excelFilePath2, ancho_maximo, altura_maxima)
+# Create an instance of the ExcelCellAdjuster class
+adjuster = ExcelCellAdjuster(excelFilePath2, ancho_maximo, altura_maxima)
+# Call the method to adjust the cells
+adjuster.ajustar_celdas()
