@@ -261,14 +261,11 @@ class DatabaseExcelHandler:
                 #COLOR DEL SEPARADOR DE DATOS:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
 
-                # Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
-                # Itera sobre todas las columnas posibles en las tablas estáticas y dinámicas
+                #Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
                 for column in range(staticDataAbove_2_Cols):
                     max_width = 16
-                    max_height = 1  # Inicializa max_height fuera del bucle para la columna actual
-                    # Verifica si la columna actual existe en el DataFrame antes de intentar acceder a ella
+                    max_height = 1
                     if column < staticDataAbove_1_Cols:
-                        # Itera a través de cada fila en la columna y encuentra el ancho y la altura máximos
                         for index, value in finalDataFrame.iloc[:, column].iteritems():
                             cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
                             if cell_width > max_width:
@@ -276,10 +273,8 @@ class DatabaseExcelHandler:
                             cell_height = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n').__len__()
                             if cell_height > max_height:
                                 max_height = cell_height
-                    # Establece el ancho de la columna al máximo ancho encontrado, limitado a un máximo de 200
                     worksheet.set_column(column, column, min(max_width + 2, 200))
-                    # Establece la altura de la fila para todas las filas en la columna al máximo alto encontrado, limitado a un máximo de 100
-                    worksheet.set_row(0, min(max_height * 15, 100))  # Suponiendo 15 píxeles por línea, ajustar según sea necesario
+                    worksheet.set_row(0, min(max_height * 15, 100))
             
             print(finalDataFrame, "\n")
             return finalDataFrame
