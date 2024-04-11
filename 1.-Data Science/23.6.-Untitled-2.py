@@ -230,7 +230,7 @@ class DatabaseExcelHandler:
                 merged_first_row = False
                 merged_second_row = False
                 merged_last_row = False
-                for i in range(rowPositionStaticDataBelow1, rowPositionStaticDataBelow1 + staticDataBelow_1_Rows):
+                for i in range(rowPositionStaticDataBelow1, (rowPositionStaticDataBelow1 + staticDataBelow_1_Rows)):
                     for j in range(staticDataBelow_1_Cols):
                         if i == 29 and not merged_first_row:
                             ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)
@@ -262,10 +262,12 @@ class DatabaseExcelHandler:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
 
                 #Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
-                for column in range(staticDataAbove_2_Cols):
+                maxColumns = max(staticDataAbove_1_Cols, staticDataAbove_2_Cols, columnasDataFrame, staticDataBelow_1_Cols)
+                minColumns = min(staticDataAbove_1_Cols, staticDataAbove_2_Cols, columnasDataFrame, staticDataBelow_1_Cols)
+                for column in range(maxColumns):
                     max_width = 16
                     max_height = 1
-                    if column < staticDataAbove_1_Cols:
+                    if (column < minColumns):
                         for index, value in finalDataFrame.iloc[:, column].iteritems():
                             cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
                             if cell_width > max_width:

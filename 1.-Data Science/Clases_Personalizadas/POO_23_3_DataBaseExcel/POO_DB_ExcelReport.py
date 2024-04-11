@@ -6,6 +6,15 @@
 #--windowed: Sirve para que cuando se ejecute el ejecutable, no se abra la consola.
 #--icon=path/icono.ico: Sirve para asignar un ícono al .exe, pero para ello el archivo debe tener extensión .ico.
 
+# - Entidad: Se refiere a una tabla que almacena datos sobre un tipo de objeto o elemento del mundo real. Cada 
+#   fila en la tabla representa una instancia individual de esa entidad, y cada columna representa un atributo o 
+#   característica de esa entidad.
+# - Atributo: Son las columnas de una tabla que representan las características o propiedades de la entidad que 
+#   está siendo modelada, todas ellas tienen un nombre y tipo de dato asociado.
+# - Registro: También conocido como "fila" o "tupla", representa una instancia individual de una entidad en la 
+#   tabla. Cada registro contiene los valores de los atributos correspondientes a esa instancia específica de la 
+#   entidad.
+
 #SQLAlchemy: Para instalarlo se debe ejecutar el comando pip install sqlalchemy, y es una biblioteca de Python 
 #para SQL ORM (Object-Relacional-Mapping) que proporciona a los desarrolladores un conjunto de herramientas para 
 #interactuar con bases de datos utilizando objetos y métodos de Python, en lugar de escribir consultas SQL.
@@ -20,18 +29,8 @@
 # - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
 # - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
 # - Psycopg2: Es conveniente usar esta librería cuando se utiliza una base de datos PostgreSQL.
-
-# - Entidad: Se refiere a una tabla que almacena datos sobre un tipo de objeto o elemento del mundo real. Cada 
-#   fila en la tabla representa una instancia individual de esa entidad, y cada columna representa un atributo o 
-#   característica de esa entidad.
-# - Atributo: Son las columnas de una tabla que representan las características o propiedades de la entidad que 
-#   está siendo modelada, todas ellas tienen un nombre y tipo de dato asociado.
-# - Registro: También conocido como "fila" o "tupla", representa una instancia individual de una entidad en la 
-#   tabla. Cada registro contiene los valores de los atributos correspondientes a esa instancia específica de la 
-#   entidad.
-
 import pyodbc
-#pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
+#pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos.
 import pandas
 #pandas: Librería que proporciona datos adicionales acerca de los errores detectados por una estructura try-except
 import traceback
@@ -47,8 +46,7 @@ class DatabaseExcelHandler:
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
     #otros lenguajes de programación.
     def __init__(self, db_connection_string):
-        #De esta manera se asigna al atributo self.db_connection_string el valor de la URL que recibe el 
-        #constructor de la clase como parámetro.
+        #De esta manera se asignan valores a los atributos que recibe el constructor de la clase como parámetro:
         self.db_connection_string = db_connection_string    #Atributo: URL de conexión para la base de datos.
         self.connected = False  #Atributo connected: Bandera que indica si la base de datos se pudo conectar.
     
@@ -74,9 +72,9 @@ class DatabaseExcelHandler:
             #pyodbc.connect(): Método para establecer la conexión con la base de datos usando PyODBC.
             self.connection1 = pyodbc.connect(self.db_connection_string)
             #pyodbc.connect().cursor(): Una vez que se ha establecido la conexión con el método pyodbc.connect(), 
-            #se crea un cursor con el método .cursor(), el cual es un objeto que se utiliza para ejecutar consultas 
-            #SQL en la base de datos y recuperar sus resultados, como la inserción, actualización o eliminación de 
-            #datos, así como la recuperación de datos de las tablas.
+            #se crea un cursor con el método .cursor(), el cual es un objeto que se utiliza para ejecutar 
+            #consultas SQL en la base de datos y recuperar sus resultados, como la inserción, actualización o 
+            #eliminación de datos, así como la recuperación de datos de las tablas.
             self.cursor = self.connection1.cursor()
             print("1.- MySQL Connection successful!!!")
             #El atributo connected se cambia manualmente a True cuando se ha realizado la conexión exitosamente.
@@ -103,43 +101,43 @@ class DatabaseExcelHandler:
             SQL_Query_string =  """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
-            #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos a través 
-            #de un objeto cursor, se puede realizar una consulta a la base de datos con SQL.
+            #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos a 
+            #través de un objeto cursor, se puede realizar una consulta a la base de datos con SQL.
             self.cursor.execute(SQL_Query_string)
-            #pyodbc.connect().cursor().execute().fetchall(): Después de ejecutar la consulta, se llama a este método 
-            #en el cursor para recuperar todos los resultados de la consulta, el cual devuelve una lista de tuplas 
-            #que contiene todas las filas de resultados de la consulta. Cada fila de la lista es una tupla que 
-            #incluye los valores de las columnas de esa fila. Pero cabe mencionar que se deberá realizar una 
+            #pyodbc.connect().cursor().execute().fetchall(): Después de ejecutar la consulta, se llama a este 
+            #método en el cursor para recuperar todos los resultados de la consulta, el cual devuelve una lista de 
+            #tuplas que contiene todas las filas de resultados de la consulta. Cada fila de la lista es una tupla 
+            #que incluye los valores de las columnas de esa fila. Pero cabe mencionar que se deberá realizar una 
             #conversión futura de tupla a tupla, que no cambia nada de los datos, pero sirve para que el programa 
             #identifique que está lidiando con una lista de tuplas, sino cree que es una lista de 1 elemento.
             resultProxy = self.cursor.fetchall()
             print("Tipo de Dato ResultProxy: ", type(resultProxy))
             #TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia que estos pueden tener es que algunos 
-            #tienen cierto órden (índice y valor) y otros no, además de que algunos son editables o mutables, donde 
-            #se les puede agregar, eliminar, o modificar elementos y otros son inmutables, donde sus datos no se 
-            #pueden cambiar.
+            #tienen cierto órden (índice y valor) y otros no, además de que algunos son editables o mutables, 
+            #donde se les puede agregar, eliminar, o modificar elementos y otros son inmutables, donde sus datos 
+            #no se pueden cambiar.
             # - Listas (list): Una lista es una colección ordenada y mutable (editable) de elementos. Se definen 
             #   utilizando corchetes [].
             #       Ejemplo: mi_lista = [1, 2, "hola", True].
-            # - Tuplas (tuple): Una tupla es una colección ordenada e inmutable de elementos. Se definen utilizando 
-            #   paréntesis ().
+            # - Tuplas (tuple): Una tupla es una colección ordenada e inmutable de elementos. Se definen 
+            #   utilizando paréntesis ().
             #       Ejemplo: mi_tupla = (1, 2, "hola", True).
-            # - Diccionarios (dict): Un diccionario es una colección desordenada y mutable de pares clave-valor. Se 
-            #   definen utilizando llaves {} y separando cada par clave-valor por dos puntos :.
+            # - Diccionarios (dict): Un diccionario es una colección desordenada y mutable de pares clave-valor. 
+            #   Se definen utilizando llaves {} y separando cada par clave-valor por dos puntos :.
             #       Ejemplo: mi_diccionario = {"nombre": "Juan", "edad": 30, "ciudad": "Madrid"}.
-            # - Conjuntos (set): Un conjunto es una colección desordenada y mutable de elementos únicos. No permite 
-            #   elementos duplicados y no tiene un orden definido. Se definen utilizando llaves {} o utilizando la 
-            #   función set().
+            # - Conjuntos (set): Un conjunto es una colección desordenada y mutable de elementos únicos. No 
+            #   permite elementos duplicados y no tiene un orden definido. Se definen utilizando llaves {} o 
+            #   utilizando la función set().
             #       Ejemplo: mi_conjunto = {1, 2, 3, 4, 5}.
             #ES MUY IMPORTANTE MENCIONAR QUE: Cuando obtenemos datos de una database utilizando PyODBC u otra 
             #librería similar como SQLAlchemy, los datos generalmente se obtienen como una lista de tuplas, donde 
             #cada tupla representa una fila de la tabla. Pero cuando queramos convertir esto a un DataFrame para 
-            #manejar mejor los datos al introducirlos en un Excel, debemos realizar de forma explícita la conversión 
-            #de las tuplas internas a tuplas, ya que sino el programa podría pensar que es una lista de 1 sola 
-            #columna en vez de detectar que se encuentra con una lista de varias columnas, para ello se puede usar 
-            #un bucle for de una sola línea, la cual se conforma de la siguiente sintaxis:
-            #   resultadoBucleFor = [acción_Realizada      for     variable_Interna_i    in     estructura_De_Datos]
-            cursorRows = [tuple(row) for row in resultProxy]            #Conversión explícita de las filas a tuplas.
+            #manejar mejor los datos al introducirlos en un Excel, debemos realizar de forma explícita la 
+            #conversión de las tuplas internas a tuplas, ya que sino el programa podría pensar que es una lista de 
+            #1 sola columna en vez de detectar que se encuentra con una lista de varias columnas, para ello se 
+            #puede usar un bucle for de una sola línea, la cual se conforma de la siguiente sintaxis:
+            #   resultadoBucleFor = [acción_Realizada      for    variable_Interna_i    in    estructura_De_Datos]
+            cursorRows = [tuple(row) for row in resultProxy]          #Conversión explícita de las filas a tuplas.
             #pyodbc.connect().cursor().description: El atributo description perteneciente al objeto cursor de la 
             #librería PyODBC sirve para proporcionar información sobre las columnas de un Query en una tupla de 
             #tuplas, las cuales indican lo siguiente en ese específico órden:
@@ -150,7 +148,7 @@ class DatabaseExcelHandler:
             # - Dígitos de precisión: El número de dígitos de precisión para tipos numéricos puede ser None.
             # - Dígitos decimales: El número de dígitos decimales para tipos numéricos puede ser None.
             # - Indicador de si la columna puede ser NULL: Si se puede contener valores NULL (True) o no (False).
-            cursorCols = [col[0] for col in self.cursor.description]    #Obtención del título de las columnas.
+            cursorCols = [col[0] for col in self.cursor.description]  #Obtención del título de las columnas.
             #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos 
             #matricial en forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de 
             #manera eficiente para realizar diversas operaciones de análisis de datos, su constructor recibe los 
@@ -171,7 +169,7 @@ class DatabaseExcelHandler:
             dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
             print(dataFramePandas, "\n")
             #pandas.to_datetime(): Este método se utiliza para convertir un objeto iterable como una lista, tupla, 
-            #DataFrame, Serie de Pandas, etc. que contiene fechas o marcas de tiempo en un objeto de tipo DateTime.
+            #DataFrame, Serie de Pandas, etc. que contiene fechas o tiempos en un objeto de tipo DateTime.
             #pandas.to_datetime().dt: El atributo .dt proporciona acceso a una serie de métodos para obtener o 
             #manipular las fechas/horas de su objeto DateTime. Algunas de las cosas que se pueden hacer con el 
             #atributo .dt son:
@@ -245,32 +243,33 @@ class DatabaseExcelHandler:
                 filtered = dataFramePandas[(dataFramePandas['estatus'] == indDicc['estatusFilter']) &
                                         (dataFramePandas['usuarios_id'] == indDicc['userIdFilter']) &
                                         (dataFramePandas['categorias_id'] == indDicc['categoryIdFilter'])]
-                #pandas.DataFrame().empty: El atributo .empty devuelve un valor True cuando su DataFrame está vacío 
-                #y False cuando el DataFrame si cuenta con filas y columnas.
+                #pandas.DataFrame().empty: El atributo .empty devuelve un valor True cuando su DataFrame está 
+                #vacío y False cuando el DataFrame si cuenta con filas y columnas.
                 #El operador not simplemente es una negación (~), osea que cuando algo sea True, lo volverá False 
                 #y viceversa, esto se utiliza porque los if se ejecutan cuando su condición vale True.
                 if (not(filtered.empty)):
-                    #pandas.DataFrame().iterrows(): El método iterrows() se debe aplicar a algun objeto de la clase 
-                    #DataFrame y siempre se encontrará como parámetro de un bucle for, ya que este recorre todos los 
-                    #datos de su DataFrame, devolviendo una tupla que indica el índice de cada fila y su contenido.
+                    #pandas.DataFrame().iterrows(): El método iterrows() se debe aplicar a algun objeto de la 
+                    #clase DataFrame y siempre se encontrará como parámetro de un bucle for, ya que este recorre 
+                    #todos los datos de su DataFrame, devolviendo una tupla que indica el índice de cada fila y 
+                    #su contenido.
                     for (index, row) in (filtered.iterrows()):
                         #Una vez obtenido el índice y contenido de los elementos del DataFrame, se pueden agregar 
-                        #un valor u otro a la lista final dependiendo de si se cumple o no una condición, para ello 
-                        #se utilizan condicionales de una sola línea que llevan la siguiente sintaxis:
+                        #un valor u otro a la lista final dependiendo de si se cumple o no una condición, para 
+                        #ello se utilizan condicionales de una sola línea que llevan la siguiente sintaxis:
                         #variable =   valor_si_verdadero        if      condicion       else        valor_si_falso
                         #Si se quiere utilizar una estructura else-if, lo que se hace es agregar un paréntesis y 
                         #varias condiciones de una línea dentro.
                         #variable =   (
-                        #               valor_si_verdadero1     if      condicion1      else        valor_si_falso1
-                        #               valor_si_verdadero2     if      condicion2      else        valor_si_falso2
+                        #               valor_si_verdadero1     if      condicion1      else      valor_si_falso1
+                        #               valor_si_verdadero2     if      condicion2      else      valor_si_falso2
                         #               ...
-                        #               valor_si_verdadero_n    if      condicion_n     else        valor_si_falso_n
+                        #               valor_si_verdadero_n    if      condicion_n     else      valor_si_falso_n
                         #               valor_por_defecto
                         #             )
                         standardContent = """Phasellus laoreet eros nec vestibulum varius. Nunc id efficitur lacus, non imperdiet quam. Aliquam porta, tellus at porta semper, felis velit congue mauris, eu pharetra felis sem vitae tortor. Curabitur bibendum vehicula dolor, nec accumsan tortor ultrices ac. Vivamus nec tristique orci. Nullam fringilla eros magna, vitae imperdiet nisl mattis et. Ut quis malesuada felis. Proin at dictum eros, eget sodales libero. Sed egestas tristique nisi et tempor. Ut cursus sapien eu pellentesque posuere. Etiam eleifend varius cursus.\n\nNullam viverra quam porta orci efficitur imperdiet. Quisque magna erat, dignissim nec velit sit amet, hendrerit mollis mauris. Mauris sapien magna, consectetur et vulputate a, iaculis eget nisi. Nunc est diam, aliquam quis turpis ac, porta mattis neque. Quisque consequat dolor sit amet velit commodo sagittis. Donec commodo pulvinar odio, ut gravida velit pellentesque vitae. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.\n\nMorbi vulputate ante quis elit pretium, ut blandit felis aliquet. Aenean a massa a leo tristique malesuada. Curabitur posuere, elit sed consectetur blandit, massa mauris tristique ante, in faucibus elit justo quis nisi. Ut viverra est et arcu egestas fringilla. Mauris condimentum, lorem id viverra placerat, libero lacus ultricies est, id volutpat metus sapien non justo. Nulla facilisis, sapien ut vehicula tristique, mauris lectus porta massa, sit amet malesuada dolor justo id lectus. Suspendisse sit amet tempor ligula. Nam sit amet nisl non magna lacinia finibus eget nec augue. Aliquam ornare cursus dapibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nDonec ornare sem eget massa pharetra rhoncus. Donec tempor sapien at posuere porttitor. Morbi sodales efficitur felis eu scelerisque. Quisque ultrices nunc ut dignissim vehicula. Donec id imperdiet orci, sed porttitor turpis. Etiam volutpat elit sed justo lobortis, tincidunt imperdiet velit pretium. Ut convallis elit sapien, ac egestas ipsum finibus a. Morbi sed odio et dui tincidunt rhoncus tempor id turpis.\n\nProin fringilla consequat imperdiet. Ut accumsan velit ac augue sollicitudin porta. Phasellus finibus porttitor felis, a feugiat purus tempus vel. Etiam vitae vehicula ex. Praesent ut tellus tellus. Fusce felis nunc, congue ac leo in, elementum vulputate nisi. Duis diam nulla, consequat ac mauris quis, viverra gravida urna."""
                         #En este caso la condición evalúa si en la columna contenido de la base de datos filtrada 
-                        #contiene específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y si 
-                        #es así, coloca un valor que se llama "standard", sino coloca "not conventional".
+                        #contiene específicamente el valor de "Phasellus laoreet eros nec vestibulum varius..." y 
+                        #si es así, coloca un valor que se llama "standard", sino coloca "not conventional".
                         contentStatus = "standard" if (standardContent in row["contenido"]) else "not conventional"
                         #Dentro del bucle, la variable indDicc representa cada diccionario de la lista de 
                         #diccionarios que realiza el filtrado y la variable row representa cada fila de la base 
@@ -345,9 +344,9 @@ class DatabaseExcelHandler:
             staticDataAbove_1_Rows = len(staticDataAbove_1)
             staticDataAbove_2_Rows = len(staticDataAbove_2)
             staticDataBelow_1_Rows = len(staticDataBelow_1)
-            #len(listaDeListas[posicion]): Para obtener el número de columnas de las agrupaciones de datos estáticas 
-            #se usa el método len(), pero aplicado a alguna de las listas internas, para ello se indica cualquier 
-            #posición, ya que todas las filas deberían tener el mismo número de columnas (osea de datos).
+            #len(listaDeListas[posicion]): Para obtener el número de columnas de las agrupaciones de datos 
+            #estáticas se usa el método len(), pero aplicado a alguna de las listas internas, para ello se indica 
+            #cualquier posición, ya que todas las filas deberían tener el mismo número de columnas (osea de datos).
             staticDataAbove_1_Cols = len(staticDataAbove_1[0])
             staticDataAbove_2_Cols = len(staticDataAbove_2[0])
             staticDataBelow_1_Cols = len(staticDataBelow_1[0])
@@ -385,11 +384,11 @@ class DatabaseExcelHandler:
             #         espacio de 10 caracteres.
             #       - {:,}: Formatea el número con separadores de miles.
             #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con 
-            #recursos que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones 
-            #de red o conexiones a bases de datos. Su sintaxis básica es la siguiente: 
+            #recursos que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, 
+            #conexiones de red o conexiones a bases de datos. Su sintaxis básica es la siguiente: 
             #       with expresion as variable:
-            # - expresion: Este parámetro recibe un método que devuelva un objeto, ya que este se comportará como el 
-            #   "contexto de ejecución", osea el recurso que debe ser gestionado, un ejemplo es: 
+            # - expresion: Este parámetro recibe un método que devuelva un objeto, ya que este se comportará como 
+            #   el "contexto de ejecución", osea el recurso que debe ser gestionado, un ejemplo es: 
             #   open('archivo.txt', 'r').
             # - variable: Es el nombre de la variable que se asigna al objeto de contexto dentro del bloque with.
             #Utilizar el operador with es igual a asignar una variable, la única diferencia es que al utilizar el 
@@ -402,8 +401,8 @@ class DatabaseExcelHandler:
             #o cerrar una conexión a la base de datos, ya que esta se maneja de forma automática por el operador.
             with pandas.ExcelWriter(path = pathExcel, engine = 'xlsxwriter', mode = "w") as objetoExcel:
                 #pandas.DataFrame(): El método DataFrame() sirve para convertir cualquier estructura de datos en 
-                #un DataFrame, que es un objeto de la librería pandas que sirve para estructurar los datos de forma 
-                #matricial en tablas.
+                #un DataFrame, que es un objeto de la librería pandas que sirve para estructurar los datos de 
+                #forma matricial en tablas.
                 staticDataAbove_1_DataFrame = pandas.DataFrame(staticDataAbove_1)
                 #pandas.DataFrame().style.set_properties(): El método style.set_properties se utiliza más que nada 
                 #para establecer la alineación del texto de un objeto DataFrame de pandas dentro de una celda de 
@@ -411,8 +410,8 @@ class DatabaseExcelHandler:
                 #fila o columna.
                 #El método recibe dos parámetros, subset y **kwargs:
                 # - subset: Es un parámetro que especifica las filas y columnas a las que se aplicarán las 
-                #   propiedades de estilo. Puede ser una lista de tuplas que contienen índices de fila y nombres de 
-                #   columna o una función que filtre las celdas.
+                #   propiedades de estilo. Puede ser una lista de tuplas que contienen índices de fila y nombres 
+                #   de columna o una función que filtre las celdas.
                 # - **kwargs: KWArgs (Key Word Arguments) es un parámetro que recibe comandos de estilo en forma 
                 #   de clave-valor que se usan para renderizar el DataFrame en el backend y se indican en código 
                 #   HTML, CSS o Excel después de dos signos de multiplicación **.
@@ -438,12 +437,12 @@ class DatabaseExcelHandler:
                 #   columna) del DataFrame en el archivo de Excel. El valor predeterminado es True.
                 # - merge_cells: Es un booleano que especifica si se deben fusionar las celdas que tengan columnas 
                 #   con encabezados duplicados. El valor predeterminado es True.
-                #CONVERSIÓN DE LISTAS DE LISTAS A DATAFRAMES, PARA AÑARILOS A UN MISMO EXCEL: Todas las agrupaciones 
-                #de datos estáticas se transformarán en un DataFrame y luego se añadirán al Excel, mientras que a la 
-                #tabla que se rellena con la base de datos se le aplica el método .to_excel() de forma directa, pero 
-                #aquí es donde se ve la importancia de saber el número de filas y columnas de cada grupo de datos, 
-                #ya que en el parámetro startrow, se colocará el número de filas de la agrupación anterior + 1 
-                #porque así se añade una fila de separación entre ellas.
+                #CONVERSIÓN DE LISTAS DE LISTAS A DATAFRAMES, PARA AÑARILOS A UN MISMO EXCEL: Todas las 
+                #agrupaciones de datos estáticas se transformarán en un DataFrame y luego se añadirán al Excel, 
+                #mientras que a la tabla que se rellena con la base de datos se le aplica el método .to_excel() 
+                #de forma directa, pero aquí es donde se ve la importancia de saber el número de filas y columnas 
+                #de cada grupo de datos, ya que en el parámetro startrow, se colocará el número de filas de la 
+                #agrupación anterior + 1 porque así se añade una fila de separación entre ellas.
                 staticDataAbove_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = 0, header = False)
                 pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
                 finalDataFrame_textAligned = finalDataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
@@ -529,6 +528,7 @@ class DatabaseExcelHandler:
                 yellowColDataBelow1_format = workbook.add_format({'bg_color': '#FFF2CC'})   #Demás celdas amarillas.
                 #FORMATO DE COLOR PARA LOS SEPARADORES DE DATOS:
                 dataSeparation_format = workbook.add_format({'bg_color': 'white'})
+
                 #Finalmente se añadirán los formatos previamente guardados en el sheet extraído del objeto 
                 #ExcelWriter() a través del método conditional_format().
                 #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(): Método que se utiliza para 
@@ -543,12 +543,23 @@ class DatabaseExcelHandler:
                 #   es donde se usa la variable columnasDataFrame obtenida del atributo pandas.DataFrame().shape.
                 # - type: Este parámetro indica la condición que se debe cumplir para que se aplique un formato en 
                 #   una celda.
-                #       - 'cell_value': Aplica el formato si el valor de la celda cumple con cierta condición.
                 #       - 'no_blanks': Aplica el formato si la celda no está en blanco.
+                #       - 'blanks': Aplica el formato si la celda está en blanco.
+                #       - 'text': Aplica el formato si se encuentra cierto contenido de texto en la celda, para 
+                #         ello después se utilizan los keys criteria y value:
+                #           - 'criteria': Este parámetro especifica el tipo de comparación a realizar entre el 
+                #             contenido de las celdas y el texto especificado. Algunos valores para este parámetro 
+                #             pueden ser "equal" (==), "not equal" (!=), "greater than" (>), "less than" (<), 
+                #             "contains" (True cuando la celda contenga cierto texto), "not contains" (no 
+                #             contiene), "begin with" (su texto comienza con), "end with" (su texto termina con), 
+                #             etc. 
+                #           - 'value': Dependiendo del valor del parámetro 'criteria' se hará una comparación del 
+                #             texto en las celdas y se aplicará el formato indicado en el parámetro 'format' 
+                #             solamente cuando la condición se cumpla.
+                #       - 'cell_value': Aplica el formato si el valor de la celda cumple con cierta condición.
                 #       - 'formula': Aplica el formato si la fórmula en la celda devuelve verdadero.
                 #       - 'time_period': Aplica el formato si la fecha en la celda cae dentro de un cierto período 
                 #         de tiempo.
-                #       - 'text': Aplica el formato basado en el contenido de texto de la celda.
                 #       - 'average': Aplica el formato si el valor de la celda es un promedio de un rango.
                 #       - 'duplicate': Aplica el formato si el valor de la celda es duplicado de un rango.
                 #       - 'unique': Aplica el formato si el valor de la celda es único dentro de un rango.
@@ -583,8 +594,8 @@ class DatabaseExcelHandler:
                     #       - Cuando se quiera fusionar celdas conviene concatenar el número de la fila con el 
                     #         nombre de la celda, ya que de esta manera se puede automatizar el proceso cuando se 
                     #         busca fusionar las celdas de más de 1 fila.
-                    # - data: Este parámetro recibe el texto (dato) que se va a mostrar en la celda fusionada, si no 
-                    #   se quiere añadir ningún texto, se deja como None.
+                    # - data: Este parámetro recibe el texto (dato) que se va a mostrar en la celda fusionada, si 
+                    #   no se quiere añadir ningún texto, se deja como None.
                     # - format (opcional): Se puede crear un formato de letra para que se aplique a esta celda.
                     ExcelCellsStaticDataAbove2 = "A" + str(i) + ":G" + str(i)
                     worksheet.merge_range(ExcelCellsStaticDataAbove2, data = None)
@@ -605,6 +616,16 @@ class DatabaseExcelHandler:
                 worksheet.conditional_format((rowPositionStaticDataDB + filasDataFrame + 1), 0, (rowPositionStaticDataDB + filasDataFrame + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 0, filasDataFrame + ((rowPositionStaticDataDB) + 1), 0, {'type': 'no_blanks', 'format': greenDB_format})
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 0, filasDataFrame + ((rowPositionStaticDataDB) + 1), 0, {'type': 'blanks',    'format': greenDB_format})
+                #FORMATO DE CELDA CONDICIONAL: Se utilizan los siguientes keys en el método para analizar el texto 
+                #de la celda: 
+                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
+                # - 'type': 'text': Para analizar el texto de la celda. 
+                # - 'criteria': 'containing': Para analizar si la celda contiene cierto texto, indicado 
+                #   posteriormente en el parámetro value.
+                # - 'value': 'Texto_a_encontrar': Este key contiene el texto que quiero ver si se encuentra en la 
+                #   celda
+                # - 'format': 'Formato_de_celda': Este formato se aplicará solamente si el texto indicado en el 
+                #   parámetro value se encuentra en la celda.
                 worksheet.conditional_format(((rowPositionStaticDataDB) + 1), 1, filasDataFrame + ((rowPositionStaticDataDB) + 1), 1, {'type': 'text',
                                                                                                                                         'criteria': 'containing',
                                                                                                                                         'value': 'standard',
@@ -618,74 +639,73 @@ class DatabaseExcelHandler:
                     worksheet.conditional_format((rowPositionStaticDataDB + 1), col, ((rowPositionStaticDataDB + 1) + filasDataFrame), col, {'type': 'blanks',    'format': yellowDB_format})
                 
                 #FORMATOS DE COLOR DE LA TABLA ESTÁTICA INFERIOR 1:
-                #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
-                #FORMATO DE COLOR DE LAS CELDAS DE LAS FILAS FUSIONADAS:
-                rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 1 + 1 + 1 + 1) + 1
-                # Variables to track if the merging has been done for the first, second, and last rows
-                merged_first_row = False
-                merged_second_row = False
-                merged_last_row = False
-                for i in range(rowPositionStaticDataBelow1, rowPositionStaticDataBelow1 + staticDataBelow_1_Rows):
-                    for j in range(staticDataBelow_1_Cols):
-                        if i == 29 and not merged_first_row:
+                #BANDERAS DE LAS CELDAS DE LAS FILAS FUSIONADAS: Para cada una de las filas donde se realice una 
+                #fusión de sus columnas, se deben crear distintas banderas, ya que sin estas, su color de fondo no 
+                #se respetará. Las banderas por default tienen asignado un valor booleano False y cuando ya se 
+                #hayan fusionado sus celdas y asignado su formato de color, se cambia a True. Esto se hace para 
+                #asegurarnos que solamente se ejecute una vez la fusión y asignación de color a esa fila en 
+                #específico, esto es necesario hacerlo cuando se busque dar formato de celdas a la tabla de un 
+                #objeto pandas.ExcelWriter().
+                first_row_merged = False    #Primera fila fusionada: Color de celda blanco.
+                second_row_merged = False   #Segunda fila fusionada: Color de celda azul claro.
+                third_row_merged = False    #Tercera fila fusionada: Color de celda azul claro.
+                #Se deben crear dos bucles for, uno que recorra las filas de la agrupación de datos y otro que 
+                #recorra sus columnas, pero para considerar la fila de inicio desde donde debe empezar a contar 
+                #las filas, se crea una variable que sume las filas de todas las agrupaciones anteriores + las 
+                #filas se separación que se encuentre entre ellas + 1. Esto se realiza así porque el método 
+                ##pandas.ExcelWriter().sheets["nombreSheet"].conditional_format() empieza a contar sus filas desde 
+                #0 y el método len() que se usa para contar las filas de las estructuras de datos cuenta desde 1.
+                rowPositionStaticDataBelow1 = (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + 1) + 1
+                for i in range(rowPositionStaticDataBelow1, (rowPositionStaticDataBelow1 + staticDataBelow_1_Rows)): #Filas.
+                    for j in range(staticDataBelow_1_Cols):                                 #Columnas de la tabla.
+                        #FORMATO DE LAS FILAS EN LA TABLA: Aquí se manejan las filas que se fusionen y las que no.
+                        if (i == 29 and not first_row_merged):      #Primera fila fusionada: Hacen uso de las banderas.
+                            #pandas.ExcelWriter(engine = 'xlsxwriter').sheets["nombreSheet"].merge_range(celdas_Excel_Fusionadas, data = None)
                             ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)       #Position  A29:G29
-                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data=None)
+                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data = None)
+                            #pandas.ExcelWriter().sheets["nombreSheet"].conditional_format(fila_inicial, col_inicial, fila_final, col_final, {type})
                             worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': whiteRowDataBelow1_format})
-                            merged_first_row = True
-                        elif i == 30:                                                       #Position  A30:G30
+                            first_row_merged = True                 #Se cambia el valor de la bandera a True. 
+                        elif i == 30:                                                       #Fila 30: Color azul obscuro.
                             worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': darkBlueRowDataBelow1_format})
-                        elif i == 31 and not merged_second_row:
+                        elif (i == 31 and not second_row_merged):   #Segunda fila fusionada: Hacen uso de las banderas.
                             ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)       #Position  A31:G31
-                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data=None)
+                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data = None)
                             worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
-                            merged_second_row = True
-                        elif i == 39 and not merged_last_row:
+                            second_row_merged = True                #Se cambia el valor de la bandera a True.
+                        elif (i == 39 and not third_row_merged):    #Tercera fila fusionada: Hacen uso de las banderas.
                             ExcelCellsStaticDataBelow1 = "A" + str(i) + ":G" + str(i)       #Position  A39:G39
-                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data=None)
+                            worksheet.merge_range(ExcelCellsStaticDataBelow1, data = None)
                             worksheet.conditional_format(i - 1, 0, i - 1, staticDataBelow_1_Cols - 1, {'type': 'no_blanks', 'format': lightBlueRowDataBelow1_format})
-                            merged_last_row = True
-                        #FORMATO DE LAS COLUMNAS EN LA TABLA:
+                            third_row_merged = True                 #Se cambia el valor de la bandera a True.
+                        #FORMATO DE LAS COLUMNAS EN LA TABLA: Se maneja cada columna de forma individual y esto se 
+                        #debe ejecutar una vez que se haya terminado de asignar las fusiones y formatos de las 
+                        #filas de la tabla.
                         elif j == 0:
-                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': greenColDataBelow1_format})
-                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': greenColDataBelow1_format})
+                            #Se asigna dos veces el formato utilizando el 'type': 'no_blanks' y 'type': 'blanks' 
+                            #para que este se aplique no importando si la celda se encuentra vacía o no. 
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks',  'format': greenColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks',     'format': greenColDataBelow1_format})
                         elif j == 1:
-                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': grayColDataBelow1_format})
-                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': grayColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks',  'format': grayColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks',     'format': grayColDataBelow1_format})
                         else:
-                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks', 'format': yellowColDataBelow1_format})
-                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': yellowColDataBelow1_format})
-                #COLOR DEL SEPARADOR DE DATOS:
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'no_blanks',  'format': yellowColDataBelow1_format})
+                            worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks',     'format': yellowColDataBelow1_format})
+                #COLOR DEL SEPARADOR DE DATOS: 
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
-
-                # Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
-                # Itera sobre todas las columnas posibles en las tablas estáticas y dinámicas
-                for column in range(staticDataAbove_2_Cols):
-                    max_width = 16
-                    max_height = 1  # Inicializa max_height fuera del bucle para la columna actual
-                    # Verifica si la columna actual existe en el DataFrame antes de intentar acceder a ella
-                    if column < staticDataAbove_1_Cols:
-                        # Itera a través de cada fila en la columna y encuentra el ancho y la altura máximos
-                        for index, value in finalDataFrame.iloc[:, column].iteritems():
-                            cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
-                            if cell_width > max_width:
-                                max_width = cell_width
-                            cell_height = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n').__len__()
-                            if cell_height > max_height:
-                                max_height = cell_height
-                    # Establece el ancho de la columna al máximo ancho encontrado, limitado a un máximo de 200
-                    worksheet.set_column(column, column, min(max_width + 2, 200))
-                    # Establece la altura de la fila para todas las filas en la columna al máximo alto encontrado, limitado a un máximo de 100
-                    worksheet.set_row(0, min(max_height * 15, 100))  # Suponiendo 15 píxeles por línea, ajustar según sea necesario
             
-            #Devolver el DataFrame procesado.
+            #El programa devuelve el DataFrame procesado si es que no ocurrió ninguna excepción.
             print(finalDataFrame, "\n")
             return finalDataFrame
         
         except Exception as error:
+            #Analiza si ocurrió algún error durante la ejecución del programa y si es así devuelve un texto.
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
             print("La línea donde ocurrió el error fue: ", traceback.format_exc())
             return "Error al procesar los datos y guardarlos en un Excel."
         finally:
-            if self.connection1:
+            #Analiza si la conexión a la base de datos todavía existe y si es así, la cierra.
+            if (self.connection1 == True):
                 self.connection1.close()
                 print("MySQL Connection closed.")
