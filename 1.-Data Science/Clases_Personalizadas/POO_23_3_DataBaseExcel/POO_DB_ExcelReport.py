@@ -9,23 +9,27 @@
 #SQLAlchemy: Para instalarlo se debe ejecutar el comando pip install sqlalchemy, y es una biblioteca de Python 
 #para SQL ORM (Object-Relacional-Mapping) que proporciona a los desarrolladores un conjunto de herramientas para 
 #interactuar con bases de datos utilizando objetos y métodos de Python, en lugar de escribir consultas SQL.
-#Entidad: Se refiere a una tabla que almacena datos sobre un tipo de objeto o elemento del mundo real. Cada fila 
-#en la tabla representa una instancia individual de esa entidad, y cada columna representa un atributo o 
-#característica de esa entidad.
-#Atributo: Son las columnas de una tabla que representan las características o propiedades de la entidad que está 
-#siendo modelada, todas ellas tienen un nombre y tipo de dato asociado.
-#Registro: También conocido como "fila" o "tupla", representa una instancia individual de una entidad en la tabla. 
-#Cada registro contiene los valores de los atributos correspondientes a esa instancia específica de la entidad.
 
 #PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open DataBase 
 #Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
 #datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
-#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
-#una conexión ODBC.
+#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de 
+#establecer una conexión ODBC de forma manual.
 #No es que exista una mejor librería de manejo de datos, sino que dependiendo de la base de datos a la que nos 
-#queramos conectar, a veces conviene utilizar una biblioteca en vez de otra.
+#queramos conectar, conviene utilizar una biblioteca en vez de otra.
 # - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
 # - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
+# - Psycopg2: Es conveniente usar esta librería cuando se utiliza una base de datos PostgreSQL.
+
+# - Entidad: Se refiere a una tabla que almacena datos sobre un tipo de objeto o elemento del mundo real. Cada 
+#   fila en la tabla representa una instancia individual de esa entidad, y cada columna representa un atributo o 
+#   característica de esa entidad.
+# - Atributo: Son las columnas de una tabla que representan las características o propiedades de la entidad que 
+#   está siendo modelada, todas ellas tienen un nombre y tipo de dato asociado.
+# - Registro: También conocido como "fila" o "tupla", representa una instancia individual de una entidad en la 
+#   tabla. Cada registro contiene los valores de los atributos correspondientes a esa instancia específica de la 
+#   entidad.
+
 import pyodbc
 #pandas: Librería que proporciona estructuras de datos y herramientas de manipulación y análisis de datos. 
 import pandas
@@ -224,7 +228,7 @@ class DatabaseExcelHandler:
                 "estatusFilter": "inactivo",            #Datos de filtrado.
                 "userIdFilter": 2,
                 "categoryIdFilter": 3
-            }]            
+            }]
 
             #CREAR UN DICCIONARIO QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
             finalData = []  #Diccionario que almacenará los datos que trae PyODBC del DataBase.
