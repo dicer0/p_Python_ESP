@@ -260,23 +260,6 @@ class DatabaseExcelHandler:
                             worksheet.conditional_format(i - 1, j, i - 1, j, {'type': 'blanks', 'format': yellowColDataBelow1_format})
                 #COLOR DEL SEPARADOR DE DATOS:
                 worksheet.conditional_format((staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), 0, (staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 3 + staticDataBelow_1_Rows + 1), (staticDataAbove_2_Cols - 1), {'type': 'blanks', 'format': dataSeparation_format})
-
-                #Ajuste del bucle para ajustar la anchura de la columna y la altura de la fila
-                maxColumns = max(staticDataAbove_1_Cols, staticDataAbove_2_Cols, columnasDataFrame, staticDataBelow_1_Cols)
-                minColumns = min(staticDataAbove_1_Cols, staticDataAbove_2_Cols, columnasDataFrame, staticDataBelow_1_Cols)
-                for column in range(maxColumns):
-                    max_width = 16
-                    max_height = 1
-                    if (column < minColumns):
-                        for index, value in finalDataFrame.iloc[:, column].iteritems():
-                            cell_width = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n')[0].strip().__len__()
-                            if cell_width > max_width:
-                                max_width = cell_width
-                            cell_height = pandas.DataFrame([value]).to_string(index=False, header=False, index_names=False).split('\n').__len__()
-                            if cell_height > max_height:
-                                max_height = cell_height
-                    worksheet.set_column(column, column, min(max_width + 2, 200))
-                    worksheet.set_row(0, min(max_height * 15, 100))
             
             print(finalDataFrame, "\n")
             return finalDataFrame
