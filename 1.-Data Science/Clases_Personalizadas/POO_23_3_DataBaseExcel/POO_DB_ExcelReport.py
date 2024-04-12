@@ -698,7 +698,6 @@ class DatabaseExcelHandler:
             #El programa devuelve el DataFrame procesado si es que no ocurrió ninguna excepción.
             print(finalDataFrame, "\n")
             return finalDataFrame
-        
         except Exception as error:
             #Analiza si ocurrió algún error durante la ejecución del programa y si es así devuelve un texto.
             print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")

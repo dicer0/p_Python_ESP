@@ -49,6 +49,7 @@ import sys #sys: Librería que permite interactuar directamente con el sistema o
 #La parte del directorio se coloca después de la palabra reservada from y la clase a importar después de import.
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_AdditionalScreens import SecondaryWindow
+from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_ExcelCellAdjust import ExcelCellAdjuster
 
 #MainWindow: La clase hereda de la clase QMainWindow, que a su vez hereda de la clase QtWidgets y ambas 
 #pertenecen a la librería PyQt5. El elemento representa la ventana del GUI y crea una instancia de la clase 
@@ -435,6 +436,11 @@ class MainWindow(QtWidgets.QMainWindow):
         #almacenar todas las instancias de la clase SecondaryWindow, asegurando que la ventana no se cierre 
         #después de que el método haya terminado de ejecutarse.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+        #Si el archivo se ha creado correctamente, se ajusta el ancho de sus celdas a través de un objeto de 
+        #la clase ExcelCellAdjuster. 
+        anchoMaximoCelda = 40                                           #Ancho máximo de la celda de 40 letras.
+        adjuster = ExcelCellAdjuster(excelFilePath1, anchoMaximoCelda)  #Instancia de la clase ExcelCellAdjuster.
+        adjuster.ajustar_celdas()                                       #Método ajustar_celdas().
         
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:

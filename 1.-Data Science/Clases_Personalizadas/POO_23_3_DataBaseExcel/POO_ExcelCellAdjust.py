@@ -11,11 +11,10 @@ class ExcelCellAdjuster:
     #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
     #otros lenguajes de programación.
-    def __init__(self, ruta_excel, ancho_maximo, altura_maxima):
+    def __init__(self, ruta_excel, ancho_maximo):
         #De esta manera se asignan valores a los atributos que recibe el constructor de la clase como parámetro:
         self.ruta_excel = ruta_excel        #Path del archivo de excel.
         self.ancho_maximo = ancho_maximo    #Ancho máximo de las celdas en el Excel después del ajuste.
-        self.altura_maxima = altura_maxima  #Altura máxima de las celdas en el Excel después del ajuste.
 
     #ajustar_celdas(): Método que recibe todos los parámetros del constructor y trabaja con ellos para 
     #ajustar de forma automática el tamaño de las celdas del Excel, pero al mismo tiempo limitar dicho tamaño.
@@ -194,12 +193,3 @@ class ExcelCellAdjuster:
         #openpyxl.load_workbook().save(path): El método Workbook.save() se utiliza para guardar un archivo de 
         #Excel, especificando su directorio por medio de un path.
         excelWorkBook.save(self.ruta_excel)
-
-# Usage:
-excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-ancho_maximo = 40
-altura_maxima = 20
-# Create an instance of the ExcelCellAdjuster class
-adjuster = ExcelCellAdjuster(excelFilePath2, ancho_maximo, altura_maxima)
-# Call the method to adjust the cells
-adjuster.ajustar_celdas()
