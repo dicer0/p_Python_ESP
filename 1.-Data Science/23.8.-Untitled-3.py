@@ -14,8 +14,8 @@ def ajustar_celdas_excel(ruta_excel, ancho_maximo, altura_maxima):
     adjusted_width_first_col = min(anchoMaxCol1, ancho_maximo)
     excelWorkSheet.column_dimensions['A'].width = adjusted_width_first_col
 
-    columns_list = list(excelWorkSheet.columns)
-    for col in columns_list[1:]:
+    colsExcel = list(excelWorkSheet.columns)[1:]
+    for col in colsExcel:
         max_length = 0
         column = col[0].column_letter
         for cell in col:

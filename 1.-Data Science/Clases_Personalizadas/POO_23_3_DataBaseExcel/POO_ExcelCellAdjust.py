@@ -158,7 +158,7 @@ class ExcelCellAdjuster:
         colsExcel = list(excelWorkSheet.columns)[1:]    #Se toman todas las columnas desde la 2 hasta la final.
         #Al convertir el objeto Generator en una lista, podré visualizar una lista de tuplas que contienen 
         #objetos openpyxl.Cell, por lo cual podré acceder a sus atributos, estos me servirán para recorrer todas 
-        #las columnas de la tabla. 
+        #las columnas de la tabla.
         print(colsExcel)
         for col in colsExcel:
             numLetrasCols = 0   #Número inicial de las letras en las celdas de las columnas menos la primera = 0.
@@ -180,7 +180,7 @@ class ExcelCellAdjuster:
             #espacio extra a la celda para que su contenido no se encuentre apachurrado en su celda. Este se 
             #puede modificar al gusto para agregar el espacio extra que se quiera. La suma aumenta el número de 
             #letras y la multiplicación ajusta el ancho de la celda al gusto.
-            anchoMaxCols = (numLetrasCol_1 + 2) * 1.4                   #Ancho en función del número de letras.
+            anchoMaxCols = (numLetrasCols + 2) * 1.3                   #Ancho en función del número de letras.
             #min(num1, num2, num_n): Método que retorna el valor mínimo al comparar varios números. De esta forma 
             #se puede limitar el ancho de las celdas, comparando el ancho máximo en función del número de letras 
             #mayor, contra el ancho máximo de celda definido por el usuario.
