@@ -30,5 +30,5 @@ def copy_excel_data_to_clipboard(file_path, delay=5):
         app.quit()
 
 # Ejemplo de uso
-excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
+excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
 copy_excel_data_to_clipboard(excelFilePath2, delay=10)  # Delay set to 10 seconds

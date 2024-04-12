@@ -105,7 +105,7 @@ class ExcelCellAdjuster:
         #espacio extra a la celda para que su contenido no se encuentre apachurrado en su celda. Este se puede 
         #modificar al gusto para agregar el espacio extra que se quiera. La suma aumenta el número de letras y la
         #multiplicación ajusta el ancho de la celda al gusto.
-        anchoMaxCol1 = (numLetrasCol_1 + 2) * 1.4                       #Ancho en función del número de letras.
+        anchoMaxCol1 = (numLetrasCol_1 + 0) * 1.4                       #Ancho en función del número de letras.
         #min(num1, num2, num_n): Método que retorna el valor mínimo al comparar varios números. De esta forma se 
         #puede limitar el ancho de las celdas, comparando el ancho máximo en función del número de letras mayor, 
         #contra el ancho máximo de celda definido por el usuario.

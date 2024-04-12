@@ -129,7 +129,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 self.__showErrorMessageBox(resultDataFrame)
             else:
                 #DATOS ESTÁTICOS QUE SE VAN A COLOCAR ENCIMA Y DEBAJO DEL REPORTE EXTRAÍDO DEL DATABASE:
-                staticDataAbove_1 = [
+                STATICDATA_ABOVE_1 = [
                     ['Title A1.1', 'Title A1.2', 'Title A1.3'],
                     ['Static Row 1', '', ''],
                     ['Static Row 2', '', ''],
@@ -138,7 +138,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['Static Row 5', '', ''],
                     ['Static Row 6', '', '']
                 ]
-                staticDataAbove_2 = [
+                STATICDATA_ABOVE_2 = [
                     ['Title A2', '', '', '', '', '', ''],
                     ['Subtitle A2.1', '', '', '', '', '', ''],
                     ['Static Row 1', '', '', '', '', '', ''],
@@ -151,7 +151,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                     ['', '', '', '', '', '', ''],
                     ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
                 ]
-                staticDataBelow_1 = [
+                STATICDATA_BELOW_1 = [
                     ['Title B1', '', '', '', '', '', ''],
                     ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
                     ['Subtitle 1', '', '', '', '', '', ''],
@@ -215,13 +215,13 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #NÚMERO DE FILAS DE LA TABLA QUE GUARDA TODOS LOS DATOS.
                 numberOfDataSets = 4
                 numberOfSpaces = numberOfDataSets - 1
-                totalRows = len(staticDataAbove_1) + len(staticDataAbove_2) + db_numRows + len(staticDataBelow_1) + numberOfSpaces
-                staticDataAbove_1_Rows = len(staticDataAbove_1)                 #Filas staticDataAbove_1.
-                staticDataAbove_2_Rows = len(staticDataAbove_2)                 #Filas staticDataAbove_1.
+                totalRows = len(STATICDATA_ABOVE_1) + len(STATICDATA_ABOVE_2) + db_numRows + len(STATICDATA_BELOW_1) + numberOfSpaces
+                staticDataAbove_1_Rows = len(STATICDATA_ABOVE_1)                 #Filas staticDataAbove_1.
+                staticDataAbove_2_Rows = len(STATICDATA_ABOVE_2)                 #Filas staticDataAbove_1.
                 #max(num1, num2, num_n): Método que retorna el valor máximo al comparar varios números.
                 totalCols = max(7, db_numCols)                                              #Columnas tabla.
-                staticDataAbove_2_Cols = len(staticDataAbove_2[0])              #Columnas staticDataAbove_2.
-                staticDataBelow_1_Cols = len(staticDataBelow_1[0])              #Columnas staticDataBelow_1.
+                staticDataAbove_2_Cols = len(STATICDATA_ABOVE_2[0])              #Columnas staticDataAbove_2.
+                staticDataBelow_1_Cols = len(STATICDATA_BELOW_1[0])              #Columnas staticDataBelow_1.
                 #QtWidgets.QTableWidget(): Widget que proporciona una funcionalidad de hoja de cálculo o tabla 
                 #editable para mostrar filas y columnas de información en una GUI de PyQt5, las cuales pueden 
                 #contener texto, números, imágenes u otros widgets.
@@ -237,7 +237,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #arriba de los datos extraídos por la database.
                 #enumerate(): Es un método que devuelve tanto el índice como el valor de los elementos de una 
                 #lista, tupla, diccionario, etc. en forma de una tupla de dos valores (indice, valor).
-                for (i, row_data) in (enumerate(staticDataAbove_1)): #Bucle que recorre las filas de la tabla.
+                for (i, row_data) in (enumerate(STATICDATA_ABOVE_1)): #Bucle que recorre las filas de la tabla.
                     for (j, value) in (enumerate(row_data)):         #Bucle que recorre las columnas de la tabla.
                         #QtWidgets.QTableWidgetItem(): Es una clase de PyQt5 que representa una celda individual 
                         #dentro de una tabla QTableWidget. Este elemento puede contener datos y proporcionar 
@@ -333,7 +333,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                         #específica dentro de una tabla.
                         table.setItem(i, (j + 1), itemAbove1)
                 #STATIC DATA ABOVE 2:
-                for (i, row_data) in (enumerate(staticDataAbove_2)): #Bucle que recorre las filas de la tabla.
+                for (i, row_data) in (enumerate(STATICDATA_ABOVE_2)):#Bucle que recorre las filas de la tabla.
                     for (j, value) in (enumerate(row_data)):         #Bucle que recorre las columnas de la tabla.
                         itemAbove2 = QtWidgets.QTableWidgetItem(str(value))     #Celdas individuales de la tabla.
                         #Texto alineado a la izquierda horizontalmente y en medio de la celda verticalmente.
@@ -417,7 +417,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #AGREGACIÓN DE DATOS ESTÁTICOS INFERIORES EN LA TABLA:
                 #Establecer colores para filas y columnas de la tabla con datos estáticos que se encuentren 
                 #arriba de los datos extraídos por la database.
-                for i, row_data in enumerate(staticDataBelow_1):    #Bucle que recorre las filas de la tabla.
+                for i, row_data in enumerate(STATICDATA_BELOW_1):    #Bucle que recorre las filas de la tabla.
                     for j, value in enumerate(row_data):            #Bucle que recorre las columnas de la tabla.
                         itemBelow1 = QtWidgets.QTableWidgetItem(str(value))   #Objeto que representa cada celda.
                         itemBelow1.setTextAlignment(QtCore.Qt.AlignCenter)    #Alineación del texto en medio.

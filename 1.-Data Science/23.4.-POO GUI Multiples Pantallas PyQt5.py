@@ -88,7 +88,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #  
         #   PyQt5.QtWidgets.QLabel: Es una representación de imagen que puede ser utilizada directamente en los 
         #   controles y widgets de la interfaz gráfica de PyQt5.
-        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
+        ICON_PATH = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
         #Cargar una Imagen: Se crea una instancia de la librería PyQt5 por medio del constructor de la clase 
         #QPixmap para cargar una imagen en memoria con datos en bruto.
         # - filepath: En este atributo se indica el nombre de archivo junto con la ruta completa de donde se 
@@ -97,7 +97,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #   (filepath = valor), solamente se pone el path entre comillas.
         # - format: El formato de imagen deseado. Puede ser una cadena como "PNG", "JPEG", "BMP", etc. Si no se 
         #   especifica, se intentará detectar automáticamente el formato.
-        pixmap = QtGui.QPixmap(iconPath)
+        pixmap = QtGui.QPixmap(ICON_PATH)
         #PyQt5.QtGui.QPixmap.scaled(): Método utilizado para redimensionar una imagen conformada por datos 
         #brutos, representada por un objeto QPixmap, se realiza a través de la siguiente sintaxis:
         #scaledImage = originalImage.scaled(width, height, aspectRatioMode)
@@ -219,11 +219,11 @@ class MainWindow(QtWidgets.QMainWindow):
         #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
         #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
         #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
+        BUTTON_ICON_PATH = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
         #PyQt5.QtGui.QIcon(): Constructor de la clase QIcon que hereda de la clase QtGui y perteneciente a la 
         #librería PyQt5, usado para crear un objeto que ícono que pueda ser añadido a cualquier widget como lo 
         #puede ser un botón, un texto estático, etc. El tamaño de dicha imagen será reducido automáticamente.
-        logoButton = QtGui.QIcon(iconPath)
+        logoButton = QtGui.QIcon(BUTTON_ICON_PATH)
         #Se declaran como self.nombreObjeto los widgets a los que se les vaya a extraer o introducir datos en el 
         #transcurso del funcionamiento de la interfaz gráfica, en este caso se aplica al botón porque este va a 
         #cambiar el texto que tiene escrito cuando sea presionado.
@@ -422,10 +422,10 @@ class MainWindow(QtWidgets.QMainWindow):
     #que es instancia de la clase SecondaryWindow.
     def open_window1(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
-        db_handler1 = DatabaseExcelHandler(connectionString)
-        excelFilePath1 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-        secondary_window = SecondaryWindow("Ventana 1", db_handler1, excelFilePath1, showTable = True) #Creación de ventana 1.
+        CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
+        db_handler1 = DatabaseExcelHandler(CONNECTION_STRING)
+        EXCEL_FILE_PATH_1 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
+        secondary_window = SecondaryWindow("Ventana 1", db_handler1, EXCEL_FILE_PATH_1, showTable = True) #Creación de ventana 1.
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         #En el código de la ventana principal MainWindow se creó una variable de lista vacía llamada 
@@ -439,15 +439,15 @@ class MainWindow(QtWidgets.QMainWindow):
         #Si el archivo se ha creado correctamente, se ajusta el ancho de sus celdas a través de un objeto de 
         #la clase ExcelCellAdjuster. 
         anchoMaximoCelda = 40                                           #Ancho máximo de la celda de 40 letras.
-        adjuster = ExcelCellAdjuster(excelFilePath1, anchoMaximoCelda)  #Instancia de la clase ExcelCellAdjuster.
+        adjuster = ExcelCellAdjuster(EXCEL_FILE_PATH_1, anchoMaximoCelda)  #Instancia de la clase ExcelCellAdjuster.
         adjuster.ajustar_celdas()                                       #Método ajustar_celdas().
         
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-        connectionString = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
-        db_handler2 = DatabaseExcelHandler(connectionString)
-        excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
-        secondary_window = SecondaryWindow("Ventana 2", db_handler2, excelFilePath2, showTable = False) #Creación de ventana 2.
+        CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
+        db_handler2 = DatabaseExcelHandler(CONNECTION_STRING)
+        EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
+        secondary_window = SecondaryWindow("Ventana 2", db_handler2, EXCEL_FILE_PATH_2, showTable = False) #Creación de ventana 2.
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.

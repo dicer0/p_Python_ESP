@@ -213,7 +213,9 @@ class DatabaseExcelHandler:
             #algunos datos de la database (DB), se extraerán algunos otros de la lista de diccionarios y se 
             #agregarán unos nuevos para crear una nueva estructura de datos, que pueda ser agregada a un reporte 
             #y posteriormente mostrada a su vez en una GUI de PyQt5.
-            compareDicc = [{
+            #En Python no existen las constantes, pero por convención, cuando se quiere que su valor no se cambie, 
+            #este se pone en mayúsculas.
+            COMPAREDICC = [{
                 "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
                 "datoStatic": "Dato grupo 1",         
                 "estatusFilter": "activo",              #Datos de filtrado.
@@ -230,9 +232,9 @@ class DatabaseExcelHandler:
 
             #CREAR UN DICCIONARIO QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
             finalData = []  #Diccionario que almacenará los datos que trae PyODBC del DataBase.
-            #bucle for each: Es un bucle que recorre la lista de diccionarios compareDicc, por lo que la variable 
+            #bucle for each: Es un bucle que recorre la lista de diccionarios COMPAREDICC, por lo que la variable 
             #indDicc lleva contenidos todos los diccionarios en cada iteración, uno por uno.
-            for indDicc in compareDicc:
+            for indDicc in COMPAREDICC:
                 #Indexación booleana: Es una técnica que se realiza con estructuras de datos de la librería pandas 
                 #para filtrar las filas de un DataFrame basándose en el uso de operadores lógicos simples como 
                 #& (and), | (or) y ~ (not). La operación solo devolverá las filas del DataFrame que cumplan con 
@@ -299,7 +301,9 @@ class DatabaseExcelHandler:
             finalDataFrame = pandas.DataFrame(data = finalData)
 
             #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
-            staticDataAbove_1 = [
+            #En Python no existen las constantes, pero por convención, cuando se quiere que su valor no se cambie, 
+            #este se pone en mayúsculas.
+            STATICDATA_ABOVE_1 = [
                 ['Title A1.1', 'Title A1.2', 'Title A1.3'],
                 ['Static Row 1', '', ''],
                 ['Static Row 2', '', ''],
@@ -308,7 +312,7 @@ class DatabaseExcelHandler:
                 ['Static Row 5', '', ''],
                 ['Static Row 6', '', '']
             ]
-            staticDataAbove_2 = [
+            STATICDATA_ABOVE_2 = [
                 ['Title A2', '', '', '', '', '', ''],
                 ['Subtitle A2.1', '', '', '', '', '', ''],
                 ['Static Row 1', '', '', '', '', '', ''],
@@ -321,7 +325,7 @@ class DatabaseExcelHandler:
                 ['', '', '', '', '', '', ''],
                 ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
             ]
-            staticDataBelow_1 = [
+            STATICDATA_BELOW_1 = [
                 ['Title B1', '', '', '', '', '', ''],
                 ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
                 ['Subtitle 1', '', '', '', '', '', ''],
@@ -341,15 +345,15 @@ class DatabaseExcelHandler:
             (filasDataFrame, columnasDataFrame) = finalDataFrame.shape
             #len(listaDeListas): Para extraer el número de filas de las agrupaciones de datos estáticas se utiliza 
             #el método len(). 
-            staticDataAbove_1_Rows = len(staticDataAbove_1)
-            staticDataAbove_2_Rows = len(staticDataAbove_2)
-            staticDataBelow_1_Rows = len(staticDataBelow_1)
+            staticDataAbove_1_Rows = len(STATICDATA_ABOVE_1)
+            staticDataAbove_2_Rows = len(STATICDATA_ABOVE_2)
+            staticDataBelow_1_Rows = len(STATICDATA_BELOW_1)
             #len(listaDeListas[posicion]): Para obtener el número de columnas de las agrupaciones de datos 
             #estáticas se usa el método len(), pero aplicado a alguna de las listas internas, para ello se indica 
             #cualquier posición, ya que todas las filas deberían tener el mismo número de columnas (osea de datos).
-            staticDataAbove_1_Cols = len(staticDataAbove_1[0])
-            staticDataAbove_2_Cols = len(staticDataAbove_2[0])
-            staticDataBelow_1_Cols = len(staticDataBelow_1[0])
+            staticDataAbove_1_Cols = len(STATICDATA_ABOVE_1[0])
+            staticDataAbove_2_Cols = len(STATICDATA_ABOVE_2[0])
+            staticDataBelow_1_Cols = len(STATICDATA_BELOW_1[0])
 
             #GUARDAR UN DATAFRAME EN UN EXCEL, INDICANDO SU FORMATO ESTÁTICO, NO UNO QUE DEPENDA DE LOS DATOS:
             #pandas.ExcelWriter: La clase ExcelWriter de la librería pandas permite crear un objeto 
@@ -403,7 +407,7 @@ class DatabaseExcelHandler:
                 #pandas.DataFrame(): El método DataFrame() sirve para convertir cualquier estructura de datos en 
                 #un DataFrame, que es un objeto de la librería pandas que sirve para estructurar los datos de 
                 #forma matricial en tablas.
-                staticDataAbove_1_DataFrame = pandas.DataFrame(staticDataAbove_1)
+                staticDataAbove_1_DataFrame = pandas.DataFrame(STATICDATA_ABOVE_1)
                 #pandas.DataFrame().style.set_properties(): El método style.set_properties se utiliza más que nada 
                 #para establecer la alineación del texto de un objeto DataFrame de pandas dentro de una celda de 
                 #Excel, ya que las demás características se pueden indicar después de forma específica para cada 
@@ -444,10 +448,10 @@ class DatabaseExcelHandler:
                 #de cada grupo de datos, ya que en el parámetro startrow, se colocará el número de filas de la 
                 #agrupación anterior + 1 porque así se añade una fila de separación entre ellas.
                 staticDataAbove_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = 0, header = False)
-                pandas.DataFrame(staticDataAbove_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
+                pandas.DataFrame(STATICDATA_ABOVE_2).to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + 1, header = False)
                 finalDataFrame_textAligned = finalDataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
                 finalDataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, index_label = None, sheet_name = 'Sheet1', startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + 1 + 1, header = True)
-                staticDataBelow_1_DataFrame = pandas.DataFrame(staticDataBelow_1)   #Conversión de lista de listas a DataFrame.
+                staticDataBelow_1_DataFrame = pandas.DataFrame(STATICDATA_BELOW_1)   #Conversión de lista de listas a DataFrame.
                 staticDataBelow_1_DataFrame_textAligned = staticDataBelow_1_DataFrame.style.set_properties(**{'text-align': 'center', 'vertical-align': 'middle'})
                 staticDataBelow_1_DataFrame_textAligned.to_excel(excel_writer = objetoExcel, index = False, startrow = staticDataAbove_1_Rows + staticDataAbove_2_Rows + filasDataFrame + 2 + 1 + 1, header = False)
                 #Después de haber creado el objeto pandas.ExcelWriter y haber convertido el DataFrame a un excel 
