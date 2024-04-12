@@ -10,7 +10,10 @@ import time
 from PyQt5 import QtCore
 
 #ExcelDataCopier: Clase propia para copiar la tabla de un archivo de Excel y guardarla temporalmente en memoria, 
-#para posteriormente poderla pegar en donde queramos de forma automática.
+#para posteriormente poderla pegar en donde queramos de forma automática. Esta clase hereda de QtCore.QThread, 
+#porque el archivo de Excel solo se podrá pegar con todo y su formato mientras el archivo de Excel se mantenga 
+#abierto por la librería xlwings, esto solo ocurrirá durante el tiempo indicado por el temporizador creado con 
+#la librería time. QtCore.QThread lo que hace es mostrar dicho contador en la GUI de PyQt5.
 class ExcelDataCopier(QtCore.QThread):
     #QtCore.pyqtSignal(): El método .pyqtSignal() de la clase PyQt5.QtCore se utiliza para declarar señales que 
     #se comuniquen durante la ejecución de una GUI de PyQt5. Las señales son una forma de comunicación entre 
@@ -34,10 +37,19 @@ class ExcelDataCopier(QtCore.QThread):
     #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
     #otros lenguajes de programación.
-    def __init__(self, file_path, delay):
+    def __init__(self, file_path, delay_segs):
+        #super(Llamada al constructor heredado).__init__(Parámetros que se le asignan): Lo que hace el método 
+        #super() es llamar al constructor de la clase padre de la clase actual (si es que no se le indica ningún 
+        #parámetro) o a cualquier clase que se le indique en su parámetro, después la instrucción .__init__() 
+        #asigna valores default a los parámetros del constructor de la clase padre (si es que no se indica 
+        #ningún parámetro), aunque de igual manera se pueden asignar parámetros adicionales, cualquier parámetro 
+        #incluido en el método init, será considerado como adicional. En conclusión, lo que está realizando la 
+        #línea de código es primero llamar al constructor de la superclase para realizar las tareas de 
+        #inicialización requeridas antes de indicar parámetros adicionales a la instancia de la clase actual.
+        super().__init__()          #Herencia del constructor de la clase QtCore.QThread.
         self.file_path = file_path  #Directorio del archivo de Excel del cual queremos obtener su tabla.
         self.workBook = None        #Valor inicial del libro (workBook) del Excel.
-        self.delay = delay          #Temporizador que me permite mantener abierto el archivo de Excel.
+        self.delay = delay_segs     #Temporizador que me permite mantener abierto el archivo de Excel.
         self.countdown_message = "Bienvenido"   #Mensaje de bienvenida inicial.
 
     #ajustar_celdas(): Método que recibe todos los parámetros del constructor y trabaja con ellos para 
@@ -131,22 +143,54 @@ class ExcelDataCopier(QtCore.QThread):
             #   usar.
             #       - self.QtCore.pyqtSignal().emit(variable)
             self.signal.emit(self.countdown_message)                        #Mandar variable por medio de señal.
+            #print(): Método para imprimir un mensaje en consola y después dar un salto de línea (Enter). Este 
+            #método puede recibir además los siguientes parámetros adicionales:
+            # - sep:    Especifica el separador entre los objetos que se imprimen. Por defecto, es un espacio en 
+            #   blanco.
+            # - end:    Especifica el carácter o cadena que se imprimirá al final. Por defecto, es un salto de 
+            #   línea (\n), pero puede ser un tabulador (\t), un delete de toda la línea (\r).
+            # - file:   En este se indica un objeto de archivo abierto o un objeto similar a un archivo que se 
+            #   utilizará como destino de salida. Por defecto, es sys.stdout.
+            # - flush:  Un valor booleano que indica si se debe forzar el vaciado del búfer. Por defecto, es 
+            #   False. Un buffer es una región de memoria temporal utilizada para almacenar datos mientras se 
+            #   transfieren entre dos dispositivos o procesos que operan a diferentes velocidades o de manera 
+            #   asincrónica. 
             print(self.countdown_message, end = "\r")
+            #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo 
+            #de tiempo específico dado en segundos. 
             time.sleep(1)
+        #Al terminar de ejecutar el conteo, se actualiza el mensaje mostrado en consola y la GUI.
         self.countdown_message = "Countdown finished. Closing Excel..."
         print(self.countdown_message)
+        #Y se vuelve a emitir este mensaje a través de la señal.
         self.signal.emit(self.countdown_message)
         
+        #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
+        # - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción 
+        #   durante su ejecución, el programa brinca al código del except.
+        # - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando 
+        #   ocurra el error esperado.
+        # - Por último, cuando no ocurra una excepción durante la ejecución del gestor de excepciones, se 
+        #   ejecutará el código que esté incluido dentro del finally después de haber terminado de ejecutar lo 
+        #   que haya en el try, pero si ocurre una excepción, la ejecución terminará cuando se llegue al except.
         try:
-            self.workBook.app.display_alerts = False
+            #xlwings.Book.close(): Este método se utiliza para cerrar el libro de Excel asociado a un objeto Book 
+            #previamente abierto con el método constructor xlwings.Book(). 
             self.workBook.close()
         except Exception as e:
             print(f"An error occurred while closing the Excel file: {e}")
         
+        #Bucle que cierra todas las aplicaciones o instancias abiertas por el programa de Excel al ejecutar este 
+        #programa.
+        #xlwings.apps: El atributo apps extraído directamente de la librería xlwings que contiene todas las 
+        #aplicaciones de Microsoft Excel que están siendo controladas por xlwings durante la ejecución del 
+        #programa.
         for app in xlwings.apps:
+            #xlwings.apps.quit(): Este método se utiliza para cerrar las aplicaciones de Excel asociadas a un 
+            #objeto Book previamente abiertas con el método constructor xlwings.Book(). 
             app.quit()
 
 # Ejemplo de uso
 excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-copier = ExcelDataCopier(excelFilePath2, delay=10)
+copier = ExcelDataCopier(excelFilePath2, delay_segs = 10)
 copier.copy_data_to_clipboard()

@@ -50,6 +50,7 @@ import sys #sys: Librería que permite interactuar directamente con el sistema o
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import DatabaseExcelHandler
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_AdditionalScreens import SecondaryWindow
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_ExcelCellAdjust import ExcelCellAdjuster
+#from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_CopyExcelTable import ExcelDataCopier
 
 #MainWindow: La clase hereda de la clase QMainWindow, que a su vez hereda de la clase QtWidgets y ambas 
 #pertenecen a la librería PyQt5. El elemento representa la ventana del GUI y crea una instancia de la clase 

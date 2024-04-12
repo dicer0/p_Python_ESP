@@ -34,19 +34,21 @@ from PyQt5 import QtGui
 #pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.
 class SecondaryWindow(QtWidgets.QMainWindow):
     #__init__(): Constructor de la clase SecondaryWindow.
+    #def __init__(self, title, db_handler, table_copier, excelFilePath, showTable = False):
     def __init__(self, title, db_handler, excelFilePath, showTable = False):
-        super().__init__()                          #super(): Herencia de la clase QtWidgets.QMainWindow.
+        super().__init__()                      #super(): Herencia de la clase QtWidgets.QMainWindow.
         #ATRIBUTOS PRIVADOS DEL CONSTRUCTOR:
         #Los métodos o atributos cuyo nombre empieza con dos guiones bajos __, indican que son métodos privados, 
         #osea que solo pueden ser accedidos desde dentro de la clase, pero no desde fuera.
         #Inyección de dependencias: Este es un concepto utilizado cuando una clase para funcionar necesita el 
         #objeto de otra clase, en este caso para que la clase SecondaryWindow funcione, necesita de un objeto 
         #DatabaseExcelHandler, a esto se le llama inyección de dependencias.
-        self.__db_handler = db_handler       #self.__db_handler: Atributo de un objeto DatabaseExcelHandler.
+        self.__db_handler = db_handler          #self.__db_handler: Atributo de un objeto DatabaseExcelHandler.
+        #self.__table_copier = table_copier      #self.__table_copier: Atributo de un objeto ExcelDataCopier.
         self.__excelFilePath = excelFilePath #self.__excelFilePath: Atributo que indica el directorio del Excel.
         #MÉTODOS EJECUTADOS POR DEFECTO EN EL CONSTRUCTOR:
-        self.setWindowTitle(title)                  #Título de la ventana, que recibe la clase como parámetro.
-        self.__createWidgets()                      #__createWidgets(): Método que crea los widgets constantes.
+        self.setWindowTitle(title)              #Título de la ventana, que recibe la clase como parámetro.
+        self.__createWidgets()                  #__createWidgets(): Método que crea los widgets constantes.
         #Condicional que evalúa si se desea mostrar la tabla con datos llenados por default o no.
         if showTable == True:
             #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
@@ -81,13 +83,15 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         createButtonStyle = "max-width: 250px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; border-radius: 25px; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
         confirmButton.setStyleSheet(createButtonStyle)              #Estilo del botón.
         text_content1 =  """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: white; font-weight: bold;'> 
-                                Título ventana adicional 
+                                Visualizador del Reporte de Excel:
                             </p>"""
         texto_1 = QtWidgets.QLabel(text_content1)                   #Texto indicativo.
-        text_content2 =   """<p style = 'font-size: 20px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
-                                Texto del botón
+
+        texto_conteo_tabla = "Texto del botón"
+        text_content2 =   f"""<p style = 'font-size: 20px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
+                                {texto_conteo_tabla}
                             </p>"""
-        texto_2 = QtWidgets.QLabel(text_content2)                   #Texto indicativo.
+        self.texto_2 = QtWidgets.QLabel(text_content2)              #Texto con conteo regresivo.
 
         #CONTENEDORES:
         widgetContenedor = QtWidgets.QWidget()              #Widget que contiene al Layout inferior.
@@ -100,7 +104,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #AÑADIR WIDGETS A LOS CONTENEDORES:
         #------------------------------------------CONTENEDOR MATRICIAL-------------------------------------------
         contenedorMatricial.addWidget(texto_1, 0, 0)        #Añadir texto a la posición matricial (0,0).
-        contenedorMatricial.addWidget(texto_2, 1, 0)        #Añadir texto a la posición matricial (1,0).
+        contenedorMatricial.addWidget(self.texto_2, 1, 0)        #Añadir texto a la posición matricial (1,0).
         contenedorMatricial.addWidget(confirmButton, 1, 2)  #Añadir botón a la posición matricial (1,2).
         #------------------------------------------CONTENEDOR MATRICIAL-------------------------------------------
         #-------------------------------------------CONTENEDOR VERTICAL-------------------------------------------
@@ -111,7 +115,62 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         centralWidget = QtWidgets.QWidget()                 #Widget que incluye todos los contenedores.
         centralWidget.setLayout(self.contenedorVertical)    #Layout principal metido en un widget para centrarlo.
         self.setCentralWidget(centralWidget)                #Centralización del widget principal.
+
+        #Instancia_Widget.evento_señal.connect(función_que_reacciona_al_evento): Este método se utiliza para 
+        #enlazar un evento a un controlador de eventos, que es una función que se ejecuta cuando ocurra el 
+        #evento, para ello se usa el nombre del widget, seguido del evento de tipo señal que detona el método, 
+        #la palabra reservdada .connect() y entre paréntesis se coloca el nombre de la función que ejecutará 
+        #alguna acción cuando ese evento ocurra. Normalmente las funciones que describen las acciones a 
+        #realizar por los widgets de la GUI se encuentran dentro de esta misma clase, pero fuera de su 
+        #constructor.
+        # - Tipos de Eventos en Python:
+        #       - clicked: Señal emitida cuando se hace clic en un elemento, como un botón.
+        #       - doubleClicked: Señal emitida cuando se hace doble clic en un elemento.
+        #       - pressed: Señal emitida cuando se presiona un elemento, como un botón.
+        #       - released: Señal emitida cuando se suelta un elemento, como un botón.
+        #       - textChanged: Señal emitida cuando el texto de un elemento, como un campo de texto, cambia.
+        #       - currentIndexChanged: Señal emitida cuando se cambia el índice seleccionado en un elemento, 
+        #         como en un menú desplegable.
+        #       - activated: Señal emitida cuando se selecciona un elemento, como un elemento de un menú 
+        #         desplegable o una opción de una lista.
+        #       - keyPressed: Señal emitida cuando se presiona una tecla en el teclado.
+        #       - keyReleased: Señal emitida cuando se suelta una tecla en el teclado.
+        #       - mousePressEvent: Señal emitida cuando se presiona un botón del mouse.
+        #       - mouseReleaseEvent: Señal emitida cuando se suelta un botón del mouse.
+        #       - mouseMoveEvent: Señal emitida cuando se mueve el mouse.
+        #       - valueChanged: Señal emitida cuando se selecciona un nuevo elemento en un combo box (lista 
+        #         desplegable).
+        #       - timeout: Señal emitida cuando transcurre cada intervalo de tiempo especificado en un 
+        #         temporizador.
+        #   ------------------Evento personalizadoooo, es el que se crea en otra clase con el objeto signal = QtCore.pyqtSignal(str) -------------------------------
+        #Es importante mencionar que en  PyQt5, cuando se conecta una función a un evento, la función conectada 
+        #puede recibir argumentos adicionales proporcionados por la señal emitida. Estos argumentos son 
+        #transmitidos automáticamente por el sistema de señales y slots de PyQt5.
+        # - Tipos de argumentos retornados al suceder un evento: 
+        #       - *args y **kwargs: Muchas señales en PyQt5 permiten enviar argumentos adicionales a través de 
+        #          *args (tupla de argumentos posicionales) y **kwargs (diccionario de argumentos de palabras 
+        #          clave). Estos parámetros pueden variar según la señal específica y su contexto de uso.
+        #       - checked: Algunas señales, como "clicked" en un botón, pueden enviar el estado de alternancia 
+        #         del widget. Este parámetro indica si el widget está marcado y suele ser de tipo booleano.
+        #       - text: En widgets de entrada de texto, como QLineEdit o QTextEdit, las señales pueden enviar el 
+        #         texto ingresado o modificado como parámetro.
+        #       - index: En widgets que tienen índices o selecciones, como QComboBox o QListView, las señales 
+        #         pueden enviar el índice seleccionado como parámetro.
+        #       - position: En widgets que trabajan con eventos de posición, como QMouseEvent, las señales 
+        #         pueden enviar la posición del cursor o del evento como parámetro.
+        #Al presionar el botón se ejecutará el método botonPresionado, declarado dentro de la misma clase.
+        #confirmButton.clicked.connect(self.copyTable_and_startCounter)
         
+    # def copyTable_and_startCounter(self):
+    #     #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
+    #     CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
+    #     db_handler2 = DatabaseExcelHandler(CONNECTION_STRING)
+    #     EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
+    #     secondary_window = SecondaryWindow("Ventana 2", db_handler2, EXCEL_FILE_PATH_2, showTable = False) #Creación de ventana 2.
+    #     secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
+    #     secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
+    #     self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+
     #__createTable():Método propio de la clase que sirve para crear y mostrar la tabla que contiene los datos 
     #extraídos de la database.
     def __createTable(self):

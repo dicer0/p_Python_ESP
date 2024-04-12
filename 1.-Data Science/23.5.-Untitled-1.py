@@ -2,8 +2,6 @@
 
 import xlwings
 import time
-#PyQt5 - QtCore: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
-#archivos, directorios, señales, hilos, subprocesos, etc.
 from PyQt5 import QtCore
 
 class ExcelDataCopier(QtCore.QThread):
