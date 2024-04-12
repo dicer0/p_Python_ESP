@@ -1,34 +1,143 @@
-import xlwings
-import time
+# -*- coding: utf-8 -*-
 
-def copy_excel_data_to_clipboard(file_path, delay=5):
-    # Abre el libro de Excel
-    workBook = xlwings.Book(file_path)
-    
-    # Copia cada hoja de cálculo al portapapeles
-    for sheet in workBook.sheets:
-        sheet.range('A1').select()
-        sheet.api.UsedRange.Copy()
-    
-    # Countdown timer
-    for remaining in range(delay, 0, -1):
-        print(f"Countdown: {remaining} seconds", end="\r")
-        time.sleep(1)
-    
-    print("Countdown finished. Closing Excel...")
-    
-    # Try to close the Excel file
-    try:
-        # Set DisplayAlerts to False to suppress pop-up messages
-        workBook.app.display_alerts = False
-        workBook.close()
-    except Exception as e:
-        print(f"An error occurred while closing the Excel file: {e}")
-    
-    # Quit the Excel application
-    for app in xlwings.apps:
-        app.quit()
+#openpyxl: Es una biblioteca que permite automatizar tareas en Excel, como leer y escribir datos en hojas de 
+#cálculo, manipular gráficos, ejecutar macros y más, todo desde Python.
+import xlwings
+#time: Librería para el manejo de tiempos, como retardos, contadores, etc.
+import time
+#PyQt5 - QtCore: Clase que incluye métodos para trabajar con temporizadores, tamaño de elementos, fechas, 
+#archivos, directorios, señales, hilos, subprocesos, etc.
+from PyQt5 import QtCore
+
+#ExcelDataCopier: Clase propia para copiar la tabla de un archivo de Excel y guardarla temporalmente en memoria, 
+#para posteriormente poderla pegar en donde queramos de forma automática.
+class ExcelDataCopier(QtCore.QThread):
+    #QtCore.pyqtSignal(): El método .pyqtSignal() de la clase PyQt5.QtCore se utiliza para declarar señales que 
+    #se comuniquen durante la ejecución de una GUI de PyQt5. Las señales son una forma de comunicación entre 
+    #objetos en PyQt5, permitiendo que un objeto emita una señal y otros la reciban y respondan en consecuencia.
+    #Su constructor recibe como parámetro el tipo de dato que la señal va a transportar, como int, str, float, 
+    #list, dict, etc.
+    # - Definición de la señal: Esto se hace creando un objeto de señal QtCore.pyqtSignal().
+    #       - QtCore.pyqtSignal()
+    # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del operador 
+    #   self (ya que este cambia su valor durante la ejecución del código) y el objeto QtCore.pyqtSignal() para 
+    #   enviar la señal.
+    #       - QtCore.pyqtSignal().emit(variable)
+    # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
+    #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
+    #   clase que creó la señal.
+    #       - objectoClaseSeñal.updated.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
+    signal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
+    #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
+    #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
+    #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
+    #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
+    #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
+    #otros lenguajes de programación.
+    def __init__(self, file_path, delay):
+        self.file_path = file_path  #Directorio del archivo de Excel del cual queremos obtener su tabla.
+        self.workBook = None        #Valor inicial del libro (workBook) del Excel.
+        self.delay = delay          #Temporizador que me permite mantener abierto el archivo de Excel.
+        self.countdown_message = "Bienvenido"   #Mensaje de bienvenida inicial.
+
+    #ajustar_celdas(): Método que recibe todos los parámetros del constructor y trabaja con ellos para 
+    #ajustar de forma automática el tamaño de las celdas del Excel, pero al mismo tiempo limitar dicho tamaño.
+    def copy_data_to_clipboard(self):
+        #xlwings.Book(): Método para abrir o crear (si es que este no existe) un archivo (libro) de Excel para 
+        #acceder a sus hojas de cálculo. Este método devuelve un objeto que representa el libro de Excel abierto.
+        self.workBook = xlwings.Book(self.file_path)
+        
+        #xlwings.Book: Los atributos del objeto Book que devuelven propiedades específicas del Excel son:
+        # - xlwings.Book.sheets:        Este atributo devuelve una lista de objetos xlwings.Sheet, que 
+        #   representan las hojas de cálculo en el libro.
+        # - xlwings.Book.names:         Devuelve una lista de objetos xlwings.Name que representan los nombres 
+        #   definidos en el libro, osea rangos de celdas definidos para aplicar fórmulas o macros. 
+        # - xlwings.Book.charts:        Devuelve una lista de objetos xlwings.Chart que representan los gráficos 
+        #   en el libro.
+        # - xlwings.Book.app:           Devuelve el objeto xlwings.App que representa la aplicación de Excel 
+        #   asociada al libro. La aplicación es la instancia de Excel que se está ejecutando en el sistema y 
+        #   representa todo el programa de Excel, incluyendo todas las hojas de cálculo, libros abiertos, 
+        #   configuraciones de aplicación, etc.
+        #       - xlwings.Book.app.visible:         Es un atributo booleano que indica si la ventana de Excel es 
+        #         visible (True) o no (False).
+        #       - xlwings.Book.app.display_alerts:  Es un atributo booleano que indica si el programa de Excel 
+        #         puede mostrar (True) o no (False) mensajes de alerta, como advertencias o confirmaciones durante
+        #         la ejecución del programa. El evitar la aparición de ventanas emergentes nos aseguramos que el 
+        #         programa no se vea detenido o estorbado por ellas.
+        #       - xlwings.Book.app.version:         Devuelve la versión de Excel con la que estás trabajando.
+        #       - xlwings.Book.app.screen_updating: Es un atributo booleano que controla si las actualizaciones 
+        #         de pantalla están habilitadas (True) o deshabilitadas (False). Deshabilitar las 
+        #         actualizaciones de pantalla puede mejorar el rendimiento al ejecutar operaciones de 
+        #         manipulación de celdas y rangos.
+        #       - xlwings.Book.app.calculation:     Controla el modo de cálculo de Excel. Puede ser "manual", 
+        #         "automatic" o "semiautomatic", determinando si Excel recalcula automáticamente las fórmulas al 
+        #         cambiar los datos o si espera hasta que se le indique explícitamente que lo haga.
+        #       - xlwings.Book.app.status_bar:      Permite establecer un mensaje en la barra de estado de Excel.
+        #       - xlwings.Book.app.books:           Devuelve una lista de todos los libros abiertos en la 
+        #         instancia de Excel.
+        # - xlwings.Book.fullname:      Devuelve la ruta completa del archivo del libro de Excel.
+        # - xlwings.Book.name:          Devuelve el nombre del archivo del libro de Excel.
+        # - xlwings.Book.path:          Devuelve la ruta del directorio en el que se encuentra el libro de Excel.
+        # - xlwings.Book.selection:     Devuelve el rango de celdas seleccionado actualmente en el libro.
+        # - xlwings.Book.active_sheet:  Devuelve el objeto xlwings.Sheet que representa la hoja de cálculo activa 
+        #   en el libro.
+        # - xlwings.Book.colors:        Devuelve una lista de colores definidos en el libro.
+        print("Libro de Excel abierto:\t\t", self.workBook.app.books)   #Nombre del libro de Excel abierto.
+        print("Hojas del Excel abierto:\t", self.workBook.sheets)       #Nombre de las hojas del Excel abierto.
+        self.workBook.app.visible = False                               #Visualización del Excel = False.
+        self.workBook.app.display_alerts = False                        #Ventanas emergentes del Excel = False.
+        #Bucle for que recorre la lista de objetos Sheet devueltos del atributo xlwings.Book.sheets, que 
+        #representan todas las hojas de cálculo del libro del Excel abierto.
+        for sheet in self.workBook.sheets:
+            #xlwings.Book: Los atributos del objeto Book que devuelven propiedades específicas del Excel son:
+            # - xlwings.Book.sheets: Este atributo devuelve una lista de objetos xlwings.Sheet, que representan 
+            #   las hojas de cálculo en el libro.
+            #       - xlwings.Book.sheets.add():            Agrega una nueva hoja de cálculo al libro de Excel.
+            #       - xlwings.Book.sheets.select():         Selecciona la hoja de cálculo especificada por su 
+            #         nombre, su índice o simplemente devuelve todo el contenido (tablas) de todas las páginas.
+            #       - xlwings.Book.sheets.__getitem__():    Permite acceder a una hoja de cálculo específica 
+            #         utilizando tanto el índice numérico (contando desde 0) como el nombre de la hoja de cálculo 
+            #         para acceder a la hoja deseada.
+            #       - xlwings.Book.sheets.__len__():        Devuelve el número de hojas de cálculo en el libro.
+            #       - xlwings.Book.sheets.names:            Devuelve una lista de los nombres de todas las hojas 
+            #         de cálculo en el libro.
+            #       - xlwings.Book.sheets.__iter__():       Permite iterar (ir una por una) sobre todas las 
+            #         hojas de cálculo del libro.
+            #       - xlwings.Book.sheets.range():          Devuelve un objeto Range que representa un rango de 
+            #         celdas en la hoja de cálculo.
+            sheet.select()              #Selecciona todo el contenido (todas las tablas) del objeto Sheet.
+            #xlwings.Book.sheets.api.UsedRange.Copy(): Este método permite acceder a la API de Excel para poder 
+            #interactuar con su hoja desde Python (Sheets.api), con ella podremos copiar el rango de celdas que 
+            #esté siendo utilizado en el Sheet del workBook, osea que contenga datos o formatos aplicados en la 
+            #hoja de cálculo de Excel y copiar ese contenido al portapapeles (Sheets.api.UsedRange.Copy()).
+            # - Portapapeles: También conocido como "clipboard", es una memoria temporal en los sistemas 
+            #   operativos que se utiliza para copiar y almacenar datos temporalmente (texto, imágenes, etc.) 
+            #   mientras estos se transfieren entre diferentes aplicaciones. Los datos en el portapapeles se 
+            #   sobrescriben cuando se copian nuevos datos en él.
+            sheet.api.UsedRange.Copy()  #Copiar el contenido del Sheet del Excel en el portapapeles.
+        
+        #Solamente se puede pegar la tabla con sus datos y formato mientras se encuentra abierto el archivo de 
+        #Excel al cerrarse, se copian solamente los datos, pero ya no el formato, para solucionar esto se creará
+        #un temporizador.
+        for remaining in range(self.delay, 0, -1):
+            self.countdown_message = f"Countdown: {remaining} seconds"  # Actualiza el mensaje de conteo
+            self.signal.emit(self.countdown_message)
+            print(self.countdown_message, end = "\r")
+            time.sleep(1)
+        self.countdown_message = "Countdown finished. Closing Excel..."
+        print(self.countdown_message)
+        self.signal.emit(self.countdown_message)
+        
+        try:
+            self.workBook.app.display_alerts = False
+            self.workBook.close()
+        except Exception as e:
+            print(f"An error occurred while closing the Excel file: {e}")
+        
+        for app in xlwings.apps:
+            app.quit()
 
 # Ejemplo de uso
 excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-copy_excel_data_to_clipboard(excelFilePath2, delay = 10)  # Delay set to 10 seconds
+copier = ExcelDataCopier(excelFilePath2, delay=10)
+copier.copy_data_to_clipboard()
