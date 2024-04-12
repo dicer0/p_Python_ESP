@@ -19,7 +19,7 @@ class ExcelDataCopier(QtCore.QThread):
     #se comuniquen durante la ejecución de una GUI de PyQt5. Las señales son una forma de comunicación entre 
     #objetos en PyQt5, permitiendo que un objeto emita una señal y otros la reciban y respondan en consecuencia.
     #Su constructor recibe como parámetro el tipo de dato que la señal va a transportar, como int, str, float, 
-    #list, dict, etc.
+    #list, dict, etc. La señal se utilizará como si fuera un tipos de evento en PyQt5.
     # - Definición de la señal: Esto se hace creando un objeto de señal QtCore.pyqtSignal().
     #       - QtCore.pyqtSignal()
     # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del operador 
@@ -29,8 +29,8 @@ class ExcelDataCopier(QtCore.QThread):
     # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
     #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
     #   clase que creó la señal.
-    #       - objectoClaseSeñal.updated.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
-    signal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
+    #       - objectoClaseSeñal.personalizedSignal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
+    personalizedSignal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
     #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
     #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
     #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
@@ -142,7 +142,7 @@ class ExcelDataCopier(QtCore.QThread):
             #   QtCore.pyqtSignal() para enviar la variable que transporta la señal a las clases que quieran 
             #   usar.
             #       - self.QtCore.pyqtSignal().emit(variable)
-            self.signal.emit(self.countdown_message)                        #Mandar variable por medio de señal.
+            self.personalizedSignal.emit(self.countdown_message)        #Mandar variable por medio de señal.
             #print(): Método para imprimir un mensaje en consola y después dar un salto de línea (Enter). Este 
             #método puede recibir además los siguientes parámetros adicionales:
             # - sep:    Especifica el separador entre los objetos que se imprimen. Por defecto, es un espacio en 
@@ -162,8 +162,8 @@ class ExcelDataCopier(QtCore.QThread):
         #Al terminar de ejecutar el conteo, se actualiza el mensaje mostrado en consola y la GUI.
         self.countdown_message = "Countdown finished. Closing Excel..."
         print(self.countdown_message)
-        #Y se vuelve a emitir este mensaje a través de la señal.
-        self.signal.emit(self.countdown_message)
+        #Y se vuelve a emitir este mensaje a través de la señal personalizada creada en esta clase.
+        self.personalizedSignal.emit(self.countdown_message)
         
         #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
         # - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción 

@@ -142,7 +142,9 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #         desplegable).
         #       - timeout: Señal emitida cuando transcurre cada intervalo de tiempo especificado en un 
         #         temporizador.
-        #   ------------------Evento personalizadoooo, es el que se crea en otra clase con el objeto signal = QtCore.pyqtSignal(str) -------------------------------
+        #       - QtCore.pyqtSignal(): Si en una clase separada se crea un objeto pyqtSignal(), este se podrá 
+        #         llamar en otras clases en vez de un evento, hace lo mismo pero a este se le llama señal y es 
+        #         considerado como un evento personalizado.
         #Es importante mencionar que en  PyQt5, cuando se conecta una función a un evento, la función conectada 
         #puede recibir argumentos adicionales proporcionados por la señal emitida. Estos argumentos son 
         #transmitidos automáticamente por el sistema de señales y slots de PyQt5.
