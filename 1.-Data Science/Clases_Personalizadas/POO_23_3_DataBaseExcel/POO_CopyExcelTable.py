@@ -21,8 +21,8 @@ class ExcelDataCopier(QtCore.QThread):
     #       - QtCore.pyqtSignal()
     # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del operador 
     #   self (ya que este cambia su valor durante la ejecución del código) y el objeto QtCore.pyqtSignal() para 
-    #   enviar la señal.
-    #       - QtCore.pyqtSignal().emit(variable)
+    #   enviar la variable que transporta la señal a las clases que la quieran usar.
+    #       - self.QtCore.pyqtSignal().emit(variable)
     # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
     #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
     #   clase que creó la señal.
@@ -119,9 +119,18 @@ class ExcelDataCopier(QtCore.QThread):
         #Solamente se puede pegar la tabla con sus datos y formato mientras se encuentra abierto el archivo de 
         #Excel al cerrarse, se copian solamente los datos, pero ya no el formato, para solucionar esto se creará
         #un temporizador.
+        #BUCLE FOR: La sintaxis de este se conforma de una variable temporal que corresponde a cada iteración del 
+        #bucle in range(num_Inicio, num_Final, intervalo_De_Conteo). 
         for remaining in range(self.delay, 0, -1):
-            self.countdown_message = f"Countdown: {remaining} seconds"  # Actualiza el mensaje de conteo
-            self.signal.emit(self.countdown_message)
+            #self.countdown_message: Se actulizará el atributo para mostrar un mensaje cambiante en la GUI de 
+            #PyQt5.
+            self.countdown_message = f"Countdown: {remaining} seconds"      #Actualiza el mensaje de conteo.
+            # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del 
+            #   operador self (ya que este cambia su valor durante la ejecución del código) y el objeto 
+            #   QtCore.pyqtSignal() para enviar la variable que transporta la señal a las clases que quieran 
+            #   usar.
+            #       - self.QtCore.pyqtSignal().emit(variable)
+            self.signal.emit(self.countdown_message)                        #Mandar variable por medio de señal.
             print(self.countdown_message, end = "\r")
             time.sleep(1)
         self.countdown_message = "Countdown finished. Closing Excel..."
