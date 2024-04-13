@@ -21,15 +21,15 @@ class ExcelDataCopier(QtCore.QThread):
     #Su constructor recibe como parámetro el tipo de dato que la señal va a transportar, como int, str, float, 
     #list, dict, etc. La señal se utilizará como si fuera un tipo de evento en PyQt5.
     # - Definición de la señal: Esto se hace creando un objeto de señal QtCore.pyqtSignal().
-    #       - personalizedSignal = QtCore.pyqtSignal()
+    #       - signal = QtCore.pyqtSignal()
     # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del operador 
     #   self (ya que este cambia su valor durante la ejecución del código) y el objeto QtCore.pyqtSignal() para 
     #   enviar la variable que transporta la señal a las clases que la quieran usar.
-    #       - self.personalizedSignal.emit(variable)
+    #       - self.signal.emit(variable)
     # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
     #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
     #   clase que creó la señal.
-    #       - objectoClaseSeñal.personalizedSignal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
+    #       - objectoClaseSeñal.signal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
     signal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
     #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
     #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
@@ -52,13 +52,22 @@ class ExcelDataCopier(QtCore.QThread):
         self.delay = delay_segs     #Temporizador que me permite mantener abierto el archivo de Excel.
         self.countdown_message = "Bienvenido"   #Mensaje de bienvenida inicial.
 
-    #copy_data_to_clipboard(): Método que obtiene toda la tabla de una hoja de un libro de Excel y nos permite 
-    #copiarla al portapapeles con todo y su formato de celdas durante cierto tiempo dado por un temporizador 
-    #donde se encuentra abierto el archivo de Excel, cuando se termina dicho conteo, solo se podrán copiar los 
-    #datos de la tabla, pero ya no contendrá su formato de celdas.
+    #run(): Cuando se quiere crear una señal de PyQt5, la clase que la contenga debe heredar de la clase 
+    #QtCore.QThread, luego se creará la señal (que se debe llamar signal) a través de un objeto 
+    #QtCore.pyqtSignal() y después se debe añadir un método que se llame run(), este contendrá el código que se 
+    #correrá en un hilo (Thread) el cual se ejecutará por separado cuando en una clase distinta se incialice 
+    #por medio de un método que se debe llamar start().
+    # - signal = QtCore.pyqtSignal()
+    # - run(): Código que se ejecuta en un hilo por separado cuando se quiera utilizar la señal.
+    # - start(): Método que inicializa la ejecución del hilo donde se corre el método run().
+    #run(): Método que obtiene toda la tabla de una hoja de un libro de Excel y nos permite copiarla al 
+    #portapapeles con todo y su formato de celdas durante cierto tiempo dado por un temporizador donde se 
+    #encuentra abierto el archivo de Excel, cuando se termina dicho conteo, solo se podrán copiar los datos de 
+    #la tabla, pero ya no contendrá su formato de celdas.
     def run(self):
         #xlwings.Book(): Método para abrir o crear (si es que este no existe) un archivo (libro) de Excel para 
-        #acceder a sus hojas de cálculo. Este método devuelve un objeto que representa el libro de Excel abierto.
+        #acceder a sus hojas de cálculo. Este método devuelve un objeto que representa el libro de Excel 
+        #abierto.
         self.workBook = xlwings.Book(self.file_path)
         
         #xlwings.Book: Los atributos del objeto Book que devuelven propiedades específicas del Excel son:
@@ -75,9 +84,9 @@ class ExcelDataCopier(QtCore.QThread):
         #       - xlwings.Book.app.visible:         Es un atributo booleano que indica si la ventana de Excel es 
         #         visible (True) o no (False).
         #       - xlwings.Book.app.display_alerts:  Es un atributo booleano que indica si el programa de Excel 
-        #         puede mostrar (True) o no (False) mensajes de alerta, como advertencias o confirmaciones durante
-        #         la ejecución del programa. El evitar la aparición de ventanas emergentes nos aseguramos que el 
-        #         programa no se vea detenido o estorbado por ellas.
+        #         puede mostrar (True) o no (False) mensajes de alerta, como advertencias o confirmaciones 
+        #         durante la ejecución del programa. El evitar la aparición de ventanas emergentes nos 
+        #         aseguramos que el programa no se vea detenido o estorbado por ellas.
         #       - xlwings.Book.app.version:         Devuelve la versión de Excel con la que estás trabajando.
         #       - xlwings.Book.app.screen_updating: Es un atributo booleano que controla si las actualizaciones 
         #         de pantalla están habilitadas (True) o deshabilitadas (False). Deshabilitar las 
@@ -86,15 +95,17 @@ class ExcelDataCopier(QtCore.QThread):
         #       - xlwings.Book.app.calculation:     Controla el modo de cálculo de Excel. Puede ser "manual", 
         #         "automatic" o "semiautomatic", determinando si Excel recalcula automáticamente las fórmulas al 
         #         cambiar los datos o si espera hasta que se le indique explícitamente que lo haga.
-        #       - xlwings.Book.app.status_bar:      Permite establecer un mensaje en la barra de estado de Excel.
+        #       - xlwings.Book.app.status_bar:      Permite establecer un mensaje en la barra de estado de 
+        #         Excel.
         #       - xlwings.Book.app.books:           Devuelve una lista de todos los libros abiertos en la 
         #         instancia de Excel.
         # - xlwings.Book.fullname:      Devuelve la ruta completa del archivo del libro de Excel.
         # - xlwings.Book.name:          Devuelve el nombre del archivo del libro de Excel.
-        # - xlwings.Book.path:          Devuelve la ruta del directorio en el que se encuentra el libro de Excel.
+        # - xlwings.Book.path:          Devuelve la ruta del directorio en el que se encuentra el libro de 
+        #   Excel.
         # - xlwings.Book.selection:     Devuelve el rango de celdas seleccionado actualmente en el libro.
-        # - xlwings.Book.active_sheet:  Devuelve el objeto xlwings.Sheet que representa la hoja de cálculo activa 
-        #   en el libro.
+        # - xlwings.Book.active_sheet:  Devuelve el objeto xlwings.Sheet que representa la hoja de cálculo 
+        #   activa en el libro.
         # - xlwings.Book.colors:        Devuelve una lista de colores definidos en el libro.
         print("Libro de Excel abierto:\t\t", self.workBook.app.books)   #Nombre del libro de Excel abierto.
         print("Hojas del Excel abierto:\t", self.workBook.sheets)       #Nombre de las hojas del Excel abierto.
@@ -110,8 +121,8 @@ class ExcelDataCopier(QtCore.QThread):
             #       - xlwings.Book.sheets.select():         Selecciona la hoja de cálculo especificada por su 
             #         nombre, su índice o simplemente devuelve todo el contenido (tablas) de todas las páginas.
             #       - xlwings.Book.sheets.__getitem__():    Permite acceder a una hoja de cálculo específica 
-            #         utilizando tanto el índice numérico (contando desde 0) como el nombre de la hoja de cálculo 
-            #         para acceder a la hoja deseada.
+            #         utilizando tanto el índice numérico (contando desde 0) como el nombre de la hoja de 
+            #         cálculo para acceder a la hoja deseada.
             #       - xlwings.Book.sheets.__len__():        Devuelve el número de hojas de cálculo en el libro.
             #       - xlwings.Book.sheets.names:            Devuelve una lista de los nombres de todas las hojas 
             #         de cálculo en el libro.
@@ -170,14 +181,14 @@ class ExcelDataCopier(QtCore.QThread):
         #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
         # - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción 
         #   durante su ejecución, el programa brinca al código del except.
-        # - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción cuando 
-        #   ocurra el error esperado.
+        # - En la parte de código donde se encuentra la palabra reservada except, se ejecuta cierta acción 
+        #   cuando ocurra el error esperado.
         # - Por último, cuando no ocurra una excepción durante la ejecución del gestor de excepciones, se 
         #   ejecutará el código que esté incluido dentro del finally después de haber terminado de ejecutar lo 
         #   que haya en el try, pero si ocurre una excepción, la ejecución terminará cuando se llegue al except.
         try:
-            #xlwings.Book.close(): Este método se utiliza para cerrar el libro de Excel asociado a un objeto Book 
-            #previamente abierto con el método constructor xlwings.Book(). 
+            #xlwings.Book.close(): Este método se utiliza para cerrar el libro de Excel asociado a un objeto 
+            #Book previamente abierto con el método constructor xlwings.Book(). 
             self.workBook.close()
         except Exception as e:
             print(f"An error occurred while closing the Excel file: {e}")

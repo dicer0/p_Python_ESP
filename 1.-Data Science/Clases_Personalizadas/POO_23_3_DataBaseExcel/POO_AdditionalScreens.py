@@ -173,23 +173,31 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #consecuencia.
         #La señal se utilizará como si fuera un tipo de evento en PyQt5.
         # - Definición de la señal: Esto se hace creando un objeto de señal QtCore.pyqtSignal().
-        #       - personalizedSignal = QtCore.pyqtSignal()  ESTO SE REALIZÓ EN LA CLASE POO_CopyExcelTable.py
+        #       - signal = QtCore.pyqtSignal()  ESTO SE REALIZÓ EN LA CLASE POO_CopyExcelTable.py
         # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del 
         #   operador self (ya que la señal cambia su valor durante la ejecución del código) y el objeto 
         #   QtCore.pyqtSignal() para enviar la variable que transporta la señal a las clases que la quieran usar.
-        #       - self.personalizedSignal.emit(variable)    ESTO SE REALIZÓ EN LA CLASE POO_CopyExcelTable.py
+        #       - self.signal.emit(variable)    ESTO SE REALIZÓ EN LA CLASE POO_CopyExcelTable.py
         # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
         #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
         #   clase que creó la señal.                        ESTO ES LO QUE SE ESTÁ HACIENDO EN ESTA CLASE.
-        #       - objectoClaseSeñal.personalizedSignal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
+        #       - objectoClaseSeñal.signal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
         #La funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal() recibe como parámetro lo que sea que devuelva la 
         #señal y describe a detalle la acción que se ejecutará con ella.
         self.__table_copier.signal.connect(self.setCounterText_onGUI)
         #INICIALIZAR EL CONTADOR Y OBTENER SU CONTEO PARA MOSTRARLO EN LA GUI:
-        #copy_data_to_clipboard(): Método que obtiene toda la tabla de una hoja de un libro de Excel y nos permite 
-        #copiarla al portapapeles con todo y su formato de celdas durante cierto tiempo dado por un temporizador 
-        #donde se encuentra abierto el archivo de Excel, cuando se termina dicho conteo, solo se podrán copiar los 
-        #datos de la tabla, pero ya no contendrá su formato de celdas.
+        #start(): Cuando se quiere crear una señal de PyQt5, la clase que la contenga debe heredar de la clase 
+        #QtCore.QThread, luego se creará la señal (que se debe llamar signal) a través de un objeto 
+        #QtCore.pyqtSignal() y después se debe añadir un método que se llame run(), este contendrá el código que 
+        #se correrá en un hilo (Thread) el cual se ejecutará por separado cuando en una clase distinta se 
+        #incialice por medio de un método que se debe llamar start().
+        # - signal = QtCore.pyqtSignal()
+        # - run(): Código que se ejecuta en un hilo por separado cuando se quiera utilizar la señal.
+        # - start(): Método que inicializa la ejecución del hilo donde se corre el método run().
+        #run(): En este programa el método run() obtiene toda la tabla de una hoja de un libro de Excel y nos 
+        #permite copiarla al portapapeles con todo y su formato de celdas durante cierto tiempo dado por un 
+        #temporizador, donde se encuentra abierto el archivo de Excel, cuando se termina dicho conteo, solo se 
+        #podrán copiar los datos de la tabla, pero ya no contendrá su formato de celdas.
         self.__table_copier.start()
 
     #setCounterText_onGUI(): Método que es llamado por la señal y se encarga de actualizar el texto que aparece 
