@@ -426,7 +426,7 @@ class MainWindow(QtWidgets.QMainWindow):
         CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
         db_handler1 = DatabaseExcelHandler(CONNECTION_STRING)
         EXCEL_FILE_PATH_1 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-        table_copier1 = ExcelDataCopier(EXCEL_FILE_PATH_1, delay_segs = 10)
+        table_copier1 = ExcelDataCopier(EXCEL_FILE_PATH_1, delay_segs = 20)
         secondary_window = SecondaryWindow("Ventana 1", db_handler1, table_copier1, EXCEL_FILE_PATH_1, showTable = True) #Creación de ventana 1.
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
@@ -449,7 +449,7 @@ class MainWindow(QtWidgets.QMainWindow):
         CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
         db_handler2 = DatabaseExcelHandler(CONNECTION_STRING)
         EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
-        table_copier2 = ExcelDataCopier(EXCEL_FILE_PATH_2, delay_segs = 10)
+        table_copier2 = ExcelDataCopier(EXCEL_FILE_PATH_2, delay_segs = 20)
         secondary_window = SecondaryWindow("Ventana 2", db_handler2, table_copier2, EXCEL_FILE_PATH_2, showTable = False) #Creación de ventana 2.
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
