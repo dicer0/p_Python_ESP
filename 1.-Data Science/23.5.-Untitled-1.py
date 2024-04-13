@@ -42,5 +42,5 @@ class ExcelDataCopier(QtCore.QThread):
             app.quit()
 
 excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-copier = ExcelDataCopier(excelFilePath2, delay=10)
+copier = ExcelDataCopier(excelFilePath2, delay = 10)
 copier.copy_data_to_clipboard()
