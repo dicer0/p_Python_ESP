@@ -34,18 +34,17 @@ from PyQt5 import QtGui
 #pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.
 class SecondaryWindow(QtWidgets.QMainWindow):
     #__init__(): Constructor de la clase SecondaryWindow.
-    #def __init__(self, title, db_handler, table_copier, excelFilePath, showTable = False):
-    def __init__(self, title, db_handler, excelFilePath, showTable = False):
+    def __init__(self, title, db_handler, table_copier, excelFilePath, showTable = False):
         super().__init__()                      #super(): Herencia de la clase QtWidgets.QMainWindow.
         #ATRIBUTOS PRIVADOS DEL CONSTRUCTOR:
         #Los métodos o atributos cuyo nombre empieza con dos guiones bajos __, indican que son métodos privados, 
         #osea que solo pueden ser accedidos desde dentro de la clase, pero no desde fuera.
-        #Inyección de dependencias: Este es un concepto utilizado cuando una clase para funcionar necesita el 
+        #INYECCIÓN DE DEPENDENCIAS: Este es un concepto utilizado cuando una clase para funcionar necesita el 
         #objeto de otra clase, en este caso para que la clase SecondaryWindow funcione, necesita de un objeto 
         #DatabaseExcelHandler, a esto se le llama inyección de dependencias.
         self.__db_handler = db_handler          #self.__db_handler: Atributo de un objeto DatabaseExcelHandler.
-        #self.__table_copier = table_copier      #self.__table_copier: Atributo de un objeto ExcelDataCopier.
-        self.__excelFilePath = excelFilePath #self.__excelFilePath: Atributo que indica el directorio del Excel.
+        self.__table_copier = table_copier      #self.__table_copier: Atributo de un objeto ExcelDataCopier.
+        self.__excelFilePath = excelFilePath    #self.__excelFilePath: Atributo que indica el path del Excel.
         #MÉTODOS EJECUTADOS POR DEFECTO EN EL CONSTRUCTOR:
         self.setWindowTitle(title)              #Título de la ventana, que recibe la clase como parámetro.
         self.__createWidgets()                  #__createWidgets(): Método que crea los widgets constantes.
@@ -160,18 +159,49 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         #         pueden enviar el índice seleccionado como parámetro.
         #       - position: En widgets que trabajan con eventos de posición, como QMouseEvent, las señales 
         #         pueden enviar la posición del cursor o del evento como parámetro.
-        #Al presionar el botón se ejecutará el método botonPresionado, declarado dentro de la misma clase.
-        #confirmButton.clicked.connect(self.copyTable_and_startCounter)
+        #Al presionar el botón se ejecutará el método copyTable_and_startCounter, declarado dentro de la misma 
+        #clase, el cual se encarga de ejecutar la señal que recibe y actualiza el temporizador en la GUI.
+        confirmButton.clicked.connect(self.copyTable_and_startCounter)
         
-    # def copyTable_and_startCounter(self):
-    #     #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-    #     CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
-    #     db_handler2 = DatabaseExcelHandler(CONNECTION_STRING)
-    #     EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
-    #     secondary_window = SecondaryWindow("Ventana 2", db_handler2, EXCEL_FILE_PATH_2, showTable = False) #Creación de ventana 2.
-    #     secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
-    #     secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
-    #     self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+    #copyTable_and_startCounter(): Método ejecutado al presionar el botón de las ventanas donde se muestra la 
+    #tabla.
+    def copyTable_and_startCounter(self):
+        #INICIALIZAR EL CONTADOR Y OBTENER SU CONTEO PARA MOSTRARLO EN LA GUI:
+        #QtCore.pyqtSignal(): El método .pyqtSignal() de la clase PyQt5.QtCore se utiliza para declarar señales 
+        #que se comuniquen durante la ejecución de una GUI de PyQt5. Las señales son una forma de comunicación 
+        #entre objetos en PyQt5, permitiendo que un objeto emita una señal y otros la reciban y respondan en 
+        #consecuencia.
+        #La señal se utilizará como si fuera un tipo de evento en PyQt5.
+        # - Definición de la señal: Esto se hace creando un objeto de señal QtCore.pyqtSignal().
+        #       - personalizedSignal = QtCore.pyqtSignal()  ESTO SE REALIZÓ EN LA CLASE POO_CopyExcelTable.py
+        # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del 
+        #   operador self (ya que la señal cambia su valor durante la ejecución del código) y el objeto 
+        #   QtCore.pyqtSignal() para enviar la variable que transporta la señal a las clases que la quieran usar.
+        #       - self.personalizedSignal.emit(variable)    ESTO SE REALIZÓ EN LA CLASE POO_CopyExcelTable.py
+        # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
+        #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
+        #   clase que creó la señal.                        ESTO ES LO QUE SE ESTÁ HACIENDO EN ESTA CLASE.
+        #       - objectoClaseSeñal.personalizedSignal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
+        #La funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal() recibe como parámetro lo que sea que devuelva la 
+        #señal y describe a detalle la acción que se ejecutará con ella.
+        self.__table_copier.signal.connect(self.setCounterText_onGUI)
+        #INICIALIZAR EL CONTADOR Y OBTENER SU CONTEO PARA MOSTRARLO EN LA GUI:
+        #copy_data_to_clipboard(): Método que obtiene toda la tabla de una hoja de un libro de Excel y nos permite 
+        #copiarla al portapapeles con todo y su formato de celdas durante cierto tiempo dado por un temporizador 
+        #donde se encuentra abierto el archivo de Excel, cuando se termina dicho conteo, solo se podrán copiar los 
+        #datos de la tabla, pero ya no contendrá su formato de celdas.
+        self.__table_copier.start()
+
+    #setCounterText_onGUI(): Método que es llamado por la señal y se encarga de actualizar el texto que aparece 
+    #en el elemento QLabel del GUI hecho con PyQt5. 
+    def setCounterText_onGUI(self, signalTimerText):
+        #QtWidgets.QLabel().setText(): Este método se utiliza para establecer el texto que se mostrará en el 
+        #QLabel. Recordemos que el contenido de los QLabel se puede indicar por medio de HTML/CSS.
+        timerText = signalTimerText
+        timerTextUpdated  = f"""<p style = 'font-size: 20px; font-family: Consolas, monospace; color: darkgray; font-weight: bold;'> 
+                                {timerText}
+                            </p>"""
+        self.texto_2.setText(timerTextUpdated)
 
     #__createTable():Método propio de la clase que sirve para crear y mostrar la tabla que contiene los datos 
     #extraídos de la database.

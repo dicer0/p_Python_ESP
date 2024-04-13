@@ -19,18 +19,18 @@ class ExcelDataCopier(QtCore.QThread):
     #se comuniquen durante la ejecución de una GUI de PyQt5. Las señales son una forma de comunicación entre 
     #objetos en PyQt5, permitiendo que un objeto emita una señal y otros la reciban y respondan en consecuencia.
     #Su constructor recibe como parámetro el tipo de dato que la señal va a transportar, como int, str, float, 
-    #list, dict, etc. La señal se utilizará como si fuera un tipos de evento en PyQt5.
+    #list, dict, etc. La señal se utilizará como si fuera un tipo de evento en PyQt5.
     # - Definición de la señal: Esto se hace creando un objeto de señal QtCore.pyqtSignal().
-    #       - QtCore.pyqtSignal()
+    #       - personalizedSignal = QtCore.pyqtSignal()
     # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del operador 
     #   self (ya que este cambia su valor durante la ejecución del código) y el objeto QtCore.pyqtSignal() para 
     #   enviar la variable que transporta la señal a las clases que la quieran usar.
-    #       - self.QtCore.pyqtSignal().emit(variable)
+    #       - self.personalizedSignal.emit(variable)
     # - Conexión de la señal: En otras clases del programa, se pueden conectar funciones o métodos que hagan 
     #   algo con lo que devuelve la señal utilizando el método updated.connect() a través de un objeto de la 
     #   clase que creó la señal.
     #       - objectoClaseSeñal.personalizedSignal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
-    personalizedSignal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
+    signal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
     #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
     #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
     #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
@@ -52,9 +52,11 @@ class ExcelDataCopier(QtCore.QThread):
         self.delay = delay_segs     #Temporizador que me permite mantener abierto el archivo de Excel.
         self.countdown_message = "Bienvenido"   #Mensaje de bienvenida inicial.
 
-    #ajustar_celdas(): Método que recibe todos los parámetros del constructor y trabaja con ellos para 
-    #ajustar de forma automática el tamaño de las celdas del Excel, pero al mismo tiempo limitar dicho tamaño.
-    def copy_data_to_clipboard(self):
+    #copy_data_to_clipboard(): Método que obtiene toda la tabla de una hoja de un libro de Excel y nos permite 
+    #copiarla al portapapeles con todo y su formato de celdas durante cierto tiempo dado por un temporizador 
+    #donde se encuentra abierto el archivo de Excel, cuando se termina dicho conteo, solo se podrán copiar los 
+    #datos de la tabla, pero ya no contendrá su formato de celdas.
+    def run(self):
         #xlwings.Book(): Método para abrir o crear (si es que este no existe) un archivo (libro) de Excel para 
         #acceder a sus hojas de cálculo. Este método devuelve un objeto que representa el libro de Excel abierto.
         self.workBook = xlwings.Book(self.file_path)
@@ -138,11 +140,11 @@ class ExcelDataCopier(QtCore.QThread):
             #PyQt5.
             self.countdown_message = f"Countdown: {remaining} seconds"      #Actualiza el mensaje de conteo.
             # - Emisión de la señal: En algún lugar de la clase, se puede llamar al método emit() a través del 
-            #   operador self (ya que este cambia su valor durante la ejecución del código) y el objeto 
-            #   QtCore.pyqtSignal() para enviar la variable que transporta la señal a las clases que quieran 
+            #   operador self (ya que la señal cambia su valor durante la ejecución del código) y el objeto 
+            #   QtCore.pyqtSignal() para enviar la variable que transporta la señal a las clases que la quieran 
             #   usar.
             #       - self.QtCore.pyqtSignal().emit(variable)
-            self.personalizedSignal.emit(self.countdown_message)        #Mandar variable por medio de señal.
+            self.signal.emit(self.countdown_message)        #Mandar variable por medio de señal.
             #print(): Método para imprimir un mensaje en consola y después dar un salto de línea (Enter). Este 
             #método puede recibir además los siguientes parámetros adicionales:
             # - sep:    Especifica el separador entre los objetos que se imprimen. Por defecto, es un espacio en 
@@ -163,7 +165,7 @@ class ExcelDataCopier(QtCore.QThread):
         self.countdown_message = "Countdown finished. Closing Excel..."
         print(self.countdown_message)
         #Y se vuelve a emitir este mensaje a través de la señal personalizada creada en esta clase.
-        self.personalizedSignal.emit(self.countdown_message)
+        self.signal.emit(self.countdown_message)
         
         #MANEJO DE EXCEPCIONES: Es una parte de código que se conforma de 2 o3 partes, try, except y finally: 
         # - Primero se ejecuta el código que haya dentro del try, y si es que llegara a ocurrir una excepción 
@@ -189,8 +191,3 @@ class ExcelDataCopier(QtCore.QThread):
             #xlwings.apps.quit(): Este método se utiliza para cerrar las aplicaciones de Excel asociadas a un 
             #objeto Book previamente abiertas con el método constructor xlwings.Book(). 
             app.quit()
-
-# Ejemplo de uso
-excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-copier = ExcelDataCopier(excelFilePath2, delay_segs = 10)
-copier.copy_data_to_clipboard()
