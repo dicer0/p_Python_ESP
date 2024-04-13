@@ -299,7 +299,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #   varios elementos o contenedores y los irá colocando dependiendo de las coordenadas que se les 
         #   indique al utilizar el método .addWidget().
         self.individual_layout1 = QtWidgets.QGridLayout(middle_widget1) #Contenedor individual intermedio 1.
-        self.individual_layout2 = QtWidgets.QGridLayout(middle_widget2) #Contenedor individual intermedio 1.
+        self.individual_layout2 = QtWidgets.QGridLayout(middle_widget2) #Contenedor individual intermedio 2.
         content_layout = QtWidgets.QHBoxLayout(content_widget)          #Contenedor de elementos intermedios.
         #--------------------------------------------CONTENEDOR MEDIO--------------------------------------------
         
