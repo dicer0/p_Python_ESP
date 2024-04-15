@@ -98,12 +98,12 @@ class DatabaseExcelHandler:
             #se ha realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta 
             #información, esto se realiza a través de la variable que haya utilizado el método .connect() y el 
             #método .cursor() de la librería pyodbc.
-            SQL_Query_string =  """SELECT 	  * 
+            SQL_QUERY_STRING =  """SELECT 	  * 
                                     FROM 	    posts
                                     ORDER BY  titulo DESC;"""
             #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos a 
             #través de un objeto cursor, se puede realizar una consulta a la base de datos con SQL.
-            self.cursor.execute(SQL_Query_string)
+            self.cursor.execute(SQL_QUERY_STRING)
             #pyodbc.connect().cursor().execute().fetchall(): Después de ejecutar la consulta, se llama a este 
             #método en el cursor para recuperar todos los resultados de la consulta, el cual devuelve una lista de 
             #tuplas que contiene todas las filas de resultados de la consulta. Cada fila de la lista es una tupla 

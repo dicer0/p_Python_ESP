@@ -23,4 +23,5 @@ Thumbs.db
 #IGNORAR ARCHIVOS Y/O CARPETAS ESPECÍFICAS: Si en el archivo .gitignore se indica un directorio con o 
 #sin un archivo, ese directorio será excluido al subir el proyecto al repositorio de GitHub:
 #   carpeta_secreta/archivo_secreto.txt
+1.-Data Science/Clases_Personalizadas/POO_23_3_DataBaseExcel/Constants&Keys/
 5.-Inteligencia Artificial/API_Keys/
