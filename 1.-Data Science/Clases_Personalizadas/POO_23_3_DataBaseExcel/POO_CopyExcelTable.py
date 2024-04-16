@@ -31,6 +31,16 @@ class ExcelDataCopier(QtCore.QThread):
     #   clase que creó la señal.
     #       - objectoClaseSeñal.signal.connect(funcion_Que_Hace_Algo_Con_Lo_Que_Devuelve_La_Señal)
     signal = QtCore.pyqtSignal(str)    #La señal transportará el conteo de cuando está abierto el Excel.
+
+    #Bucle que cierra todas las aplicaciones o instancias abiertas por el programa de Excel al ejecutar este 
+    #programa. Esto se debe hacer antes y después de haber abierto el archivo de Excel.
+    #xlwings.apps: El atributo apps extraído directamente de la librería xlwings que contiene todas las 
+    #aplicaciones de Microsoft Excel que están siendo controladas por xlwings durante la ejecución del programa.
+    for app in xlwings.apps:
+        #xlwings.apps.quit(): Este método se utiliza para cerrar las aplicaciones de Excel asociadas a un 
+        #objeto Book previamente abiertas con el método constructor xlwings.Book(). 
+        app.quit()
+
     #def __init__(self): Es el constructor o inicializador de la clase, este se llama automáticamente cuando se 
     #crea un objeto que instancíe la clase y en él se declaran los atributos que se reutilizarán en los demás 
     #métodos. En Python, el primer parámetro de cualquier método constructor debe ser self, los demás pueden 
@@ -194,7 +204,7 @@ class ExcelDataCopier(QtCore.QThread):
             print(f"An error occurred while closing the Excel file: {e}")
         
         #Bucle que cierra todas las aplicaciones o instancias abiertas por el programa de Excel al ejecutar este 
-        #programa.
+        #programa. Esto se debe hacer antes y después de haber abierto el archivo de Excel.
         #xlwings.apps: El atributo apps extraído directamente de la librería xlwings que contiene todas las 
         #aplicaciones de Microsoft Excel que están siendo controladas por xlwings durante la ejecución del 
         #programa.
