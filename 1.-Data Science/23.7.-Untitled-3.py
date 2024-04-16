@@ -1,69 +1,51 @@
-# -*- coding: utf-8 -*-
+import openpyxl
 
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import datetime
-import time
-
-def send_email():
-    message = MIMEMultipart()
-    sender_email = "diego-rko@live.com.mx"
-    password = "tucontraseña"
-    receiver_email = "diego-rko@live.com.mx"
-    subject = "Olis crayolis automatizado"
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    message["Subject"] = subject
+def ajustar_celdas_excel(ruta_excel, ancho_maximo, altura_maxima):
+    excelWorkBook = openpyxl.load_workbook(ruta_excel)
+    excelWorkSheet = excelWorkBook.active
     
-    body = "Contenido del correo"
-    emailPlainContent = MIMEText(_text = body, _subtype = "plain", _charset = "utf-8")
-    message.attach(emailPlainContent)
+    numLetrasCol_1 = 0
+    cellObject = excelWorkSheet.cell(row = 1, column = 1)
+    column1Index = cellObject.column
+    for cell in excelWorkSheet[column1Index]:
+        if ((cell.value is not None) and (len(cell.value) > numLetrasCol_1)):
+            numLetrasCol_1 = len(cell.value)
+    anchoMaxCol1 = (numLetrasCol_1 + 2) * 1.4
+    adjusted_width_first_col = min(anchoMaxCol1, ancho_maximo)
+    excelWorkSheet.column_dimensions['A'].width = adjusted_width_first_col
 
-    try:
-        with smtplib.SMTP("smtp-mail.outlook.com", 587) as server:
-            server.starttls()
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message.as_string())
-            print("Correo electrónico enviado correctamente.")
-    except Exception as e:
-        print(f"Error al enviar el correo electrónico: {e}")
+    colsExcel = list(excelWorkSheet.columns)[1:]
+    for col in colsExcel:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            if ((cell.value is not None) and (len(cell.value) > max_length)):
+                max_length = len(cell.value)
+        adjusted_width = min((max_length + 2) * 1.2, ancho_maximo)
+        excelWorkSheet.column_dimensions[column].width = adjusted_width
 
+    for row in excelWorkSheet.iter_rows():
+        max_height = 0
+        for cell in row:
+            lines = str(cell.value).count('\n') + 1
+            height = lines * 15
+            if (height > max_height):
+                max_height = height
+        for cell in row:
+            if (cell.coordinate in excelWorkSheet.merged_cells):
+                for range_ in excelWorkSheet.merged_cells.ranges:
+                    if (cell.coordinate in range_):
+                        for row_ in range(range_.min_row, range_.max_row + 1):
+                            if (excelWorkSheet.row_dimensions[row_].height is not None):
+                                max_height = max(max_height, excelWorkSheet.row_dimensions[row_].height)
+        if (max_height == 0):
+            max_height = 15
+        adjusted_height = min(max_height, altura_maxima)
+        excelWorkSheet.row_dimensions[row[0].row].height = adjusted_height
 
-def send_email_at_specific_time(hour, minute):
-    intentosEmail = 0
-    while True:
-        now = datetime.datetime.now()
-        if now.hour == hour and now.minute == minute:
-            send_email()
-            break
-        else:
-            time.sleep(5)
-            print("Intento número", intentosEmail, "de mandar el correo...")
-            intentosEmail += 1
+    excelWorkBook.save(ruta_excel)
 
-send_email_at_specific_time(14, 11)
-
-
-import socket
-def test_port_connection(host, port):
-    try:
-        # Create a TCP socket
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Set a timeout for connection attempt (adjust as needed)
-        sock.settimeout(2)
-        # Attempt to connect to the host and port
-        result = sock.connect_ex((host, port))
-        if result == 0:
-            print(f"Success: Port {port} is open on {host}")
-        else:
-            print(f"Failed: Port {port} is not open on {host}")
-        sock.close()
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-# Example usage:
-# Replace "example.com" and the port numbers with the ones you want to test
-test_port_connection("https://dicer0.com/", 80)  # Test HTTP port
-test_port_connection("https://dicer0.com/", 443)  # Test HTTPS port
-test_port_connection("smtp.office365.com", 587)  # Test SMTP port for Office365
+excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
+ancho_maximo = 40
+altura_maxima = 20
+ajustar_celdas_excel(excelFilePath2, ancho_maximo, altura_maxima)

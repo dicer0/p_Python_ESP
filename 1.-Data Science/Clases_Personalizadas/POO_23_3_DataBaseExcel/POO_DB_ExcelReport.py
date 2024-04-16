@@ -307,6 +307,7 @@ class DatabaseExcelHandler:
             #columnas en su constructor, se pasa directamente a su parámetro data.
             print("finalData =", finalData, "\n")
             finalDataFrame = pandas.DataFrame(data = finalData)
+            print("finalDataFrame =\n", finalDataFrame, "\n")
 
             #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
             #En Python no existen las constantes, pero por convención, cuando se quiere que su valor no se cambie, 

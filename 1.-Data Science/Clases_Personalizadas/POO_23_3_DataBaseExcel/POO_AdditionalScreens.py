@@ -221,7 +221,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
             #directorio en un archivo de Excel.
             resultDataFrame = self.__db_handler.process_data_and_save_to_excel(self.__excelFilePath)
             print("Tipo de dato database: ", type(resultDataFrame))
-            print(resultDataFrame)
+            print(resultDataFrame + "\n")
             #Se detecta que ha ocurrido un error cuando resultDataFrame es de tipo string, en vez de DataFrame. 
             if (type(resultDataFrame) == str):
                 #Si pasa un error al procesar los datos, se mostrará un cuadro de diálogo con un mensaje.
