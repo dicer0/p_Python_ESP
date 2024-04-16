@@ -281,7 +281,8 @@ class DatabaseExcelHandler:
                             "Content Status": contentStatus,
                             "Dato Static": indDicc["datoStatic"],
                             "Titulo": row["titulo"],
-                            "Fecha de Publicacion": row["fecha_publicacion"]
+                            "Fecha de Publicacion": row["fecha_publicacion"],
+                            "Static Column": "Static Text"
                         })
                 #Dentro del else se consideran los datos que no cumplan con las condiciones del filtro, para que 
                 #estos no sean despreciados, sino clasificados.
@@ -294,7 +295,8 @@ class DatabaseExcelHandler:
                         "Content Status": "Not categorized",
                         "Dato Static": "Not categorized",
                         "Titulo": row["titulo"],
-                        "Fecha de Publicacion": row["fecha_publicacion"]
+                        "Fecha de Publicacion": row["fecha_publicacion"],
+                        "Static Column": "Static Text"
                     })
             #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
             #columnas en su constructor, se pasa directamente a su parámetro data.
