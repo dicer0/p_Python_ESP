@@ -141,13 +141,18 @@ class DatabaseExcelHandler:
             #pyodbc.connect().cursor().description: El atributo description perteneciente al objeto cursor de la 
             #librería PyODBC sirve para proporcionar información sobre las columnas de un Query en una tupla de 
             #tuplas, las cuales indican lo siguiente en ese específico órden:
-            # - Nombre de la columna: El nombre de la columna tal como está en la base de datos.
-            # - Tipo de datos de la columna: El tipo de datos de la columna según la base de datos.
-            # - Tamaño de la columna (en bytes): El tamaño máximo de la columna en bytes.
-            # - Bytes reservados para la columna: El número de bytes reservados para la columna puede ser None.
-            # - Dígitos de precisión: El número de dígitos de precisión para tipos numéricos puede ser None.
-            # - Dígitos decimales: El número de dígitos decimales para tipos numéricos puede ser None.
-            # - Indicador de si la columna puede ser NULL: Si se puede contener valores NULL (True) o no (False).
+            # - Nombre de la columna = description[0]: El nombre de la columna tal como está en la base de datos.
+            # - Tipo de datos de la columna = description[1]: El tipo de datos de la columna según la base de 
+            #   datos.
+            # - Tamaño de la columna (en bytes) = description[2]: El tamaño máximo de la columna en bytes.
+            # - Bytes reservados para la columna = description[3]: El número de bytes reservados para la columna 
+            #   puede ser None.
+            # - Dígitos de precisión = description[4]: El número de dígitos de precisión para tipos numéricos 
+            #   puede ser None.
+            # - Dígitos decimales = description[5]: El número de dígitos decimales para tipos numéricos puede ser 
+            #   None.
+            # - Indicador de si la columna puede ser NULL = description[6]: Si se puede contener valores NULL 
+            #   (True) o no (False).
             cursorCols = [col[0] for col in self.cursor.description]  #Obtención del título de las columnas.
             #pandas.DataFrame: La clase DataFrame de la librería pandas representa una estructura de datos 
             #matricial en forma de tablas que pueden contener datos de diferentes tipos y se pueden manipular de 
@@ -167,7 +172,7 @@ class DatabaseExcelHandler:
             #         acceder de otra forma.
             # - dtype (opcional): Este parámetro especifica el tipo de datos para cada columna del DataFrame.
             dataFramePandas = pandas.DataFrame(data = cursorRows, columns = cursorCols)
-            print(dataFramePandas, "\n")
+            print("dataFramePandas =",dataFramePandas, "\n")
             #pandas.to_datetime(): Este método se utiliza para convertir un objeto iterable como una lista, tupla, 
             #DataFrame, Serie de Pandas, etc. que contiene fechas o tiempos en un objeto de tipo DateTime.
             #pandas.to_datetime().dt: El atributo .dt proporciona acceso a una serie de métodos para obtener o 
@@ -300,6 +305,7 @@ class DatabaseExcelHandler:
                     })
             #Cuando se crea un DataFrame a partir de un diccionario, no es necesario indicar explícitamente las 
             #columnas en su constructor, se pasa directamente a su parámetro data.
+            print("finalData =", finalData, "\n")
             finalDataFrame = pandas.DataFrame(data = finalData)
 
             #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
