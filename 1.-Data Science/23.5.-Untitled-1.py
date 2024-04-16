@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-
 import xlwings
 import time
 from PyQt5 import QtCore
 import psutil
+import subprocess
 
 class ExcelDataCopier(QtCore.QThread):
     signal = QtCore.pyqtSignal(str)
+
     def __init__(self, file_path, delay_segs):
         super().__init__()
         self.file_path = file_path
@@ -25,6 +25,17 @@ class ExcelDataCopier(QtCore.QThread):
                 pass
         return False
 
+    def close_excel(self):
+        try:
+            if self.workBook:
+                for app in xlwings.apps:
+                    app.quit()
+                subprocess.Popen('taskkill /f /im EXCEL.EXE', shell=True)
+                time.sleep(2)  # Esperar un momento para que Excel se cierre completamente
+        except Exception as e:
+            print(f"Error al cerrar Excel: {e}")
+            self.signal.emit(f"Error al cerrar Excel: {e}")
+
     def run(self):
         if self.check_excel_open():
             self.countdown_message = "El archivo de Excel está abierto. Cerrándolo..."
@@ -40,6 +51,8 @@ class ExcelDataCopier(QtCore.QThread):
             except Exception as e:
                 print(f"Error al cerrar el archivo de Excel: {e}")
                 self.signal.emit(f"Error al cerrar el archivo de Excel: {e}")
+
+        self.close_excel()
 
         # Ahora podemos abrir el archivo de Excel
         try:
@@ -59,21 +72,21 @@ class ExcelDataCopier(QtCore.QThread):
         for remaining in range(self.delay, 0, -1):
             self.countdown_message = f"Countdown: {remaining} segundos"
             self.signal.emit(self.countdown_message)
-            print(self.countdown_message, end = "\r")
+            print(self.countdown_message, end="\r")
             time.sleep(1)
         self.countdown_message = "Countdown finalizado. Cerrando Excel..."
         print(self.countdown_message)
         self.signal.emit(self.countdown_message)
-        
+
         try:
-            self.workBook.close()
+            if self.workBook:
+                self.workBook.close()
         except Exception as e:
             print(f"Error al cerrar el archivo de Excel: {e}")
             self.signal.emit(f"Error al cerrar el archivo de Excel: {e}")
-        
-        for app in xlwings.apps:
-            app.quit()
+
+        self.close_excel()
 
 excelFilePath2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
-copier = ExcelDataCopier(excelFilePath2, delay_segs = 10)
+copier = ExcelDataCopier(excelFilePath2, delay_segs=10)
 copier.run()
