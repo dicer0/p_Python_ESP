@@ -6,7 +6,7 @@
 #--windowed: Sirve para que cuando se ejecute el ejecutable, no se abra la consola.
 #--icon=path/icono.ico: Sirve para asignar un ícono al .exe, pero para ello el archivo debe tener extensión .ico.
 
-#PyQt5 - QtWidgets: La clase QtWidgets proporciona todos los elementos que conforman las interfaces gráficas 
+#PyQt5 - QtWidgets: La clase QtWidgets proporciona todos los elementos que conforman las interfaces gráficas
 #(GUI) hechas con la librería PyQt5, entre dichas herramientas se incluyen: 
 # - Widgets: Elementos gráficos básicos de los que se conforma una GUI como lo son botones (QPushButton), cajas 
 #   de texto (QLineEdit), texto estático (QLabel), listas desplegables (QComboBox), barras de progreso 
