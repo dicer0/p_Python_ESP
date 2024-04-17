@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#openpyxl: Es una biblioteca que permite automatizar tareas en Excel, como leer y escribir datos en hojas de 
+#xlwings: Es una biblioteca que permite automatizar tareas en Excel, como leer y escribir datos en hojas de 
 #cálculo, manipular gráficos, ejecutar macros y más, todo desde Python.
 import xlwings
 #time: Librería para el manejo de tiempos, como retardos, contadores, etc.
