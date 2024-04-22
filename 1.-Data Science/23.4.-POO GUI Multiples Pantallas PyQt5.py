@@ -157,7 +157,29 @@ class MainWindow(QtWidgets.QMainWindow):
         #en una ventana o layout.
         self.timezones_combo = QtWidgets.QComboBox()
         #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
-        #widgets de una interfaz gráfica de usuario (GUI).
+        #widgets de una interfaz gráfica de usuario (GUI). Cabe mencionar que al indicar el objeto del widget 
+        #(tipo de elemento), se puede añadir condiciones para que el diseño cambie:
+        # - "widget:estado { estilo }": A continuación se muestran algunos ejemplos.
+        #       - QPushButton:
+        #           - QPushButton:disabled { estilo_condicional }
+        #           - QPushButton:checked { estilo_condicional }
+        #           - QPushButton:checked:hover { estilo_condicional }
+        #           - QPushButton:checked:pressed { estilo_condicional }
+        #       - QCheckBox:
+        #           - QCheckBox:checked { estilo_condicional }
+        #           - QCheckBox:unchecked { estilo_condicional }
+        #       - QRadioButton:
+        #           - QRadioButton:checked { estilo_condicional }
+        #       -    QRadioButton:unchecked { estilo_condicional }
+        #       - QLineEdit:
+        #           - QLineEdit:read-only { estilo_condicional }
+        #           - QLineEdit:focus { estilo_condicional }
+        #       - QComboBox:
+        #           - QComboBox:editable { estilo_condicional }
+        #           - QComboBox:disabled { estilo_condicional }
+        #       - QProgressBar:
+        #           - QProgressBar::chunk { estilo_condicional }
+        #           - QProgressBar::chunk:disabled { estilo_condicional }
         # - La siguiente línea de código es un método alternativo a usar la herramienta linear-gradient, ya que 
         #   esta no es admitida por PyQt5:
         #   background: qlineargradient(x1:punto_inicial, y1:punto_inicial, x2:punto_final, y2:punto_final, stop:0 rgb(R_inicial,G_inicial,B_inicial), stop:1 rgb(R_final,G_final,B_final));
@@ -237,11 +259,25 @@ class MainWindow(QtWidgets.QMainWindow):
         doctButtonStyle = "background-color: transparent; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
         docButton1.setStyleSheet(doctButtonStyle)
         docButton2.setStyleSheet(doctButtonStyle)
+        #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
+        #widgets de una interfaz gráfica de usuario (GUI). Cabe mencionar que al indicar el objeto del widget 
+        #(tipo de elemento), se puede añadir condiciones para que el diseño cambie:
+        # - "widget:estado { estilo }": A continuación se muestran algunos ejemplos.
+        #       - QPushButton:
+        #           - QPushButton:disabled { estilo_condicional }
+        #           - QPushButton:checked { estilo_condicional }
+        #           - QPushButton:hover { estilo_condicional }
+        #           - QPushButton:pressed { estilo_condicional }
         createButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
-        createButton1.setStyleSheet(createButtonStyle)
-        createButton2.setStyleSheet(createButtonStyle)
-        
-
+        pressedCreateButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: #00395D;"
+        createButton1.setStyleSheet(
+            f"QPushButton {{ {createButtonStyle} }}"
+            f"QPushButton:hover {{ {pressedCreateButtonStyle} }}"
+        )
+        createButton2.setStyleSheet(
+            f"QPushButton {{ {createButtonStyle} }}"
+            f"QPushButton:pressed {{ {pressedCreateButtonStyle} }}"
+        )
 
         #CONTENEDORES DE ELEMENTOS: La biblioteca PyQt5 ofrece varios tipos de contenedores que se pueden 
         #utilizar para organizar los widgets en una interfaz gráfica. Los más comunes son:

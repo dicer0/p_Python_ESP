@@ -1,12 +1,30 @@
-import pandas as pd
+from PyQt5 import QtWidgets
 
-# Supongamos que df es tu DataFrame
-df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+def main():
+    app = QtWidgets.QApplication([])
 
-# Nueva fila que quieres añadir
-nueva_fila = pd.DataFrame({'A': ['nuevo_valor_A'], 'B': ['nuevo_valor_B']})
+    # Creamos un botón
+    button = QtWidgets.QPushButton("Presionar")
 
-# Concatenar la nueva fila con el DataFrame original
-df = pd.concat([nueva_fila, df], ignore_index=True)
+    # Estilo CSS para el botón cuando está presionado
+    style = "background-color: red;"
+    pressed_style = "background-color: black;"
+    button.setStyleSheet(
+        f"QPushButton {{ {style} }}"
+        f"QPushButton:pressed {{ {pressed_style} }}"
+    )
 
-print(df)
+    # Creamos el diseño
+    layout = QtWidgets.QVBoxLayout()
+    layout.addWidget(button)
+
+    # Creamos la ventana
+    window = QtWidgets.QWidget()
+    window.setLayout(layout)
+    window.setWindowTitle("Botón Presionado")
+    window.show()
+
+    app.exec_()
+
+if __name__ == "__main__":
+    main()

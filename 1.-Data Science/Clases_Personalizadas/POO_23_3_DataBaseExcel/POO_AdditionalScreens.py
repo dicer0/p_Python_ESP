@@ -79,8 +79,21 @@ class SecondaryWindow(QtWidgets.QMainWindow):
     def __createWidgets(self):
         #CREACIÓN DE WIDGETS DE LAS VENTANAS ADICIONALES, QUE NO SON LA TABLA:
         confirmButton = QtWidgets.QPushButton("Texto del botón")    #Botón.
+        #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
+        #widgets de una interfaz gráfica de usuario (GUI). Cabe mencionar que al indicar el objeto del widget 
+        #(tipo de elemento), se puede añadir condiciones para que el diseño cambie:
+        # - "widget:estado { estilo }": A continuación se muestran algunos ejemplos.
+        #       - QPushButton:
+        #           - QPushButton:disabled { estilo_condicional }
+        #           - QPushButton:checked { estilo_condicional }
+        #           - QPushButton:hover { estilo_condicional }
+        #           - QPushButton:pressed { estilo_condicional }
         createButtonStyle = "max-width: 250px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; border-radius: 25px; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
-        confirmButton.setStyleSheet(createButtonStyle)              #Estilo del botón.
+        pressedCreateButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: #00395D;"
+        confirmButton.setStyleSheet(                            
+            f"QPushButton {{ {createButtonStyle} }}"                #Estilo del botón.
+            f"QPushButton:hover {{ {pressedCreateButtonStyle} }}"   #Estilo del botón con hover (con el mouse encima).
+        )
         text_content1 =  """<p style = 'font-size: 25px; font-family: Consolas, monospace; color: white; font-weight: bold;'> 
                                 Visualizador del Reporte de Excel:
                             </p>"""
