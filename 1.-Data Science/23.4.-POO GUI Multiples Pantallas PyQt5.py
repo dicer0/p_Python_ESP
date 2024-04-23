@@ -265,7 +265,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #           - QPushButton:hover { estilo_condicional }
         #           - QPushButton:pressed { estilo_condicional }
         doctButtonStyle = "background-color: transparent; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
-        hoverDoctButtonStyle = "background-color: #00AEEF; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
+        hoverDoctButtonStyle = "background-color: #eaedef; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
         docButton1.setStyleSheet(
             f"QPushButton {{ {doctButtonStyle} }}"
             f"QPushButton:hover {{ {hoverDoctButtonStyle} }}"
