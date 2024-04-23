@@ -40,6 +40,7 @@ from PyQt5 import QtCore
 #íconos y otros elementos visuales utilizados en una interfaz gráfica (GUI) de PyQt5.
 from PyQt5 import QtGui
 import sys #sys: Librería que permite interactuar directamente con el sistema operativo y consola del ordenador.
+import webbrowser #webbrowser: Librería que permite abrir y utilizar navegadores web en Python.
 
 #IMPORTACIÓN DE CLASES: Cuando se quiera importar una clase, el nombre de esta no puede empezar con un número, 
 #sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas o también llamados paquetes 
@@ -255,11 +256,6 @@ class MainWindow(QtWidgets.QMainWindow):
         docButton2 = QtWidgets.QPushButton(text = "", icon = logoButton, iconSize = QtCore.QSize(30, 30))
         createButton2 = QtWidgets.QPushButton(text = "Create")
         #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
-        #widgets de una interfaz gráfica de usuario (GUI).
-        doctButtonStyle = "background-color: transparent; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
-        docButton1.setStyleSheet(doctButtonStyle)
-        docButton2.setStyleSheet(doctButtonStyle)
-        #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
         #widgets de una interfaz gráfica de usuario (GUI). Cabe mencionar que al indicar el objeto del widget 
         #(tipo de elemento), se puede añadir condiciones para que el diseño cambie:
         # - "widget:estado { estilo }": A continuación se muestran algunos ejemplos.
@@ -268,15 +264,27 @@ class MainWindow(QtWidgets.QMainWindow):
         #           - QPushButton:checked { estilo_condicional }
         #           - QPushButton:hover { estilo_condicional }
         #           - QPushButton:pressed { estilo_condicional }
+        doctButtonStyle = "background-color: transparent; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
+        hoverDoctButtonStyle = "background-color: #00AEEF; max-width: 50px; height: 50px; border: 2px solid #e6ebf3; border-radius: 23px;"
+        docButton1.setStyleSheet(
+            f"QPushButton {{ {doctButtonStyle} }}"
+            f"QPushButton:hover {{ {hoverDoctButtonStyle} }}"
+        )
+        docButton2.setStyleSheet(
+            f"QPushButton {{ {doctButtonStyle} }}"
+            f"QPushButton:pressed {{ {hoverDoctButtonStyle} }}"
+        )
+        #widget.setStyleSheet(): Método que permite aplicar código CSS (la mayoría de métodos, no todos) a los 
+        #widgets de una interfaz gráfica de usuario (GUI).
         createButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0,187,255), stop:1 rgb(0,125,173));"
-        pressedCreateButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: #00395D;"
+        hoverCreateButtonStyle = "min-width: 100px; height: 50px; font-size: 17px; font-weight: bold; font-family: Consolas, monospace; color: white; background: #00395D;"
         createButton1.setStyleSheet(
             f"QPushButton {{ {createButtonStyle} }}"
-            f"QPushButton:hover {{ {pressedCreateButtonStyle} }}"
+            f"QPushButton:hover {{ {hoverCreateButtonStyle} }}"
         )
         createButton2.setStyleSheet(
             f"QPushButton {{ {createButtonStyle} }}"
-            f"QPushButton:pressed {{ {pressedCreateButtonStyle} }}"
+            f"QPushButton:pressed {{ {hoverCreateButtonStyle} }}"
         )
 
         #CONTENEDORES DE ELEMENTOS: La biblioteca PyQt5 ofrece varios tipos de contenedores que se pueden 
@@ -452,6 +460,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #Al presionar el botón se ejecutará el método botonPresionado, declarado dentro de la misma clase.
         createButton1.clicked.connect(self.open_window1)
         createButton2.clicked.connect(self.open_window2)
+        docButton1.clicked.connect(self.open_documentation_link1)
+        docButton2.clicked.connect(self.open_documentation_link2)
 
     #función open_window1(): Método creado dentro de la clase propia llamada MainWindow que recibe como 
     #parámetro el evento que lo activa, para posteriormente ejecutar cierta acción.
@@ -479,7 +489,7 @@ class MainWindow(QtWidgets.QMainWindow):
         anchoMaximoCelda = 40                                           #Ancho máximo de la celda de 40 letras.
         adjuster = ExcelCellAdjuster(EXCEL_FILE_PATH_1, anchoMaximoCelda)  #Instancia de la clase ExcelCellAdjuster.
         adjuster.ajustar_celdas()                                       #Método ajustar_celdas().
-        
+    #función open_window2(): Abre una ventana con una tabla vacía.
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
         CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
@@ -490,6 +500,18 @@ class MainWindow(QtWidgets.QMainWindow):
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.
+
+    #función open_documentation_link1(): Método creado dentro de la clase propia llamada MainWindow que recibe como 
+    #parámetro el evento que lo activa, para posteriormente ejecutar cierta acción. La acción es simplemente abrir 
+    #el navegador en un sitio web.
+    def open_documentation_link1(self):
+        #webbrowser.open(): Método que abre el navegador web predeterminado del sistema operativo en la dirección 
+        #URL especificada.
+        webbrowser.open("https://dicer0.com/")
+    def open_documentation_link2(self):
+        #webbrowser.open(): Método que abre el navegador web predeterminado del sistema operativo en la dirección 
+        #URL especificada.
+        webbrowser.open("https://github.com/dicer0")
 
 
 #__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 

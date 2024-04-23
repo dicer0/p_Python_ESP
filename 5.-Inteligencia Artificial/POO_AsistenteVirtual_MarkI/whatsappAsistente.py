@@ -22,9 +22,9 @@ class widgetWhatsApp:
             #Solo en la primera línea de texto se abre el navegador y se espera que se habra bien para mandar el 
             #primer mensaje.
             if(i == 0):
-                #webbrowser.open(): Método que abre un navegador web en la dirección URL especificada. El truco que 
-                #se realiza para mandar mensajes de whatsapp es que la URL de su sitio permite ingresar el mensaje y 
-                #teléfono de la persona a la que se busca mandar el WhatsApp. 
+                #webbrowser.open(): Método que abre el navegador web predeterminado del sistema operativo en la 
+                #dirección URL especificada. El truco que se realiza para mandar mensajes de whatsapp es que la URL de 
+                #su sitio permite ingresar el mensaje y teléfono de la persona a la que se busca mandar el WhatsApp.
                 webbrowser.open(f"https://web.whatsapp.com/send?phone={self.contacto}&text={mensaje[i]}")
                 #time.sleep(): Método que permite detener el programa cierto número de segundos.
                 time.sleep(15)
