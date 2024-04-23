@@ -80,7 +80,7 @@ class DatabaseExcelHandler:
             #El atributo connected se cambia manualmente a True cuando se ha realizado la conexión exitosamente.
             self.connected = True
         except Exception as error:
-            print("Error occurred while opening the MySQL database:\n" + str(error) + "\n") 
+            print("Error occurred while opening the MySQL database:\n" + str(error) + "\n")
 
     #Los métodos que no tienen dos guiones bajos al inicio de su nombre son públicos, lo que significa que se 
     #pueden llamar y utilizar desde fuera de la clase. 
