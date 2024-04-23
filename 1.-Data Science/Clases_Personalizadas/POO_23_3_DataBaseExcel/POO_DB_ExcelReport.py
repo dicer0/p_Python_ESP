@@ -101,7 +101,7 @@ class DatabaseExcelHandler:
             #se ha realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta 
             #información, esto se realiza a través de la variable que haya utilizado el método .connect() y el 
             #método .cursor() de la librería pyodbc.
-            SQL_QUERY_STRING =  self.sql_query
+            SQL_QUERY_STRING = self.sql_query
             # SQL_QUERY_STRING =  """SELECT 	  * 
             #                         FROM 	    posts
             #                         ORDER BY  titulo DESC;"""
