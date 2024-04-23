@@ -52,6 +52,16 @@ from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_DB_ExcelReport import Data
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_AdditionalScreens import SecondaryWindow
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_ExcelCellAdjust import ExcelCellAdjuster
 from Clases_Personalizadas.POO_23_3_DataBaseExcel.POO_CopyExcelTable import ExcelDataCopier
+#AutomationConstants(): Clase propia que hereda de enum.Enum para poder declarar enums en el código para ayudar 
+#en la legibilidad del código, además de que de esta manera se pueden separar datos sensibles que necesitan más 
+#seguridad como claves, contraseñas, etc. en un archivo por separado. La sintaxis para usar un enum es:
+# - Clase donde se declaran los enums dentro de un archivo file_enums.py:
+#       class nombreClasePersonalizadaQueHeredaDeEnum(enum.Enum):
+#           NOMBRE_CONSTANTE = VALOR
+# - Clase donde se importan los enums para utilizarlos:
+#       from file_enums import nombreClasePersonalizadaQueHeredaDeEnum
+#       constanteEnum = nombreClasePersonalizadaQueHeredaDeEnum.NOMBRE_CONSTANTE.value
+from Clases_Personalizadas.POO_23_3_DataBaseExcel.Constants_and_Keys.ENUM_Constants import AutomationConstants
 
 #MainWindow: La clase hereda de la clase QMainWindow, que a su vez hereda de la clase QtWidgets y ambas 
 #pertenecen a la librería PyQt5. El elemento representa la ventana del GUI y crea una instancia de la clase 
@@ -469,11 +479,17 @@ class MainWindow(QtWidgets.QMainWindow):
     #que es instancia de la clase SecondaryWindow.
     def open_window1(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-        CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
-        db_handler1 = DatabaseExcelHandler(CONNECTION_STRING)   #Objeto para extraer datos de la DB y crear un Excel.
-        EXCEL_FILE_PATH_1 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 1.xlsx"
+        #Constantes del archivo ENUM_Constants.py:
+        CONNECTION_STRING = AutomationConstants.CONNECTION_STRING.value #Constante PyODBC con server y database.
+        SQL_QUERY_STRING = AutomationConstants.SQL_QUERY_STRING.value   #Constante con un SQL query.
+        COMPAREDICC = AutomationConstants.COMPAREDICC.value             #Constante con un diccionario de filtrado.
+        STATICDATA_ABOVE_AND_BELOW = AutomationConstants.STATICDATA_ABOVE_AND_BELOW.value   #Static Data.
+        #DatabaseExcelHandler(): Objeto para extraer datos de la DB y crear un Excel.
+        db_handler1 = DatabaseExcelHandler(CONNECTION_STRING, SQL_QUERY_STRING, COMPAREDICC, STATICDATA_ABOVE_AND_BELOW)
+        EXCEL_FILE_PATH_1 = AutomationConstants.EXCEL_FILE_PATH_1.value #Constante del archivo ENUM_Constants.py
         table_copier1 = ExcelDataCopier(EXCEL_FILE_PATH_1, delay_segs = 20) #Objeto para copiar la tabla del Excel.
-        secondary_window = SecondaryWindow("Ventana 1", db_handler1, table_copier1, EXCEL_FILE_PATH_1, showTable = True) #Creación de ventana 1.
+        #SecondaryWindow(): Creación de ventana adicional.
+        secondary_window = SecondaryWindow("Ventana 1", db_handler1, table_copier1, EXCEL_FILE_PATH_1, STATICDATA_ABOVE_AND_BELOW, showTable = True) 
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         #En el código de la ventana principal MainWindow se creó una variable de lista vacía llamada 
@@ -492,11 +508,17 @@ class MainWindow(QtWidgets.QMainWindow):
     #función open_window2(): Abre una ventana con una tabla vacía.
     def open_window2(self):
         #ABRIR SEGUNDA PANTALLA - INYECCIÓN DE DEPENDENCIAS CLASES PROPIAS DatabaseExcelHandler y SecondaryWindow:
-        CONNECTION_STRING = 'DRIVER={MySQL ODBC 8.3 Unicode Driver};SERVER=localhost;PORT=3306;DATABASE=1_platziblog_db;USER=root;PASSWORD=Diego1234;'
-        db_handler2 = DatabaseExcelHandler(CONNECTION_STRING)   #Objeto para extraer datos de la DB y crear un Excel.
+        #Constantes del archivo ENUM_Constants.py:
+        CONNECTION_STRING = AutomationConstants.CONNECTION_STRING.value #Constante PyODBC con server y database.
+        SQL_QUERY_STRING = AutomationConstants.SQL_QUERY_STRING.value   #Constante con un SQL query.
+        COMPAREDICC = AutomationConstants.COMPAREDICC.value             #Constante con un diccionario de filtrado.
+        STATICDATA_ABOVE_AND_BELOW = AutomationConstants.STATICDATA_ABOVE_AND_BELOW.value   #Static Data.
+        #DatabaseExcelHandler: Objeto para extraer datos de la DB y crear un Excel.
+        db_handler2 = DatabaseExcelHandler(CONNECTION_STRING, SQL_QUERY_STRING, COMPAREDICC, STATICDATA_ABOVE_AND_BELOW)
         EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
         table_copier2 = ExcelDataCopier(EXCEL_FILE_PATH_2, delay_segs = 20) #Objeto para copiar la tabla del Excel.
-        secondary_window = SecondaryWindow("Ventana 2", db_handler2, table_copier2, EXCEL_FILE_PATH_2, showTable = False) #Creación de ventana 2.
+        #SecondaryWindow(): Creación de ventana adicional.
+        secondary_window = SecondaryWindow("Ventana 2", db_handler2, table_copier2, EXCEL_FILE_PATH_2, STATICDATA_ABOVE_AND_BELOW, showTable = False)
         secondary_window.setStyleSheet("background: qlineargradient(x1:1, y1:1, x2:0, y2:0, stop:0 rgb(255, 255, 255), stop:1 rgb(179, 185, 188));")
         secondary_window.showMaximized()                #showMaximized(): Método para abrir maximizada una ventana.
         self.open_windows.append(secondary_window)      #Instancia añadida a la lista de ventanas abiertas.

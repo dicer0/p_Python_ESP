@@ -45,9 +45,12 @@ class DatabaseExcelHandler:
     #servir para cualquier cosa, pero si se declaran en el constructor, estos a fuerza deben tener un valor.
     #self: Se refiere al objeto futuro que se cree a partir de esta clase, es similar al concepto de this en 
     #otros lenguajes de programación.
-    def __init__(self, db_connection_string):
+    def __init__(self, db_connection_string, sql_query, filter_dicc, staticData_aboveBelow):
         #De esta manera se asignan valores a los atributos que recibe el constructor de la clase como parámetro:
         self.db_connection_string = db_connection_string    #Atributo: URL de conexión para la base de datos.
+        self.sql_query = sql_query                          #Atributo: Consulta realizada a la base de datos.
+        self.filter_dicc = filter_dicc                      #Atributo: Diccionario de filtrado/adición de datos.
+        self.staticData_aboveBelow = staticData_aboveBelow  #Atributo: Datos estáticos añadidos encima y abajo.
         self.connected = False  #Atributo connected: Bandera que indica si la base de datos se pudo conectar.
     
     #Los métodos privados se indican mediante dos guiones bajos al inicio del nombre de la función y esto lo 
@@ -98,9 +101,11 @@ class DatabaseExcelHandler:
             #se ha realizado de forma exitosa, podremos utilizar comandos SQL para filtrar y obtener cierta 
             #información, esto se realiza a través de la variable que haya utilizado el método .connect() y el 
             #método .cursor() de la librería pyodbc.
-            SQL_QUERY_STRING =  """SELECT 	  * 
-                                    FROM 	    posts
-                                    ORDER BY  titulo DESC;"""
+            SQL_QUERY_STRING =  self.sql_query
+            # SQL_QUERY_STRING =  """SELECT 	  * 
+            #                         FROM 	    posts
+            #                         ORDER BY  titulo DESC;"""
+
             #pyodbc.connect().cursor().execute(): Ya que se haya realizado la conexión con la base de datos a 
             #través de un objeto cursor, se puede realizar una consulta a la base de datos con SQL.
             self.cursor.execute(SQL_QUERY_STRING)
@@ -220,20 +225,21 @@ class DatabaseExcelHandler:
             #y posteriormente mostrada a su vez en una GUI de PyQt5.
             #En Python no existen las constantes, pero por convención, cuando se quiere que su valor no se cambie, 
             #este se pone en mayúsculas.
-            COMPAREDICC = [{
-                "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
-                "datoStatic": "Dato grupo 1",         
-                "estatusFilter": "activo",              #Datos de filtrado.
-                "userIdFilter": 1,
-                "categoryIdFilter": 2
-            },
-            {
-                "tituloStatic": "Grupo de Datos 2",     #Datos que así se pasan al diccionario final.
-                "datoStatic": "Dato grupo 2",         
-                "estatusFilter": "inactivo",            #Datos de filtrado.
-                "userIdFilter": 2,
-                "categoryIdFilter": 3
-            }]
+            COMPAREDICC = self.filter_dicc
+            # COMPAREDICC = [{
+            #     "tituloStatic": "Grupo de Datos 1",     #Datos que así se pasan al diccionario final.
+            #     "datoStatic": "Dato grupo 1",         
+            #     "estatusFilter": "activo",              #Datos de filtrado.
+            #     "userIdFilter": 1,
+            #     "categoryIdFilter": 2
+            # },
+            # {
+            #     "tituloStatic": "Grupo de Datos 2",     #Datos que así se pasan al diccionario final.
+            #     "datoStatic": "Dato grupo 2",         
+            #     "estatusFilter": "inactivo",            #Datos de filtrado.
+            #     "userIdFilter": 2,
+            #     "categoryIdFilter": 3
+            # }]
 
             #CREAR UN DICCIONARIO QUE COMBINE DATOS DE LA DATABASE CON OTROS A TRAVÉS DE UN DICCIONARIO DE FILTRADO:
             finalData = []  #Diccionario que almacenará los datos que trae PyODBC del DataBase.
@@ -312,42 +318,46 @@ class DatabaseExcelHandler:
             #AÑADIR DATOS ESTÁTICOS A UN REPORTE DONDE SE RELLENAN DE FORMA DINÁMICA ALGUNAS TABLAS:
             #En Python no existen las constantes, pero por convención, cuando se quiere que su valor no se cambie, 
             #este se pone en mayúsculas.
-            STATICDATA_ABOVE_1 = [
-                ['Title A1.1', 'Title A1.2', 'Title A1.3'],
-                ['Static Row 1', '', ''],
-                ['Static Row 2', '', ''],
-                ['Static Row 3', '', ''],
-                ['Static Row 4', '', ''],
-                ['Static Row 5', '', ''],
-                ['Static Row 6', '', '']
-            ]
-            STATICDATA_ABOVE_2 = [
-                ['Title A2', '', '', '', '', '', ''],
-                ['Subtitle A2.1', '', '', '', '', '', ''],
-                ['Static Row 1', '', '', '', '', '', ''],
-                ['', '', '', '', '', '', ''],
-                ['Subtitle A2.2', '', '', '', '', '', ''],
-                ['Static Row 2', '', '', '', '', '', ''],
-                ['', '', '', '', '', '', ''],
-                ['Subtitle A2.3', '', '', '', '', '', ''],
-                ['Static Row 3', '', '', '', '', '', ''],
-                ['', '', '', '', '', '', ''],
-                ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
-            ]
-            STATICDATA_BELOW_1 = [
-                ['Title B1', '', '', '', '', '', ''],
-                ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
-                ['Subtitle 1', '', '', '', '', '', ''],
-                ['Static Row 1', '', '', '', '', '', ''],
-                ['Static Row 2', '', '', '', '', '', ''],
-                ['Static Row 3', '', '', '', '', '', ''],
-                ['Static Row 4', '', '', '', '', '', ''],
-                ['Static Row 5', '', '', '', '', '', ''],
-                ['Static Row 6', '', '', '', '', '', ''],
-                ['Static Row 7', '', '', '', '', '', ''],
-                ['Subtitle 2', '', '', '', '', '', ''],
-                ['Static Row 1', '', '', '', '', '', '']
-            ]
+            STATICDATA_ABOVE_1 = self.staticData_aboveBelow[0]
+            # STATICDATA_ABOVE_1 = [
+            #     ['Title A1.1', 'Title A1.2', 'Title A1.3'],
+            #     ['Static Row 1', '', ''],
+            #     ['Static Row 2', '', ''],
+            #     ['Static Row 3', '', ''],
+            #     ['Static Row 4', '', ''],
+            #     ['Static Row 5', '', ''],
+            #     ['Static Row 6', '', '']
+            # ]
+            STATICDATA_ABOVE_2 = self.staticData_aboveBelow[1]
+            # STATICDATA_ABOVE_2 = [
+            #     ['Title A2', '', '', '', '', '', ''],
+            #     ['Subtitle A2.1', '', '', '', '', '', ''],
+            #     ['Static Row 1', '', '', '', '', '', ''],
+            #     ['', '', '', '', '', '', ''],
+            #     ['Subtitle A2.2', '', '', '', '', '', ''],
+            #     ['Static Row 2', '', '', '', '', '', ''],
+            #     ['', '', '', '', '', '', ''],
+            #     ['Subtitle A2.3', '', '', '', '', '', ''],
+            #     ['Static Row 3', '', '', '', '', '', ''],
+            #     ['', '', '', '', '', '', ''],
+            #     ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
+            # ]
+            STATICDATA_BELOW_1 = self.staticData_aboveBelow[2]
+            # STATICDATA_BELOW_1 = [
+            #     ['Title B1', '', '', '', '', '', ''],
+            #     ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
+            #     ['Subtitle 1', '', '', '', '', '', ''],
+            #     ['Static Row 1', '', '', '', '', '', ''],
+            #     ['Static Row 2', '', '', '', '', '', ''],
+            #     ['Static Row 3', '', '', '', '', '', ''],
+            #     ['Static Row 4', '', '', '', '', '', ''],
+            #     ['Static Row 5', '', '', '', '', '', ''],
+            #     ['Static Row 6', '', '', '', '', '', ''],
+            #     ['Static Row 7', '', '', '', '', '', ''],
+            #     ['Subtitle 2', '', '', '', '', '', ''],
+            #     ['Static Row 1', '', '', '', '', '', '']
+            # ]
+
             #Para añadir las distintas tablas tanto dinámicas como estáticas se deberá extraer el tamaño del 
             #DataFrame, esto se hará a través de su atributo pandas.DataFrame().shape, el cual devuelve una tupla 
             #que indica su número de filas y columnas: (filas, columnas) = pandas.DataFrame().shape

@@ -34,7 +34,7 @@ from PyQt5 import QtGui
 #pueden crear instancias que abran ventanas distintas, esta recibe un parámetro que nombra cada ventana.
 class SecondaryWindow(QtWidgets.QMainWindow):
     #__init__(): Constructor de la clase SecondaryWindow.
-    def __init__(self, title, db_handler, table_copier, excelFilePath, showTable = False):
+    def __init__(self, title, db_handler, table_copier, excelFilePath, staticData_aboveBelow, showTable = False):
         super().__init__()                      #super(): Herencia de la clase QtWidgets.QMainWindow.
         #ATRIBUTOS PRIVADOS DEL CONSTRUCTOR:
         #Los métodos o atributos cuyo nombre empieza con dos guiones bajos __, indican que son métodos privados, 
@@ -45,6 +45,7 @@ class SecondaryWindow(QtWidgets.QMainWindow):
         self.__db_handler = db_handler          #self.__db_handler: Atributo de un objeto DatabaseExcelHandler.
         self.__table_copier = table_copier      #self.__table_copier: Atributo de un objeto ExcelDataCopier.
         self.__excelFilePath = excelFilePath    #self.__excelFilePath: Atributo que indica el path del Excel.
+        self.staticData_aboveBelow = staticData_aboveBelow  #Atributo: Datos estáticos añadidos encima y abajo.
         #MÉTODOS EJECUTADOS POR DEFECTO EN EL CONSTRUCTOR:
         self.setWindowTitle(title)              #Título de la ventana, que recibe la clase como parámetro.
         self.__createWidgets()                  #__createWidgets(): Método que crea los widgets constantes.
@@ -240,43 +241,49 @@ class SecondaryWindow(QtWidgets.QMainWindow):
                 #Si pasa un error al procesar los datos, se mostrará un cuadro de diálogo con un mensaje.
                 self.__showErrorMessageBox(resultDataFrame)
             else:
-                #DATOS ESTÁTICOS QUE SE VAN A COLOCAR ENCIMA Y DEBAJO DEL REPORTE EXTRAÍDO DEL DATABASE:
-                STATICDATA_ABOVE_1 = [
-                    ['Title A1.1', 'Title A1.2', 'Title A1.3'],
-                    ['Static Row 1', '', ''],
-                    ['Static Row 2', '', ''],
-                    ['Static Row 3', '', ''],
-                    ['Static Row 4', '', ''],
-                    ['Static Row 5', '', ''],
-                    ['Static Row 6', '', '']
-                ]
-                STATICDATA_ABOVE_2 = [
-                    ['Title A2', '', '', '', '', '', ''],
-                    ['Subtitle A2.1', '', '', '', '', '', ''],
-                    ['Static Row 1', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', ''],
-                    ['Subtitle A2.2', '', '', '', '', '', ''],
-                    ['Static Row 2', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', ''],
-                    ['Subtitle A2.3', '', '', '', '', '', ''],
-                    ['Static Row 3', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', ''],
-                    ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
-                ]
-                STATICDATA_BELOW_1 = [
-                    ['Title B1', '', '', '', '', '', ''],
-                    ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
-                    ['Subtitle 1', '', '', '', '', '', ''],
-                    ['Static Row 1', '', '', '', '', '', ''],
-                    ['Static Row 2', '', '', '', '', '', ''],
-                    ['Static Row 3', '', '', '', '', '', ''],
-                    ['Static Row 4', '', '', '', '', '', ''],
-                    ['Static Row 5', '', '', '', '', '', ''],
-                    ['Static Row 6', '', '', '', '', '', ''],
-                    ['Static Row 7', '', '', '', '', '', ''],
-                    ['Subtitle 2', '', '', '', '', '', ''],
-                    ['Static Row 1', '', '', '', '', '', '']
-                ]
+                #DATOS ESTÁTICOS QUE SE VAN A COLOCAR ENCIMA Y DEBAJO DEL REPORTE DINÁMICO EXTRAÍDO DEL DATABASE:
+                #En Python no existen las constantes, pero por convención, cuando se quiere que su valor no se 
+                #cambie, este se pone en mayúsculas.
+                STATICDATA_ABOVE_1 = self.staticData_aboveBelow[0]
+                # STATICDATA_ABOVE_1 = [
+                #     ['Title A1.1', 'Title A1.2', 'Title A1.3'],
+                #     ['Static Row 1', '', ''],
+                #     ['Static Row 2', '', ''],
+                #     ['Static Row 3', '', ''],
+                #     ['Static Row 4', '', ''],
+                #     ['Static Row 5', '', ''],
+                #     ['Static Row 6', '', '']
+                # ]
+                STATICDATA_ABOVE_2 = self.staticData_aboveBelow[1]
+                # STATICDATA_ABOVE_2 = [
+                #     ['Title A2', '', '', '', '', '', ''],
+                #     ['Subtitle A2.1', '', '', '', '', '', ''],
+                #     ['Static Row 1', '', '', '', '', '', ''],
+                #     ['', '', '', '', '', '', ''],
+                #     ['Subtitle A2.2', '', '', '', '', '', ''],
+                #     ['Static Row 2', '', '', '', '', '', ''],
+                #     ['', '', '', '', '', '', ''],
+                #     ['Subtitle A2.3', '', '', '', '', '', ''],
+                #     ['Static Row 3', '', '', '', '', '', ''],
+                #     ['', '', '', '', '', '', ''],
+                #     ['Static Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non laoreet mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur vulputate bibendum nibh elementum pulvinar. Integer a leo in orci ultricies fermentum. Ut vitae velit et sapien congue accumsan sed tincidunt dui. Ut elementum imperdiet nunc, non hendrerit enim ultrices at. Sed rhoncus vehicula.', '', '', '', '', '', '']
+                # ]
+                STATICDATA_BELOW_1 = self.staticData_aboveBelow[2]
+                # STATICDATA_BELOW_1 = [
+                #     ['Title B1', '', '', '', '', '', ''],
+                #     ['Title B1.1', 'Title B1.2', 'Title B1.3', 'Title B1.4', 'Title B1.5', 'Title B1.6', 'Title B1.7'],
+                #     ['Subtitle 1', '', '', '', '', '', ''],
+                #     ['Static Row 1', '', '', '', '', '', ''],
+                #     ['Static Row 2', '', '', '', '', '', ''],
+                #     ['Static Row 3', '', '', '', '', '', ''],
+                #     ['Static Row 4', '', '', '', '', '', ''],
+                #     ['Static Row 5', '', '', '', '', '', ''],
+                #     ['Static Row 6', '', '', '', '', '', ''],
+                #     ['Static Row 7', '', '', '', '', '', ''],
+                #     ['Subtitle 2', '', '', '', '', '', ''],
+                #     ['Static Row 1', '', '', '', '', '', '']
+                # ]
+                
                 #TAMAÑO DE LA TABLA QUE CONTIENE TODAS LAS AGRUPACIONES DE DATOS:
                 #pandas.DataFrame().columns: El atributo .columns devuelve un objeto de tipo Index que representa 
                 #los nombres de las columnas de un DataFrame. Los objetos Index de igual manera se pueden utilizar
