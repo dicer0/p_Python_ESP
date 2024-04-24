@@ -1,6 +1,7 @@
 import pyautogui
 import math
 import keyboard
+#time: Librería para el manejo de tiempos, como retardos, contadores, etc.
 import time
 
 # Get the screen resolution
