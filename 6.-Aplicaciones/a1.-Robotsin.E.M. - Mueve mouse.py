@@ -1,6 +1,7 @@
 import pyautogui
-import math
 import keyboard
+#math: Librería que proporciona funciones y constantes matemáticas como seno, π, logaritmo, etc.
+import math
 #time: Librería para el manejo de tiempos, como retardos, contadores, etc.
 import time
 
