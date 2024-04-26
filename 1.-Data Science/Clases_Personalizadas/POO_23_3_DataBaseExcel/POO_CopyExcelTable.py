@@ -180,7 +180,7 @@ class ExcelDataCopier(QtCore.QThread):
             #   asincrónica. 
             print(self.countdown_message, end = "\r")
             #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo 
-            #de tiempo específico dado en segundos. 
+            #de tiempo específico dado en segundos.
             time.sleep(1)
         #Al terminar de ejecutar el conteo, se actualiza el mensaje mostrado en consola y la GUI.
         self.countdown_message = "Countdown finished. Closing Excel..."

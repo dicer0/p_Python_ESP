@@ -32,6 +32,8 @@ while not keyboard.is_pressed('s'):
     # Wrap angle to keep it within 0 to 2*pi
     angle %= (2 * math.pi)
     # Add a slight delay to control the speed
+    #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo 
+    #de tiempo específico dado en segundos.
     time.sleep(0.01)
 
 print("Program stopped.")
