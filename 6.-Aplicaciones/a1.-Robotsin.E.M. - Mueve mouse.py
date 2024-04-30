@@ -10,6 +10,7 @@
 #Para comentar en Visual Studio Code varias líneas de código se debe pulsar:
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
+
 import pyautogui
 #keyboard: Librería que permite detectar pulsaciones de teclas en el teclado.
 import keyboard
