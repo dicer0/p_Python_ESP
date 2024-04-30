@@ -11,6 +11,7 @@
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
 import pyautogui
+#keyboard: Librería que permite detectar pulsaciones de teclas en el teclado.
 import keyboard
 #math: Librería que proporciona funciones y constantes matemáticas como seno, π, logaritmo, etc.
 import math

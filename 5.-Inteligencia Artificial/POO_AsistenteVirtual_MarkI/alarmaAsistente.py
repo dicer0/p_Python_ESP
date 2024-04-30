@@ -3,7 +3,7 @@ import datetime #datetime: Librería que proporciona método para trabajar con f
 #re: Librería que identifica patrones en expresiones regulares. Una expresión regular es un patrón de texto que se 
 #puede utilizar para buscar, reemplazar o extraer texto de una cadena.
 import re       #re: Librería que permite utilizar expresiones regulares para detectar patrones.
-import keyboard #keyboard: Librería que permite detectar las pulsaciones de teclas en tu teclado
+import keyboard #keyboard: Librería que permite detectar pulsaciones de teclas en el teclado.
 import pygame   #pygame: librería de multimedia que permite mostrar gráficos, reproducir sonido, etc.
 
 class widgetAlarma:
