@@ -29,7 +29,7 @@ radius = 100
 # Set the speed of the circular motion (adjust as needed)
 speed = 0.05  # Adjust this value to control the speed
 
-# Function to calculate the next position of the mouse
+#calculate_next_position(): Función que calcula la próxima posición del mouse.
 def calculate_next_position(angle):
     x = center_x + int(radius * math.cos(angle))
     y = center_y + int(radius * math.sin(angle))
