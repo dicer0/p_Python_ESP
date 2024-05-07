@@ -35,6 +35,7 @@ def calculate_next_position(angle):
     x = center_x + int(radius * math.cos(angle))
     y = center_y + int(radius * math.sin(angle))
     return x, y
+
 #Main loop
 angle = 0
 while not keyboard.is_pressed('s'):
