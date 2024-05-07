@@ -239,6 +239,7 @@ try:
     print(finalDataFrame, "\n")
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
+
 #2.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
 #instalation: pip install psycopg2 
 try:
@@ -250,6 +251,7 @@ try:
         print("2.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("2.- Ups an Error ocurred while Opening the PostgresSQL DataBase:\n" + str(error) + "\n")
+
 #3.- SQLite (path relativo): create_engine('sqlite:///mydatabase.db')
 #No additional installation is needed.
 try:
@@ -265,6 +267,7 @@ finally:
     if ('connection3' in locals()):
         print("5.- Connection 5 closed manually\n")
         connection3.close()
+
 #4.- SQLite (path absoluto): create_engine('sqlite:////absolute/path/to/mydatabase.db')
 #No additional installation is needed.
 try:
@@ -273,6 +276,7 @@ try:
         print("4.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("4.- Ups an Error ocurred while Opening the SQLite DataBase with an Absolute Path:\n" + str(error) + "\n")
+
 #5.- Microsoft SQL Server (Windows authentication): create_engine('mssql+pyodbc://@mydsn')
 #instalation: pip install pyodbc
 #Este tipo de conexión es más compleja que las demás, ya que se debe ejecutar un paso intermedio donde se crea un 
@@ -298,7 +302,8 @@ finally:
     if ('connection5' in locals()):
         print("5.- Connection 5 closed\n")
         connection5.close()
-#6.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
+
+#6.1.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
 #instalation: pip install pyodbc
 #Este tipo de conexión es la misma a la descrita en el número 5, con la única diferencia que se incluye el nombre 
 #de usuario y contraseña para la conexión en vez del puro ODBC, para ello se siguen los siguientes pasos:
@@ -320,7 +325,8 @@ finally:
     if ('connection6' in locals()):
         print("6.1.- Connection 6.1 closed\n")
         connection6.close()
-#PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
+
+#6.2.- PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
 #Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
 #datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
 #Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
