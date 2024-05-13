@@ -28,7 +28,7 @@ center_y = screen_height // 2
 #Set the radius of the circular motion
 radius = 100
 #Set the speed of the circular motion (adjust as needed)
-speed = 0.05  # Adjust this value to control the speed
+speed = 0.05  #Adjust this value to control the speed
 
 #calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a 
 #través de la librería math.
