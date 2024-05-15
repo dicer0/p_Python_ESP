@@ -39,6 +39,7 @@ def calculate_next_position(angle):
 
 #Main loop
 angle = 0
+#Bucle while: 
 while not keyboard.is_pressed('s'):
     #Calculate the next position
     next_x, next_y = calculate_next_position(angle)
