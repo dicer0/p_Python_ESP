@@ -20,7 +20,7 @@ import math
 #time: Librería para el manejo de tiempos, como retardos, contadores, etc.
 import time
 
-#Get the screen resolution
+#pyautogui.size(): Método para obtener el tamaño de la pantalla de forma automática en forma de tupla (ancho, alto).
 screen_width, screen_height = pyautogui.size()
 #Calculate the center of the screen
 center_x = screen_width // 2
