@@ -37,9 +37,8 @@ def calculate_next_position(angle):
     y = center_y + int(radius * math.sin(angle))
     return x, y
 
-#Main loop
+#Bucle while:
 angle = 0
-#Bucle while: 
 while not keyboard.is_pressed('s'):
     #Calculate the next position
     next_x, next_y = calculate_next_position(angle)
