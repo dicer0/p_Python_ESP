@@ -10,6 +10,22 @@
 #Para comentar en Visual Studio Code varias líneas de código se debe usar las líneas:
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
+#TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia que estos pueden tener es que algunos tienen cierto 
+#órden (índice y valor) y otros no, además de que algunos son editables o mutables, donde se les puede agregar, 
+#eliminar, o modificar elementos y otros son inmutables, donde sus datos no se pueden cambiar.
+# - Listas (list): Una lista es una colección ordenada y mutable (editable) de elementos. Se definen utilizando 
+#   corchetes [].
+#       Ejemplo: mi_lista = [1, 2, "hola", True].
+# - Tuplas (tuple): Una tupla es una colección ordenada e inmutable de elementos. Se definen utilizando 
+#   paréntesis ().
+#       Ejemplo: mi_tupla = (1, 2, "hola", True).
+# - Diccionarios (dict): Un diccionario es una colección desordenada y mutable de pares clave-valor. Se definen 
+#   utilizando llaves {} y separando cada par clave-valor por dos puntos :.
+#       Ejemplo: mi_diccionario = {"nombre": "Juan", "edad": 30, "ciudad": "Madrid"}.
+# - Conjuntos (set): Un conjunto es una colección desordenada y mutable de elementos únicos. No permite elementos 
+#   duplicados y no tiene un orden definido. Se definen utilizando llaves {} o utilizando la función set().
+#       Ejemplo: mi_conjunto = {1, 2, 3, 4, 5}.
+
 #LISTAS: Las listas en Python son tipos de datos estructurados, parecido a lo que son los arrays en otros 
 #lenguajes de programación, aunque no es el único tipo de dato agrupado que existe en Python, existen además las 
 #tuplas, diccionarios y numpy arrays.
