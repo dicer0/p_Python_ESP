@@ -48,7 +48,6 @@ while not keyboard.is_pressed('s'):
     angle += speed
     #Wrap angle to keep it within 0 to 2*pi
     angle %= (2 * math.pi)
-    
     #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo 
     #de tiempo específico dado en segundos. El delay se cambia para controlar la velocidad del mouse.
     time.sleep(0.01)
