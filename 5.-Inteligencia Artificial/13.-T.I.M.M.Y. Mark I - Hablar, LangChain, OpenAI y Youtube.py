@@ -22,9 +22,9 @@ import pywhatkit
 # - Directorio normal:      carpeta1/carpeta2/carpeta3
 # - Directorio paquetes:    carpeta1.carpeta2.carpeta3
 #La parte del directorio se coloca después de la palabra reservada from y la clase a importar después de import.
-from POO_AsistenteVirtualMarkI.oidoAsistente import EscucharMicrofono
-from POO_AsistenteVirtualMarkI.vozAsistente import vozWindows
-from POO_AsistenteVirtualMarkI.cerebroLangchainAsistente import cerebro_OpenAI
+from POO_AsistenteVirtual_MarkI.oidoAsistente import EscucharMicrofono
+from POO_AsistenteVirtual_MarkI.vozAsistente import vozWindows
+from POO_AsistenteVirtual_MarkI.cerebroLangchainAsistente import cerebro_OpenAI
 
 #IMPORTACIÓN DE LIBRERÍAS:
 #IMPORTACIÓN DE LLAVE: Cuando se quiera utilizar una API que utiliza un key, por seguridad es de buenas 
@@ -35,7 +35,7 @@ from POO_AsistenteVirtualMarkI.cerebroLangchainAsistente import cerebro_OpenAI
 # - Directorio paquetes:    carpeta1.carpeta2.carpeta3
 #La parte del directorio se coloca después de la palabra reservada import y posteriormente se manda a llamar sus 
 #variables o constantes de igual manera a través de un punto.
-import API_Keys.Llaves_ChatGPT_Bard
+import API_Keys.Llaves_ChatGPT_Bard_etc
 #ChatGPT API key
 ApiKey = API_Keys.Llaves_ChatGPT_Bard.LlaveChatGPT 
 
