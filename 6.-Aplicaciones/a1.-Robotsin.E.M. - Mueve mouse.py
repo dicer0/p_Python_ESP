@@ -24,7 +24,6 @@ import time
 screen_width, screen_height = pyautogui.size()
 #Calculate the center of the screen
 center_x = screen_width // 2
-
 center_y = screen_height // 2
 #Set the radius of the circular motion
 radius = 100
