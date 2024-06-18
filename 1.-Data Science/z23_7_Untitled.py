@@ -27,8 +27,8 @@ class MyService(win32serviceutil.ServiceFramework):
 
     def check_time_and_run_script(self):
         # Especifica la hora en la que quieres ejecutar el script
-        target_hour = 1  # Ejemplo: 14 para las 2:00 PM
-        target_minute = 54
+        target_hour = 2  # Ejemplo: 14 para las 2:00 PM
+        target_minute = 3
 
         now = datetime.now()
         if now.hour == target_hour and now.minute == target_minute:
