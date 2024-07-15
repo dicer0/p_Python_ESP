@@ -23,8 +23,8 @@ import time
 #pyautogui.size(): Método para obtener el tamaño de la pantalla de forma automática en forma de tupla (ancho, alto).
 screen_width, screen_height = pyautogui.size()
 #Calcular el centroide de la pantalla.
-center_x = screen_width // 2
-center_y = screen_height // 2
+center_x = screen_width // 2    #Centroide x
+center_y = screen_height // 2   #Centroide y
 #Set the radius of the circular motion
 radius = 100
 #Set the speed of the circular motion (adjust as needed)
