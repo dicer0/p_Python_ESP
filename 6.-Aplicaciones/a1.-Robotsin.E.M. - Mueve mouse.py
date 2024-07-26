@@ -25,9 +25,9 @@ screen_width, screen_height = pyautogui.size()
 #Calcular el centroide de la pantalla.
 center_x = screen_width // 2    #Centroide x
 center_y = screen_height // 2   #Centroide y
-#Radio del movimiento circular del mouse
+#Radio del movimiento circular del mouse.
 radius = 100
-#Set the speed of the circular motion (adjust as needed)
+#Velocidad del movimiento circular del mouse.
 speed = 0.05  #Adjust this value to control the speed
 
 #calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a 
