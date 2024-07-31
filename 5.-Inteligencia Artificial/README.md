@@ -1,4 +1,4 @@
-[![MasterHead](http://dicer0.com/wp-content/uploads/2023/09/Python-di_cer0-Banner.png)](https://dicer0.com/)
+[![MasterHead](http://dicer0.com/wp-content/uploads/2024/07/OpenAI-di_cer0-Banner.png)](https://dicer0.com/)
 # p_Python_ESP
 <h6 align="justify">
   <ul>
