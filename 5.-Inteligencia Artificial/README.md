@@ -11,4 +11,4 @@ And this specific repository contains documentation about the Python programming
 <br/>
 &nbsp;
 
-[![Python](http://dicer0.com/wp-content/uploads/2024/04/p_Python_AI.png)](https://dicer0.com/#skills)
+[![A.I.Python](http://dicer0.com/wp-content/uploads/2024/04/p_Python_AI.png)](https://dicer0.com/#skills)
