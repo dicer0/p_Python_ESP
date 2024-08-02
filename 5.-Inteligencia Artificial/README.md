@@ -1,4 +1,4 @@
-[![MasterHead](http://dicer0.com/wp-content/uploads/2023/09/Python-di_cer0-Banner.png)](https://dicer0.com/)
+[![MasterHead](http://dicer0.com/wp-content/uploads/2024/07/OpenAI-di_cer0-Banner.png)](https://dicer0.com/)
 # p_Python_ESP
 <h6 align="justify">
   <ul>
@@ -11,4 +11,4 @@ And this specific repository contains documentation about the Python programming
 <br/>
 &nbsp;
 
-[![Python](http://dicer0.com/wp-content/uploads/2024/04/p_Python_AI.png)](https://dicer0.com/#skills)
+[![A.I.Python](http://dicer0.com/wp-content/uploads/2024/04/p_Python_AI.png)](https://dicer0.com/#skills)
