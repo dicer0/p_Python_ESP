@@ -16,6 +16,8 @@
 #       Ejemplo: mi_conjunto = {1, 2, 3, 4, 5}.
 
 #MÉTODOS COMÚNES ARRAYS:
+#array[index]: Acceder al elemento o array interno que se encuentre en cierto índice o posición que se cuenta 
+#desde 0.
 #array.append(element): Añade un elemento al final de la lista.
 #array.extend(array): Extiende la lista añadiendo todos los elementos de una lista dada, osea otro array.
 #array.insert(index, element): Inserta un elemento en una posición o índice específico.
