@@ -1,6 +1,7 @@
-#TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia entre ellos, es que algunos tienen cierto órden 
-#(índice y valor) y otros no, además de que algunos son editables o mutables, donde se les puede agregar, eliminar, 
-#o modificar elementos y otros son inmutables, donde sus datos no se pueden cambiar.
+#TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON - DSA (DATA STRUCTURES AND ALGORITHMS): 
+#La gran diferencia entre ellos, es que algunos tienen cierto órden (índice y valor) y otros no, además de que 
+#algunos son editables o mutables, donde se les puede agregar, eliminar, o modificar elementos y otros son 
+#inmutables, donde sus datos no se pueden cambiar.
 # - Listas (list): Una lista es una colección ordenada (con índice y valor) y mutable (editable) de elementos. Se 
 #   definen utilizando corchetes [].
 #       Ejemplo: mi_lista = [1, 2, "hola", True].
@@ -13,7 +14,43 @@
 # - Conjuntos (set): Un conjunto es una colección desordenada y mutable de elementos únicos. No permite elementos 
 #   duplicados y no tiene un orden definido. Se definen utilizando llaves {} o utilizando la función set().
 #       Ejemplo: mi_conjunto = {1, 2, 3, 4, 5}.
-#ALGORITMOS Y ESCTRUCTURAS DE DATOS BigO:
+
+#MÉTODOS COMÚNES ARRAYS:
+#array.append(element): Añade un elemento al final de la lista.
+#array.extend(array): Extiende la lista añadiendo todos los elementos de una lista dada, osea otro array.
+#array.insert(index, element): Inserta un elemento en una posición o índice específico.
+#array.remove(element): Elimina el primer elemento con el valor especificado.
+#array.pop(index, element): Elimina y devuelve el elemento en la posición especificada (por defecto, el último 
+#elemento).
+#array.clear(): Elimina todos los elementos de la lista.
+#array.index(element): Devuelve el índice del primer elemento con el valor especificado.
+#array.count(element): Devuelve el número de veces que aparece un valor especificado en la lista.
+#array.sort(): Ordena la lista de menor a mayor.
+#array.reverse(): Invierte el orden de los elementos en la lista.
+#array.copy(): Devuelve una copia de la lista.
+
+#MÉTODOS COMÚNES STRINGS:
+#string.capitalize(str): Convierte el primer carácter a mayúsculas.
+#lower(str): Convierte todos los caracteres a minúsculas.
+#upper(str): Convierte todos los caracteres a mayúsculas.
+#title(str): Convierte el primer carácter de cada palabra a mayúsculas.
+#strip(str): Elimina los caracteres de espacio en blanco al inicio y al final.
+#lstrip(str): Elimina los caracteres de espacio en blanco al inicio.
+#rstrip(str): Elimina los caracteres de espacio en blanco al final.
+#split(char): Divide la cadena en una lista de subcadenas utilizando el caracter especificado (por defecto, el 
+#espacio).
+#join(char): Une una lista de cadenas con un delimitador especificado.
+#replace(strOriginal, strReemplazo): Reemplaza todas las ocurrencias de una subcadena con otra subcadena.
+#find(str): Devuelve el índice de la primera aparición de una subcadena. Devuelve -1 si no se encuentra.
+#count(str): Devuelve el número de veces que aparece una subcadena en la cadena.
+#startswith(str): Devuelve True si la cadena empieza con la subcadena especificada.
+#endswith(str): Devuelve True si la cadena termina con la subcadena especificada.
+#isnumeric(str): Devuelve True si todos los caracteres de la cadena son numéricos.
+#isalnum(str): Devuelve True si todos los caracteres de la cadena son alfanuméricos.
+#isalpha(str): Devuelve True si todos los caracteres de la cadena son alfabéticos.
+
+
+#ALGORITMOS Y ESCTRUCTURAS DE DATOS Big O Notation:
 #Complejidad Constante (O(1)): Este tipo de operación siempre toma en ejecutarse la misma cantidad de tiempo, sin 
 #importar el tamaño del array.
 #Acceso a un elemento específico en un array.
