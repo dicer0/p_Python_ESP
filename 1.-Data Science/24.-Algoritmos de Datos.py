@@ -55,27 +55,23 @@
 #ALGORITMOS Y ESCTRUCTURAS DE DATOS Big O Notation:
 #Complejidad Constante (O(1)): Este tipo de operación siempre toma en ejecutarse la misma cantidad de tiempo, sin 
 #importar el tamaño del array.
-#Acceso a un elemento específico en un array.
+#Ejemplo 1.1.- Acceso a un elemento específico en un array.
 def get_element(arr, index):
     return arr[index]
-
 arr = [1, 2, 3, 4, 5]
-print(get_element(arr, 2))  #Output: 3
-
+print("Ejemplo 1.1.- Big O Notation Complejidad Constante: " + str(get_element(arr, 2)))    #Output: 3
 
 #Complejidad Lineal (O(n)): Este tipo de operación toma en ejecutarse un tiempo proporcional al tamaño del array.
-#Recorrer todos los elementos de un array.
+#Ejemplo 2.1.- Recorrer todos los elementos de un array.
 def print_all_elements(arr):
     for element in arr:
-        print(element)
-
+        print("Ejemplo 2.1.- Big O Notation Complejidad Lineal: " + str(element))
 arr = [1, 2, 3, 4, 5]
-print_all_elements(arr)
-
+print_all_elements(arr)    #Output: 1, 2, 3, 4, 5
 
 #Complejidad Logarítmica (O(log n)): Este tipo de operación es eficiente porque reduce el espacio de búsqueda a 
 #la mitad en cada paso.
-#Búsqueda binaria en un array ordenado.
+#Ejemplo 3.1.- Búsqueda binaria en un array ordenado.
 def binary_search(arr, value):
     low = 0
     high = len(arr) - 1
@@ -88,14 +84,13 @@ def binary_search(arr, value):
         else:
             high = mid - 1
     return -1
-
 arr = [1, 2, 3, 4, 5]
-print(binary_search(arr, 4))  # Output: 3 (índice del elemento 4)
+print("Ejemplo 3.1.- Big O Notation Complejidad Lineal: " + str(binary_search(arr, 4)))
+#Output: 3 (índice del elemento 4)
 
-
-#Complejidad Exponencial (O(2^n)): Este tipo de operación es muy costosa y se vuelve impracticable para tamaños 
-#grandes de entrada.
-#Generar todas las combinaciones posibles de un array.
+#Complejidad Exponencial (O(2^n)): Este tipo de operación es muy costosa y se vuelve impracticable para datos de 
+#entrada grandes, osea de muchos elementos.
+#Ejemplo 4.1.- Generar todas las combinaciones posibles de un array.
 def generate_subsets(arr):
     subsets = []
     n = len(arr)
@@ -105,11 +100,9 @@ def generate_subsets(arr):
             backtrack(i + 1, path + [arr[i]])
     backtrack(0, [])
     return subsets
-
 arr = [1, 2, 3]
-print(generate_subsets(arr))
+print("Ejemplo 4.1.- Big O Notation Complejidad Lineal: " + str(generate_subsets(arr)))
 # Output: [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
-
 
 #Árboles Binarios: Los árboles binarios son estructuras de datos jerárquicas donde cada nodo tiene a lo sumo 
 #dos hijos.
@@ -133,6 +126,48 @@ root.left.left = TreeNode(4)
 root.left.right = TreeNode(5)
 preorder_traversal(root)
 #Output: 1 2 4 5 3
+
+#BINARY TREE: Un árbol binario es una estructura de datos jerárquica en la que cada nodo tiene a lo sumo dos 
+#hijos, conocidos como el hijo izquierdo y el hijo derecho. Los árboles binarios son una estructura fundamental en 
+#la informática debido a su eficiencia para ciertas operaciones y su capacidad para representar relaciones 
+#jerárquicas.
+class Node:
+    def __init__(self, key):
+        self.left = None
+        self.right = None
+        self.val = key
+#Función para insertar un nuevo nodo con la clave dada
+def insert(root, key):
+    #Si el árbol está vacío, retornar un nuevo nodo
+    if root is None:
+        return Node(key)
+    #De lo contrario, recurrir por el árbol
+    if key < root.val:
+        root.left = insert(root.left, key)
+    else:
+        root.right = insert(root.right, key)
+    #Retornar el nodo (sin cambios)
+    return root
+#Función para realizar un recorrido en orden
+def in_order_traversal(root):
+    if root:
+        # Recorrer el subárbol izquierdo
+        in_order_traversal(root.left)
+        # Imprimir el valor del nodo
+        print(root.val, end=" ")
+        # Recorrer el subárbol derecho
+        in_order_traversal(root.right)
+#Crear un nuevo árbol binario e insertar algunos nodos
+root = Node(50)
+insert(root, 30)
+insert(root, 20)
+insert(root, 40)
+insert(root, 70)
+insert(root, 60)
+insert(root, 80)
+#Realizar un recorrido en orden
+print("In-order traversal of the binary tree is:")
+in_order_traversal(root)  #Output: 20 30 40 50 60 70 80
 
 
 #Grafos: Los grafos son estructuras de datos que consisten en nodos conectados por aristas.
@@ -256,23 +291,26 @@ print_directory_structure(root)
 #     documents
 #     pictures
 
-
 #Algoritmos de Recorrido (Traversal)
-#Los algoritmos de recorrido se utilizan para visitar todos los nodos en una estructura de datos, como un árbol o un grafo.
+#Los algoritmos de recorrido se utilizan para visitar todos los nodos en una estructura de datos, como un árbol o 
+#un grafo.
 #Pueden ser utilizados para búsquedas, ordenamientos y otras operaciones que requieren visitar cada nodo.
 #Ejemplo: Recorrido en preorden de un árbol binario (ver más arriba en el código).
 
 #Divide y Conquista (Divide and Conquer)
-#Este enfoque divide un problema en subproblemas más pequeños y manejables, los resuelve de manera recursiva, y luego combina los resultados.
+#Este enfoque divide un problema en subproblemas más pequeños y manejables, los resuelve de manera recursiva, y 
+#luego combina los resultados.
 #Es útil para algoritmos de ordenamiento, búsqueda y otras operaciones complejas.
 #Ejemplo: Búsqueda binaria (ver más arriba en el código).
 
 #Breadth-First Search (BFS - Búsqueda en Amplitud)
 #Algoritmo que explora un grafo nivel por nivel desde el nodo inicial.
-#Es útil para encontrar el camino más corto en un grafo no ponderado y para búsquedas de amplitud en estructuras jerárquicas.
+#Es útil para encontrar el camino más corto en un grafo no ponderado y para búsquedas de amplitud en estructuras 
+#jerárquicas.
 #Ejemplo de código: BFS en un grafo (ver más arriba en el código).
 
 #Depth-First Search (DFS - Búsqueda en Profundidad)
 #Algoritmo que explora un grafo tan profundo como sea posible antes de retroceder.
-#Es útil para la detección de ciclos, el recorrido de todas las posibles rutas y la búsqueda en profundidad en estructuras jerárquicas.
+#Es útil para la detección de ciclos, el recorrido de todas las posibles rutas y la búsqueda en profundidad en 
+#estructuras jerárquicas.
 #Ejemplo de código: DFS en un grafo (ver más arriba en el código).
