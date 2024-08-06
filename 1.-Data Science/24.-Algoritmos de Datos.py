@@ -31,6 +31,15 @@
 #array.reverse(): Invierte el orden de los elementos en la lista.
 #array.copy(): Devuelve una copia de la lista.
 
+#Ejemplo numérico: Por ejemplo, para extraer todos los dígitos de un número, podemos utilizar un bucle for de una 
+#sola línea para que de esta manera se cree una lista de los dígitos pertenecientes a un número:
+#Bucle for en una sola línea: [instrucción      for   variable_local   in   range(inicio, final)]
+#Bucle for en una sola línea: [instrucción      for   variable_local   in   array_a_recorrer]
+digits = 12345
+digits_str = str(digits)
+array_digitos = [int(digit) for digit in digits_str]
+print("Ejemplo Arrays: " + str(array_digitos))
+
 #MÉTODOS COMÚNES STRINGS:
 #string.capitalize(str): Convierte el primer carácter a mayúsculas.
 #string.lower(str): Convierte todos los caracteres a minúsculas.
@@ -47,9 +56,9 @@
 #string.count(str): Devuelve el número de veces que aparece una subcadena en la cadena.
 #string.startswith(str): Devuelve True si la cadena empieza con la subcadena especificada.
 #string.endswith(str): Devuelve True si la cadena termina con la subcadena especificada.
-#string.isnumeric(str): Devuelve True si todos los caracteres de la cadena son numéricos.
-#string.isalnum(str): Devuelve True si todos los caracteres de la cadena son alfanuméricos.
-#string.isalpha(str): Devuelve True si todos los caracteres de la cadena son alfabéticos.
+#string.isnumeric(): Devuelve True si todos los caracteres de la cadena son numéricos.
+#string.isalnum(): Devuelve True si todos los caracteres de la cadena son alfanuméricos.
+#string.isalpha(): Devuelve True si todos los caracteres de la cadena son alfabéticos.
 
 
 #ALGORITMOS Y ESCTRUCTURAS DE DATOS Big O Notation:
