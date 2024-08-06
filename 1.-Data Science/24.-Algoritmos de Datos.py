@@ -1,18 +1,32 @@
-# Algoritmos y estructuras de datos
+#TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia entre ellos, es que algunos tienen cierto órden 
+#(índice y valor) y otros no, además de que algunos son editables o mutables, donde se les puede agregar, eliminar, 
+#o modificar elementos y otros son inmutables, donde sus datos no se pueden cambiar.
+# - Listas (list): Una lista es una colección ordenada (con índice y valor) y mutable (editable) de elementos. Se 
+#   definen utilizando corchetes [].
+#       Ejemplo: mi_lista = [1, 2, "hola", True].
+# - Tuplas (tuple): Una tupla es una colección ordenada e inmutable de elementos. Se definen utilizando 
+#   paréntesis ().
+#       Ejemplo: mi_tupla = (1, 2, "hola", True).
+# - Diccionarios (dict): Un diccionario es una colección desordenada y mutable de pares clave-valor. Se definen 
+#   utilizando llaves {} y separando cada par clave-valor por dos puntos(:).
+#       Ejemplo: mi_diccionario = {"nombre": "Juan", "edad": 30, "ciudad": "Madrid"}.
+# - Conjuntos (set): Un conjunto es una colección desordenada y mutable de elementos únicos. No permite elementos 
+#   duplicados y no tiene un orden definido. Se definen utilizando llaves {} o utilizando la función set().
+#       Ejemplo: mi_conjunto = {1, 2, 3, 4, 5}.
 
-# Complejidad Constante (O(1))
-# Acceso a un elemento específico en un array.
-# Este tipo de operación siempre toma la misma cantidad de tiempo, sin importar el tamaño del array.
+#ALGORITMOS Y ESCTRUCTURAS DE DATOS BigO:
+#Complejidad Constante (O(1)): Este tipo de operación siempre toma en ejecutarse la misma cantidad de tiempo, sin 
+#importar el tamaño del array.
+#Acceso a un elemento específico en un array.
 def get_element(arr, index):
     return arr[index]
 
 arr = [1, 2, 3, 4, 5]
-print(get_element(arr, 2))  # Output: 3
+print(get_element(arr, 2))  #Output: 3
 
 
-# Complejidad Lineal (O(n))
-# Recorrer todos los elementos de un array.
-# Este tipo de operación toma tiempo proporcional al tamaño del array.
+#Complejidad Lineal (O(n)): Este tipo de operación toma en ejecutarse un tiempo proporcional al tamaño del array.
+#Recorrer todos los elementos de un array.
 def print_all_elements(arr):
     for element in arr:
         print(element)
@@ -21,9 +35,9 @@ arr = [1, 2, 3, 4, 5]
 print_all_elements(arr)
 
 
-# Complejidad Logarítmica (O(log n))
-# Búsqueda binaria en un array ordenado.
-# Este tipo de operación es eficiente porque reduce el espacio de búsqueda a la mitad en cada paso.
+#Complejidad Logarítmica (O(log n)): Este tipo de operación es eficiente porque reduce el espacio de búsqueda a 
+#la mitad en cada paso.
+#Búsqueda binaria en un array ordenado.
 def binary_search(arr, value):
     low = 0
     high = len(arr) - 1
@@ -41,9 +55,9 @@ arr = [1, 2, 3, 4, 5]
 print(binary_search(arr, 4))  # Output: 3 (índice del elemento 4)
 
 
-# Complejidad Exponencial (O(2^n))
-# Generar todas las combinaciones posibles de un array.
-# Este tipo de operación es muy costosa y se vuelve impracticable para tamaños grandes de entrada.
+#Complejidad Exponencial (O(2^n)): Este tipo de operación es muy costosa y se vuelve impracticable para tamaños 
+#grandes de entrada.
+#Generar todas las combinaciones posibles de un array.
 def generate_subsets(arr):
     subsets = []
     n = len(arr)
@@ -59,9 +73,9 @@ print(generate_subsets(arr))
 # Output: [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
 
 
-# Árboles Binarios
-# Definición y recorrido en preorden de un árbol binario.
-# Los árboles binarios son estructuras de datos jerárquicas donde cada nodo tiene a lo sumo dos hijos.
+#Árboles Binarios: Los árboles binarios son estructuras de datos jerárquicas donde cada nodo tiene a lo sumo 
+#dos hijos.
+#Definición y recorrido en preorden de un árbol binario.
 class TreeNode:
     def __init__(self, key):
         self.left = None
@@ -80,15 +94,14 @@ root.right = TreeNode(3)
 root.left.left = TreeNode(4)
 root.left.right = TreeNode(5)
 preorder_traversal(root)
-# Output: 1 2 4 5 3
+#Output: 1 2 4 5 3
 
 
-# Grafos
-# Recorridos DFS y BFS en un grafo.
-# Los grafos son estructuras de datos que consisten en nodos conectados por aristas.
+#Grafos: Los grafos son estructuras de datos que consisten en nodos conectados por aristas.
+#Recorridos DFS y BFS en un grafo.
 from collections import deque
 
-# Grafo como diccionario de listas
+#Grafo como diccionario de listas
 graph = {
     'A': ['B', 'C'],
     'B': ['A', 'D', 'E'],
@@ -98,8 +111,7 @@ graph = {
     'F': ['C', 'E']
 }
 
-# DFS (Búsqueda en Profundidad)
-# Algoritmo que explora un grafo tan profundo como sea posible antes de retroceder.
+#DFS (Búsqueda en Profundidad): Algoritmo que explora un grafo tan profundo como sea posible antes de retroceder.
 def dfs(graph, start, visited=None):
     if visited is None:
         visited = set()
