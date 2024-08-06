@@ -58,7 +58,7 @@ print("1 y 2.- Los índices de los caracteres que se repiten en el string son: \
 
 
 #3.- REORDENAR EL VECTOR GENERADO EN EL PROCESO 2 DE VALOR MENOR A MAYOR POR MEDIO DE LA FUNCIÓN SORT.
-#sort(): El método sort() sirve para ordenar de menor a mayor los elementos numéricos de una lista o diccionario.
+#sorted(): El método sorted() sirve para ordenar de menor a mayor los elementos numéricos de una lista o diccionario.
 chIndexSort = sorted(chIndex)
 print("3.- Los índices de los caracteres que se repiten ordenados de mayor a menor son: \n", chIndexSort)
 
@@ -131,7 +131,7 @@ for i in range(0, len(chNewIndex)):
     letras.append(st[chNewIndex[i]])
 
 #zip(): El método lo que hace es crear un tipo de dato llamado tupla, una tupla es un conjunto de datos del mismo o 
-#diferente tipo, si se quisiera .
+#diferente tipo, si se quisiera.
 tupla = zip(letras, freq)
 #tuple(): El método crea un objeto tuple para que se le puedan aplicar los métodos correspondientes o en este caso se 
 #pueda imprimir en consola
