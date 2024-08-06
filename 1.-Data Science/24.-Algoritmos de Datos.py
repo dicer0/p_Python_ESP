@@ -33,23 +33,23 @@
 
 #MÉTODOS COMÚNES STRINGS:
 #string.capitalize(str): Convierte el primer carácter a mayúsculas.
-#lower(str): Convierte todos los caracteres a minúsculas.
-#upper(str): Convierte todos los caracteres a mayúsculas.
-#title(str): Convierte el primer carácter de cada palabra a mayúsculas.
-#strip(str): Elimina los caracteres de espacio en blanco al inicio y al final.
-#lstrip(str): Elimina los caracteres de espacio en blanco al inicio.
-#rstrip(str): Elimina los caracteres de espacio en blanco al final.
-#split(char): Divide la cadena en una lista de subcadenas utilizando el caracter especificado (por defecto, el 
-#espacio).
-#join(char): Une una lista de cadenas con un delimitador especificado.
-#replace(strOriginal, strReemplazo): Reemplaza todas las ocurrencias de una subcadena con otra subcadena.
-#find(str): Devuelve el índice de la primera aparición de una subcadena. Devuelve -1 si no se encuentra.
-#count(str): Devuelve el número de veces que aparece una subcadena en la cadena.
-#startswith(str): Devuelve True si la cadena empieza con la subcadena especificada.
-#endswith(str): Devuelve True si la cadena termina con la subcadena especificada.
-#isnumeric(str): Devuelve True si todos los caracteres de la cadena son numéricos.
-#isalnum(str): Devuelve True si todos los caracteres de la cadena son alfanuméricos.
-#isalpha(str): Devuelve True si todos los caracteres de la cadena son alfabéticos.
+#string.lower(str): Convierte todos los caracteres a minúsculas.
+#string.upper(str): Convierte todos los caracteres a mayúsculas.
+#string.title(str): Convierte el primer carácter de cada palabra a mayúsculas.
+#string.strip(str): Elimina los caracteres de espacio en blanco al inicio y al final.
+#string.lstrip(str): Elimina los caracteres de espacio en blanco al inicio.
+#string.rstrip(str): Elimina los caracteres de espacio en blanco al final.
+#string.split(char): Divide la cadena en una lista de subcadenas utilizando el caracter especificado (por defecto, 
+#el string de espacio).
+#string.join(char): Une una lista de cadenas con un delimitador especificado.
+#string.replace(strOriginal, strReemplazo): Reemplaza todas las ocurrencias de una subcadena con otra subcadena.
+#string.find(str): Devuelve el índice de la primera aparición de una subcadena. Devuelve -1 si no se encuentra.
+#string.count(str): Devuelve el número de veces que aparece una subcadena en la cadena.
+#string.startswith(str): Devuelve True si la cadena empieza con la subcadena especificada.
+#string.endswith(str): Devuelve True si la cadena termina con la subcadena especificada.
+#string.isnumeric(str): Devuelve True si todos los caracteres de la cadena son numéricos.
+#string.isalnum(str): Devuelve True si todos los caracteres de la cadena son alfanuméricos.
+#string.isalpha(str): Devuelve True si todos los caracteres de la cadena son alfabéticos.
 
 
 #ALGORITMOS Y ESCTRUCTURAS DE DATOS Big O Notation:
@@ -128,8 +128,8 @@ preorder_traversal(root)
 #Output: 1 2 4 5 3
 
 #BINARY TREE: Un árbol binario es una estructura de datos jerárquica en la que cada nodo tiene a lo sumo dos 
-#hijos, conocidos como el hijo izquierdo y el hijo derecho. Los árboles binarios son una estructura fundamental en 
-#la informática debido a su eficiencia para ciertas operaciones y su capacidad para representar relaciones 
+#hijos, conocidos como el hijo izquierdo y el hijo derecho. Los árboles binarios son una estructura fundamental 
+#en la informática debido a su eficiencia para ciertas operaciones y su capacidad para representar relaciones 
 #jerárquicas.
 class Node:
     def __init__(self, key):
@@ -253,8 +253,8 @@ print_linked_list(head)
 #Output: 1 -> 2 -> 3 -> None
 
 
-#Hip Tree Algorithms: Los Hip trees son una variante de los árboles binarios balanceados, diseñados para optimizar 
-#ciertas operaciones específicas.
+#Hip Tree Algorithms: Los Hip trees son una variante de los árboles binarios balanceados, diseñados para 
+#optimizar ciertas operaciones específicas.
 class HipTreeNode:
     def __init__(self, key):
         self.key = key
