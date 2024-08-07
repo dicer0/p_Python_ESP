@@ -182,7 +182,6 @@ in_order_traversal(root)  #Output: 20 30 40 50 60 70 80
 #Grafos: Los grafos son estructuras de datos que consisten en nodos conectados por aristas.
 #Recorridos DFS y BFS en un grafo.
 from collections import deque
-
 #Grafo como diccionario de listas
 graph = {
     'A': ['B', 'C'],
@@ -202,7 +201,6 @@ def dfs(graph, start, visited=None):
     for neighbor in graph[start]:
         if neighbor not in visited:
             dfs(graph, neighbor, visited)
-
 print("DFS Traversal:")
 dfs(graph, 'A')  # Output: A B D E F C
 
@@ -218,7 +216,6 @@ def bfs(graph, start):
             if neighbor not in visited:
                 queue.append(neighbor)
                 visited.add(neighbor)
-
 print("\nBFS Traversal:")
 bfs(graph, 'A')  # Output: A B C D E F
 
@@ -231,7 +228,6 @@ def print_matrix(matrix):
         for element in row:
             print(element, end=" ")
         print()
-
 matrix = [
     [1, 2, 3],
     [4, 5, 6],
@@ -247,14 +243,12 @@ class ListNode:
     def __init__(self, value):
         self.value = value
         self.next = None
-
 def print_linked_list(head):
     current = head
     while current:
         print(current.value, end=" -> ")
         current = current.next
     print("None")
-
 head = ListNode(1)
 head.next = ListNode(2)
 head.next.next = ListNode(3)
@@ -279,12 +273,10 @@ class Directory:
     def __init__(self, name):
         self.name = name
         self.subdirectories = []
-
 def print_directory_structure(directory, indent=0):
     print(" " * indent + directory.name)
     for subdirectory in directory.subdirectories:
         print_directory_structure(subdirectory, indent + 2)
-
 root = Directory("root")
 home = Directory("home")
 user = Directory("user")
@@ -293,6 +285,7 @@ pictures = Directory("pictures")
 root.subdirectories.extend([home, user])
 user.subdirectories.extend([documents, pictures])
 print_directory_structure(root)
+
 # Output:
 # root
 #   home
