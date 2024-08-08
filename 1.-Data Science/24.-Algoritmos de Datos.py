@@ -285,7 +285,6 @@ pictures = Directory("pictures")
 root.subdirectories.extend([home, user])
 user.subdirectories.extend([documents, pictures])
 print_directory_structure(root)
-
 # Output:
 # root
 #   home
