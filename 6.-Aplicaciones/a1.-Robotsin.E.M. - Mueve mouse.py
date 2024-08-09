@@ -44,7 +44,7 @@ while not keyboard.is_pressed('s'):
     next_x, next_y = calculate_next_position(angle)
     #Mover el mouse a la siguiente posición.
     pyautogui.moveTo(next_x, next_y, duration=0)
-    #Increment the angle
+    #Incrementar el ángulo
     angle += speed
     #Wrap angle to keep it within 0 to 2*pi
     angle %= (2 * math.pi)
