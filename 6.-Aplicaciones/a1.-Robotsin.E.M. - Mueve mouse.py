@@ -44,9 +44,9 @@ while not keyboard.is_pressed('s'):
     next_x, next_y = calculate_next_position(angle)
     #Mover el mouse a la siguiente posición.
     pyautogui.moveTo(next_x, next_y, duration=0)
-    #Incrementar el ángulo
+    #Incrementar el ángulo.
     angle += speed
-    #Wrap angle to keep it within 0 to 2*pi
+    #Hacer que el ángulo se mantenga dentro del rango de 0 a 2pi.
     angle %= (2 * math.pi)
     #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo 
     #de tiempo específico dado en segundos. El delay se cambia para controlar la velocidad del mouse.
