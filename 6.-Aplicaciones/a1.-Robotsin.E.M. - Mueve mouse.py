@@ -23,12 +23,12 @@ import time
 
 #pyautogui.size(): Método para obtener el tamaño de la pantalla de forma automática en forma de tupla (ancho, alto).
 screen_width, screen_height = pyautogui.size()
-#Calcular el centroide de la pantalla.
-center_x = screen_width // 2    #Centroide x
-center_y = screen_height // 2   #Centroide y
-#Radio del movimiento circular del mouse.
+#Ahora calcularemos el centroide de la pantalla al dividir entre dos su ancho y altura.
+center_x = screen_width // 2    #Centroide x = Ancho/2
+center_y = screen_height // 2   #Centroide y = Altura/2
+#Se declara el radio del movimiento circular del mouse en pixeles.
 radius = 100
-#Velocidad del movimiento circular del mouse.
+#La velocidad del movimiento circular del mouse se utilizará dentro del bucle while que realiza el movimiento.
 speed = 0.05  #Ajustar este valor para controlar la velocidad, mientras mayor sea, más rápido se moverá el mouse.
 
 #calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a 
