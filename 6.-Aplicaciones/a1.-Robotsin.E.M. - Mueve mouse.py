@@ -21,7 +21,8 @@ import math
 #time: Librería para el manejo de tiempos, como retardos, contadores, etc.
 import time
 
-#pyautogui.size(): Método para obtener el tamaño de la pantalla de forma automática en forma de tupla (ancho, alto).
+#pyautogui.size(): Método para obtener el tamaño de la pantalla de forma automática en forma de la siguiente 
+#tupla: (ancho, alto).
 screen_width, screen_height = pyautogui.size()
 #Ahora calcularemos el centroide de la pantalla al dividir entre dos su ancho y altura.
 center_x = screen_width // 2    #Centroide x = Ancho/2
@@ -29,10 +30,10 @@ center_y = screen_height // 2   #Centroide y = Altura/2
 #Se declara el radio del movimiento circular del mouse en pixeles.
 radius = 100
 #La velocidad del movimiento circular del mouse se utilizará dentro del bucle while que realiza el movimiento.
-speed = 0.05  #Ajustar este valor para controlar la velocidad, mientras mayor sea, más rápido se moverá el mouse.
+speed = 0.05  #Control de velocidad: Mientras mayor sea, más rápido se moverá el mouse.
 
-#calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a 
-#través de la librería math.
+#calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a través de la 
+#librería math.
 def calculate_next_position(angle):
     x = center_x + int(radius * math.cos(angle))
     y = center_y + int(radius * math.sin(angle))
@@ -49,8 +50,8 @@ while not keyboard.is_pressed('s'):
     angle += speed
     #Hacer que el ángulo se mantenga dentro del rango de 0 a 2pi.
     angle %= (2 * math.pi)
-    #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo 
-    #de tiempo específico dado en segundos. El delay se cambia para controlar la velocidad del mouse.
+    #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo de 
+    #tiempo específico dado en segundos. El delay se cambia para controlar la velocidad del mouse.
     time.sleep(0.01)
  
 #print(): Método para imprimir un mensaje en consola y después dar un salto de línea (Enter).
