@@ -32,8 +32,8 @@ radius = 100
 #La velocidad del movimiento circular del mouse se utilizará dentro del bucle while que realiza el movimiento.
 speed = 0.05  #Control de velocidad: Mientras mayor sea, más rápido se moverá el mouse.
 
-#calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a través de la 
-#librería math.
+#calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a través de 
+#la librería math.
 def calculate_next_position(angle):
     x = center_x + int(radius * math.cos(angle))
     y = center_y + int(radius * math.sin(angle))
