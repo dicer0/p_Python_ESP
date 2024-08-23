@@ -25,8 +25,8 @@ import time
 #tupla: (ancho, alto).
 screen_width, screen_height = pyautogui.size()
 #Ahora calcularemos el centroide de la pantalla al dividir entre dos su ancho y altura.
-center_x = screen_width // 2    #Centroide x = Ancho/2
-center_y = screen_height // 2   #Centroide y = Altura/2
+center_x = screen_width // 2    #Centroide x = Ancho / 2
+center_y = screen_height // 2   #Centroide y = Altura / 2
 #Se declara el radio del movimiento circular del mouse en pixeles.
 radius = 100
 #La velocidad del movimiento circular del mouse se utilizará dentro del bucle while que realiza el movimiento.
