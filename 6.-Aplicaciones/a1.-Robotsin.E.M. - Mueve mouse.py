@@ -53,6 +53,5 @@ while not keyboard.is_pressed('s'):
     #time.sleep(): Método que se utiliza para suspender la ejecución de un programa durante un intervalo de 
     #tiempo específico dado en segundos. El delay se cambia para controlar la velocidad del mouse.
     time.sleep(0.01)
- 
 #print(): Método para imprimir un mensaje en consola y después dar un salto de línea (Enter).
 print("Program stopped.")
