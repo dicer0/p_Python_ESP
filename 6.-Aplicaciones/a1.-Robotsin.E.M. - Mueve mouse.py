@@ -10,7 +10,7 @@
 #Para comentar en Visual Studio Code varias líneas de código se debe pulsar:
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
-#MOVER MOUSE: 
+#AUTOMATIZACIÓN PARA MOVER EL MOUSE INDEFINIDAMENTE DE FORMA CIRCULAR: 
 #PyAutoGUI: Biblioteca que permite controlar el mouse y el teclado para realizar tareas repetitivas, automatizar 
 #procesos de software, o incluso realizar tareas de accesibilidad para personas con discapacidades.
 import pyautogui
