@@ -10,7 +10,7 @@
 #Para comentar en Visual Studio Code varias líneas de código se debe pulsar:
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
-#AUTOMATIZACIÓN PARA MOVER EL MOUSE INDEFINIDAMENTE DE FORMA CIRCULAR: 
+#AUTOMATIZACIÓN PARA MOVER EL MOUSE DE FORMA CIRCULAR INDEFINIDAMENTE:
 #PyAutoGUI: Biblioteca que permite controlar el mouse y el teclado para realizar tareas repetitivas, automatizar 
 #procesos de software, o incluso realizar tareas de accesibilidad para personas con discapacidades.
 import pyautogui
@@ -35,7 +35,9 @@ speed = 0.05  #Control de velocidad: Mientras mayor sea, más rápido se moverá
 #calculate_next_position(): Función que calcula la próxima posición del mouse en forma de círculo a través de 
 #la librería math.
 def calculate_next_position(angle):
+    #math.cos(): Método que calcula el coseno de un ángulo dado en radianes. 
     x = center_x + int(radius * math.cos(angle))
+    #math.sin(): Método que calcula el seno de un ángulo dado en radianes.
     y = center_y + int(radius * math.sin(angle))
     return x, y
 
