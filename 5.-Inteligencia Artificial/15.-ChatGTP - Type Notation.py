@@ -197,6 +197,9 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
     )
     return stream
 
+#__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 
+#programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
+#una buena práctica.
 if __name__ == '__main__':
     import sys
     user_message_content = sys.argv[1]
