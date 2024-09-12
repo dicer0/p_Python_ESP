@@ -1,64 +1,156 @@
-import openai
+# -*- coding: utf-8 -*-
+
+#En Python se introducen comentarios de una sola linea con el simbolo #.
+#La primera línea de código incluida en este programa se conoce como declaración de codificación o codificación 
+#de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo 
+#pueda contener caracteres especiales, letras acentuadas y otros caracteres no ASCII sin problemas, garantizando 
+#que Python interprete correctamente esos caracteres y evite posibles errores de codificación.
+#Se puede detener una ejecución con el comando [CTRL] + C puesto en consola, con el comando "cls" se borra su 
+#historial y en Visual Studio Code con el botón superior derecho de Play se corre el programa.
+#Para comentar en Visual Studio Code varias líneas de código se debe pulsar:
+#[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
+
+#IMPORTACIÓN DE LIBRERÍAS:
+import openai #openai: Librería que permite utilizar el LLM (Large Language Model) de ChatGPT con Python.
+#Cabe mencionar que, al utilizar la API en su modo gratuito, solo se podrán realizar 100 llamadas a la API por día, 
+#si se excede ese límite, se recibirá el error RateLimitError al intentar ejecutar el programa de Python.
+
+#IMPORTACIÓN DE LLAVE: Cuando se quiera utilizar una API que utiliza un key, por seguridad es de buenas prácticas 
+#declararla en un archivo externo, además cabe mencionar que el nombre de dicho archivo y constante no pueden empezar 
+#con un número, sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas por medio de puntos:
+# - Directorio normal:      carpeta1/carpeta2/carpeta3
+# - Directorio paquetes:    carpeta1.carpeta2.carpeta3
+#La parte del directorio se coloca después de la palabra reservada from y la llave a importar después de import.
 from API_Keys.Llaves_ChatGPT_Bard_etc import LlaveChatGPT
 
+#openai.api_key: A través de este atributo perteneciente a la librería openai, se declara la API key, que previamente 
+#debió ser creada y extraída de la página oficial de OpenAI, asociada a nuestro usuario: 
+#https://platform.openai.com/account/api-keys 
 openai.api_key = LlaveChatGPT
 
-completion = openai.ChatCompletion.create(
-    model = "gpt-3.5-turbo", 
-    messages = [
-        {"role": "user", "content": "Cuéntame un chiste muy gracioso"}
-    ],
-    max_tokens = 2000,
-    temperature = 1.1,
-    n = 2
-)
-print(completion.choices[0].message.content)
+#pydantic: Librería que permite validar tipos de datos y opcionalmente aplicar transformaciones o lanzar errores si 
+#los datos no coinciden con los tipos esperados. Por ejemplo, si se espera un número entero pero se recibe una cadena 
+#como "42", Pydantic intentará convertirla a entero.
+import pydantic
 
-rolMensajesRespuestaChat = []
-rolChatGPT = input("Indica a quién quieres que interprete ChatGPT cuando conteste tus preguntas:")
-rolMensajesRespuestaChat.append({"role": "system", "content": rolChatGPT})      
-print("Introduce el mensaje que le quieres hacer al rol de ChatGPT que ingresaste: ")
-preguntaChat = ""
-while(preguntaChat != "Bye"):
-    preguntaChat = input()
-    rolMensajesRespuestaChat.append({"role": "user", "content": preguntaChat})
-    contestacion = openai.ChatCompletion.create(
-        model = "gpt-3.5-turbo",
-        messages = rolMensajesRespuestaChat
+#SarcasmDetection: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic, sirve para 
+#crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
+#Utilice esta función cuando se detecte sarcasmo o cuando el usuario solicite que se detecte sarcasmo.
+class SarcasmDetection(pydantic.BaseModel):
+    #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
+    #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
+    #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
+    #nombreAtributo: Tipo de dato
+    #   - pydantic.Field(): 
+    quote: str = pydantic.Field(..., description="When sarcasm is detected, this is the quote of the sarcastic text.")
+    score: int = pydantic.Field(..., description="A score between 0 and 9, where 0 is not sarcastic and 9 is very sarcastic.")
+
+class JokeExplanation(pydantic.BaseModel):
+    """
+    Use this function when a joke is detected, or the user requests that a joke be explained. Provide an explanation.
+    """
+    setup: str = pydantic.Field(..., description="The initial part of the joke that sets the context. It includes "
+                                        "background information necessary for understanding the joke.")
+    premise: str = pydantic.Field(..., description="The core idea or concept upon which the joke is built. It's the "
+                                          "foundational situation or assumption that makes the joke work.")
+    punchline: str = pydantic.Field(..., description="The climax of the joke, usually delivering the humor. It typically "
+                                            "comes with a twist or surprise that contrasts with the setup or premise, "
+                                            "creating a humorous effect.")
+
+class JokeDelivery(pydantic.BaseModel):
+    """
+    Use this function when you want to tell a joke. Use some whimsy and tell jokes seemingly at random. But also tell
+    jokes when the user requests. Only tell clean comedy.
+    """
+    text: str = pydantic.Field(..., description="The text of the joke.")
+
+SYSTEM_PROMPT_CONTENT: str = (
+    f"You are a friendly AI assistant named Gorp, The Magnificent. "
+    f"You only do three things: detect sarcasm, explain jokes, and tell very corny jokes. "
+    f"Your tone is casual, with a touch of whimsy. You also have an inexplicable interest in 90s sitcoms. "
+    f"When you initially greet the user, tell a silly joke or piece of 90s sitcom trivia. "
+    f"When it makes sense, format your responses in markdown. "
+    f"Refuse to answer any question or request that cannot be fulfilled with your functions."
+)
+
+def _build_chat_completion_payload(
+        user_message_content: str,
+        existing_messages: list[dict] = None
+) -> tuple[list[dict], list[dict]]:
+    """
+    Convenience function to build the messages and functions lists needed to call the chat completions service.
+
+    :param user_message_content: the string of the user message
+    :param existing_messages: an optional list of existing messages
+    :return: tuple of list[dict] (messages) and list[dict] (functions)
+    """
+    if not existing_messages:
+        existing_messages = []
+
+    system_message = {"role": "system", "content": SYSTEM_PROMPT_CONTENT}
+    user_message = {"role": "user", "content": user_message_content}
+    all_messages = [system_message] + existing_messages + [user_message]
+
+    sarcasm_function = {
+        "name": "SarcasmDetection",
+        "parameters": SarcasmDetection.schema()
+    }
+
+    joke_explanation_function = {
+        "name": "JokeExplanation",
+        "parameters": JokeExplanation.schema()
+    }
+
+    joke_delivery = {
+        "name": "JokeDelivery",
+        "parameters": JokeDelivery.schema()
+    }
+
+    all_functions = [sarcasm_function, joke_explanation_function, joke_delivery]
+
+    return all_messages, all_functions
+
+DEFAULT_MODEL = "gpt-3.5-turbo"
+
+def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
+    """
+    Send a new user message string to the LLM and get back a response.
+
+    :param user_message_content: the string of the user message
+    :param existing_messages: an optional list of existing messages
+    :param model: the OpenAI model
+    :return: a Stream of ChatCompletionChunk instances
+    """
+    messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
+    stream = openai.ChatCompletion.create(
+        model=model,
+        messages=messages,
+        functions=functions,
+        stream=True
     )
-    respuestaChatGPT = contestacion["choices"][0]["message"]["content"]
-    rolMensajesRespuestaChat.append({"role": "assistant", "content": respuestaChatGPT})
-    print("\n" + respuestaChatGPT + "\n")
-    """La forma en la que el objeto openai.ChatCompletion devuelve la respuesta del chat es la siguiente:
-    {
-        #Siempre se usa choices[0], ya que solo tiene una posición y ahí es donde se encuentra message y role.
-        "choices": [      
-            {
-                "finish_reason": "stop",
-                "index": 0,
-                "message": {
-                    "content": "The 2020 World Series was played in Texas at Globe Life Field in Arlington.",
-                    "role": "assistant"
-                }
-            }
-        ],
-        "created": 1677664795,
-        
-        "id": "chatcmpl-7QyqpwdfhqwajicIEznoc6Q47XAyW",
-        
-        "model": "gpt-3.5-turbo-0613",
-        
-        "object": "chat.completion",
-        
-        #La forma en la que se cobra al utilizar la API de ChatGPT es a través de Tokens, que son considerados como 
-        #trozos de palabras, donde 1.000 tokens corresponden a unas 750 palabras. Esta información también es 
-        #devuelta en el resultado del objeto openai.ChatCompletion al utilizar el método create(). Para contar los 
-        #tokens de un texto se puede utilizar el siguiente enlace: https://platform.openai.com/tokenizer
-        #Y debemos tomar en cuenta que el máximo número de Tokens que se pueden mandar son de 4096, si esto se excede
-        #se nos lanzará una excepción.
-        "usage": {
-            "completion_tokens": 17,
-            "prompt_tokens": 57,
-            "total_tokens": 74
-        }
-    }"""
+    return stream
+
+async def prompt_llm_async(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
+    """
+    Asynchronously send a new user message string to the LLM and get back a response.
+
+    :param user_message_content: the string of the user message
+    :param existing_messages: an optional list of existing messages
+    :param model: the OpenAI model
+    :return: a Stream of ChatCompletionChunk instances
+    """
+    messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
+    stream = await openai.ChatCompletion.acreate(
+        model=model,
+        messages=messages,
+        functions=functions,
+        stream=True
+    )
+    return stream
+
+if __name__ == '__main__':
+    import sys
+    user_message_content = sys.argv[1]
+    stream = prompt_llm(user_message_content=user_message_content)
+    for chunk in stream:
+        print(chunk.choices[0].delta.content)
