@@ -42,7 +42,7 @@ def calculate_next_position(angle):
     return x, y
 
 #Bucle while: Este checa si se ha presionado la tecla s, para determinar si se debe detener o no el movimiento 
-#circular del mouse.
+#automático circular del mouse.
 angle = 0
 while not keyboard.is_pressed('s'):
     #Calcular la próxima posición.
