@@ -33,37 +33,86 @@ openai.api_key = LlaveChatGPT
 #como "42", Pydantic intentará convertirla a entero.
 import pydantic
 
-#SarcasmDetection: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic, sirve para 
+#SarcasmDetection: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
 #crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
 #Utilice esta función cuando se detecte sarcasmo o cuando el usuario solicite que se detecte sarcasmo.
 class SarcasmDetection(pydantic.BaseModel):
     #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
     #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
     #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
-    #nombreAtributo: Tipo de dato
-    #   - pydantic.Field(): 
-    quote: str = pydantic.Field(..., description="When sarcasm is detected, this is the quote of the sarcastic text.")
-    score: int = pydantic.Field(..., description="A score between 0 and 9, where 0 is not sarcastic and 9 is very sarcastic.")
+    # nombreAtributo: Tipo de dato
+    #   - pydantic.Field(): Método de la librería Pydantic que se usa para configurar validaciones de datos, establecer 
+    #     sus valores predeterminados, agregar descripciones y definir alias para los atributos en un modelo de datos. 
+    #     Esto mejora la claridad del código al asegurar que los campos del modelo cumplan con las expectativas y se 
+    #     cree su documentación. Para ello el método recibe los siguientes parámetros:
+    #       - default: Establece un valor predeterminado para el atributo. Si no se proporciona un valor, se debe 
+    #         usar ... para indicar que el campo es obligatorio.
+    #       - default_factory: Permite proporcionar una función que genera el valor predeterminado para el campo. Esto 
+    #         es útil para valores que necesitan ser calculados o generados dinámicamente.
+    #       - title: Proporciona un título para el campo, que puede ser útil para la documentación.
+    #       - description: Ofrece una descripción del campo, mejorando la claridad del propósito del atributo en la 
+    #         documentación del modelo.
+    #       - alias: Define un nombre alternativo para el campo, permitiendo que el campo sea referenciado con un 
+    #         nombre diferente en la entrada y salida de datos.
+    #       - const: Indica que el valor del campo debe ser constante y no puede cambiar una vez asignado.
+    #       - gt (greater than >): Establece una restricción de valor mayor que a un número específico.
+    #       - ge (greater than or equal >=): Establece una restricción de valor mayor o igual a un número específico.
+    #       - lt (less than <): Establece una restricción de valor menor que a un número específico.
+    #       - le (less than or equal <=): Establece una restricción de valor menor o igual a un número específico.
+    #       - max_length: Define la longitud máxima permitida para cadenas de texto o listas.
+    #       - min_length: Define la longitud mínima permitida para cadenas de texto o listas.
+    #       - regex: Permite validar que el valor del campo coincide con una expresión regular específica.
+    #       - example: Proporciona un ejemplo del valor que se espera para el campo, útil para la documentación y la 
+    #         generación de esquemas.
+    quote: str = pydantic.Field(..., description = "When sarcasm is detected, this is the quote of the sarcastic text.")
+    score: int = pydantic.Field(..., description = "A score between 0 and 9, where 0 is not sarcastic and 9 is very sarcastic.")
 
+#JokeExplanation: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
+#crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
+#Utilice esta función cuando se detecte un chiste o el usuario solicite que se explique un chiste (donde se debe 
+#proporcionar una explicación).
 class JokeExplanation(pydantic.BaseModel):
-    """
-    Use this function when a joke is detected, or the user requests that a joke be explained. Provide an explanation.
-    """
-    setup: str = pydantic.Field(..., description="The initial part of the joke that sets the context. It includes "
+    #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
+    #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
+    #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
+    # nombreAtributo: Tipo de dato
+    #   - pydantic.Field(): Método de la librería Pydantic que se usa para configurar validaciones de datos, establecer 
+    #     sus valores predeterminados, agregar descripciones y definir alias para los atributos en un modelo de datos. 
+    #     Esto mejora la claridad del código al asegurar que los campos del modelo cumplan con las expectativas y se 
+    #     cree su documentación. Para ello el método recibe los siguientes parámetros:
+    #       - default: Establece un valor predeterminado para el atributo. Si no se proporciona un valor, se debe 
+    #         usar ... para indicar que el campo es obligatorio.
+    #       - description: Ofrece una descripción del campo, mejorando la claridad del propósito del atributo en la 
+    #         documentación del modelo.
+    setup: str = pydantic.Field(..., description = "The initial part of the joke that sets the context. It includes "
                                         "background information necessary for understanding the joke.")
-    premise: str = pydantic.Field(..., description="The core idea or concept upon which the joke is built. It's the "
+    premise: str = pydantic.Field(..., description = "The core idea or concept upon which the joke is built. It's the "
                                           "foundational situation or assumption that makes the joke work.")
-    punchline: str = pydantic.Field(..., description="The climax of the joke, usually delivering the humor. It typically "
+    punchline: str = pydantic.Field(..., description = "The climax of the joke, usually delivering the humor. It typically "
                                             "comes with a twist or surprise that contrasts with the setup or premise, "
                                             "creating a humorous effect.")
 
+#JokeExplanation: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
+#crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
+#Utilice esta función cuando quiera contar un chiste. Use un poco de capricho y cuente chistes aparentemente al azar. 
+#Pero también cuente chistes cuando el usuario se lo pida. Cuente sólo chistes con comedia limpia.
 class JokeDelivery(pydantic.BaseModel):
-    """
-    Use this function when you want to tell a joke. Use some whimsy and tell jokes seemingly at random. But also tell
-    jokes when the user requests. Only tell clean comedy.
-    """
-    text: str = pydantic.Field(..., description="The text of the joke.")
+    #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
+    #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
+    #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
+    # nombreAtributo: Tipo de dato
+    #   - pydantic.Field(): Método de la librería Pydantic que se usa para configurar validaciones de datos, establecer 
+    #     sus valores predeterminados, agregar descripciones y definir alias para los atributos en un modelo de datos. 
+    #     Esto mejora la claridad del código al asegurar que los campos del modelo cumplan con las expectativas y se 
+    #     cree su documentación. Para ello el método recibe los siguientes parámetros:
+    #       - default: Establece un valor predeterminado para el atributo. Si no se proporciona un valor, se debe 
+    #         usar ... para indicar que el campo es obligatorio.
+    #       - description: Ofrece una descripción del campo, mejorando la claridad del propósito del atributo en la 
+    #         documentación del modelo.
+    text: str = pydantic.Field(..., description = "The text of the joke.")
 
+#Constantes: En Python no existen las constantes, pero se puede denotar la existencia simbolica de una a través de 
+#indicar el nombre de una variable en mayúsculas: NOMBRE_CONSTANTE = VALOR
 SYSTEM_PROMPT_CONTENT: str = (
     f"You are a friendly AI assistant named Gorp, The Magnificent. "
     f"You only do three things: detect sarcasm, explain jokes, and tell very corny jokes. "
