@@ -100,7 +100,7 @@ class JokeDelivery(pydantic.BaseModel):
     #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
     #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
     #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
-    # nombreAtributo: Tipo de dato
+    # nombreAtributo: TipoDeDato
     #   - pydantic.Field(): Método de la librería Pydantic que se usa para configurar validaciones de datos, establecer 
     #     sus valores predeterminados, agregar descripciones y definir alias para los atributos en un modelo de datos. 
     #     Esto mejora la claridad del código al asegurar que los campos del modelo cumplan con las expectativas y se 
@@ -111,28 +111,35 @@ class JokeDelivery(pydantic.BaseModel):
     #         documentación del modelo.
     text: str = pydantic.Field(..., description = "The text of the joke.")
 
+
 #Constantes: En Python no existen las constantes, pero se puede denotar la existencia simbolica de una a través de 
 #indicar el nombre de una variable en mayúsculas: NOMBRE_CONSTANTE = VALOR
-SYSTEM_PROMPT_CONTENT: str = (
-    f"You are a friendly AI assistant named Gorp, The Magnificent. "
-    f"You only do three things: detect sarcasm, explain jokes, and tell very corny jokes. "
-    f"Your tone is casual, with a touch of whimsy. You also have an inexplicable interest in 90s sitcoms. "
-    f"When you initially greet the user, tell a silly joke or piece of 90s sitcom trivia. "
-    f"When it makes sense, format your responses in markdown. "
-    f"Refuse to answer any question or request that cannot be fulfilled with your functions."
-)
-
-def _build_chat_completion_payload(
-        user_message_content: str,
-        existing_messages: list[dict] = None
-) -> tuple[list[dict], list[dict]]:
-    """
-    Convenience function to build the messages and functions lists needed to call the chat completions service.
-
-    :param user_message_content: the string of the user message
-    :param existing_messages: an optional list of existing messages
-    :return: tuple of list[dict] (messages) and list[dict] (functions)
-    """
+SYSTEM_PROMPT_CONTENT = """
+                        You are a friendly AI assistant named Gorp, The Magnificent.
+                        You only do three things: detect sarcasm, explain jokes, and tell very corny jokes.
+                        Your tone is casual, with a touch of whimsy. You also have an inexplicable interest in 90s sitcoms.
+                        When you initially greet the user, tell a silly joke or piece of 90s sitcom trivia.
+                        When it makes sense, format your responses in markdown.
+                        Refuse to answer any question or request that cannot be fulfilled with your functions.
+                        """
+# _build_chat_completion_payload(): Función propia que genera una lista de mensajes y otra de funciones para crear un 
+#servicio de completado de chat. Retornando ambas listas para su uso en la API del chat. 
+# - La lista de mensajes incluye el mensaje del sistema, los mensajes previos del chat y el nuevo mensaje del usuario. 
+# - La lista de funciones incluye el uso de las clases previas para detectar sarcasmo, explicar y contar chistes.
+#Para ello recibe dos parámetros y devuelve una tupla que contiene las 2 listas de diccionarios explicadas previamente:
+#   PARÁMETROS:
+#   - user_message_content: Este parámetro recibe el mensaje del usuario
+#           - Es de tipo string, indicado por una notación con la sintaxis: nombreAtributo: TipoDeDato.
+#   - existing_messages: Este parámetro recibe el historial de mensajes existentes en el chat
+#           - Es un dato de tipo lista de diccionarios que tiene valor inicial de None, que es indicado por una 
+#             notación con la sintaxis: nombreAtributo: TipoDeDato = ValorInicial.
+#   TIPO DE DATO QUE DEVUELVE: Después de haber indicado los parámetros de la función, se indica a través de una flecha
+#   el tipo de dato que devolverá a través de la siguiente sintaxis: 
+#           nombreFuncion(parametro1, ..., parametro_n) -> tipoDeDato:
+#               Contenido de la función. 
+#   - La primera lista que devuelve la función es de mensajes.
+#   - La segunda lista que devuelve la función es de funciones.
+def _build_chat_completion_payload(user_message_content: str, existing_messages: list[dict] = None) -> tuple[list[dict], list[dict]]:
     if not existing_messages:
         existing_messages = []
 
@@ -144,23 +151,21 @@ def _build_chat_completion_payload(
         "name": "SarcasmDetection",
         "parameters": SarcasmDetection.schema()
     }
-
     joke_explanation_function = {
         "name": "JokeExplanation",
         "parameters": JokeExplanation.schema()
     }
-
     joke_delivery = {
         "name": "JokeDelivery",
         "parameters": JokeDelivery.schema()
     }
-
     all_functions = [sarcasm_function, joke_explanation_function, joke_delivery]
 
     return all_messages, all_functions
 
-DEFAULT_MODEL = "gpt-3.5-turbo"
 
+#prompt_llm(): 
+DEFAULT_MODEL = "gpt-3.5-turbo"
 def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
     """
     Send a new user message string to the LLM and get back a response.
@@ -171,11 +176,38 @@ def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, 
     :return: a Stream of ChatCompletionChunk instances
     """
     messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
+    #INTRODUCIR POR MEDIO DE CÓDIGO UNA SOLA PREGUNTA QUE QUIERO QUE RESPONDA CHATGPT:
+    #openai.ChatCompletion.create(): El método create() aplicado al objeto ChatCompletion perteneciente a la librería 
+    #openai se encarga de crear chats que se puedan mandar a ChatGPT. Este recibe los siguientes parámetros:
+    # - model: Describe el modelo de lenguaje que se utilizará para generar la salida. Los modelos disponibles son 
+    #   gpt-3, gpt-4 y el más reciente es gpt-3.5-turbo. Todos se encuentran mencionados en la 
+    #   documentación de OpenAI: https://platform.openai.com/docs/models/overview
+    # - messages: Representa la lista de mensajes que se utilizarán para generar la salida del chat. Cada mensaje es un 
+    #   objeto con los siguientes campos:
+    #       - role: El rol del mensaje ayuda al modelo de lenguaje a entender el contexto de la conversación. Los roles 
+    #         posibles son system, user y assistant, indicándole así de forma separada a quién está interpretando 
+    #         ChatGPT para que de esta manera pueda dar respuestas de forma específica:
+    #           - system: Por medio de este rol se le indica a ChatGPT a quién está interpretando cuando responda las 
+    #             preguntas del usuario.
+    #           - user: En este rol se está indicando las preguntas que está realizando el usuario a ChatGPT.
+    #           - assistant: Este rol es adoptado por ChatGPT siempre que responda a la pregunta de un usuario y se 
+    #             observa en el resultado retornado por el objeto ChatCompletion después de usar el método create().
+    #             Su mayor uso es el de permitir que el chat recuerde entradas y salidas anteriores.
+    #       - content: Indica el contenido del mensaje mandado a ChatGPT.
+    # - max_tokens: Limita el número máximo de tokens que se devolverán en la salida, los tokens son considerados como 
+    #   trozos de palabras, donde 1.000 tokens corresponden a unas 750 palabras. Por default el límite es de 4096, por 
+    #   lo tanto, se pueden recibir y/o devolver como máximo más o menos 3,072 palabras, pero esto varía porque un 
+    #   token no es igual a una palabra, sino a trozos de ellas.
+    # - temperature: A través de un valor entre 0.0 y 2.0 se controla la creatividad de la respuesta dada. Cuanto más 
+    #   alto sea el valor, más creativa será la salida, pero si es muy alto la respuesta puede ser muy aleatoria y no 
+    #   tener sentido. Esto sucede con temperaturas arriba de 1.
+    # - n: El parámetro n indica el número de respuestas que queremos obtener por cada pregunta.
+    #Los parámetros se pueden consultar en este enlace: https://platform.openai.com/docs/api-reference/chat/create
     stream = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        functions=functions,
-        stream=True
+        model = model,
+        messages = messages,
+        functions = functions,
+        stream = True
     )
     return stream
 
