@@ -209,6 +209,9 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
 #Y retorna los fragmentos de texto  del modelo LLM al recibir el prompt de mensajes.
 DEFAULT_MODEL = "gpt-3.5-turbo"
 def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
+    #_build_chat_completion_payload(): Método privado de este script que permite obtener una lista de mensajes entre el 
+    #LLM y el usuario (incluyendo su historial) y una lista de funciones que le permiten saber al LLM de que forma debe 
+    #contestar el mensaje.
     messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
     #INTRODUCIR POR MEDIO DE CÓDIGO UNA SOLA PREGUNTA QUE QUIERO QUE RESPONDA CHATGPT:
     #openai.ChatCompletion.create(): El método create() aplicado al objeto ChatCompletion perteneciente a la librería 
@@ -249,6 +252,8 @@ def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, 
         functions = functions,
         stream = True
     )
+    #El método prompt_llm() de forma síncrona (uno tras otro) devuelve los fragmentos de texto de la respuesta del LLM 
+    #en tiempo real a medida que se generan.
     return stream
 
 async def prompt_llm_async(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
@@ -260,13 +265,50 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
     :param model: the OpenAI model
     :return: a Stream of ChatCompletionChunk instances
     """
+    #_build_chat_completion_payload(): Método privado de este script que permite obtener una lista de mensajes entre el 
+    #LLM y el usuario (incluyendo su historial) y una lista de funciones que le permiten saber al LLM de que forma debe 
+    #contestar el mensaje.
     messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
+    #INTRODUCIR POR MEDIO DE CÓDIGO UNA SOLA PREGUNTA ASINCRÓNICA QUE QUIERO QUE RESPONDA CHATGPT:
+    #openai.ChatCompletion.acreate(): El método asincrónico acreate() aplicado al objeto ChatCompletion perteneciente a 
+    #la librería openai se encarga de crear chats que se puedan mandar a ChatGPT de manera asíncrona, es decir, que 
+    #permite que otras operaciones se ejecuten mientras se espera la respuesta del modelo. Este método recibe los 
+    #siguientes parámetros:
+    # - model: Describe el modelo de lenguaje que se utilizará para generar la salida. Los modelos disponibles son 
+    #   gpt-3, gpt-4 y gpt-3.5-turbo. Todos se encuentran mencionados en la documentación de OpenAI: 
+    #   https://platform.openai.com/docs/models/overview
+    # - messages: Representa la lista de mensajes que se utilizarán para generar la salida del chat. Cada mensaje es un 
+    #   objeto con los siguientes campos:
+    #       - role: El rol del mensaje ayuda al modelo a entender el contexto. Los roles posibles son system, user y 
+    #         assistant:
+    #           - system: Indica a quién está interpretando ChatGPT cuando responda las preguntas del usuario.
+    #           - user: Representa las preguntas hechas por el usuario.
+    #           - assistant: Rol adoptado por ChatGPT al responder, permite recordar entradas y salidas anteriores.
+    #       - content: Indica el contenido del mensaje enviado a ChatGPT.
+    # - max_tokens: Limita el número máximo de tokens devueltos en la salida. Los tokens son trozos de palabras donde 
+    #   1.000 tokens corresponden a unas 750 palabras. El límite predeterminado es de 4096 tokens.
+    # - temperature: Controla la creatividad de la respuesta dada, con un valor entre 0.0 y 2.0. Valores más altos 
+    #   aumentan la creatividad, pero pueden generar respuestas menos coherentes. 
+    # - n: Indica el número de respuestas que se quieren obtener por cada pregunta.
+    # - functions: Permite al modelo invocar funciones específicas durante la conversación. Puede utilizar una lista de 
+    #   variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
+    #   pydantic.BaseModel para validar los datos de entrada.
+    # - stream: Si se establece en True, permite recibir las respuestas del modelo en tiempo real, enviando fragmentos 
+    #   de texto a medida que se generan.
+    # - timeout: Establece un límite de tiempo para la respuesta. Si se supera este tiempo, se produce una excepción.
+    # - api_key: Permite definir una clave de API específica para la solicitud, en caso de que no se quiera usar la 
+    #   configurada por defecto.
+    #El método `acreate()` retorna un objeto awaitable, lo que significa que se debe esperar su ejecución con la 
+    #palabra clave `await` en un contexto asíncrono. Los parámetros se pueden consultar en el siguiente enlace: 
+    #https://platform.openai.com/docs/api-reference/chat/create
     stream = await openai.ChatCompletion.acreate(
         model = model,
         messages = messages,
         functions = functions,
         stream = True
     )
+    #El método prompt_llm_async() de forma asíncrona (en paralelo) devuelve los fragmentos de texto de la respuesta del 
+    #LLM en tiempo real a medida que se generan.
     return stream
 
 #__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 
