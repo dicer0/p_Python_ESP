@@ -149,9 +149,10 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
     if not existing_messages:
         existing_messages = []
     
-    #Al usar internamente el método _build_chat_completion_payload() en la clase, se mandará la lista de mensajes a la 
-    #API de ChatGPT, la cual utiliza el siguiente método openai.ChatCompletion.create() para mandar un prompt al LLM 
-    #(Large Language Model) de OpenAI, específicamente esto se manda al siguiente parámetro:
+    #LISTA DE MENSAJES:
+    #Al usar internamente el método _build_chat_completion_payload() en alguna otra función de la clase, se mandará la 
+    #lista de mensajes a la API de ChatGPT, la cual utiliza el siguiente método openai.ChatCompletion.create() para 
+    #mandar un prompt al LLM (Large Language Model) de OpenAI, específicamente esto se manda al siguiente parámetro:
     # - messages: Representa la lista de mensajes que se utilizarán para generar la salida del chat. Cada mensaje es un 
     #   objeto con los siguientes campos:
     #       - role: El rol del mensaje ayuda al modelo de lenguaje a entender el contexto de la conversación. Los roles 
@@ -168,6 +169,14 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
     user_message = {"role": "user", "content": user_message_content}
     all_messages = [system_message] + existing_messages + [user_message]
 
+    #LISTA DE FUNCIONES:
+    #Al usar internamente el método _build_chat_completion_payload() en alguna otra función de la clase, se mandará la 
+    #lista de funciones a la API de ChatGPT, la cual utiliza el siguiente método openai.ChatCompletion.create() para 
+    #indicar la forma de contestación que debe adoptar el LLM (Large Language Model) de OpenAI durante la conversación 
+    #del chat, específicamente esto se manda al siguiente parámetro:
+    # - functions: Permite al modelo invocar funciones específicas durante una conversación. Puede utilizar una lista 
+    #   de variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
+    #   pydantic.BaseModel para validar los datos de entrada de las funciones.
     sarcasm_function = {
         "name": "SarcasmDetection",
         "parameters": SarcasmDetection.schema()
@@ -182,6 +191,8 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
     }
     all_functions = [sarcasm_function, joke_explanation_function, joke_delivery]
 
+    #El método privado _build_chat_completion_payload() entonces retorna una tupla de dos valores, la lista de mensajes 
+    #y la lista de funciones.
     return all_messages, all_functions
 
 
@@ -246,10 +257,10 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
     """
     messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
     stream = await openai.ChatCompletion.acreate(
-        model=model,
-        messages=messages,
-        functions=functions,
-        stream=True
+        model = model,
+        messages = messages,
+        functions = functions,
+        stream = True
     )
     return stream
 
