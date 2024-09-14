@@ -139,10 +139,31 @@ SYSTEM_PROMPT_CONTENT = """
 #               Contenido de la función. 
 #   - La primera lista que devuelve la función es de mensajes.
 #   - La segunda lista que devuelve la función es de funciones.
+#POO: En Python cuando al nombre de una función se le pongan dos o un guión bajo antes de su nombre es porque se está 
+#refiriendo a un método privado, el cual se utiliza solo dentro de esta misma clase, no desde fuera, es una buena 
+#práctica de sintaxis.
 def _build_chat_completion_payload(user_message_content: str, existing_messages: list[dict] = None) -> tuple[list[dict], list[dict]]:
+    #Condicional if que inicializa la lista de diccionarios que contiene el historial de mensajes en el chat, si este 
+    #tiene valor de None (cuyo valor está asignado inicialmente), se crea una lista vacía, sino se respeta el historial
+    #existente.
     if not existing_messages:
         existing_messages = []
-
+    
+    #Al usar internamente el método _build_chat_completion_payload() en la clase, se mandará la lista de mensajes a la 
+    #API de ChatGPT, la cual utiliza el siguiente método openai.ChatCompletion.create() para mandar un prompt al LLM 
+    #(Large Language Model) de OpenAI, específicamente esto se manda al siguiente parámetro:
+    # - messages: Representa la lista de mensajes que se utilizarán para generar la salida del chat. Cada mensaje es un 
+    #   objeto con los siguientes campos:
+    #       - role: El rol del mensaje ayuda al modelo de lenguaje a entender el contexto de la conversación. Los roles 
+    #         posibles son system, user y assistant, indicándole así de forma separada a quién está interpretando 
+    #         ChatGPT para que de esta manera pueda dar respuestas de forma específica:
+    #           - system: Por medio de este rol se le indica a ChatGPT a quién está interpretando cuando responda las 
+    #             preguntas del usuario.
+    #           - user: En este rol se está indicando las preguntas que está realizando el usuario a ChatGPT.
+    #           - assistant: Este rol es adoptado por ChatGPT siempre que responda a la pregunta de un usuario y se 
+    #             observa en el resultado retornado por el objeto ChatCompletion después de usar el método create().
+    #             Su mayor uso es el de permitir que el chat recuerde entradas y salidas anteriores.
+    #       - content: Indica el contenido del mensaje mandado a ChatGPT.
     system_message = {"role": "system", "content": SYSTEM_PROMPT_CONTENT}
     user_message = {"role": "user", "content": user_message_content}
     all_messages = [system_message] + existing_messages + [user_message]
@@ -202,6 +223,9 @@ def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, 
     #   alto sea el valor, más creativa será la salida, pero si es muy alto la respuesta puede ser muy aleatoria y no 
     #   tener sentido. Esto sucede con temperaturas arriba de 1.
     # - n: El parámetro n indica el número de respuestas que queremos obtener por cada pregunta.
+    # - functions: Permite al modelo invocar funciones específicas durante una conversación. Puede utilizar una lista 
+    #   de variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
+    #   pydantic.BaseModel para validar los datos de entrada de las funciones.
     #Los parámetros se pueden consultar en este enlace: https://platform.openai.com/docs/api-reference/chat/create
     stream = openai.ChatCompletion.create(
         model = model,

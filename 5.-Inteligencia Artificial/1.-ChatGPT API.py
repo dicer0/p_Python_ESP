@@ -54,6 +54,9 @@ openai.api_key = LlaveChatGPT
 #   alto sea el valor, más creativa será la salida, pero si es muy alto la respuesta puede ser muy aleatoria y no 
 #   tener sentido. Esto sucede con temperaturas arriba de 1.
 # - n: El parámetro n indica el número de respuestas que queremos obtener por cada pregunta.
+# - functions: Permite al modelo invocar funciones específicas durante una conversación. Puede utilizar una lista de 
+#   variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
+#   pydantic.BaseModel para validar los datos de entrada de las funciones.
 #Todos los parámetros se pueden consultar en este enlace: https://platform.openai.com/docs/api-reference/chat/create
 completion = openai.ChatCompletion.create(
     model = "gpt-3.5-turbo", 
