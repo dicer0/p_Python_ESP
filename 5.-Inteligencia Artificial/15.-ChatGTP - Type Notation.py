@@ -11,6 +11,7 @@
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
 #IMPORTACIÓN DE LIBRERÍAS:
+import sys #sys: Librería que permite interactuar directamente con el sistema operativo y consola del ordenador.
 import openai #openai: Librería que permite utilizar el LLM (Large Language Model) de ChatGPT con Python.
 #Cabe mencionar que, al utilizar la API en su modo gratuito, solo se podrán realizar 100 llamadas a la API por día, 
 #si se excede ese límite, se recibirá el error RateLimitError al intentar ejecutar el programa de Python.
@@ -196,17 +197,18 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
     return all_messages, all_functions
 
 
-#prompt_llm(): 
+#prompt_llm(): Esta función utiliza el método privado _build_chat_completion_payload() de forma interna en este script 
+#para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la lista de 
+#funciones del chat (que indica al modelo la forma en la que debe contestar al usuario). Este método realiza la acción 
+#de contestar al usuario de forma síncrona con el método openai.ChatCompletion.create(). Para ello recibe 3 parámetros:
+#   - user_message_content: Este parámetro recibe un string con los mensajes del usuario.
+#   - existing_messages: Este parámetro recibe una lista de diccionarios opcional con el historial de mensajes 
+#     existentes en el chat.
+#   - model: Este parámetro recibe un string que indica el modelo LLM de OpenAI con el que se quiere trabajar al 
+#     utilizar el método openai.ChatCompletion.create().
+#Y retorna los fragmentos de texto  del modelo LLM al recibir el prompt de mensajes.
 DEFAULT_MODEL = "gpt-3.5-turbo"
 def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
-    """
-    Send a new user message string to the LLM and get back a response.
-
-    :param user_message_content: the string of the user message
-    :param existing_messages: an optional list of existing messages
-    :param model: the OpenAI model
-    :return: a Stream of ChatCompletionChunk instances
-    """
     messages, functions = _build_chat_completion_payload(user_message_content, existing_messages)
     #INTRODUCIR POR MEDIO DE CÓDIGO UNA SOLA PREGUNTA QUE QUIERO QUE RESPONDA CHATGPT:
     #openai.ChatCompletion.create(): El método create() aplicado al objeto ChatCompletion perteneciente a la librería 
@@ -237,6 +239,9 @@ def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, 
     # - functions: Permite al modelo invocar funciones específicas durante una conversación. Puede utilizar una lista 
     #   de variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
     #   pydantic.BaseModel para validar los datos de entrada de las funciones.
+    # - stream: Si se establece en True, permite recibir las respuestas del modelo en tiempo real, enviando fragmentos 
+    #   de texto a medida que se generan. Esto es útil para mostrar respuestas progresivas sin esperar a que el modelo 
+    #   complete toda la respuesta.
     #Los parámetros se pueden consultar en este enlace: https://platform.openai.com/docs/api-reference/chat/create
     stream = openai.ChatCompletion.create(
         model = model,
@@ -268,7 +273,6 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
 #programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
 #una buena práctica.
 if __name__ == '__main__':
-    import sys
     user_message_content = sys.argv[1]
     stream = prompt_llm(user_message_content=user_message_content)
     for chunk in stream:

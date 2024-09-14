@@ -57,6 +57,9 @@ openai.api_key = LlaveChatGPT
 # - functions: Permite al modelo invocar funciones específicas durante una conversación. Puede utilizar una lista de 
 #   variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
 #   pydantic.BaseModel para validar los datos de entrada de las funciones.
+# - stream: Si se establece en True, permite recibir las respuestas del modelo en tiempo real, enviando fragmentos de 
+#   texto a medida que se generan. Esto es útil para mostrar respuestas progresivas sin esperar a que el modelo 
+#   complete toda la respuesta.
 #Todos los parámetros se pueden consultar en este enlace: https://platform.openai.com/docs/api-reference/chat/create
 completion = openai.ChatCompletion.create(
     model = "gpt-3.5-turbo", 
