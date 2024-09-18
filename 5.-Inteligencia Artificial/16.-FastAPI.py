@@ -22,12 +22,22 @@ from API_Keys.Llaves_ChatGPT_Bard_etc import LlaveChatGPT
 import asyncio
 #random: Librería para generar números aleatorios y realizar operaciones relacionadas con la aleatoriedad.
 import random
-#fastapi: Es una bilbioteca para crear APIs web rápidas y eficientes. Está basada en Starlette para la gestión de 
-#solicitudes HTTP y en Pydantic para la validación de datos, lo que la convierte en una opción ideal para construir 
-#APIs modernas y robustas.
+
+#FastAPI: Es una bilbioteca para crear APIs web rápidas y eficientes. Está basada en la librería Starlette para la 
+#gestión de solicitudes HTTP y la librería Pydantic para la validación de datos, lo que la convierte en una opción 
+#ideal para construir APIs modernas y robustas. Sus mayores ventajas son:
+# - Documentación Automática: Mientras se construyen los endpoints de la API (las carpetas o rutas de la URL) usando 
+#   los 4 métodos HTTP que conforman el CRUD (Create, Read, Update y Delete): GET, POST, PUT y DELETE. Se estará 
+#   creando automáticamente una documentación de su uso al acceder al endpoint URL/docs.
+#       - Create -> POST: Método HTTP que permite mandar datos al endpoint de una API.
+#       - Read ->   GET: Método HTTP que permite obtener los datos almacenados en algún endpoint de una API.
+#       - Update -> PUT: Método HTTP que permite actualizar los datos previamente almacenados en un endpoint.
+#       - Delete -> DELETE: Método HTTP que permite borrar los datos previamente almacenados en un endpoint.
+# - Validación de Datos: Estos se realizan a través de la librería Pydantic, la cual realiza operaciones de anotación 
+#   de datos con la siguiente sintaxis: nombreAtributo: Tipo de dato = "Valor por default".
 import fastapi
 #sse_starlette: Esta librería se utiliza en aplicaciones web que usen la bilbioteca FastAPI para habilitar el soporte 
-#de Server-Sent Events (SSE), tecnología que permite al servidor enviar actualizaciones automáticas al cliente a través 
+#de Server-Sent Events (SSE); tecnología que permite al servidor enviar actualizaciones automáticas al cliente a través 
 #de una conexión HTTP persistente, lo que facilita la transmisión continua de datos en tiempo real.
 import sse_starlette
 
