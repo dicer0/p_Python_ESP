@@ -1,7 +1,3 @@
-import asyncio
-import random
-from fastapi import FastAPI
-from sse_starlette.sse import EventSourceResponse
 
 #IMPORTACIÓN DE CLASES: Cuando se quiera importar una clase, el nombre de esta no puede empezar con un número, 
 #sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas o también llamados paquetes 
@@ -19,7 +15,12 @@ from POO_API_AsistenteVirtual import ChatGPT_TypeNotation
 #La parte del directorio se coloca después de la palabra reservada from y la llave a importar después de import.
 from API_Keys.Llaves_ChatGPT_Bard_etc import LlaveChatGPT
 
-app = FastAPI()
+import asyncio
+import random
+import fastapi
+import sse_starlette
+
+app = fastapi.FastAPI()
 
 @app.get("/stream-example")
 async def stream_example():
@@ -39,6 +40,6 @@ async def stream_example():
             print(f"Yielding token: {token}")
             yield token
 
-    return EventSourceResponse(stream_tokens())
+    return sse_starlette.sse.EventSourceResponse(stream_tokens())
 
 # Your code/routes here (you may also keep code in separate files and import/it them here):
