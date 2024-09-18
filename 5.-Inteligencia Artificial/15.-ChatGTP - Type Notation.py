@@ -186,19 +186,25 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
     #   de variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que hereden de 
     #   pydantic.BaseModel para validar los datos de entrada de las funciones.
     sarcasm_function = {
-        "name": "SarcasmDetection",
+        #__name__: Es un atributo especial de todas las clases, funciones, y módulos en Python que almacena su nombre 
+        #como una cadena de texto (str).
+        "name": SarcasmDetection.__name__,
+        #.schema(): Este método se aplica únicamente a las clases que heredan de BaseModel, perteneciente a la librería 
+        #Pydantic. Genera y devuelve un diccionario que representa el esquema del modelo, incluyendo los atributos, sus 
+        #tipos de datos, validaciones, restricciones y valores predeterminados. El esquema describe cómo deben ser los 
+        #datos que el modelo acepta.
         "parameters": SarcasmDetection.schema()
     }
     joke_explanation_function = {
-        "name": "JokeExplanation",
+        "name": JokeExplanation.__name__,
         "parameters": JokeExplanation.schema()
     }
     joke_delivery = {
-        "name": "JokeDelivery",
+        "name": JokeDelivery.__name__,
         "parameters": JokeDelivery.schema()
     }
     all_functions = [sarcasm_function, joke_explanation_function, joke_delivery]
-
+    
     #El método privado _build_chat_completion_payload() entonces retorna una tupla de dos valores, la lista de mensajes 
     #y la lista de funciones.
     return all_messages, all_functions
@@ -345,7 +351,7 @@ if __name__ == '__main__':
     #este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
     #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario).
     stream = prompt_llm(user_message_content = user_message_content)
-
+    
     for chunk in stream:
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)

@@ -41,5 +41,4 @@ async def stream_example():
             yield token
 
     return sse_starlette.sse.EventSourceResponse(stream_tokens())
-
 # Your code/routes here (you may also keep code in separate files and import/it them here):
