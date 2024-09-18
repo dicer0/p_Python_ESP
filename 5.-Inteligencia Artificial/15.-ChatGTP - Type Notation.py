@@ -45,7 +45,7 @@ class SarcasmDetection(pydantic.BaseModel):
     #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
     #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
     #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
-    # nombreAtributo: Tipo de dato
+    # nombreAtributo: Tipo de dato = "Valor por default"
     #   - pydantic.Field(): Método de la librería Pydantic que se usa para configurar validaciones de datos, establecer 
     #     sus valores predeterminados, agregar descripciones y definir alias para los atributos en un modelo de datos. 
     #     Esto mejora la claridad del código al asegurar que los campos del modelo cumplan con las expectativas y se 
@@ -80,7 +80,7 @@ class JokeExplanation(pydantic.BaseModel):
     #Anotación de tipo: Se utiliza principalmente para documentar y mejorar la legibilidad del código, pero cuando la 
     #clase herede de alguna herramienta de autocompletado o validación, las anotaciones de tipo sirven para especificar 
     #el tipo de dato que se espera para una variable, atributo o parámetro de función. Su sintaxis es la siguiente:
-    # nombreAtributo: Tipo de dato
+    # nombreAtributo: Tipo de dato = "Valor por default"
     #   - pydantic.Field(): Método de la librería Pydantic que se usa para configurar validaciones de datos, establecer 
     #     sus valores predeterminados, agregar descripciones y definir alias para los atributos en un modelo de datos. 
     #     Esto mejora la claridad del código al asegurar que los campos del modelo cumplan con las expectativas y se 
@@ -97,7 +97,7 @@ class JokeExplanation(pydantic.BaseModel):
                                             "comes with a twist or surprise that contrasts with the setup or premise, "
                                             "creating a humorous effect.")
 
-#JokeExplanation: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
+#JokeDelivery: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
 #crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
 #Utilice esta función cuando quiera contar un chiste. Use un poco de capricho y cuente chistes aparentemente al azar. 
 #Pero también cuente chistes cuando el usuario se lo pida. Cuente sólo chistes con comedia limpia.
@@ -345,7 +345,7 @@ if __name__ == '__main__':
     #este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
     #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario).
     stream = prompt_llm(user_message_content = user_message_content)
-    
+
     for chunk in stream:
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)
