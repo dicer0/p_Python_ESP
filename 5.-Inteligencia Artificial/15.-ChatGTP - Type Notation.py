@@ -34,6 +34,9 @@ openai.api_key = LlaveChatGPT
 #como "42", Pydantic intentará convertirla a entero.
 import pydantic
 
+
+
+
 #SarcasmDetection: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
 #crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
 #Utilice esta función cuando se detecte sarcasmo o cuando el usuario solicite que se detecte sarcasmo.
@@ -111,6 +114,7 @@ class JokeDelivery(pydantic.BaseModel):
     #       - description: Ofrece una descripción del campo, mejorando la claridad del propósito del atributo en la 
     #         documentación del modelo.
     text: str = pydantic.Field(..., description = "The text of the joke.")
+
 
 
 #Constantes: En Python no existen las constantes, pero se puede denotar la existencia simbolica de una a través de 
@@ -197,6 +201,7 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
     return all_messages, all_functions
 
 
+
 #prompt_llm(): Esta función utiliza el método privado _build_chat_completion_payload() de forma interna en este script 
 #para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la lista de 
 #funciones del chat (que indica al modelo la forma en la que debe contestar al usuario). Este método realiza la acción 
@@ -256,15 +261,20 @@ def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, 
     #en tiempo real a medida que se generan.
     return stream
 
-async def prompt_llm_async(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
-    """
-    Asynchronously send a new user message string to the LLM and get back a response.
 
-    :param user_message_content: the string of the user message
-    :param existing_messages: an optional list of existing messages
-    :param model: the OpenAI model
-    :return: a Stream of ChatCompletionChunk instances
-    """
+
+#prompt_llm_async(): Esta función asíncrona utiliza el método privado _build_chat_completion_payload() de forma interna 
+#en este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
+#lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario). Este método realiza 
+#la acción de contestar al usuario de forma síncrona con el método openai.ChatCompletion.create(). Para ello recibe 3 
+#parámetros:
+#   - user_message_content: Este parámetro recibe un string con los mensajes del usuario.
+#   - existing_messages: Este parámetro recibe una lista de diccionarios opcional con el historial de mensajes 
+#     existentes en el chat.
+#   - model: Este parámetro recibe un string que indica el modelo LLM de OpenAI con el que se quiere trabajar al 
+#     utilizar el método openai.ChatCompletion.create().
+#Y retorna los fragmentos de texto  del modelo LLM al recibir el prompt de mensajes.
+async def prompt_llm_async(user_message_content: str, existing_messages: list[dict] = None, model: str = DEFAULT_MODEL):
     #_build_chat_completion_payload(): Método privado de este script que permite obtener una lista de mensajes entre el 
     #LLM y el usuario (incluyendo su historial) y una lista de funciones que le permiten saber al LLM de que forma debe 
     #contestar el mensaje.
@@ -299,8 +309,7 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
     # - api_key: Permite definir una clave de API específica para la solicitud, en caso de que no se quiera usar la 
     #   configurada por defecto.
     #El método `acreate()` retorna un objeto awaitable, lo que significa que se debe esperar su ejecución con la 
-    #palabra clave `await` en un contexto asíncrono. Los parámetros se pueden consultar en el siguiente enlace: 
-    #https://platform.openai.com/docs/api-reference/chat/create
+    #palabra clave `await` en un contexto asíncrono.
     stream = await openai.ChatCompletion.acreate(
         model = model,
         messages = messages,
@@ -315,9 +324,20 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
 #programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
 #una buena práctica.
 if __name__ == '__main__':
-    #user_message_content = sys.argv[1]
+    #sys.argv: Es una lista llamada "argument vector" que contiene en su posición 0 el nombre del script y el contenido 
+    #de los demás parámetros pasados al programa en sus otras posiciones. Si no se proporcionan argumentos al programa, 
+    #acceder a sys.argv[1] generará un IndexError, por lo que es común verificar su longitud con un condicional antes 
+    #de usarlo.
+    #   - Ejemplo: 
+    #       python mi_script.py "Hola Mundo"
+    #   - sys.argv sería: 
+    #       ['mi_script.py', 'Hola Mundo']
     user_message_content = sys.argv[1] if len(sys.argv) > 1 else "Tell me a joke about 90s sitcoms."
+    #prompt_llm(): Esta función propia utiliza el método privado _build_chat_completion_payload() de forma interna en 
+    #este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
+    #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario).
     stream = prompt_llm(user_message_content = user_message_content)
+    
     for chunk in stream:
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)

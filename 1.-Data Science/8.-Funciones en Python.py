@@ -103,3 +103,25 @@ square = lambda x: x**2
 #Llamada a la función: Se puede llamar las funciones lambda por medio de la variable que almacena su valor 
 #resultante, siguiendo la misma sintaxis de una función normal y obteniendo su resultado.
 print("Función lambda:", square(25))
+
+
+
+
+#Función asíncrona: 
+#asyncio: Librería que facilita la escritura de código concurrente y asíncrono en Python mediante el uso de 
+#corutinas, bucles de eventos y tareas.
+import asyncio
+#async def: Palabra reservada que se utiliza para definir una función asíncrona en Python, conocida como 
+#corutina. Estas funciones permiten realizar operaciones de manera no bloqueante, facilitando la ejecución 
+#concurrente de código. 
+#Relación con await: Dentro de una función definida con async def, la palabra clave await se usa para llamar 
+#a otras corutinas, indicando al bucle de eventos que debe esperar su resultado sin bloquear la ejecución del 
+#resto del código.
+async def my_coroutine():
+    print("Start")
+    await asyncio.sleep(1)  # Simula una espera asincrónica de 1 segundo
+    print("End")
+
+async def main():
+    await my_coroutine()
+asyncio.run(main())
