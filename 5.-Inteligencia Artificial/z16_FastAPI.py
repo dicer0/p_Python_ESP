@@ -1,4 +1,15 @@
-#API 
+# -*- coding: utf-8 -*-
+
+#En Python se introducen comentarios de una sola linea con el simbolo #.
+#La primera línea de código incluida en este programa se conoce como declaración de codificación o codificación 
+#de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo 
+#pueda contener caracteres especiales, letras acentuadas y otros caracteres no ASCII sin problemas, garantizando 
+#que Python interprete correctamente esos caracteres y evite posibles errores de codificación.
+#Se puede detener una ejecución con el comando [CTRL] + C puesto en consola, con el comando "cls" se borra su 
+#historial y en Visual Studio Code con el botón superior derecho de Play se corre el programa.
+#Para comentar en Visual Studio Code varias líneas de código se debe pulsar:
+#[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
+
 #IMPORTACIÓN DE CLASES: Cuando se quiera importar una clase, el nombre de esta no puede empezar con un número, 
 #sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas o también llamados paquetes 
 #en la programación orientada a objetos (POO), por medio de puntos:
@@ -15,6 +26,7 @@ from POO_API_AsistenteVirtual import ChatGPT_TypeNotation
 #La parte del directorio se coloca después de la palabra reservada from y la llave a importar después de import.
 from API_Keys.Llaves_ChatGPT_Bard_etc import LlaveChatGPT
 
+#IMPORTACIÓN DE LIBRERÍAS:
 #AsyncIO: Librería que permite escribir código concurrente (asíncrono) que puede realizar múltiples tareas al mismo 
 #tiempo sin la necesidad de usar hilos (threads) o procesos múltiples. En lugar de bloquear el programa mientras se 
 #espera una operación de I/O (entradas/salidas como leer de una base de datos, recibir datos de una API o interactuar 
