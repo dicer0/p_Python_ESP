@@ -345,7 +345,7 @@ if __name__ == '__main__':
     #este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
     #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario).
     stream = prompt_llm(user_message_content = user_message_content)
-
+    
     for chunk in stream:
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)
