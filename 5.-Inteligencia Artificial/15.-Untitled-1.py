@@ -220,15 +220,21 @@ class GorpAssistant:
         #   lista de variables en formato JSON que definen las funciones y sus parámetros, o una lista de clases que 
         #   hereden de pydantic.BaseModel para validar los datos de entrada de las funciones.
         sarcasm_function = {
-            "name": "SarcasmDetection",
+            #__name__: Es un atributo especial de todas las clases, funciones, y módulos en Python que almacena su 
+            #nombre como una cadena de texto (str).
+            "name": self.SarcasmDetection.__name__,
+            #.schema(): Este método se aplica únicamente a las clases que heredan de BaseModel, perteneciente a la 
+            #librería Pydantic. Genera y devuelve un diccionario que representa el esquema del modelo, incluyendo los 
+            #atributos, sus tipos de datos, validaciones, restricciones y valores predeterminados. El esquema describe 
+            #cómo deben ser los datos que el modelo acepta.
             "parameters": self.SarcasmDetection.schema()
         }
         joke_explanation_function = {
-            "name": "JokeExplanation",
+            "name": self.JokeExplanation.__name__,
             "parameters": self.JokeExplanation.schema()
         }
         joke_delivery = {
-            "name": "JokeDelivery",
+            "name": self.JokeDelivery.__name__,
             "parameters": self.JokeDelivery.schema()
         }
         all_functions = [sarcasm_function, joke_explanation_function, joke_delivery]
