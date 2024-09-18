@@ -315,7 +315,8 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
 #programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
 #una buena práctica.
 if __name__ == '__main__':
-    user_message_content = sys.argv[1]
-    stream = prompt_llm(user_message_content=user_message_content)
+    #user_message_content = sys.argv[1]
+    user_message_content = sys.argv[1] if len(sys.argv) > 1 else "Tell me a joke about 90s sitcoms."
+    stream = prompt_llm(user_message_content = user_message_content)
     for chunk in stream:
         print(chunk.choices[0].delta.content)
