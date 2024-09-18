@@ -99,18 +99,14 @@ app = fastapi.FastAPI()
 #entre usuario y un asistente virtual de ChatGPT, en particular transmitiendo texto del servidor al cliente mandando 
 #una palabra o token a la vez. 
 async def stream_example():
+    #stream_tokens(): Implementación de marcador de posición para la transmisión de tokens. Pruebe a ejecutar esta ruta 
+    #tal cual para comprender mejor cómo transmitir datos mediante eventos enviados por el servidor (SSE) en FastAPI.
+    #Para más información checar: https://devdojo.com/bobbyiliev/how-to-use-server-sent-events-sse-with-fastapi
     async def stream_tokens():
-        """
-        Placeholder implementation for token streaming. Try running this route as-is to better understand how to
-        stream data using Server-Sent Events (SSEs) in FastAPI.
-        See this tutorial for more information: https://devdojo.com/bobbyiliev/how-to-use-server-sent-events-sse-with-fastapi
-        """
         for token in ['hello', ', ', 'this ', 'is ', 'a ', 'streamed ', 'response.']:
-            # fake delay:
+            # fake delay: 
             await asyncio.sleep(random.randint(0, 3))
-
             print(f"Yielding token: {token}")
             yield token
-
     return sse_starlette.sse.EventSourceResponse(stream_tokens())
 # Your code/routes here (you may also keep code in separate files and import/it them here):
