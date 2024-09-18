@@ -348,10 +348,10 @@ class GorpAssistant:
         #El método `acreate()` retorna un objeto awaitable, lo que significa que se debe esperar su ejecución con la 
         #palabra clave `await` en un contexto asíncrono.
         stream = await openai.ChatCompletion.acreate(
-            model=self.model,
-            messages=messages,
-            functions=functions,
-            stream=True
+            model = self.model,
+            messages = messages,
+            functions = functions,
+            stream = True
         )
         #El método prompt_llm_async() de forma asíncrona (en paralelo) devuelve los fragmentos de texto de la respuesta 
         #del LLM en tiempo real a medida que se generan.
