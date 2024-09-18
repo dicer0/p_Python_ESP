@@ -2,6 +2,13 @@ import asyncio
 import random
 from fastapi import FastAPI
 from sse_starlette.sse import EventSourceResponse
+#IMPORTACIÓN DE CLASES: Cuando se quiera importar una clase, el nombre de esta no puede empezar con un número, 
+#sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas o también llamados paquetes 
+#en la programación orientada a objetos (POO), por medio de puntos:
+# - Directorio normal:      carpeta1/carpeta2/carpeta3
+# - Directorio paquetes:    carpeta1.carpeta2.carpeta3
+#La parte del directorio se coloca después de la palabra reservada from y la clase a importar después de import.
+from POO_API_AsistenteVirtual import ChatGPT_TypeNotation
 
 app = FastAPI()
 
