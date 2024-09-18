@@ -319,4 +319,5 @@ if __name__ == '__main__':
     user_message_content = sys.argv[1] if len(sys.argv) > 1 else "Tell me a joke about 90s sitcoms."
     stream = prompt_llm(user_message_content = user_message_content)
     for chunk in stream:
-        print(chunk.choices[0].delta.content)
+        if 'content' in chunk.choices[0].delta:
+            print(chunk.choices[0].delta.content)
