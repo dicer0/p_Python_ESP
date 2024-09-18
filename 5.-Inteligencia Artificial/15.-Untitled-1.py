@@ -11,7 +11,6 @@
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
 #IMPORTACIÓN DE LIBRERÍAS:
-import sys #sys: Librería que permite interactuar directamente con el sistema operativo y consola del ordenador.
 import openai #openai: Librería que permite utilizar el LLM (Large Language Model) de ChatGPT con Python.
 #Cabe mencionar que, al utilizar la API en su modo gratuito, solo se podrán realizar 100 llamadas a la API por día, 
 #si se excede ese límite, se recibirá el error RateLimitError al intentar ejecutar el programa de Python.
