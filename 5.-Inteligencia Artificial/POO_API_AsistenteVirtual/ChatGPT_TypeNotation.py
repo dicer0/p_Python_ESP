@@ -15,14 +15,6 @@ import openai #openai: Librería que permite utilizar el LLM (Large Language Mod
 #Cabe mencionar que, al utilizar la API en su modo gratuito, solo se podrán realizar 100 llamadas a la API por día, 
 #si se excede ese límite, se recibirá el error RateLimitError al intentar ejecutar el programa de Python.
 
-#IMPORTACIÓN DE LLAVE: Cuando se quiera utilizar una API que utiliza un key, por seguridad es de buenas prácticas 
-#declararla en un archivo externo, además cabe mencionar que el nombre de dicho archivo y constante no pueden empezar 
-#con un número, sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas por medio de puntos:
-# - Directorio normal:      carpeta1/carpeta2/carpeta3
-# - Directorio paquetes:    carpeta1.carpeta2.carpeta3
-#La parte del directorio se coloca después de la palabra reservada from y la llave a importar después de import.
-#from API_Keys.Llaves_ChatGPT_Bard_etc import LlaveChatGPT
-
 #pydantic: Librería que permite validar tipos de datos y opcionalmente aplicar transformaciones o lanzar errores si 
 #los datos no coinciden con los tipos esperados. Por ejemplo, si se espera un número entero pero se recibe una cadena 
 #como "42", Pydantic intentará convertirla a entero.
