@@ -240,7 +240,7 @@ try:
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
 
-#2.1.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
+#2.1.- PostgreSQL: psycopg2.connect(dbname, user, password, host, port)
 #instalation: pip install psycopg2-binary
 #2.2.- Psycopg2: La librería psycopg2 permite trabajar directamente con bases de datos PostgreSQL. A través de 
 #psycopg2, los desarrolladores pueden enviar consultas SQL, manejar transacciones y trabajar con datos de manera 
@@ -250,9 +250,6 @@ except Exception as error:
 # - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
 import psycopg2
 try:
-    #with: Con este operador de contexto de ejecución se maneja la apertura y cierre de la conexión a la base de 
-    #datos de forma automática, por lo que esta no se debe abrir ni cerrar de forma manual, solo se llama al 
-    #método y se le asigna una variable para poderla utilizar.
     postgresql_engine = psycopg2.connect(
         dbname = 'c1_AI_ChatHistory',
         user = 'postgres',
@@ -260,10 +257,17 @@ try:
         host = '127.0.0.1',
         port = '5432'
     )
+    #with: Con este operador de contexto de ejecución se maneja la apertura y cierre de la conexión a la base de 
+    #datos de forma automática, por lo que esta no se debe abrir ni cerrar de forma manual, solo se llama al 
+    #método y se le asigna una variable para poderla utilizar.
     with postgresql_engine.cursor() as connection2:
         print("2.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("2.- Ups an Error ocurred while Opening the PostgresSQL DataBase:\n" + str(error) + "\n")
+finally:
+    if ('postgresql_engine' in locals()):
+        print("2.- PostgreSQL connection closed\n")
+        postgresql_engine.close()
 
 #3.- SQLite (path relativo): create_engine('sqlite:///mydatabase.db')
 #No additional installation is needed.
