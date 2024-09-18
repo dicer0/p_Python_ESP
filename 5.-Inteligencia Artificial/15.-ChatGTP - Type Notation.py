@@ -37,6 +37,7 @@ import pydantic
 
 
 
+
 #SarcasmDetection: La clase hereda de la clase BaseModel, que a su vez pertenece a la librería pydantic y sirve para 
 #crear modelos de tipos de datos. Estos modelos se utilizan para definir, validar, manejar y transformar datos.
 #Utilice esta función cuando se detecte sarcasmo o cuando el usuario solicite que se detecte sarcasmo.
@@ -114,6 +115,8 @@ class JokeDelivery(pydantic.BaseModel):
     #       - description: Ofrece una descripción del campo, mejorando la claridad del propósito del atributo en la 
     #         documentación del modelo.
     text: str = pydantic.Field(..., description = "The text of the joke.")
+
+
 
 
 
@@ -202,6 +205,8 @@ def _build_chat_completion_payload(user_message_content: str, existing_messages:
 
 
 
+
+
 #prompt_llm(): Esta función utiliza el método privado _build_chat_completion_payload() de forma interna en este script 
 #para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la lista de 
 #funciones del chat (que indica al modelo la forma en la que debe contestar al usuario). Este método realiza la acción 
@@ -262,7 +267,6 @@ def prompt_llm(user_message_content: str, existing_messages: list[dict] = None, 
     return stream
 
 
-
 #prompt_llm_async(): Esta función asíncrona utiliza el método privado _build_chat_completion_payload() de forma interna 
 #en este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
 #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario). Este método realiza 
@@ -320,6 +324,10 @@ async def prompt_llm_async(user_message_content: str, existing_messages: list[di
     #LLM en tiempo real a medida que se generan.
     return stream
 
+
+
+
+
 #__name__ == __main__: Método main, esta función es super importante ya que sirve para instanciar las clases del 
 #programa y ejecutar sus métodos, en python pueden existir varios métodos main en un solo programa, aunque no es 
 #una buena práctica.
@@ -337,7 +345,7 @@ if __name__ == '__main__':
     #este script para obtener la lista de mensajes (que almacena el historial del chat y recibe mensajes nuevos) y la 
     #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario).
     stream = prompt_llm(user_message_content = user_message_content)
-    
+
     for chunk in stream:
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)
