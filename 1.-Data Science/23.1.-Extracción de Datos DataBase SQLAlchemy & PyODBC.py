@@ -21,7 +21,7 @@
 #establecer una conexión ODBC de forma manual.
 #No es que exista una mejor librería de manejo de datos, sino que dependiendo de la base de datos a la que nos 
 #queramos conectar, conviene utilizar una biblioteca en vez de otra.
-# - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
+# - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench y SQLite.
 # - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
 # - Psycopg2: Es conveniente usar esta librería cuando se utiliza una base de datos PostgreSQL.
 
@@ -240,14 +240,27 @@ try:
 except Exception as error:
     print("1.- Ups an Error ocurred while Opening the MySQL DataBase:\n" + str(error) + "\n")
 
-#2.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
-#instalation: pip install psycopg2 
+#2.1.- PostgreSQL: create_engine('postgresql://username:password@hostname:port/database_name')
+#instalation: pip install psycopg2-binary
+#2.2.- Psycopg2: La librería psycopg2 permite trabajar directamente con bases de datos PostgreSQL. A través de 
+#psycopg2, los desarrolladores pueden enviar consultas SQL, manejar transacciones y trabajar con datos de manera 
+#eficiente. Aunque existen otras librerías para conectarse a bases de datos, psycopg2 es especialmente adecuada 
+#para PostgreSQL debido a su compatibilidad y rendimiento.
+# - SQLAlchemy: Conviene usarse para bases de datos como MySQL y SQLite.
+# - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
+import psycopg2
 try:
     #with: Con este operador de contexto de ejecución se maneja la apertura y cierre de la conexión a la base de 
     #datos de forma automática, por lo que esta no se debe abrir ni cerrar de forma manual, solo se llama al 
-    #método y se le asigna una variable para poderla utilizar.  
-    postgresql_engine = create_engine('postgresql://username:password@hostname:port/database_name')
-    with postgresql_engine.connect() as connection2:
+    #método y se le asigna una variable para poderla utilizar.
+    postgresql_engine = psycopg2.connect(
+        dbname = 'c1_AI_ChatHistory',
+        user = 'postgres',
+        password = 'Diego1234',
+        host = '127.0.0.1',
+        port = '5432'
+    )
+    with postgresql_engine.cursor() as connection2:
         print("2.- PostgresSQL Connection successful!!!")
 except Exception as error:
     print("2.- Ups an Error ocurred while Opening the PostgresSQL DataBase:\n" + str(error) + "\n")
@@ -260,12 +273,12 @@ try:
     #reporte o algo del estilo, podrá haber problemas al momento de la extracción de datos.
     sqlite_engine_relative = create_engine('sqlite:///mydatabase.db')
     connection3 = sqlite_engine_relative.connect()
-    print("5.- Microsoft SQL Server Connection successful with Windows authentication!!!")
+    print("3.- Microsoft SQL Server Connection successful with Windows authentication!!!")
 except Exception as error:
-    print("5.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
+    print("3.- Ups an Error ocurred while Opening the Microsoft SQL Server DataBase with Windows authentication:\n" + str(error) + "\n")
 finally:
     if ('connection3' in locals()):
-        print("5.- Connection 5 closed manually\n")
+        print("3.- Connection 5 closed manually\n")
         connection3.close()
 
 #4.- SQLite (path absoluto): create_engine('sqlite:////absolute/path/to/mydatabase.db')
@@ -329,11 +342,11 @@ finally:
 #6.2.- PyODBC: La librería pyodbc permite trabajar con bases de datos utilizando el estándar ODBC (Open Database 
 #Connectivity), el cual es una API que permite a las aplicaciones conectarse a una amplia variedad de bases de 
 #datos que tienen controladores ODBC disponibles, como Microsoft SQL Server, MySQL, PostgreSQL, Oracle, etc.
-#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de establecer 
-#una conexión ODBC.
+#Permitiendo a los desarrolladores enviar consultas SQL directamente a la base de datos, sin necesidad de 
+#establecer una conexión ODBC.
 #No es que exista una manera mejor de manejar los datos, sino que dependiendo de la base de datos que se quiera 
 #utilizar, a veces conviene utilizar una librería en vez de otra.
-# - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench, PostgreSQL y SQLite.
+# - SQLAlchemy: Conviene usarse cuando se utilizan bases de datos como MySQL Workbench y SQLite.
 # - PyODBC: Conviene usarse cuando se utilizan bases de datos como Microsoft SQL Server.
 import pyodbc
 #7.- Microsoft SQL Server (SQL Server authentication): create_engine('mssql+pyodbc://username:password@mydsn')
