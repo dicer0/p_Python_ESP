@@ -352,6 +352,9 @@ if __name__ == '__main__':
     #lista de funciones del chat (que indica al modelo la forma en la que debe contestar al usuario).
     stream = prompt_llm(user_message_content = user_message_content)
     
+    #Bucle for que recorre cada uno de los pedazos de mensaje recibidos del stream pertenecientes al método 
+    #openai.ChatCompletion.acreate(), el cual se recibe en forma de diccionario, donde se debe acceder a las posiciones
+    #indicadas por los keys choices[0], luego delta y finalmente content:
     for chunk in stream:
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)
