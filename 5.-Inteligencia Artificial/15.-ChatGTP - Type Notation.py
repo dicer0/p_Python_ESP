@@ -356,5 +356,6 @@ if __name__ == '__main__':
     #openai.ChatCompletion.acreate(), el cual se recibe en forma de diccionario, donde se debe acceder a las posiciones
     #indicadas por los keys choices[0], luego delta y finalmente content:
     for chunk in stream:
+        #Este condicional checa que la variable chunk, la cual recorre el diccionario stream, obtenido del método propio
         if 'content' in chunk.choices[0].delta:
             print(chunk.choices[0].delta.content)
