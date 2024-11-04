@@ -2,7 +2,7 @@
 
 #En Python se introducen comentarios de una sola linea con el simbolo #.
 #La primera línea de código incluida en este programa se conoce como declaración de codificación o codificación 
-#de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo 
+#de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo
 #pueda contener caracteres especiales, letras acentuadas y otros caracteres no ASCII sin problemas, garantizando 
 #que Python interprete correctamente esos caracteres y evite posibles errores de codificación.
 #Se puede detener una ejecución con el comando [CTRL] + C puesto en consola, con el comando "cls" se borra su 
