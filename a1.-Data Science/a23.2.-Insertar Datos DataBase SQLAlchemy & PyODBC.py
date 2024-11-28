@@ -60,7 +60,7 @@ import pandas
 #instalation: pip install pymysql
 try:
     #create_engine: Método que sirve para configurar la conexión a un tipo de base de datos en específico.
-    mysql_engine = create_engine('mysql+pymysql://root:PincheTonto!123@localhost:3306/1_platziblog_db')
+    mysql_engine = create_engine('mysql+pymysql://root:Diego1234@localhost:3306/1_platziblog_db')
     #CONTEXTO DE EJECUCIÓN: Es un concepto de programación que se utiliza cuando se quiere trabajar con recursos 
     #que necesitan ser gestionados de forma prioritaria, como una apertura de archivos, conexiones de red o 
     #conexiones a bases de datos. Su sintaxis básica es la siguiente: 

@@ -34,7 +34,7 @@ stMessage = input("Ingresa el mensaje en consola: \n") #Variable que guarda un m
 #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
 #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
 #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-filename = "0.-Archivos_Ejercicios_Python/12.-Abrir, Escribir y Leer un Archivo/Mensaje.txt"
+filename = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/a12.-Abrir, Escribir y Leer un Archivo/Mensaje.txt"
 #open(): Método que sirve para abrir un archivo cualquiera, para ello es necesario indicar dos parámetros, 
 #el primero se refiere a la ruta relativa o absoluta del archivo previamente creado y la segunda indica qué 
 #es lo que se va a realizar con él, el contenido del archivo se asigna a una variable.

@@ -100,7 +100,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #  
         #   PyQt5.QtWidgets.QLabel: Es una representación de imagen que puede ser utilizada directamente en los 
         #   controles y widgets de la interfaz gráfica de PyQt5.
-        ICON_PATH = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
+        ICON_PATH = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/Img/logoDi_cer0MarkIII.png"
         #Cargar una Imagen: Se crea una instancia de la librería PyQt5 por medio del constructor de la clase 
         #QPixmap para cargar una imagen en memoria con datos en bruto.
         # - filepath: En este atributo se indica el nombre de archivo junto con la ruta completa de donde se 
@@ -253,7 +253,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
         #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
         #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-        BUTTON_ICON_PATH = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
+        BUTTON_ICON_PATH = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/Img/LogoBlancoDi_cer0.png"
         #PyQt5.QtGui.QIcon(): Constructor de la clase QIcon que hereda de la clase QtGui y perteneciente a la 
         #librería PyQt5, usado para crear un objeto que ícono que pueda ser añadido a cualquier widget como lo 
         #puede ser un botón, un texto estático, etc. El tamaño de dicha imagen será reducido automáticamente.
@@ -515,7 +515,7 @@ class MainWindow(QtWidgets.QMainWindow):
         STATICDATA_ABOVE_AND_BELOW = AutomationConstants.STATICDATA_ABOVE_AND_BELOW.value   #Static Data.
         #DatabaseExcelHandler: Objeto para extraer datos de la DB y crear un Excel.
         db_handler2 = DatabaseExcelHandler(CONNECTION_STRING, SQL_QUERY_STRING, COMPAREDICC, STATICDATA_ABOVE_AND_BELOW)
-        EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
+        EXCEL_FILE_PATH_2 = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/a23.-GUI PyQt5 Conexion DataBase/23.-Reporte Analisis de Datos 2.xlsx"
         table_copier2 = ExcelDataCopier(EXCEL_FILE_PATH_2, delay_segs = 20) #Objeto para copiar la tabla del Excel.
         #SecondaryWindow(): Creación de ventana adicional.
         secondary_window = SecondaryWindow("Ventana 2", db_handler2, table_copier2, EXCEL_FILE_PATH_2, STATICDATA_ABOVE_AND_BELOW, showTable = False)

@@ -421,7 +421,7 @@ class ImagePanel(wx.Panel):
         #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
         #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
         #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-        image_file = "0.-Archivos_Ejercicios_Python/Img/Iron Man Bullet.jpg"
+        image_file = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/Img/Iron Man Bullet.jpg"
         img = wx.Image(image_file, wx.BITMAP_TYPE_ANY)
 
         #Una vez que se haya cargado la imagen y asignado el tamaño del widget donde aparece por medio del 

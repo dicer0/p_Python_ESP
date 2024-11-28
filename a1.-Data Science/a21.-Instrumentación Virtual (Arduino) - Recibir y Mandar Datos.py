@@ -237,7 +237,7 @@ print(data)
 
 
 #GUARDAR LOS DATOS RECOPILADOS EN UN ARCHIVO:
-filename = "0.-Archivos_Ejercicios_Python/21.-Instrumentacion_Virtual_Mandar_Recibir_Datos_Arduino/DatosArduinoPyfirmata.csv"
+filename = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/a21.-Instrumentacion_Virtual_Mandar_Recibir_Datos_Arduino/DatosArduinoPyfirmata.csv"
 #open(): Método que sirve para abrir un archivo cualquiera, para ello es necesario indicar dos parámetros, el 
 #primero se refiere a la ruta relativa o absoluta del archivo previamente creado y la segunda indica qué es lo 
 #que se va a realizar con él, el contenido del archivo se asigna a una variable.

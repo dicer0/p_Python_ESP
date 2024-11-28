@@ -74,7 +74,7 @@ print("El vector vertical creado con numpy versión 2 es: \n", y_np_v2)
 #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
 #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
 #Es un archivo de Excel el que se va a crear, por eso tiene extensión .csv
-nombreArchivo = "0.-Archivos_Ejercicios_Python/13.-Graficar y Almacenar Datos en un Archivo/DatosXY.csv"
+nombreArchivo = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/a13.-Graficar y Almacenar Datos en un Archivo/DatosXY.csv"
 #open(): Método que sirve para abrir un archivo cualquiera, para ello es necesario indicar dos parámetros, 
 #el primero se refiere a la ruta relativa o absoluta del archivo previamente creado y la segunda indica qué 
 #es lo que se va a realizar con él, el contenido del archivo se asigna a una variable.

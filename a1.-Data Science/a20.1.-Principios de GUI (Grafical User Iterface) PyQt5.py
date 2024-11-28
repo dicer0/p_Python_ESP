@@ -95,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
         #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
         #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconLogoDi_cer0.png"
+        iconPath = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconLogoDi_cer0.png"
         #PyQt5.QtGui.QIcon(): Constructor de la clase QIcon que hereda de la clase QtGui y perteneciente a la 
         #librería PyQt5, usado para crear un objeto que ícono que pueda ser añadido a cualquier widget como lo 
         #puede ser un botón, un texto estático, etc. El tamaño de dicha imagen será reducido automáticamente.
@@ -300,7 +300,7 @@ class VentanaImagen(QtWidgets.QMainWindow):
         #   ..      : Significa que nos debemos salir de la carpeta donde nos encontramos actualmente.
         #   /       : Sirve para introducirnos a alguna carpeta cuyo nombre se coloca después del slash.
         #   .ext    : Se debe colocar siempre el nombre del archivo + su extensión.
-        path = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconLogoDi_cer0.png"
+        path = "C:/Users/diego/OneDrive/Documents/The_MechaBible/p_Python_ESP/a1.-Data Science/0.-Archivos_Ejercicios_Python/Img/IconLogoDi_cer0.png"
         #Cargar una Imagen: Se crea una instancia de la librería PyQt5 por medio del constructor de la clase 
         #QPixmap para cargar una imagen en memoria con datos en bruto.
         # - filepath: En este atributo se indica el nombre de archivo junto con la ruta completa de donde se 
