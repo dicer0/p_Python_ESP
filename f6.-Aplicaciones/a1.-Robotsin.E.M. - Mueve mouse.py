@@ -5,7 +5,7 @@
 #de caracteres. Al especificar utf-8 (caracteres Unicode) como la codificación, nos aseguramos de que el archivo
 #pueda contener caracteres especiales, letras acentuadas y otros caracteres no ASCII sin problemas, garantizando 
 #que Python interprete correctamente esos caracteres y evite posibles errores de codificación.
-#Se puede detener una ejecución con el comando [CTRL] + C puesto en consola, con el comando "cls" se borra su 
+#Se puede detener una ejecución con el comando [CTRL] + C puesto en consola, con el comando "cls" se borra su
 #historial y en Visual Studio Code con el botón superior derecho de Play se corre el programa.
 #Para comentar en Visual Studio Code varias líneas de código se debe pulsar: 
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
