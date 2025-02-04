@@ -257,6 +257,7 @@ try:
         host = '127.0.0.1',
         port = '5432'
     )
+    #
     #with: Con este operador de contexto de ejecución se maneja la apertura y cierre de la conexión a la base de 
     #datos de forma automática, por lo que esta no se debe abrir ni cerrar de forma manual, solo se llama al 
     #método y se le asigna una variable para poderla utilizar.
