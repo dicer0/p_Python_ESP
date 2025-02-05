@@ -215,19 +215,19 @@ class GorpAssistant:
             #__name__: Es un atributo especial de todas las clases, funciones, y módulos en Python que almacena su 
             #nombre como una cadena de texto (str).
             "name": self.SarcasmDetection.__name__,
-            #.schema(): Este método se aplica únicamente a las clases que heredan de BaseModel, perteneciente a la 
-            #librería Pydantic. Genera y devuelve un diccionario que representa el esquema del modelo, incluyendo los 
+            #.model_json_schema(): Este método se aplica únicamente a las clases que heredan de BaseModel, perteneciente a 
+            #la librería Pydantic. Genera y devuelve un diccionario que representa el esquema del modelo, incluyendo los 
             #atributos, sus tipos de datos, validaciones, restricciones y valores predeterminados. El esquema describe 
             #cómo deben ser los datos que el modelo acepta.
-            "parameters": self.SarcasmDetection.schema()
+            "parameters": self.SarcasmDetection.model_json_schema()
         }
         joke_explanation_function = {
             "name": self.JokeExplanation.__name__,
-            "parameters": self.JokeExplanation.schema()
+            "parameters": self.JokeExplanation.model_json_schema()
         }
         joke_delivery = {
             "name": self.JokeDelivery.__name__,
-            "parameters": self.JokeDelivery.schema()
+            "parameters": self.JokeDelivery.model_json_schema()
         }
         all_functions = [sarcasm_function, joke_explanation_function, joke_delivery]
         #El método privado _build_chat_completion_payload() entonces retorna una tupla de dos valores, la lista de 
