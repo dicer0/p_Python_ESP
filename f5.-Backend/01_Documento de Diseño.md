@@ -58,7 +58,7 @@ RandomCameraReviews, una empresa especializada en la venta de cámaras fotográf
 
 ## 📌 Alcance del Proyecto
 
-### ✅ Alcance Incluido
+### ✅ Alcance Incluido (Scope)
 
 - API REST con endpoints para creación de reseñas (`POST /reviews`) y lectura de contenido (`GET /content`).
 - Autenticación y control de acceso para editores.
@@ -66,7 +66,7 @@ RandomCameraReviews, una empresa especializada en la venta de cámaras fotográf
 - Preparación para distribución geográfica en operaciones de lectura.
 - Backend listo para desplegar con soporte para Docker.
 
-### ❌ Fuera de Alcance
+### ❌ Fuera de Alcance (Out of Scope)
 
 - Autenticación para los lectores.
 - Flujos de aprobación o moderación de contenido.
