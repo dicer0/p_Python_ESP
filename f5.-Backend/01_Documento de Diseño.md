@@ -134,3 +134,10 @@ CREATE TABLE reviews (
   editor_id INTEGER REFERENCES editors(id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
+
+### 💸 Consideraciones de Costo
+- **Hosting del Backend:** ~$30–50 USD/mes (ej. AWS EC2, DigitalOcean).
+- **Base de Datos Administrada:** ~$15–25 USD/mes (ej. AWS RDS, Supabase).
+- **CDN o Caché (para /content):** ~$10–20 USD/mes.
+- **Monitoreo y Logs (opcional):** ~$10–15 USD/mes adicionales.
