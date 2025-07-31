@@ -1,4 +1,4 @@
-# 📄 Diseño de Alto Nivel – Backend para RandomCameraReviews
+# Diseño de Alto Nivel – Backend para RandomCameraReviews
 
 ## 🔍 Definiciones y Acrónimos
 
@@ -14,9 +14,15 @@
 
 ---
 
-## 🧩 Problema a Resolver
+## Problema a Resolver
 
-RandomCameraReviews, una empresa especializada en la venta de cámaras fotográficas, necesita un sistema backend escalable que permita a fotógrafos profesionales (editores) subir reseñas, y que al mismo tiempo permita que cualquier persona en el mundo pueda leerlas desde una interfaz desarrollada por el equipo frontend. El objetivo es crear un sistema backend robusto, con pruebas automatizadas (TDD), que pueda ser desplegado en la nube y que esté optimizado para consultas globales.
+La meta es construir y desarrollar la arquitectura de un sistema backend desde cero hasta la implementación (deploy) del mismo, deberá realizarse tomando en cuenta la planificación de la arquitectura que se detalle en alto nivel. Para ello, los requerimientos que nos ha dado un cliente ficticio son los siguientes:
+- La empresa “RandomCameraReviews” necesita un sistema que permita que fotógrafos profesionales suban “reviews” de cámaras fotográficas, para que cualquier persona en todo el mundo pueda buscar los reviews y compararlas a través de su portal. La empresa cuenta con un equipo de developers especializado en frontend que realizará una interfaz de usuario para que los editores suban sus “reviews” y los usuarios puedan verlas, y han solicitado que creemos un sistema backend, incluyendo su API, que permita realizar lo siguiente:
+    - Subir reviews de cámaras fotográficas.
+    - Obtener el contenido de los reviews para mostrarlo en vistas del portal en sus versiones web y mobile.
+    - Manejo de usuarios para editores (no incluye visitantes que leen los reviews).
+
+También se menciona que la empresa “RandomCameraReviews” planea distribuir mayormente en America del Sur, donde está su mercado más grande, pero también tienen ventas en Norte América, Europa y muy pocas en Asia. De igual forma, los editores se encuentran mayormente en América del Sur.
 
 ---
 
@@ -27,7 +33,7 @@ RandomCameraReviews, una empresa especializada en la venta de cámaras fotográf
 - Construir el sistema backend con enfoque TDD para garantizar confiabilidad.
 - Facilitar el despliegue y escalabilidad geográfica para operaciones de lectura.
 
-### 👥 Stakeholders (Interesados)
+### Stakeholders (Interesados)
 
 - Equipo de Producto (define requerimientos del negocio).
 - Equipo de Ingeniería Backend (desarrolla y mantiene la API).
@@ -41,18 +47,19 @@ RandomCameraReviews, una empresa especializada en la venta de cámaras fotográf
 
 - Solo los editores requieren autenticación y acceso de escritura.
 - Los usuarios no necesitan registrarse para consultar las reseñas.
-- La moderación del contenido se realizará fuera de este sistema.
 - Los editores están ubicados principalmente en Sudamérica.
-- La mayoría de los usuarios están en Sudamérica y Norteamérica, con menor presencia en Europa y Asia.
+- La mayoría de los usuarios están en Sudamérica, Norteamérica y Europa, con menor presencia en Asia.
 
 ---
 
 ## 🚧 Limitaciones y Desconocimientos
 
-- No se contempla integración con herramientas de moderación o analítica externa en esta etapa.
-- Las estimaciones de tráfico se basan en los mercados actuales; un crecimiento rápido puede requerir balanceo de carga.
+En esta sección se describe un listado de limitaciones conocidas, ya sea de recursos o conocimientos, y se deben presentar de forma cuantificable.
+- Las estimaciones de tráfico se basan en los mercados conocidos actualmente; un crecimiento rápido puede requerir un balanceo de carga.
 - No se contempla la subida de archivos multimedia por el momento.
-- No se incluye soporte multilenguaje o localización.
+- No se incluye soporte multilenguaje.
+- Las llamadas de la API que permite subir reviews (POST), no excede los límites de latencia de 500ms.
+- Las llamadas a la API que permitan leer reviews (GET), deben de tener una latencia menor a 100ms.
 
 ---
 
@@ -60,26 +67,34 @@ RandomCameraReviews, una empresa especializada en la venta de cámaras fotográf
 
 ### ✅ Alcance Incluido (Scope)
 
-- API REST con endpoints para creación de reseñas (`POST /reviews`) y lectura de contenido (`GET /content`).
+- API REST con endpoints para la creación de reseñas (`POST /reviews`) y lectura de contenido (`GET /content`).
 - Autenticación y control de acceso para editores.
 - Almacenamiento y recuperación de datos de reseñas.
 - Preparación para distribución geográfica en operaciones de lectura.
-- Backend listo para desplegar con soporte para Docker.
+- Backend listo para desplegar.
 
 ### ❌ Fuera de Alcance (Out of Scope)
 
 - Autenticación para los lectores.
-- Flujos de aprobación o moderación de contenido.
 - Implementación del frontend.
 - Subida de imágenes o contenido multimedia.
 - Sistema de puntuación o comentarios en las reseñas.
 
 ### 📚 Casos de Uso
 
-1. **Ed sube una reseña**: El editor autenticado utiliza el endpoint `/reviews` para enviar una reseña.
-2. **Usuario consulta una reseña**: El visitante accede al endpoint `/content` para visualizar reseñas publicadas.
-3. **Editor actualiza una reseña**: (Posible función futura, no implementada en esta versión).
-4. **Escalabilidad para lecturas globales**: El sistema se adapta a alta demanda de lectura en distintas regiones.
+Esto se realiza a través de iteraciones con el cliente, donde se describe ejemplos de uso de la aplicación para que haya claridad entre ambas partes. 
+1. Como editor, me gustaría poder subir una review de una cámara o una review de un lente para cámara, para ello:
+2. **Ed sube una reseña**: El editor autenticado utiliza el endpoint `/reviews` para enviar una reseña.
+3. **Usuario consulta una reseña**: El visitante accede al endpoint `/content` para visualizar reseñas publicadas.
+4. **Editor actualiza una reseña**: (Posible función futura, no implementada en esta versión).
+5. **Escalabilidad para lecturas globales**: El sistema se adapta a alta demanda de lectura en distintas regiones.
+
+---
+
+### 📚 Casos de Uso No Soportados
+
+Esto se realiza a través de iteraciones con el cliente, donde se describe ejemplos de uso de la aplicación para que haya claridad entre ambas partes. 
+1. Como usuario me gustaría poder subir una review de cámara.
 
 ---
 
@@ -116,6 +131,7 @@ RandomCameraReviews, una empresa especializada en la venta de cámaras fotográf
 
 ### 📊 Modelos de Datos (SQL)
 
+En esta sección se describen entidades, relaciones, JSONs, tablas, diagramas de entidad-relación, etc. pertenecientes a la base de datos del sistema.
 ```sql
 -- Tabla de Editores
 CREATE TABLE editors (
@@ -137,6 +153,7 @@ CREATE TABLE reviews (
 ```
 
 ### 💸 Consideraciones de Costo
+Contemplando 100,000 usuarios diarios, que visiten recurrentemente cada hora el sitio, se tienen los siguientes costos:
 - **Hosting del Backend:** ~$30–50 USD/mes (ej. AWS EC2, DigitalOcean).
 - **Base de Datos Administrada:** ~$15–25 USD/mes (ej. AWS RDS, Supabase).
 - **CDN o Caché (para /content):** ~$10–20 USD/mes.
