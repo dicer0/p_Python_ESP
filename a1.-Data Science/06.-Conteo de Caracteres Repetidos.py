@@ -17,9 +17,9 @@ st = "google.com" #Palabra de ejemplo a analizar
 
 #PROCESO:
 #1.- CONTAR EL NÚMERO TOTAL DE CARACTERES.
-#len(): El método len() sirve para calcular el tamaño de una cadena de caracteres, lista o array
+#len(): El método len() sirve para calcular el tamaño de una cadena de caracteres, lista o array.
 stLenght = len(st)
-#Variable auxiliar que guarda cada caracter de forma individual para 
+#Variable auxiliar que guarda cada caracter de forma individual.
 lastChar = ""
 #Vector con una longitud igual al número de caracteres de la palabra de ejemplo, donde se guardan los índices en 
 #donde por primera vez apareció un carácter en la palabra analizada.

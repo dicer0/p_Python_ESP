@@ -13,8 +13,8 @@
 #CÓDIGO PARA INTRODUCIR EN CONSOLA LOS COEFICIENTES DE UN POLINOMIO CUADRÁTICO Y CALCULAR SUS RAÍCES:
 #Lectura de los coeficientes a, b y c de la fórmula cuadrática: ax2 + bx + c = 0
 #input(): Método que sirve para imprimir en consola un mensaje y que luego se permita al usuario ingresar un valor 
-#por consola, que será de tipo String y podrá ser almacenado en una variable.
-#float(): Se usa el método float() para convertir un dato a que sea numérico decimal.
+#que será de tipo String y podrá ser almacenado en una variable.
+#float(): Se usa el método float() para convertir un dato a numérico decimal.
 #El tipo primitivo del input que viene siendo un String, se convertirá en decimal y se guardará en una variable:
 a = float(input("Ingresa el coeficiente a: \n"))#Coeficiente a
 b = float(input("Ingresa el coeficiente b: \n"))#Coeficiente b
@@ -27,9 +27,9 @@ c = float(input("Ingresa el coeficiente c: \n"))#Coeficiente c
 #Recordemos además que la jerarquía de operaciones matemáticas dicta lo siguiente, lo cual es respetado de la 
 #misma forma por el código Python.
 #   1.- Paréntesis: Las operaciones dentro de paréntesis se evalúan primero.
-#   2.- Exponentes: Las potencias y raíces se evalúan a continuación.
+#   2.- Exponentes: Las potencias y raíces se evalúan después.
 #   3.- Multiplicación y División: Estas operaciones se realizan de izquierda a derecha.
-#   4.- Suma y Resta: Estas operaciones se realizan de izquierda a derecha.
+#   4.- Suma y Resta: Estas operaciones se realizan de izquierda a derecha al último.
 raiz1 = (-b+(b**2-4*a*c)**(1/2))/(2*a)
 raiz2 = (-b-(b**2-4*a*c)**(1/2))/(2*a)
 

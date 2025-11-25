@@ -12,10 +12,10 @@
 
 #CÓDIGO PARA INTRODUCIR EN CONSOLA UN NÚMERO N Y SACAR SU FACTORIAL:
 #input(): Método que sirve para imprimir en consola un mensaje y que luego se permita al usuario ingresar un valor 
-#por consola, que será de tipo String y podrá ser almacenado en una variable.
-#int(): Se usa el método int() para convertir un dato a que sea numérico entero.
-#El tipo primitivo del input que viene siendo un String, se convertirá a numérico entero para que pueda ser 
-#utilizado para manejar las ejecuciones de un bucle.
+#que será de tipo String y podrá ser almacenado en una variable.
+#int(): Se usa el método int() para convertir un dato a numérico entero.
+#El tipo primitivo del input que viene siendo un String, se convertirá a numérico entero para que pueda manejar las 
+#ejecuciones de un bucle.
 n = int(input("Ingresa un número entero positivo n: \n"))   #Número n del cual se obtendrá su factorial
 
 #Esta es la base del número del cual se obtendrá su factorial, a través de un condicional if y un bucle for.

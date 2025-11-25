@@ -18,8 +18,8 @@ from math import pi
 print("Hola mundo")
 
 #input(): Método que sirve para imprimir en consola un mensaje y que luego se permita al usuario ingresar un valor 
-#por consola, que será de tipo String y podrá ser almacenado en una variable.
-#float(): Se usa el método float() para convertir un dato a que sea numérico decimal.
+#que será de tipo String y podrá ser almacenado en una variable.
+#float(): Se usa el método float() para convertir un dato a numérico decimal.
 #El tipo primitivo del input que viene siendo un String, se convertirá en decimal y se guardará en una variable:
 ang_deg = float(input("Ingresa el ángulo en grados: \n"))
 #Fórmula para convertir grados a radianes

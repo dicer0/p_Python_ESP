@@ -16,8 +16,9 @@ import openai #openai: Librería que permite utilizar el LLM (Large Language Mod
 #si se excede ese límite, se recibirá el error RateLimitError al intentar ejecutar el programa de Python.
 
 #IMPORTACIÓN DE LLAVE: Cuando se quiera utilizar una API que utiliza un key, por seguridad es de buenas prácticas 
-#declararla en un archivo externo, además cabe mencionar que el nombre de dicho archivo y constante no pueden empezar 
-#con un número, sino cuando la quiera importar obtendré un error y se va accediendo a las carpetas por medio de puntos:
+#declararla en un archivo externo o en un archivo .env, además cabe mencionar que el nombre de dicho archivo y 
+#constante no pueden empezar con un número, sino cuando la quiera importar obtendré un error y además se va accediendo 
+#a las carpetas por medio de puntos:
 # - Directorio normal:      carpeta1/carpeta2/carpeta3
 # - Directorio paquetes:    carpeta1.carpeta2.carpeta3
 #La parte del directorio se coloca después de la palabra reservada from y la llave a importar después de import.
@@ -32,10 +33,10 @@ openai.api_key = LlaveChatGPT
 #openai.ChatCompletion.create(): El método create() aplicado al objeto ChatCompletion perteneciente a la librería 
 #openai se encarga de crear chats que se puedan mandar a ChatGPT. Este recibe los siguientes parámetros:
 # - model: Describe el modelo de lenguaje que se utilizará para generar la salida. Los modelos disponibles son 
-#   gpt-3, gpt-4 y el más reciente es gpt-3.5-turbo. Todos se encuentran mencionados en la 
-#   documentación de OpenAI: https://platform.openai.com/docs/models/overview
-# - messages: Representa la lista de mensajes que se utilizarán para generar la salida del chat. Cada mensaje es un 
-#   objeto con los siguientes campos:
+#   gpt-3, gpt-4 y el más reciente es gpt-3.5-turbo. Todos se encuentran mencionados en la documentación de OpenAI: 
+#   https://platform.openai.com/docs/models/overview
+# - messages: Representa la lista de prompts o mensajes que se utilizarán para generar la salida del chat. Cada 
+#   mensaje es un objeto con los siguientes campos:
 #       - role: El rol del mensaje ayuda al modelo de lenguaje a entender el contexto de la conversación. Los roles 
 #         posibles son system, user y assistant, indicándole así de forma separada a quién está interpretando ChatGPT 
 #         para que de esta manera pueda dar respuestas de forma específica:
