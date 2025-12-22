@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import json
 
+import json
 
 TAX_RATE = 0.20
 TAX_FREE_LIMIT = 20000.0
@@ -22,22 +22,21 @@ def process_operations(operations):
         unit_cost = float(op["unit-cost"])
         quantity = int(op["quantity"])
 
-        #BUY
+        # BUY operation
         if operation == "buy":
             total_cost = unit_cost * quantity
             new_total_quantity = stock_quantity + quantity
 
             if new_total_quantity > 0:
                 weighted_avg_price = (
-                    (stock_quantity * weighted_avg_price) +
-                    total_cost
+                    (stock_quantity * weighted_avg_price) + total_cost
                 ) / new_total_quantity
 
             stock_quantity = new_total_quantity
             taxes.append({"tax": 0.0})
             continue
 
-        #SELL
+        # SELL operation
         total_amount = unit_cost * quantity
         profit = (unit_cost - weighted_avg_price) * quantity
         tax = 0.0
@@ -60,134 +59,24 @@ def process_operations(operations):
     return taxes
 
 
-#TEST 9 OFFICIAL CASES:
-TEST_CASES = [
-    #Case 1
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 100},
-            {"operation": "sell", "unit-cost": 15.00, "quantity": 50},
-            {"operation": "sell", "unit-cost": 15.00, "quantity": 50},
-        ],
-        [{"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}],
-    ),
-
-    #Case 2
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 20.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 5.00, "quantity": 5000},
-        ],
-        [{"tax": 0.0}, {"tax": 10000.0}, {"tax": 0.0}],
-    ),
-
-    #Case 3
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 5.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 20.00, "quantity": 3000},
-        ],
-        [{"tax": 0.0}, {"tax": 0.0}, {"tax": 1000.0}],
-    ),
-
-    #Case 4
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "buy", "unit-cost": 25.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 15.00, "quantity": 10000},
-        ],
-        [{"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}],
-    ),
-
-    #Case 5
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "buy", "unit-cost": 25.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 15.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 25.00, "quantity": 5000},
-        ],
-        [{"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 10000.0}],
-    ),
-
-    #Case 6
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 2.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 20.00, "quantity": 2000},
-            {"operation": "sell", "unit-cost": 20.00, "quantity": 2000},
-            {"operation": "sell", "unit-cost": 25.00, "quantity": 1000},
-        ],
-        [{"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 3000.0}],
-    ),
-
-    #Case 7
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 2.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 20.00, "quantity": 2000},
-            {"operation": "sell", "unit-cost": 20.00, "quantity": 2000},
-            {"operation": "sell", "unit-cost": 25.00, "quantity": 1000},
-            {"operation": "buy", "unit-cost": 20.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 15.00, "quantity": 5000},
-            {"operation": "sell", "unit-cost": 30.00, "quantity": 4350},
-            {"operation": "sell", "unit-cost": 30.00, "quantity": 650},
-        ],
-        [
-            {"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0},
-            {"tax": 3000.0}, {"tax": 0.0}, {"tax": 0.0},
-            {"tax": 3700.0}, {"tax": 0.0}
-        ],
-    ),
-
-    #Case 8
-    (
-        [
-            {"operation": "buy", "unit-cost": 10.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 50.00, "quantity": 10000},
-            {"operation": "buy", "unit-cost": 20.00, "quantity": 10000},
-            {"operation": "sell", "unit-cost": 50.00, "quantity": 10000},
-        ],
-        [{"tax": 0.0}, {"tax": 80000.0}, {"tax": 0.0}, {"tax": 60000.0}],
-    ),
-
-    #Case 9
-    (
-        [
-            {"operation": "buy", "unit-cost": 5000.00, "quantity": 10},
-            {"operation": "sell", "unit-cost": 4000.00, "quantity": 5},
-            {"operation": "buy", "unit-cost": 15000.00, "quantity": 5},
-            {"operation": "buy", "unit-cost": 4000.00, "quantity": 2},
-            {"operation": "buy", "unit-cost": 23000.00, "quantity": 2},
-            {"operation": "sell", "unit-cost": 20000.00, "quantity": 1},
-            {"operation": "sell", "unit-cost": 12000.00, "quantity": 10},
-            {"operation": "sell", "unit-cost": 15000.00, "quantity": 3},
-        ],
-        [
-            {"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0}, {"tax": 0.0},
-            {"tax": 0.0}, {"tax": 0.0}, {"tax": 1000.0}, {"tax": 2400.0}
-        ],
-    ),
-]
-
-
-#TEST RUNNER
 def main():
-    print("Running Capital Gains validation (9 official cases):")
+    print(
+        "Capital Gains Tax Calculator\n"
+        "----------------------------------\n"
+        "Please check the README.md file.\n"
+        "Paste each test case (JSON array) manually in the console and compare the output with the expected results.\n"
+        "Press ENTER on an empty line to finish.\n"
+    )
+    for line in iter(input, ""):
+        line = line.strip()
+        if not line:
+            break
 
-    for i, (operations, expected) in enumerate(TEST_CASES, start=1):
+        operations = json.loads(line)
         result = process_operations(operations)
-        status = "PASS" if result == expected else "FAIL"
+        print("result:")
+        print(json.dumps(result), "\n")
 
-        print(f"Case #{i}: {status}")
-        print("Expected:", json.dumps(expected))
-        print("Got     :", json.dumps(result))
-        print("-" * 60)
 
 
 if __name__ == "__main__":
