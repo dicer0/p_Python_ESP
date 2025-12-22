@@ -285,12 +285,6 @@ pictures = Directory("pictures")
 root.subdirectories.extend([home, user])
 user.subdirectories.extend([documents, pictures])
 print_directory_structure(root)
-# Output:
-# root
-#   home
-#   user
-#     documents
-#     pictures
 
 #Algoritmos de Recorrido (Traversal)
 #Los algoritmos de recorrido se utilizan para visitar todos los nodos en una estructura de datos, como un árbol o 
