@@ -64,8 +64,9 @@ print("3.- Los índices de los caracteres que se repiten ordenados de mayor a me
 
 
 #4.- GENERAR UN NUEVO VECTOR QUE ELIMINA LOS ÍNDICES REPETIDOS, ESTO PARA PODER AL FINAL ASOCIAR A CADA LETRA DE LA 
-#PALABRA ANALIZADA LA FRECUENCIA CON LA QUE APARECE EN LA PALABRA.
-index = 0
+#PALABRA ANALIZADA LA FRECUENCIA CON LA QUE APARECE EN LA PALABRA. LO HACE DE FORMA COMPLICADA Y SE PODRÍA SIMPLIFICAR
+#MUCHO MÁS REALIZANDO LA OPERACIÓN: chNewIndex = sorted(set(chIndex)) = [0, 1, 4, 5, 6, 7, 9]
+index = 0       #Índice inicial del nuevo array, es cero porque siempre al menos la primera letra aparecerá una vez.
 #Vector donde se guardan los índices no repetidos de la lista chIndexSort.
 chNewIndex = []
 #Se agrega el primer elemento de la lista chIndexSort que contiene los índices ordenados de menor a mayor a la lista 
@@ -75,15 +76,20 @@ chNewIndex.append(chIndexSort[0])
 #hold: Variable auxiliar para analizar individualmente cada valor de la lista chIndexSort y compararlo con todos sus 
 #demás valores.   
 #comp: Variable auxiliar para empezar el segundo bucle for anidado desde donde no se haya encontrado valores repetidos.
-#Recordemos que el tamaño de la palabra original, el vector chIndex y chIndexSort es el mismo ya que en él se analizaron 
-#los índices de todas las letras de la palabra donde se repitiera cada letra.
+#Recordemos que el tamaño de la palabra original, el vector chIndex y chIndexSort es el mismo ya que en él se 
+#analizaron los índices de todas las letras de la palabra donde se repitiera cada letra. La variable i no se usa en el 
+#bucle.
 for i in range(0, stLenght): #stLenght = len(st) = len(chIndex) = len(chIndexSort)
+    #El valor de la variable index cambiará cuando hold != chNewIndex[j].
     hold = chIndexSort[index] #Variable que guarda uno a uno los valores contenidos en la lista chIndexSort.
     comp = index #Variable que guarda el índice de la lista chIndexSort donde no se encontraron valores repetidos.
     #Bucle for anidado: En este se recorre toda la palabra inicial, partiendo desde el índice guardado en la variable 
     #comp, que cambia de valor cuando no encuentra valores repetidos en la lista chIndexSort.
     for j in range(comp, stLenght):
-        #En el bucle anidado solo se ejecuta algo cuando el valor del 
+        #En el bucle anidado solo se añade un valor a chNewIndex algo cuando el valor de hold sea distinto a 
+        #chIndexSort. Por ejemplo, en la primera iteración, hold = 0 y será distinto en el índice 2, cuando 
+        #chIndexSort[j] = 1 porque chIndexSort = [0, 0, 1, 1, 1, 4, 5, 6, 7, 9], esto para crear 
+        #chNewIndex = [0, 1, 4, 5, 6, 7, 9].
         if(hold != chIndexSort[j]):
             #Cambio de valor de la variable index y comp por el índice donde no se encontró valores repetidos
             index = j #index = comp = j, cuando el valor actual de la lista es distinto al que le sigue
@@ -91,16 +97,16 @@ for i in range(0, stLenght): #stLenght = len(st) = len(chIndex) = len(chIndexSor
             #bucle for anidado j
             chNewIndex.append(chIndexSort[j])
             break
-
+#Todo lo anterior es equivalente a hacer: chNewIndex = sorted(set(chIndex)) = [0, 1, 4, 5, 6, 7, 9]
 print("4.- Los índices de los caracteres que se repiten ordenados de mayor a menor y sin índices repetidos son: \n", chNewIndex)
 
 
 #5.- DETERMINAR LA FRECUENCIA DE CADA UNO DE LOS CARACTERES, EN BASE AL VECTOR CREADO EN EL PROCESO 4.
 freq = [] #Vector donde se guarda la frecuencia de cada letra analizada perteneciente a la palabra original.
-#Bucle for exterior: Este parte de 0 hasta el tamaño de la lista chNewIndex, que contiene todos los índices no repetidos 
-#y ordenados de menor a mayor de la lista que indica la posición en donde por primera vez apareció un carácter en la 
-#palabra analizada, en este se crea una variable auxiliar que indicará la frecuencia con la que aparece cada letra en 
-#la palabra original.
+#Bucle for exterior: Este parte de 0 hasta el tamaño de la lista chNewIndex, el cual contiene todos los índices no 
+#repetidos y ordenados de menor a mayor de la lista que indica la posición en donde por primera vez apareció un 
+#caracter en la palabra analizada, en este se crea una variable auxiliar que indicará la frecuencia con la que aparece 
+#cada letra en la palabra original.
 #stLenght != len(chNewIndex)
 for i in range(0, len(chNewIndex)):
     #Variable auxiliar que indica la frecuencia de cada letra, esto se logra comparando los valores de los vectores 
@@ -109,10 +115,10 @@ for i in range(0, len(chNewIndex)):
     sumFreq = 0
     #Bucle anidado: En este se compara cada índice de la lista chNewIndex con cada índice de la lista chIndexSort, cada 
     #vez que sean iguales los valores, se le sumará un 1 a la variable sumFreq para saber la frecuencia de esa letra en 
-    #específico, al ya no cumplirse esa condición, el programa se saldrá del bucle anidado y agregará un valor a la lista 
-    #freq, el segundo bucle for parte desde 0 hasta el tamaño de la palabra original porque: 
+    #específico, al ya no cumplirse esa condición, el programa se saldrá del bucle anidado y agregará un valor a la 
+    #lista freq, el segundo bucle for parte desde 0 hasta el tamaño de la palabra original porque: 
     #stLenght = len(st) = len(chIndex) = len(chIndexSort)
-    for j in range(0, stLenght):
+    for j in range(0, len(chIndexSort)):
         #Comparación de los índices de la lista chIndexSort y chNewIndex para saber la frecuencia de cada letra.
         if(chIndexSort[j] == chNewIndex[i]):
             sumFreq += 1 #Se suma un 1 a la variable sumFreq cada que sea igual un índice de ambas listas
@@ -130,17 +136,19 @@ letras = [] #Vector donde se guardarán las letras de los índices no repetidos 
 for i in range(0, len(chNewIndex)):
     letras.append(st[chNewIndex[i]])
 
-#zip(): El método lo que hace es crear un tipo de dato llamado tupla, una tupla es un conjunto de datos del mismo o 
-#diferente tipo, si se quisiera.
-tupla = zip(letras, freq)
+#zip(Lista, tupla): Método que une varias estructuras de datos iterables posición por posición, creando una nueva 
+#estructura de diccionario o conjunto que utiliza un formato de clave-valor, donde su primer parámetro indica la clave 
+#y el segundo su valor.
+iterable = zip(letras, freq)
+print("6.- Iterable: ", iterable)
 #tuple(): El método crea un objeto tuple para que se le puedan aplicar los métodos correspondientes o en este caso se 
-#pueda imprimir en consola
-lista2D = tuple(tupla)
-print("6.- Tupla: ", lista2D)
+#pueda imprimir en consola.
+tupla = tuple(iterable)
+print("6.- Tupla: ", tupla)
 #Convertir dos listas en un diccionario Python: Python tiene una función incorporada llamada zip(), que agrega tipos de 
-#datos iterables en una tupla y la función dict() crea un diccionario a partir de la colección dada, para lograr esto se 
-#debe realizar todo en una misma línea de código o usar el método tuple como paso intermedio.
-freq_caract = dict(lista2D) # = freq_caract = dict(zip(letras, freq))
+#datos iterables en una tupla y la función dict() crea un diccionario a partir de la colección dada, para lograr esto 
+#se debe realizar todo en una misma línea de código o usar el método tuple como paso intermedio.
+freq_caract = dict(tupla) # = freq_caract = dict(zip(letras, freq))
 print("6.- Diccionario: ",freq_caract)
 
 #Imprimir en consola el key y value de un diccionario

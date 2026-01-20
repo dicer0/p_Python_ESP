@@ -10,7 +10,7 @@
 #Para comentar en Visual Studio Code varias líneas de código se debe usar las líneas:
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
-#TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia entre ellos, es que algunos tienen cierto órden 
+#TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia entre ellos, es que algunos tienen cierto orden 
 #(índice y valor) y otros no, además de que algunos son editables o mutables, donde se les puede agregar, eliminar, 
 #o modificar elementos y otros son inmutables, donde sus datos no se pueden cambiar.
 # - Listas (list): Una lista es una colección ordenada y mutable (editable) de elementos. Se definen utilizando 
@@ -43,7 +43,7 @@ for i in range(0,11):
 
 
 
-#LISTAS ANIDADAS: Cuando dentro de la posición de una lista se encuentra otra lista interna, se le llama lista 
+#LISTAS ANIDADAS: Cuando dentro de la posición de una lista se encuentre otra lista interna, se le llama lista 
 #anidada, esto se realiza por ejemplo para categorizar datos, realizar operaciones matriciales, etc.
 lista_anidada = [[1,2,3,4],[1,5,6]]
 #Además dentro de una lista anidada, se puede incluir otra lista anidada, logrando así que se creen dimensiones 

@@ -39,7 +39,7 @@ else:
     #palabra reservada range() para terminar el bucle. En otras palabras, dentro del paréntesis de la palabra 
     #reservada "range()" se coloca el inicio y final del conteo para indicar cuantas veces se ejecutará el bucle.
     for i in range(2, n+1):
-        #Caso como en el condicional if anterior se analizó la opción para cuando n = 0 o 1, en el bucle for se 
+        #Como en el condicional if anterior se analizó la opción para cuando n = 0 o 1, en el bucle for se 
         #tomarán en cuenta las opciones que van desde n = 2 hasta n = n+1, porque el último número del conteo en 
         #el for nunca lo va a alcanzar y se busca que el bucle llegue hasta n.
         factorial = factorial*i

@@ -11,7 +11,7 @@
 #[CTRL] + K (VSCode queda a la espera). Después pulsa [CTRL] + C para comentar y [CTRL] + U para descomentar.
 
 #CÓDIGO PARA INTRODUCIR EN CONSOLA GRADOS Y CONVERTIR A RADIANES:
-#Importación de librería math para poder usar el valor pi.
+#math: Importación de librería math para poder usar el valor pi.
 from math import pi
 
 #print(): Método para imprimir un mensaje en consola y después dar un salto de línea (Enter).
@@ -19,10 +19,10 @@ print("Hola mundo")
 
 #input(): Método que sirve para imprimir en consola un mensaje y que luego se permita al usuario ingresar un valor 
 #que será de tipo String y podrá ser almacenado en una variable.
-#float(): Se usa el método float() para convertir un dato a numérico decimal.
+#float(): Se usa el método float() para convertir un dato a numérico o string decimal.
 #El tipo primitivo del input que viene siendo un String, se convertirá en decimal y se guardará en una variable:
 ang_deg = float(input("Ingresa el ángulo en grados: \n"))
-#Fórmula para convertir grados a radianes
+#Fórmula para convertir grados a radianes: rad = pi/180°.
 ang_rad = ang_deg*(pi/180)
 
 #Cuando imprimimos en consola con el comando print() y el operador de interpolación % para concatenar valores: 

@@ -31,7 +31,7 @@ B = [[2,3],[0,4]] #Matriz B (tipo de dato lista),   2X2
 #Se debe declarar la matriz vacía que almacenará el resultado de la multiplicación:
 C = [[0,0],[0,0]] #Matriz C = A*B, 2X2
 
-#Obtención de las dimensiones de la matriz para accesar a las posiciones de sus elementos y realizar la 
+#Obtención de las dimensiones de la matriz para acceder a las posiciones de sus elementos y realizar la 
 #multiplicación, ya que debe coincidir el tamaño de las columnas de la matriz A con el tamaño de las filas de la
 #matriz B para que se pueda hacer su producto.
 #len(): Este método sirve para ver el tamaño de una matriz, que en Python a ese tipo de dato se le llama lista.
@@ -54,6 +54,7 @@ l = len(A[0]) #l = len(A[0]) = len(B)
 #reservada "range()" se coloca el inicio y final del conteo para indicar cuantas veces se ejecutará el bucle.
 #Es importante mencionar que los bucles for se pueden utilizar para realizar sumatorias en operaciones 
 #matemáticas:
+#cij = ai*bj = Σai*bj
 for i in range(0, m): #Lectura de filas de la matriz A.
     for j in range(0, n): #Lectura de columnas de la matriz B.
         sum = 0 #Inicialización de la variable que almacenará el valor de cada elemento de la matriz resultante.
