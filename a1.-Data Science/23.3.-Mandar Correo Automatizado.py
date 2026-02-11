@@ -23,7 +23,7 @@ from email.mime.text import MIMEText
 #librería email sirve para trabajar con las partes de un email que no sean texto plano, lo que permite enviar 
 #mensajes más complejos que incluyan texto, archivos adjuntos, imágenes u otros tipos de contenido.
 from email.mime.multipart import MIMEMultipart
-import datetime #datetime: Librería que proporciona método para trabajar con fechas y horas en Python.
+import datetime #datetime: Librería que proporciona métodos para trabajar con fechas y horas en Python.
 import time     #time: Librería del manejo de tiempos, como retardos, contadores, etc.
 
 #FUNCIÓN PARA MANDAR UN EMAIL:
