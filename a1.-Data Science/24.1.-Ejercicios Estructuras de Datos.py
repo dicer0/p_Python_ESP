@@ -23,10 +23,10 @@ def nums_pares(datos):
     #       divisor%dividendo = resultado_operador_modulo;  7/2 = 3, con cociente = 1, por lo tanto 7%2 = 1, esto indica que 7 es impar.
     for i in datos:
         if(i%2 == 1):
-            #continue: Comando que interrumpe la iteración actual del condicional o bucle y salta inmediatamente a la siguiente vuelta, sin 
-            #ejecutar el resto del código.
-            #break: Comando que rompe completamente el condicional o bucle, no solo la iteración actual.
-            #pass: Comando que no hace nada, sirve para cuando Python exige al menos una instrucción dentro del bloque.
+            #- continue: Comando que interrumpe la iteración actual del condicional o bucle y salta inmediatamente a la siguiente vuelta, sin 
+            #  ejecutar el resto del código.
+            #- break: Comando que rompe completamente el condicional o bucle, no solo la iteración actual.
+            #- pass: Comando que no hace nada, sirve para cuando Python exige al menos una instrucción dentro del bloque.
             continue
         else:
             #.append(): Comando que agrega un valor al final de una lista, su equivalente en diccionarios es .update() y en conjuntos es .add().
@@ -126,8 +126,8 @@ productos = {
     "Teclado": {"precio": 800, "stock": 12},
     "Monitor": {"precio": 4000, "stock": 3}
 }
-result_product = {}
 def diccionario_productos(productos):
+    result_product = {}
     #diccionario.items(): Método que devuelve una lista de tuplas con los pares {key: value}, conteniendo dentro de las tuplas internas: 
     #lista = [(key, value)]. 
     #Aunque cabe mencionar que aunque se ve como una lista de tuplas, en realidad devuelve un tipo de dato especial llamado dict_items.
@@ -236,21 +236,27 @@ def insert_cache(new_data):
 insert_cache(new_data)
     
 
-#Ejercicio 10: Dado un diccionario donde la clave es el nombre de un alumno y el valor es una lista de materias aprobadas:
-#materias = {
-#    "Ana": ["Álgebra", "Cálculo", "Física"],
-#    "Luis": ["Álgebra"],
-#    "Sofía": ["Cálculo", "Física", "Programación", "Álgebra"],
-#    "Pedro": []
-#}
-#Devuelve un diccionario nuevo donde la clave sea el nombre del alumno, el valor sea el número de materias aprobadas, excluyendo a los alumnos 
-#que no aprobaron ninguna materia. Ejemplo esperado:
+#Ejercicio 10: Dado un diccionario de 3 elementos donde la clave es el identificador del paciente, el segundo las notas del terapeuta y el 
+#tercero es el score que sacó en la terapia, siendo un número de 0 a 100, saca el promedio del score de cada paciente y ordenalo de mayor a 
+#menor en un diccionario final, que tenga por cada id, cual fue su promedio de score y lo ordene de mayor a menor, incluyendo al final, todas 
+#una lista de las notas de su terapeuta:
+#datos_pacientes = [
+#    {"patient_id": "1", "therapy_notes": "ok", "score": 98},
+#    {"patient_id": "1", "therapy_notes": "meh", "score": 20},
+#    {"patient_id": "1", "therapy_notes": "good", "score": 30},
+#    {"patient_id": "2", "therapy_notes": "ok", "score": 70},
+#    {"patient_id": "2", "therapy_notes": "good", "score": 85},
+#    {"patient_id": "2", "therapy_notes": "excellent", "score": 90},
+#    {"patient_id": "3", "therapy_notes": "bad", "score": 40},
+#    {"patient_id": "3", "therapy_notes": "ok", "score": 60},
+#]
+#Ejemplo esperado:
 #{
-#    "Ana": 3,
-#    "Luis": 1,
-#    "Sofía": 4
+#    "2": 81.6666, "therapy_notes": ["ok", "good", "excellent"],
+#    "3": 50, "therapy_notes": ["bad", "ok"],
+#    "1": 49.3333, "therapy_notes": ["ok", "meh", "good"]
 #}
-datos = [
+datos_pacientes = [
     {"patient_id": "1", "therapy_notes": "ok", "score": 98},
     {"patient_id": "1", "therapy_notes": "meh", "score": 20},
     {"patient_id": "1", "therapy_notes": "good", "score": 30},
@@ -261,7 +267,7 @@ datos = [
     {"patient_id": "3", "therapy_notes": "ok", "score": 60},
 ]
 scores_por_paciente = {}
-for fila in datos:
+for fila in datos_pacientes:
     pid = fila["patient_id"]
     score = fila["score"]
     if pid not in scores_por_paciente:
@@ -272,6 +278,27 @@ print("10.-", scores_por_paciente, "\n")
 
 #Ejercicio 10:
 
+
+
+#Ejercicio 11:
+# block_list = [("R","A"),("A","B"),("B","Y"),("A","B")]
+# text = "BABY"
+# letters_in_block = None
+# for block in block_list:                    #1: (R,A);                          2:(R,A);
+#     for letter in text:                     #1: 'B'                             2: 'A'
+#         if(block[0] == letter):              #1: block[0] = R; letter = 'B'      2:break
+#             text.remove(block[0])
+#             break
+#         elif(block[1] == letter):            #1: block[1] = A; letter = 'B'      2: block[1] = A; letter = 'A'
+#             text.remove(block[0])
+#             break
+#         else:
+#             break
+        
+#     if(text!=None):
+#         letters_in_block = "no"
+#     else:
+#         letters_in_block = "yes"
 
 #11.-
 import re
