@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #TIPOS DE ESTRUCTURAS DE DATOS EN PYTHON: La gran diferencia entre ellos, es que algunos tienen cierto orden (índice y valor) y otros no, 
 #además de que algunos son editables o mutables, donde se les puede agregar, eliminar, o modificar elementos y otros son inmutables, donde sus 
 #datos no se pueden cambiar.
@@ -98,24 +99,15 @@ mejores_promedios(calificaciones)
 #Ejercicio 5: Dada una lista de números, devuelve el primer número que se repite, aquí tenemos que considerar el tiempo de ejecución para usar 
 #un algoritmo de menor tiempo de ejecución O(n), se podría utilizar búsqueda binaria.
 numeros = [4, 2, 7, 3, 2, 5, 7]
-def nums_pares(numeros):
-    datos_ord = sorted(numeros)
-    resultado = []
-    #Operador de módulo (%): Calcula el resto de una división entera entre dos números, siendo una herramienta fundamental para determinar 
-    #divisibilidad, alternar acciones (pares/impares) o limitar rangos de valores, su sintaxis es: 
-    #       divisor/dividendo = cociente
-    #       divisor%dividendo = resultado_operador_modulo;  7/2 = 3, con cociente = 1, por lo tanto 7%2 = 1, esto indica que 7 es impar.
-    for i in datos_ord:
-        if(i%2 == 1):
-            #continue: Comando que interrumpe la iteración actual del condicional o bucle y salta inmediatamente a la siguiente vuelta, sin 
-            #ejecutar el resto del código.
-            #break: Comando que rompe completamente el condicional o bucle, no solo la iteración actual.
-            #pass: Comando que no hace nada, sirve para cuando Python exige al menos una instrucción dentro del bloque.
-            break
-        else:
-            resultado.append(i)
-    return resultado
-print("5.-", nums_pares(numeros), "\n")
+def primer_repetido(numeros):
+    #set(): Un conjunto es una colección desordenada, heterogénea y mutable de elementos únicos. No permite elementos duplicados ni tiene orden.
+    vistos = set()
+    for num in numeros:
+        if num in vistos:
+            return num
+        vistos.add(num)
+    return None             #Si no hay repetidos.
+print("5.-", primer_repetido(numeros), "\n")
 
 
 #Ejercicio 6: Dado un diccionario donde la clave es el nombre de un producto y el valor es otro diccionario con su información, Devuelve un 
@@ -138,7 +130,7 @@ def diccionario_productos(productos):
         if(stock >= 0 and precio >= 1000):
             result_product[nombre_producto] = precio
     #sorted(): Método para ordenar de menor a mayor los elementos de una estructura mutable, como una lista, diccionario, conjunto, etc.
-    print("6.-", sorted(result_product), "\n")
+    print("6.-", dict(sorted(result_product.items())), "\n")
 diccionario_productos(productos)
 
 
@@ -215,16 +207,16 @@ cache_data = {
     "9": "data9",
     "10": "data10"
 }
-new_data = ("4", "data11")
+new_data = ("11", "data11")
 def insert_cache(new_data):
     cache_order = list(cache_data.keys())       #cache_order = ['1','2','3','4','5','6','7','8','9','10']
     CAPACITY = 10
     #new_data[0] = key; new_data[1] = value.
-    if(new_data[0] in cache_data):              #Si la key de data ya existía en la memoria, se actualiza y se remueve el último elemento.
+    if(new_data[0] in cache_order):              #Si la key de data ya existía en la memoria, se actualiza y se remueve el último elemento.
         cache_data[new_data[0]] = new_data[1]
-        #remove(): Método que sirve para borrar un elemento y no retorna nada.
-        cache_order.remove(new_data[0])
-        cache_order.append(new_data[0])
+        #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que eliminó.
+        cache_data.pop(new_data[0])
+        cache_data[new_data[0]] = new_data[1]
     else:                                       #Si la key de data es nueva y la memoria estaba llena.
         if(len(cache_order) >= CAPACITY):
             #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que eliminó.
@@ -234,7 +226,7 @@ def insert_cache(new_data):
         cache_order.append(new_data[0])
     print("9.-", cache_data, "\n")
 insert_cache(new_data)
-    
+  
 
 #Ejercicio 10: Dado un diccionario de 3 elementos donde la clave es el identificador del paciente, el segundo las notas del terapeuta y el 
 #tercero es el score que sacó en la terapia, siendo un número de 0 a 100, saca el promedio del score de cada paciente y ordenalo de mayor a 
@@ -266,21 +258,222 @@ datos_pacientes = [
     {"patient_id": "3", "therapy_notes": "bad", "score": 40},
     {"patient_id": "3", "therapy_notes": "ok", "score": 60},
 ]
-scores_por_paciente = {}
-for fila in datos_pacientes:
-    pid = fila["patient_id"]
-    score = fila["score"]
-    if pid not in scores_por_paciente:
-        scores_por_paciente[pid] = []
-    scores_por_paciente[pid].append(score)
-print("10.-", scores_por_paciente, "\n")
+def promedio_pacientes(datos_pacientes):
+    pacientes = {}
+    #Cuando en el JSON hay más de 2 elementos, todos se extraen en una misma variable llamada row o fila y luego se extrae individualmente su 
+    #value por key.
+    for fila in datos_pacientes:
+        pid = fila["patient_id"]
+        score = fila["score"]
+        nota = fila["therapy_notes"]
+        #Se crea manualmente el JSON interno de cada pacient_id si es que este no existe, si ya existe se va aumentando su score y se cuenta 
+        #las veces que este haya aparecido, para luego sacar su promedio.
+        if pid not in pacientes:
+            pacientes[pid] = {
+                "total_score": 0,
+                "count": 0,
+                "therapy_notes": []
+            }
+        pacientes[pid]["total_score"] += score
+        pacientes[pid]["count"] += 1
+        pacientes[pid]["therapy_notes"].append(nota)
+    #Construimos resultado final con promedio
+    resultado = {}
+    for pid, info in pacientes.items():
+        promedio = info["total_score"] / info["count"]
+        resultado[pid] = {
+            "average": promedio,
+            "therapy_notes": info["therapy_notes"]
+        }
+    #sorted(iterable, key=..., reverse=...): Iterable se refiere a los elementos que se van a ordenar, la clave key indica que elemento se va a 
+    #comparar para poder ordenarlo respecto a ese factor y el factor reverse indica el órden de acomodo, que normalmente su valor por default 
+    #está como reverse = False, ordenando los valores de menor a mayor, pero si se quiere ordenar del mayor al menor se debe cambiar su valor a 
+    #True.
+    # - key: En esta parte debemos acceder al elemento que queremos comparar, para esto se suelen utilizar funciones lambda.
+    #   - lambda: Es un tipo de función que no tiene nombre ni instrucción return, pero si parámetros y su sintaxis es la siguiente, donde en 
+    #     vez de tener:
+    #       def sumar(a, b):
+    #           return a + b
+    #     se tiene:
+    #       lambda a, b: a + b
+    #     En el caso de sorted, se utiliza una función lambda para acceder a un elemento del JSON, a través de cual se hará el acomodo. 
+    resultado = dict(sorted(resultado.items(), key = lambda x: x[1]["average"], reverse = True))
+    return resultado
+print("10.-", promedio_pacientes(datos_pacientes), "\n")
 
 
-#Ejercicio 10:
+#Ejercicio 11: Dado el siguiente listado de ventas, agrupa las ventas por seller_id, calculando el total vendido por vendedor y el número de 
+#productos vendidos. Devuelve un diccionario ordenado de mayor a menor según el total vendido:
+# El resultado debe verse así:
+#{
+#     "A2": {"total": 15300, "count": 2},
+#     "A1": {"total": 19300, "count": 3},
+#     "A3": {"total": 4800, "count": 2}
+#}
+ventas = [
+    {"seller_id": "A1", "product": "Laptop", "amount": 15000},
+    {"seller_id": "A2", "product": "Mouse", "amount": 300},
+    {"seller_id": "A1", "product": "Monitor", "amount": 4000},
+    {"seller_id": "A3", "product": "Teclado", "amount": 800},
+    {"seller_id": "A2", "product": "Laptop", "amount": 15000},
+    {"seller_id": "A3", "product": "Monitor", "amount": 4000},
+    {"seller_id": "A1", "product": "Mouse", "amount": 300}
+]
+resultado = {}
+for rows in ventas:
+    sid = rows["seller_id"]
+    sales = rows["amount"]
+    product = rows["product"]
+    if sid not in resultado:
+        resultado[sid] = {
+            "sales_amount": 0,
+            "number_of_products": 0
+        }
+    resultado[sid]["sales_amount"] += sales
+    resultado[sid]["number_of_products"] += 1
+    resultado = dict(sorted(resultado.items(), key = lambda x: x[1]["sales_amount"], reverse = True))
+print("11.-", resultado, "\n")
 
 
+#Ejercicio 12: Dado un vector a, debemos generar un vector b de la misma longitud aplicando la siguiente transformación: 
+# - Cada posición b[i] debe ser la suma del elemento actual a[i], el elemento anterior a[i-1] (si existe) y el elemento siguiente 
+#   a[i+1] (si existe).
+# - Si el elemento anterior no existe (cuando i == 0), no lo sumes.
+# - Si el elemento siguiente no existe (cuando i es el último índice), no lo sumes.
+# - La lista resultante debe tener exactamente la misma longitud que la original.
+#En conclusión, para cada posición, suma el elemento y sus vecinos inmediatos; b[i] = izquierda + actual + derecha.
+vector_a = [4, 0, 1, -2, 3]     #i = 0 → no hay izquierda → usar 0; i = último → no hay derecha → usar 0.
+def vector_transformation(a):
+    vector_b = []
+    for i in range(0, len(a)):      #b[i] = izquierda + actual + derecha.
+        posicion_b = a[i]           #b[i] = actual;                         Siempre existe el actual.
+        if(i > 0):
+            posicion_b += a[i - 1]  #b[i] = izquierda + actual;             i = 0 → no hay izquierda → usar 0.
+        if(i < len(a) - 1):
+            posicion_b += a[i + 1]  #b[i] = izquierda + actual + derecha;   i = len(a) = último → no hay derecha → usar 0.
+        vector_b.append(posicion_b) #Para cada elemento del vector a, se crea la nueva posición del vector_b.
+    return vector_b
+print("12.-", vector_transformation(vector_a), "\n")
 
-#Ejercicio 11:
+
+#Ejercicio 13 (Sliding window manual): Se nos dan dos strings; "pattern" que solo contiene caracteres '0' y '1' y "source" que contiene letras 
+#minúsculas. El string pattern representa una regla donde: 
+# - '0' significa que la letra debe ser una vocal; Las vocales son: a, e, i, o, u, y
+# - '1' significa que la letra debe ser una consonante; Que son todas las letras no vocales.
+#Debemos contar cuántas subcadenas consecutivas de source (del mismo tamaño que pattern) cumplen exactamente el patrón. Para ello debemos 
+#recorrer source y extraer subcadenas del tamaño de pattern para compararlas carácter por carácter. Las subcadenas deben ser consecutivas y solo 
+#se consideran subcadenas del mismo tamaño que pattern.
+pattern = "010"         #0 = Vocal; 1 = Consonante; 1 = "010" = True;   2 = "010" = False;  3 = "010" = True;   4 = "010" = False;  5 = "010" = False.
+source = "amazing"      #Subcadenas;                1 = "ama";          2 = "maz";          3 = "azi";          4 = "zin";          5 = "ing".
+def subcadenas_vocales(pattern, source):
+    vocales = {"a","e","i","o","u","y"}
+    contador = 0
+    for i in range(len(source) - len(pattern) + 1): #7-3+1 = 4+1 = 5 posibles subcadenas, recorriendo de 1 en 1 todas sus letras.
+        cumple = True                               #Booleano, que suma 1 a 1 cuando las letras de la subcadena cumplan el patrón.
+        for j in range(len(pattern)):               #Bucle que recorre los números del patrón para compararlos con las letras de las subcadenas.
+            letra = source[i + j]                   #Bucle que avanza de 1 en 1 los caracteres de source, para crear las subcadenas.
+            if(pattern[j] == "0"):
+                if(letra not in vocales):           #Si el caracter del patrón es 0 pero la letra no es una vocal, cumple = False.
+                    cumple = False
+                    #- continue: Comando que interrumpe la iteración actual del condicional o bucle y salta inmediatamente a la siguiente 
+                    #  vuelta, sin ejecutar el resto del código.
+                    #- break: Comando que rompe completamente el condicional o bucle donde está contenido.
+                    #- pass: Comando que no hace nada, sirve para cuando Python exige al menos una instrucción dentro del bloque.
+                    break
+            if(pattern[j] == "1" and letra in vocales): #Si el caracter del patrón es 1 pero la letra es una vocal, cumple = False.
+                cumple = False
+                break
+        if(cumple == True):                         #Cada vez que la bandera cumple sea True, es porque la subcadena de source cumplió pattern.
+            contador += 1                           #Y esto aumenta al contador.
+    return contador
+print("13.-", subcadenas_vocales(pattern, source), "\n")
+
+
+#Ejercicio 14: Si una matriz field de tamaño 3x5 representa un tablero de Tetris, la cual solo contiene 0 y 1, indicando con 0 si una coordenada 
+#se encuentra libre y con 1 si está ocupada. Debemos determinar en qué columnas y filas diferentes se puede dejar caer la figura de manera que, 
+#después de caer completamente, se forme al menos una fila completamente llena de 1.
+#Para ello, cada posición horizontal posible debe simular que la figura cae verticalmente hasta que toque el fondo o que toque otra pieza 
+#existente en el tablero (un 1), una vez que la pieza se detiene debemos integrarla temporalmente al tablero, revisando si existe al menos una 
+#fila completamente llena de 1. Contando si esa posición genera al menos una fila llena.
+#Reglas importantes:
+# 1.- Posiciones donde caer: No podemos salirnos de los límites del tablero.
+# 2.- Simular caída: La figura no puede superponerse con 1 existentes (Revisar si hay choque y si es así, parar).
+# 3.- Verificar fila llena: Una fila está llena si todos los valores son 1.
+field = [[0, 0, 0],
+         [0, 0, 0],
+         [0, 0, 0],
+         [1, 0, 0],
+         [1, 1, 0]]
+figure = [[0, 0, 1],
+         [0, 1, 1],
+         [0, 0, 1]]
+#tetris(): La tarea de la función es encontrar la posición de caída tal que se forme al menos una fila completa. Como posición de caída, debe 
+#devolver el índice de la columna de la celda en el campo de juego que coincida con la fila superior de la matriz de la figura. Si hay varias 
+#posiciones de caída que satisfacen la condición, se devolverá cualquiera de ellas. Si no hay tales posiciones de caída, se devolverá un -1.
+def tetris(field, figure):
+    height = len(field)
+    width = len(field[0])           #Board_size = 5x3 = field[fila][columna]
+    print("Tetris board:\t", height, "x", width)
+    for fila in field:
+        print(fila)
+    figure_size = len(figure[0])    #Figure_size = nxn = 3x3.
+    print("\nFigure:\t\t", figure_size, "x", figure_size)
+    for fila in figure:
+        print(fila)
+    #1.- Posiciones donde caer: Para recorrer cada columna válida (eje x), debo restar el ancho del tablero menos el ancho de la figura + 1, así 
+    #la figura no se sale del tablero.
+    for column in range(width - figure_size + 1):   #En una matriz sus coordenadas son: matrix[fila][columna].
+        #2.- Simular caída: Para ello la figura empieza a caer desde la fila de hasta arriba, contandola desde cero. 
+        fila_actual = 0
+        while(True):            #Bucle while controlado por la instrucción break, que nos sacaría cuando la pieza ya no pueda seguir bajando.
+            puede_bajar = True  #Verificamos si puede bajar una fila más.
+            for dx in range(figure_size):
+                for dy in range(figure_size):       #las coordenadas dx y dy recorren todas las posiciones de la figura.
+                    #Simulación de bajar, preguntándonos si la bajo una fila más, ¿chocará o no?, pero esta variable no se usa en la práctica, 
+                    #en su lugar se utiliza el valor de la variable fila_actual.
+                    nueva_fila = fila_actual + 1
+                    #Verificar límites: Este condicional verifica que al bajar, la pieza no se salga del tablero. 
+                    if(nueva_fila + dx >= height):  #nueva_fila + dy >= 5.
+                        puede_bajar = False         #Si nueva_fila + dy es mayor a la altura del tablero, ya no se puede bajar más.
+                        break
+                    #Verificar choque: Observamos si en las coordenadas de la figura hay un 1 y también si las coordenadas actuales del tablero 
+                    #hay un 1, comprobando que las piezas que ya habían en el tablero no vayan a chocar con la nueva que se está introduciendo.
+                    if(figure[dx][dy] == 1 and field[nueva_fila + dx][column + dy] == 1):
+                        #Si hay una pieza en la misma coordenada donde se quiere bajar la figura en el tablero, no se puede bajar más.
+                        puede_bajar = False 
+                        break
+                #Si al realizar las verificaciones de límite y choque de la pieza en el tablero la bandera puede_bajar es False, se rompe la 
+                #ejecución de los bucles dx y dy que recorren las coordenadas de la pieza y la intentan bajar.
+                if(puede_bajar == False): 
+                    break
+            if puede_bajar: #Es igual a poner if(puede_bajar == True).
+                fila_actual += 1                    #Si pasaron las pruebas de límite y choque, se puede bajar una fila más.
+            else:
+                break                               #Si la bandera puede_bajar == False, se rompe la ejecución del bucle while(True).
+        #3.- Verificar fila llena: Una fila está llena si todos los valores son 1, para ello crearemos una copia del tablero.
+        #Slicing [index_inicial:index_final_no_alcanzado]: Cuando se pone la instrucción [:] lo que se hace es acceder a todos los elementos 
+        #de la lista, aquí lo que hace la expresión [fila[:] for fila in field] es acceder a todos los elementos de las filas de la matriz field
+        #para crear una copia del tablero, esto porque queremos antes de modificarlo, ver si no rompe límites o choques de figuras.
+        tablero_temp = [fila[:] for fila in field]
+        #Colocar las piezas de la figura (unos 1), en su respectivo lugar en el tablero.
+        for dx in range(figure_size):
+            for dy in range(figure_size):           #las coordenadas dx y dy recorren todas las posiciones de la figura.
+                #Si la figura tiene una pieza en una de sus coordenadas...
+                if(figure[dx][dy] == 1):            
+                    tablero_temp[fila_actual + dx][column + dy] = 1 #...Se coloca dicha pieza en la copia del tablero.
+        #Verificar si alguna fila está llena: Para ello recorro todas las listas en la lista del tablero.
+        for fila in tablero_temp:   #for elemento in lista: Recorre todos los elementos de una lista, pero esta es una lista de listas.
+            #all(): Método que devuelve True si todos los elementos de su iterable interno son verdaderos y False si al menos uno es Falso.
+            #Generator expression: Es un bucle que evalúa o convierte los elementos de un iterable, recorriéndolos uno por uno con la sintaxis:
+            #   - condicion             for     variable_local      in      lista_tupla_diccionario_o_conjunto
+            #   - transformacion_datos  for     variable_local      in      lista_tupla_diccionario_o_conjunto
+            if all(valor == 1 for valor in fila):
+                return column       #Si todos los elementos de la fila son 1, devuelve la coordenada de la columna de dicha fila.
+    return -1                       #Si todos los elementos de la fila NO son 1, devuelve un -1.
+print("14.-", tetris(field, figure), "\n")
+
+
+#Ejercicio 16:
 # block_list = [("R","A"),("A","B"),("B","Y"),("A","B")]
 # text = "BABY"
 # letters_in_block = None
@@ -294,25 +487,13 @@ print("10.-", scores_por_paciente, "\n")
 #             break
 #         else:
 #             break
-        
 #     if(text!=None):
 #         letters_in_block = "no"
 #     else:
 #         letters_in_block = "yes"
 
-#11.-
-import re
-def texttonum(input):
-    nums = re.findall(r'\d+', input)
-    # Source - https://stackoverflow.com/a
-    # Posted by cheeken, modified by community. See post 'Timeline' for change history
-    # Retrieved 2025-12-22, License - CC BY-SA 4.0
-    nums = list(map(int, nums))
-    print(nums, "sum:", sum(nums))
-    return nums
-usefun = texttonum("105 test4more 35k2 0292 AVVC")
 
-#10.- 
+#17.- 
 items = [
     {"category": "books", "value": 1},
     {"category": "electronics", "value": 2},
@@ -505,7 +686,7 @@ for i in items:
 
 print(mylist)
 
-#Ejercicio 12: Find the number of times that each dev_ids appear on the list and create a function that returns the highest 2 devs.
+#Ejercicio 18: Find the number of times that each dev_ids appear on the list and create a function that returns the highest 2 devs.
 # with k=2
 # the result is [1, 4]
 dev_ids = [1,3,4,5,4,5,5,4,6,1,1,1,2,1,2,7,8,9,4,5,4,6,2]
@@ -534,7 +715,7 @@ get_top_devs(dev_ids, 2)
 
 """
 ===========================================================
-Ejercicio 13: Reverse String + ChallengeToken Transformation
+Ejercicio 19: Reverse String + ChallengeToken Transformation
 ===========================================================
 
 Problem:
@@ -575,7 +756,7 @@ print(StringChallenge_Reverse("I Love Code"))
 
 """
 ===========================================================
-Ejercicio 14: String Rearrangement (Anagram Check)
+Ejercicio 20: String Rearrangement (Anagram Check)
 ===========================================================
 
 Problem:
@@ -610,7 +791,7 @@ print(StringChallenge_Rearrange("h3llko", "hello"))
 
 """
 ===========================================================
-Ejercicio 15: Public S3 Bucket File Finder + Token Processing
+Ejercicio 21: Public S3 Bucket File Finder + Token Processing
 ===========================================================
 
 Problem:
