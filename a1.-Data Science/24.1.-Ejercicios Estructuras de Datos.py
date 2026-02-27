@@ -24,10 +24,11 @@ def nums_pares(datos):
     #       divisor%dividendo = resultado_operador_modulo;  7/2 = 3, con cociente = 1, por lo tanto 7%2 = 1, esto indica que 7 es impar.
     for i in datos:
         if(i%2 == 1):
-            #- continue: Comando que interrumpe la iteración actual del condicional o bucle y salta inmediatamente a la siguiente vuelta, sin 
-            #  ejecutar el resto del código.
-            #- break: Comando que rompe completamente el condicional o bucle, no solo la iteración actual.
-            #- pass: Comando que no hace nada, sirve para cuando Python exige al menos una instrucción dentro del bloque.
+            #- continue: Comando que interrumpe la iteración actual del condicional o bucle actual y salta inmediatamente a la siguiente vuelta, 
+            #  sin ejecutar el resto del código.
+            #- break: Comando que rompe completamente el condicional o bucle, no solo la iteración actual, sin afectar a los bucles/condicionales 
+            #  exteriores, solo donde se encuentre contenido.
+            #- pass: Comando que no hace nada, sirve para cuando Python exija al menos una instrucción dentro del bloque.
             continue
         else:
             #.append(): Comando que agrega un valor al final de una lista, su equivalente en diccionarios es .update() y en conjuntos es .add().
@@ -101,12 +102,11 @@ mejores_promedios(calificaciones)
 numeros = [4, 2, 7, 3, 2, 5, 7]
 def primer_repetido(numeros):
     #set(): Un conjunto es una colección desordenada, heterogénea y mutable de elementos únicos. No permite elementos duplicados ni tiene orden.
-    vistos = set()
+    vistos = set()          #Variable que almacena todos los elementos no repetidos, para compararlos entre ellos.
     for num in numeros:
         if num in vistos:
             return num
         vistos.add(num)
-    return None             #Si no hay repetidos.
 print("5.-", primer_repetido(numeros), "\n")
 
 
@@ -168,7 +168,7 @@ print("7.-", result_ages, "\n")
 #    "Sofía": ["Cálculo", "Física", "Programación", "Álgebra"],
 #    "Pedro": []
 #}
-#Devuelve un diccionario nuevo donde la clave sea el nombre del alumno, el valor sea el número de materias aprobadas, excluyendo a los alumnos 
+#Devuelve un diccionario nuevo donde la clave sea el nombre del alumno y el valor sea el número de materias aprobadas, excluyendo a los alumnos 
 #que no aprobaron ninguna materia. Ejemplo esperado:
 #{
 #    "Ana": 3,
@@ -208,18 +208,19 @@ cache_data = {
     "9": "data9",
     "10": "data10"
 }
-new_data = ("11", "data11")
+new_data = ("4", "data11")
 def insert_cache(new_data):
     cache_order = list(cache_data.keys())       #cache_order = ['1','2','3','4','5','6','7','8','9','10']
     CAPACITY = 10
     #new_data[0] = key; new_data[1] = value.
-    if(new_data[0] in cache_order):             #Si la key de new_data ya existía en la LRU, se remueve el último elemento y se actualiza.
-        #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que eliminó.
-        cache_data.pop(new_data[0])
-        cache_data[new_data[0]] = new_data[1]
-    else:                                       #Si la key de data es nueva y la memoria estaba llena.
-        if(len(cache_order) >= CAPACITY):
-            #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que eliminó.
+    if(new_data[0] in cache_order):             #Si la key de new_data ya existía, se actualiza su valor al nuevo y se mueve al final.
+        #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que se eliminó si se utiliza en listas, pero 
+        #cuando se usa en diccionarios, este recibe la key del elemento y retorna el valor eliminado.
+        cache_data.pop(new_data[0])             #Se elimina su valor actual.
+        cache_data[new_data[0]] = new_data[1]   #Se actualiza (agrega) el nuevo valor al key de new_data.
+    else:                                       #Si la key es nueva, se agrega el nuevo valor y se actualiza la lista cache_order.
+        if(len(cache_order) >= CAPACITY):       #Si además la memoria estaba llena, se elimina el primer elemento de cache_order y cache_data.
+            #pop(): Método que elimina un elemento de un diccionario (key y value), para ello recibe su key y devuelve el value eliminado.
             least_used = cache_order.pop(0)
             cache_data.pop(least_used)
         cache_data[new_data[0]] = new_data[1]
@@ -473,7 +474,15 @@ def tetris(field, figure):
 print("14.-", tetris(field, figure), "\n")
 
 
-#Ejercicio 15: Dado un arreglo de enteros únicos numbers, debemos encontrar el número de pares de índices (i,j) donde: (i ≤ j) y la suma 
+#Ejercicio 15: Para cada valor n que se reciba, se debe crear un cuadrado con la siguiente forma, dependiendo del número de n, donde por 
+#ejemplo para n = 3:
+#resultado = ["***",
+#             "* *",
+#             "***"]
+
+
+
+#Ejercicio 16: Dado un arreglo de enteros únicos numbers, debemos encontrar el número de pares de índices (i,j) donde: (i ≤ j) y la suma 
 #numbers[i] + numbers[j] sea igual a alguna potencia de 2.
 # - numbers[i] + numbers[j] sea una potencia de 2, para ello se permiten: 
 #   - Pares donde i == j
@@ -484,7 +493,7 @@ print("14.-", tetris(field, figure), "\n")
 
 
 
-#Ejercicio 16:
+#Ejercicio 17:
 # block_list = [("R","A"),("A","B"),("B","Y"),("A","B")]
 # text = "BABY"
 # letters_in_block = None
@@ -504,7 +513,15 @@ print("14.-", tetris(field, figure), "\n")
 #         letters_in_block = "yes"
 
 
-#17.- 
+#18.- Have the function PreorderTraversal(strArr) take the array of strings stored in strArr, which will represent a binary tree with 
+#integer values in a format similar to how a binary heap is implemented with NULL nodes at any level represented with a #. Your goal is 
+#to return the pre-order traversal of the tree with the elements separated by a space. For example, if strArr is: 
+#["5", "2", "6", "1", "9", "#", "8", "#", "#", "#", "#", "#", "#", "4", "#"] then this tree looks like the following tree:
+#For the input above, your program should return the string 5 2 1 9 6 8 4 because that is the pre-order traversal of the tree.
+
+
+
+#19.- 
 items = [
     {"category": "books", "value": 1},
     {"category": "electronics", "value": 2},
@@ -697,7 +714,7 @@ for i in items:
 
 print(mylist)
 
-#Ejercicio 18: Find the number of times that each dev_ids appear on the list and create a function that returns the highest 2 devs.
+#Ejercicio 20: Find the number of times that each dev_ids appear on the list and create a function that returns the highest 2 devs.
 # with k=2
 # the result is [1, 4]
 dev_ids = [1,3,4,5,4,5,5,4,6,1,1,1,2,1,2,7,8,9,4,5,4,6,2]
@@ -726,7 +743,7 @@ get_top_devs(dev_ids, 2)
 
 """
 ===========================================================
-Ejercicio 19: Reverse String + ChallengeToken Transformation
+Ejercicio 21: Reverse String + ChallengeToken Transformation
 ===========================================================
 
 Problem:
@@ -767,7 +784,7 @@ print(StringChallenge_Reverse("I Love Code"))
 
 """
 ===========================================================
-Ejercicio 20: String Rearrangement (Anagram Check)
+Ejercicio 22: String Rearrangement (Anagram Check)
 ===========================================================
 
 Problem:
@@ -802,7 +819,7 @@ print(StringChallenge_Rearrange("h3llko", "hello"))
 
 """
 ===========================================================
-Ejercicio 21: Public S3 Bucket File Finder + Token Processing
+Ejercicio 23: Public S3 Bucket File Finder + Token Processing
 ===========================================================
 
 Problem:
