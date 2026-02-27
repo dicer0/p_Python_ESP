@@ -130,6 +130,7 @@ def diccionario_productos(productos):
         if(stock >= 0 and precio >= 1000):
             result_product[nombre_producto] = precio
     #sorted(): Método para ordenar de menor a mayor los elementos de una estructura mutable, como una lista, diccionario, conjunto, etc.
+    #Nota: Cuando se esté utilizando en diccionarios, forzosamente se debe utilizar con el método dict.items().
     print("6.-", dict(sorted(result_product.items())), "\n")
 diccionario_productos(productos)
 
@@ -212,8 +213,7 @@ def insert_cache(new_data):
     cache_order = list(cache_data.keys())       #cache_order = ['1','2','3','4','5','6','7','8','9','10']
     CAPACITY = 10
     #new_data[0] = key; new_data[1] = value.
-    if(new_data[0] in cache_order):              #Si la key de data ya existía en la memoria, se actualiza y se remueve el último elemento.
-        cache_data[new_data[0]] = new_data[1]
+    if(new_data[0] in cache_order):             #Si la key de new_data ya existía en la LRU, se remueve el último elemento y se actualiza.
         #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que eliminó.
         cache_data.pop(new_data[0])
         cache_data[new_data[0]] = new_data[1]
@@ -342,7 +342,7 @@ print("11.-", resultado, "\n")
 # - Si el elemento siguiente no existe (cuando i es el último índice), no lo sumes.
 # - La lista resultante debe tener exactamente la misma longitud que la original.
 #En conclusión, para cada posición, suma el elemento y sus vecinos inmediatos; b[i] = izquierda + actual + derecha.
-vector_a = [4, 0, 1, -2, 3]     #i = 0 → no hay izquierda → usar 0; i = último → no hay derecha → usar 0.
+vector_a = [4, 0, 1, -2, 3]         #i = 0 → no hay izquierda → usar 0; i = último → no hay derecha → usar 0.
 def vector_transformation(a):
     vector_b = []
     for i in range(0, len(a)):      #b[i] = izquierda + actual + derecha.
@@ -471,6 +471,17 @@ def tetris(field, figure):
                 return column       #Si todos los elementos de la fila son 1, devuelve la coordenada de la columna de dicha fila.
     return -1                       #Si todos los elementos de la fila NO son 1, devuelve un -1.
 print("14.-", tetris(field, figure), "\n")
+
+
+#Ejercicio 15: Dado un arreglo de enteros únicos numbers, debemos encontrar el número de pares de índices (i,j) donde: (i ≤ j) y la suma 
+#numbers[i] + numbers[j] sea igual a alguna potencia de 2.
+# - numbers[i] + numbers[j] sea una potencia de 2, para ello se permiten: 
+#   - Pares donde i == j
+#   - Se cuentan todos los pares válidos.
+#La suma debe ser exactamente una potencia de 2, como por ejemplo:
+#1, 2, 4, 8, 16, 32, 64, ...
+#Contar pares cuya suma sea potencia de 2.
+
 
 
 #Ejercicio 16:
