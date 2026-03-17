@@ -214,8 +214,8 @@ def insert_cache(new_data):
     CAPACITY = 10
     #new_data[0] = key; new_data[1] = value.
     if(new_data[0] in cache_order):             #Si la key de new_data ya existía, se actualiza su valor al nuevo y se mueve al final.
-        #pop(): Método que sirve para borrar un elemento y retornar el índice del elemento que se eliminó si se utiliza en listas, pero 
-        #cuando se usa en diccionarios, este recibe la key del elemento y retorna el valor eliminado.
+        #pop(): Método que sirve para borrar un elemento, recibiendo el índice del elemento que se quiere eliminar si se utiliza en listas, 
+        #pero cuando se usa en diccionarios, este recibe la key del elemento y en ambos casos, retorna el valor del elemento eliminado.
         cache_data.pop(new_data[0])             #Se elimina su valor actual.
         cache_data[new_data[0]] = new_data[1]   #Se actualiza (agrega) el nuevo valor al key de new_data.
     else:                                       #Si la key es nueva, se agrega el nuevo valor y se actualiza la lista cache_order.
@@ -231,8 +231,8 @@ insert_cache(new_data)
 
 #Ejercicio 10: Dado un diccionario de 3 elementos donde la clave es el identificador del paciente, el segundo las notas del terapeuta y el 
 #tercero es el score que sacó en la terapia, siendo un número de 0 a 100, saca el promedio del score de cada paciente y ordenalo de mayor a 
-#menor en un diccionario final, que tenga por cada id, cual fue su promedio de score y lo ordene de mayor a menor, incluyendo al final, todas 
-#una lista de las notas de su terapeuta:
+#menor en un diccionario final, que tenga por cada id, cual fue su promedio de score y lo ordene de mayor a menor, incluyendo al final, una 
+#lista de todas las notas de su terapeuta:
 #datos_pacientes = [
 #    {"patient_id": "1", "therapy_notes": "ok", "score": 98},
 #    {"patient_id": "1", "therapy_notes": "meh", "score": 20},
@@ -351,7 +351,7 @@ def vector_transformation(a):
         if(i > 0):
             posicion_b += a[i - 1]  #b[i] = izquierda + actual;             i = 0 → no hay izquierda → usar 0.
         if(i < len(a) - 1):
-            posicion_b += a[i + 1]  #b[i] = izquierda + actual + derecha;   i = len(a) = último → no hay derecha → usar 0.
+            posicion_b += a[i + 1]  #b[i] = actual + derecha;               i = len(a) = último → no hay derecha → usar 0.
         vector_b.append(posicion_b) #Para cada elemento del vector a, se crea la nueva posición del vector_b.
     return vector_b
 print("12.-", vector_transformation(vector_a), "\n")
@@ -479,7 +479,18 @@ print("14.-", tetris(field, figure), "\n")
 #resultado = ["***",
 #             "* *",
 #             "***"]
-
+def cuadrado(n):
+    resultado = []
+    for i in range(n):
+        #Primera o última fila
+        if(i == 0 or i == n-1):
+            resultado.append("*" * n)
+        #Filas intermedias
+        else:
+            fila = "*" + " "*(n-2) + "*"
+            resultado.append(fila)
+    return resultado
+print("15.-", cuadrado(3), "\n")
 
 
 #Ejercicio 16: Dado un arreglo de enteros únicos numbers, debemos encontrar el número de pares de índices (i,j) donde: (i ≤ j) y la suma 
@@ -490,6 +501,20 @@ print("14.-", tetris(field, figure), "\n")
 #La suma debe ser exactamente una potencia de 2, como por ejemplo:
 #1, 2, 4, 8, 16, 32, 64, ...
 #Contar pares cuya suma sea potencia de 2.
+#Ejercicio 16
+numbers = [1,3,5,7]
+def es_potencia_de_dos(x):
+    return x > 0 and (x & (x-1)) == 0
+def contar_pares(numbers):
+    contador = 0
+    n = len(numbers)
+    for i in range(n):
+        for j in range(i, n):
+            suma = numbers[i] + numbers[j]
+            if es_potencia_de_dos(suma):
+                contador += 1
+    return contador
+print("16.-", contar_pares(numbers), "\n")
 
 
 
