@@ -1107,3 +1107,14 @@ if __name__ == "__main__":
     ejemplo_hash(nums)
 
 #Investigar Memoria Caché.
+# Write a program that prints all the numbers from 1 to 100.
+# However, for multiples of 3, instead of the number, print "Foo". For multiples of 5 print "Bar".
+
+# For numbers which are multiples of both 3 and 5, print "FooBar".
+
+# But here's the catch: you can use only one if. No multiple branches, ternary operators or else.
+#We can just use one if in all the program, no else, no elif.
+
+for i in range(1, 101):
+    s = "Foo" * (i % 3 == 0) + "Bar" * (i % 5 == 0)
+    print(s or i)
